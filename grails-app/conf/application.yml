@@ -111,7 +111,7 @@ dataSource:
     driverClassName: com.mysql.cj.jdbc.Driver
     dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     dbCreate: update
-    url: jdbc:mysql://trptDatabase:3306/trpt_db??verifyServerCertificate=false&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://trptDatabase:3306/trpt?verifyServerCertificate=false&useSSL=false&allowPublicKeyRetrieval=true
     username: trpt_user
     password: trpt_pw_11
 #    logSql: true
