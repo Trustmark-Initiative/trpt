@@ -1,6 +1,4 @@
-# trpt
-Trustmark Relying Party Tool
+# Trustmark Relying Party Tool (TRPT)
 
-Build with ./gradlew clean build
- - It does reqiure the tmf-api library in your environment.
+**NOTE**: The TRPT is not yet ready for operational use. We expect to release TRPT 1.0 for operational use in September 2021.
 
