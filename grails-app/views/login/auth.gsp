@@ -1,63 +1,61 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta name="layout" content="main"/>
-    <title>Login</title>
+    <head>
+        <meta name="layout" content="main"/>
+    </head>
 
-    <r:require modules="application" />
-</head>
-<body>
-<h2>Binding Registry Tool Login</h2>
+    <body>
 
-<div class="pageContent">
+        <div class="container pt-4" style="max-width: 540px;">
+            <form action="/login/authenticate" method="POST" class="border rounded card" id="login-form" autocomplete="off">
+                <div class="card-header fw-bold">
+                    <div class="row">
+                        <div class="col-12">
+                            <div>Login</div>
+                        </div>
+                    </div>
+                </div>
 
-    <g:if test='${flash.message}'>
-        <div class="alert alert-danger" style="margin-top: 1em; width: 45%;">
-            <div style="font-weight: bold;">Authentication Failed!</div>
-            ${flash.message}
+                <div class="card-body">
+                    <div class="row pb-2">
+                        <label id="login-label-username" class="col-3 col-form-label text-end" for="login-input-username">Username</label>
+
+                        <div class="col-9">
+                            <input type="text" id="login-input-username" name="username" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="row pb-2">
+                        <label id="login-label-password" class="col-3 col-form-label text-end" for="login-input-password">Password</label>
+
+                        <div class="col-9">
+                            <input type="password" id="login-input-password" name="password" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-3"></div>
+
+                        <div class="col-1 text-start">
+                            <input id="login-action-submit-login" type="submit" class="btn btn-primary" value="Login">
+                        </div>
+
+                        <div class="col-8 d-flex align-items-center">
+                            <a href="${createLink(controller: "password", action: "reset")}" class="ms-auto">Forgot Password?</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-    </g:if>
 
-
-    <form action="${postUrl ?: '/login/authenticate'}" method='POST' id='loginForm' class='form-horizontal' autocomplete='off' role="form">
-
-        <div class="form-group">
-            <label for="username" class="col-sm-1 control-label"><g:message code="springSecurity.login.username.label"/></label>
-            <div class="col-sm-3">
-                <input type="text" class="form-control" id="username" name="username" placeholder="Username">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="password" class="col-sm-1 control-label"><g:message code="springSecurity.login.password.label"/></label>
-            <div class="col-sm-3">
-                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                <p class="help-block"><a href="${createLink(controller:'forgotPassword')}">Forgot Password?</a></p>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-sm-offset-1 col-md-5">
-                <div class="checkbox">
-                    <label>
-                        <input type='checkbox' class='chk' name='${rememberMeParameter}' id='remember_me' <g:if test='${hasCookie}'>checked='checked'</g:if>/>
-                        <label for='remember_me'><g:message code="springSecurity.login.remember.me.label"/></label>
-                    </label>
+        <g:if test="${flash.message}">
+            <div class="container pt-4" style="max-width: 540px;">
+                <div class="alert alert-danger text-center">
+                    ${flash.message}
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-sm-offset-1 col-sm-2">
-                <input class="btn btn-default" type='submit' id="submit" value='${message(code: "springSecurity.login.button")}'/>
-            </div>
-        </div>
-
-    </form>
-
-</div>
-</div>
-
-<script>$(function () { $('#username').focus(); });</script>
-</body>
+        </g:if>
+    </body>
 </html>

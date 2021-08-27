@@ -1,110 +1,193 @@
+// If your build script needs to use external libraries, you can add them to the script’s classpath in the build script
+// itself. You do this using the buildscript() method, passing in a block which declares the build script classpath.
+//
+// https://docs.gradle.org/current/userguide/dependency_management.html
+
 buildscript {
     repositories {
-        mavenLocal()
-        maven { url "https://repo.grails.org/grails/core" }
-        maven { url  "http://idcapture.bintray.com/plugins" }
-        mavenCentral()
+        maven { url 'https://repo.grails.org/grails/core' }
     }
     dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.0"
-        classpath "org.grails.plugins:hibernate5:7.0.0"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.0.10"
+        classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:3.2.4'
+        classpath 'gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.0'
+        classpath 'org.grails.plugins:hibernate5:7.0.4'
+        classpath 'org.grails:grails-gradle-plugin:4.0.10'
     }
 }
 
-version "0.1"
-group "tm.relying.party.tool"
+// The plugins DSL provides a succinct and convenient way to declare plugin dependencies. It works with the Gradle
+// plugin portal to provide easy access to both core and community plugins. The plugins DSL block configures an instance
+// of PluginDependenciesSpec.
+//
+// https://docs.gradle.org/current/userguide/plugins.html
 
-apply plugin:"eclipse"
-apply plugin:"idea"
-apply plugin:"war"
-apply plugin:"org.grails.grails-web"
-apply plugin:"com.github.erdi.webdriver-binaries"
-apply plugin:"com.bertramlabs.asset-pipeline"
-apply plugin:"org.grails.grails-gsp"
+plugins {
+    id 'com.diffplug.spotless' version '5.11.1'
+    id 'war'
+}
+
+// With the introduction of the plugins DSL, users should have little reason to use the legacy method of applying
+// plugins. It is documented here in case a build author cannot use the plugins DSL due to restrictions in how it
+// currently works.
+//
+// https://docs.gradle.org/current/userguide/plugins.html
+
+apply plugin: 'com.bertramlabs.asset-pipeline'
+apply plugin: 'com.github.erdi.webdriver-binaries'
+apply plugin: 'org.grails.grails-web' // web must appear before gsp; otherwise, controllers fail to redirect to views.
+apply plugin: 'org.grails.grails-gsp'
+
+// Maven coordinates.
+
+version '0.1'
+group 'edu.gatech.gtri.trustmark.trpt'
+
+// https://docs.gradle.org/current/userguide/declaring_repositories.html
 
 repositories {
-    mavenLocal()
-    maven { url "https://repo.grails.org/grails/core" }
+    maven { url 'https://repo.grails.org/grails/core' }
     mavenCentral()
-    maven { url  "http://idcapture.bintray.com/plugins" }
+    mavenLocal()
 }
 
-dependencyManagement {
-    imports {
-        mavenBom "org.grails:grails-bom:$grailsVersion"
-    }
-    applyMavenExclusions false
-}
+// https://docs.gradle.org/current/userguide/dependency_management.html
 
 configurations {
     developmentOnly
     runtimeClasspath {
         extendsFrom developmentOnly
     }
+    all {
+        exclude group: 'pull-parser', module: 'pull-parser' // this transitive dependency prompts xml parsing errors in spring
+    }
 }
 
 dependencies {
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-    compile "org.springframework.boot:spring-boot-starter-logging"
-    compile "org.springframework.boot:spring-boot-autoconfigure"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-starter-tomcat"
+    compile 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.15'
+    compile 'edu.gatech.gtri.trustmark:tf-api:1.4.9'
+    compile 'log4j:log4j:1.2.16' // required by tf-api-impl
 
-    compile "org.grails:grails-core"
-    compile "org.grails:grails-dependencies"
-    compile "org.grails:grails-web-boot"
-    compile "org.grails:grails-logging"
-    console "org.grails:grails-console"
+    compile 'org.grails.plugins:async'
+    compile 'org.grails.plugins:cache'
+    compile 'org.grails.plugins:events'
+    compile 'org.grails.plugins:gsp'
+    compile 'org.grails.plugins:hibernate5'
+    compile 'org.grails.plugins:quartz:2.0.13' // required for quartz scheduler
+    compile 'org.grails.plugins:scaffolding'
+    compile 'org.grails.plugins:spring-security-core:4.0.3'
+    compile 'org.grails:grails-core'
+    compile 'org.grails:grails-logging'
+    compile 'org.grails:grails-plugin-databinding'
+    compile 'org.grails:grails-plugin-i18n'
+    compile 'org.grails:grails-plugin-interceptors'
+    compile 'org.grails:grails-plugin-rest'
+    compile 'org.grails:grails-plugin-services'
+    compile 'org.grails:grails-plugin-url-mappings'
+    compile 'org.grails:grails-web-boot'
 
-    compile "org.grails.plugins:cache"
-    compile "org.grails.plugins:gsp:4.0.0"
-    compile "org.grails.plugins:scaffolding"
-    compile "org.grails.plugins:hibernate5:7.0.2"
-    compile 'org.grails.plugins:spring-security-core:4.0.0.RC3'
-    compile "org.hibernate:hibernate-core:5.4.10.Final"
+    compile 'org.hibernate:hibernate-core:5.4.18.Final'
+    compile 'org.hibernate:hibernate-ehcache:5.4.18.Final'
 
-    compile "org.hibernate:hibernate-ehcache:5.4.10.Final"
+    compile 'org.quartz-scheduler:quartz:2.2.1' // required for quartz scheduler
 
-    compile "edu.gatech.gtri.trustmark:tf-api:1.4.1"
-    compile "edu.gatech.gtri.trustmark:tf-api-impl:1.4.1"
+    compile 'org.springframework.boot:spring-boot-autoconfigure'
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'org.springframework.boot:spring-boot-starter-logging'
+    compile 'org.springframework.boot:spring-boot-starter-tomcat'
 
-    profile "org.grails.profiles:web"
+    compile 'org.gtri.functionaljava:functionaljava:4.10.0-GTRI'
 
-    runtime "com.h2database:h2"
-    runtime "org.apache.tomcat:tomcat-jdbc"
+    compile 'javax.el:javax.el-api:2.2.4'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.12.4'
 
-    runtimeOnly 'jaxen:jaxen:1.1.6'
-    runtimeOnly 'mysql:mysql-connector-java:8.0.20'
-    runtime "com.bertramlabs.plugins:asset-pipeline-grails:3.0.10"
+    compileOnly 'io.micronaut:micronaut-inject-groovy'
 
-    testCompile "org.grails.plugins:geb"
-    testCompile "org.grails:grails-gorm-testing-support"
-    testCompile "org.grails:grails-web-testing-support"
-    testCompile "org.mockito:mockito-core"
+    console 'org.grails:grails-console'
 
-    testCompile "org.seleniumhq.selenium:selenium-remote-driver:3.14.0"
-    testCompile "org.seleniumhq.selenium:selenium-api:3.14.0"
-    testCompile "org.seleniumhq.selenium:selenium-support:3.14.0"
+    developmentOnly('org.springframework.boot:spring-boot-devtools')
 
-    testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:3.14.0"
-    testRuntime "org.seleniumhq.selenium:selenium-firefox-driver:3.14.0"
+    profile 'org.grails.profiles:web'
+
+    runtime 'com.bertramlabs.plugins:asset-pipeline-grails:3.2.4'
+    runtime 'com.h2database:h2'
+    runtime 'javax.xml.bind:jaxb-api:2.3.1'
+    runtime 'org.apache.tomcat:tomcat-jdbc'
+    runtime 'org.glassfish.web:el-impl:2.1.2-b03'
+
+    runtimeOnly 'mysql:mysql-connector-java:8.0.24'
+
+    testCompile 'io.micronaut:micronaut-inject-groovy'
+    testCompile 'org.grails.plugins:geb'
+    testCompile 'org.grails:grails-gorm-testing-support'
+    testCompile 'org.grails:grails-web-testing-support'
+    testCompile 'org.mockito:mockito-core'
+    testCompile 'org.seleniumhq.selenium:selenium-api:3.14.0'
+    testCompile 'org.seleniumhq.selenium:selenium-remote-driver:3.14.0'
+    testCompile 'org.seleniumhq.selenium:selenium-support:3.14.0'
+    testRuntime 'org.seleniumhq.selenium:selenium-chrome-driver:3.14.0'
+    testRuntime 'org.seleniumhq.selenium:selenium-firefox-driver:3.14.0'
+
 }
 
 bootRun {
+    ignoreExitValue true
     jvmArgs(
-        '-Dspring.output.ansi.enabled=always', 
-        '-Xmx1024m')
+            '-Dspring.output.ansi.enabled=always',
+            '-noverify',
+            '-XX:TieredStopAtLevel=1',
+            '-Xmx1024m')
     sourceResources sourceSets.main
-}
-
-// copied from: http://nimavat.me/blog/grails3-add-custom-build-info-to-war
-buildProperties {
-    inputs.property("info.app.buildDate", new Date().format('yyyy-MM-dd HH:mm:ss'))
+    String springProfilesActive = 'spring.profiles.active'
+    systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }
 
 assets {
     minifyJs = false
-    minifyCss = false
+    minifyCss = true
+}
+
+spotless {
+    groovy {
+        target '*.groovy'
+        importOrder('java', 'javax', '')
+
+        greclipse('4.17.0').configFile('eclipse-formatter-config.xml')
+    }
+    groovyGradle {
+        target '*.gradle'
+
+        importOrder('java', 'javax', 'groovy', '')
+        greclipse('4.17.0').configFile('eclipse-formatter-config.xml')
+    }
+    java {
+        target '*.java'
+        importOrder('java', 'javax', '')
+
+        eclipse('4.18.0').configFile('eclipse-formatter-config.xml')
+    }
+}
+
+compileGroovy.dependsOn spotlessApply
+compileJava.dependsOn spotlessApply
+
+tasks.withType(GroovyCompile) {
+    configure(groovyOptions) {
+        forkOptions.jvmArgs = ['-Xmx1024m']
+    }
+}
+
+tasks.withType(Test) {
+    systemProperty 'geb.env', System.getProperty('geb.env')
+    systemProperty 'geb.build.reportsDir', reporting.file('geb/integrationTest')
+    systemProperty 'webdriver.chrome.driver', System.getProperty('webdriver.chrome.driver')
+    systemProperty 'webdriver.gecko.driver', System.getProperty('webdriver.gecko.driver')
+}
+
+test {
+    useJUnitPlatform()
+}
+
+webdriverBinaries {
+    chromedriver '2.45.0'
+    geckodriver '0.24.0'
 }

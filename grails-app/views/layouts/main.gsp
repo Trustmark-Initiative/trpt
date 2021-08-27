@@ -1,50 +1,71 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!doctype html>
-<html lang="en" class="no-js">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>${grailsApplication.config.trpt.org.title}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    <asset:stylesheet src="application.css"/>
-    <asset:javascript src="application.js"/>
+        <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
+        <asset:stylesheet src="application.css"/>
+        <asset:javascript src="application.js"/>
 
-    <g:layoutHead/>
-</head>
+        <title>Trustmark Relying Party Tool</title>
 
-<body>
-<tmpl:/layouts/menu />
-<a name="top"></a>
-<div class="container" style="margin-top: 5em; margin-bottom: 5em;">
-    <div class="row header">
-        <div class="col-md-2 headerTopLeft">
-            <div id="header-logo">
-                <asset:image height="90em" src="${grailsApplication.config.trpt.org.banner}" />
+        <g:layoutHead/>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <div class="navbar navbar-collapse p-0">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item fw-bold pe-4"><a class="nav-link" href="${createLink(uri: "/")}">Trustmark Relying Party Tool</a></li>
+                        <sec:ifLoggedIn>
+                            <sec:ifAllGranted roles="ROLE_ADMINISTRATOR">
+                                <li class="nav-item ps-4 pe-4"><a class="nav-link" href="${createLink(controller: "protectedSystem", action: "manage")}">Protected Systems</a></li>
+                                <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "trustmarkBindingRegistry", action: "manage")}">Trustmark Binding Registries</a></li>
+                                <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "organization", action: "manage")}">Organizations</a></li>
+                                <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "user", action: "manage")}">Users</a></li>
+                            </sec:ifAllGranted>
+                        </sec:ifLoggedIn>
+                    </ul>
+
+                    <ul class="navbar-nav">
+                        <sec:ifLoggedIn>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Profile
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="${createLink(controller: "password", action: "changeWithAuthentication")}">Change Password</a></li>
+                                    <li><a class="dropdown-item" href="${createLink(controller: "logout", action: "index")}">Logout</a></li>
+                                </ul>
+                            </li>
+                        </sec:ifLoggedIn>
+                        <sec:ifNotLoggedIn>
+                            <li class="nav-item"><a class="nav-link"  href="${createLink(controller: "login")}">Login</a></li>
+                        </sec:ifNotLoggedIn>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container pt-4">
+            <div class="row">
+                <div class="col-12">
+                    <asset:image src="tmi-header.png" height="90em"/>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="content row">
-        <div class="col-md-12">
-            <g:layoutBody/>
-        </div>
-    </div>
 
-    <div style="margin-bottom: 4em;">&nbsp;</div>
-</div>
+        <g:layoutBody/>
 
-<footer>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6">
-                <span class="text-muted">&copy;2020 Georgia Tech Research Institute</span>
+        <footer class="container pt-4">
+            <div class="row">
+                <div class="col-12 text-center">
+                    Copyright &copy; 2021 Georgia Tech Research Institute
+                </div>
             </div>
-            <div>
-                v.<g:meta name="info.app.version"/>,
-                Build Date: <g:meta name="info.app.buildDate"/>
-            </div>
-        </div>
-    </div>
-</footer>
-</body>
+        </footer>
+    </body>
 </html>

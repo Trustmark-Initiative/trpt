@@ -1,15 +1,9 @@
-import tm.relying.party.tool.UserPasswordEncoderListener
-import tm.relying.party.tool.util.AuthFailureSecurityListener
-import tm.relying.party.tool.util.AuthSuccessSecurityListener
-import tm.relying.party.tool.util.TRPTSecurity
+import edu.gatech.gtri.trustmark.trpt.listener.AuthFailureSecurityListener
+import edu.gatech.gtri.trustmark.trpt.listener.AuthSuccessSecurityListener
+import edu.gatech.gtri.trustmark.trpt.listener.UserPasswordEncoderListener
 
-// Place your Spring DSL code here
 beans = {
-
-  userPasswordEncoderListener(UserPasswordEncoderListener)
-  authFailureListener(AuthFailureSecurityListener.class)
-  authSuccessListener(AuthSuccessSecurityListener.class)
-
-    // Gives methods for using in @Secured annotation.
-    trptSecurity(TRPTSecurity.class)
+    userPasswordEncoderListener(UserPasswordEncoderListener)
+    authFailureListener(AuthFailureSecurityListener.class)
+    authSuccessListener(AuthSuccessSecurityListener.class)
 }
