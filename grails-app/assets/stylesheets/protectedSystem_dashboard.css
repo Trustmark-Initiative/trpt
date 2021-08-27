@@ -1,0 +1,410 @@
+.ProtectedSystemContainer {
+    margin-top: 20px;
+}
+
+
+.ProtectedSystemContainer ol,
+.ProtectedSystemContainer ul {
+    padding-bottom: 7px;
+    padding-top: 7px;
+    margin: 0;
+}
+
+.ProtectedSystemContainer label,
+.TrustInteroperabilityProfileContainer  label {
+    width: 100%;
+    font-weight: normal;
+}
+
+.ProtectedSystemContainer > .Head {
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    line-height: 1.1;
+}
+
+.TrustExpressionContainer > .Body {
+    border-right: 1px solid rgb(221, 221, 221);
+}
+
+.TrustExpressionContainer > .Body > .TrustExpressionBorder {
+    border-bottom: 1px solid darkgrey;
+}
+
+.ProtectedSystemContainer, .TrustInteroperabilityProfileContainer, .PartnerSystemCandidateContainer, .PartnerSystemCandidate, .TrustExpressionEvaluationContainer, .TrustExpressionEvaluation, .TrustExpressionEvaluatorFailureListContainer, .TrustExpressionEvaluatorFailureListContainer > .Body, .TrustExpressionEvaluatorFailureListContainer > .Body .TrustExpressionParserFailureURI, .TrustExpressionEvaluatorFailureListContainer > .Body .TrustExpressionEvaluatorFailureResolve {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: min-content;
+}
+
+.TrustExpressionContainer, .TrustExpressionContainer > .Body, .TrustExpressionContainer > .Body .TrustExpression {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: min-content;
+}
+
+.TrustInteroperabilityProfileInner {
+    padding: 7px 7px 7px 7px;
+}
+
+.TrustExpression {
+    border-left: 1px solid rgb(221, 221, 221);
+}
+
+.TrustExpressionBorder {
+    border-top: 1px solid darkgray;
+    border-left: 1px solid darkgray;
+}
+
+.TrustExpressionOperatorBinary, .TrustExpressionOperatorUnary {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    grid-auto-rows: min-content;
+}
+
+.TrustExpressionOperatorBinary > div:first-of-type,
+.TrustExpressionOperatorUnary > div:first-of-type {
+    padding: 7px 7px 7px 7px;
+    border-top: 1px solid rgb(221, 221, 221);
+    width: 96px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.TrustExpressionOperatorBinary > div:first-of-type > div:first-of-type,
+.TrustExpressionOperatorUnary > div:first-of-type > div:first-of-type {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.TrustExpressionTerminal.TrustExpressionParserFailureParser {
+    border-top: 0px;
+}
+
+.TrustExpressionTerminal {
+    padding: 7px 7px 7px 7px;
+    border-top: 1px solid rgb(221, 221, 221);
+    /*border-left: 1px solid rgb(221, 221, 221);*/
+}
+
+.TrustExpressionBorder > input[type=checkbox],
+.TrustExpression > input[type=checkbox],
+.TrustExpressionTerminal > input[type=checkbox],
+.PartnerSystemCandidate > input[type=checkbox],
+.TrustInteroperabilityProfile > input[type=checkbox] {
+    display: none;
+}
+
+.TrustExpressionBorder > input[type=checkbox] ~ label,
+.TrustExpression > input[type=checkbox] ~ label,
+.TrustExpressionTerminal > input[type=checkbox] ~ label,
+.PartnerSystemCandidate > input[type=checkbox] ~ label,
+.TrustInteroperabilityProfile > input[type=checkbox] ~ label {
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.TrustExpressionBorder > input[type=checkbox]:not(:checked) ~ div,
+.TrustExpression > input[type=checkbox]:not(:checked) ~ div,
+.TrustExpressionTerminal > input[type=checkbox]:not(:checked) ~ div,
+.PartnerSystemCandidate > input[type=checkbox]:not(:checked) ~ div,
+.TrustInteroperabilityProfile > input[type=checkbox]:not(:checked) ~ div {
+    display: none;
+}
+
+.PartnerSystemCandidate > label > span.glyphicon-triangle-bottom,
+.PartnerSystemCandidate > input[type=checkbox]:checked ~ label > span.glyphicon-triangle-right
+
+.PartnerSystemCandidate > input[type=checkbox]:not(:checked) ~ label > span.glyphicon-triangle-bottom,
+.PartnerSystemCandidate > input[type=checkbox]:checked ~ label > span.glyphicon-triangle-right,
+.TrustInteroperabilityProfile > input[type=checkbox]:not(:checked) ~ label > span.glyphicon-triangle-bottom,
+.TrustInteroperabilityProfile > input[type=checkbox]:checked ~ label > span.glyphicon-triangle-right {
+    font-size: 10px;
+    display: none;
+}
+
+.PartnerSystemCandidate > input[type=checkbox]:not(:checked) ~ label > span.glyphicon-triangle-right,
+.PartnerSystemCandidate > input[type=checkbox]:checked ~ label > span.glyphicon-triangle-bottom,
+.TrustInteroperabilityProfile > input[type=checkbox]:not(:checked) ~ label > span.glyphicon-triangle-right,
+.TrustInteroperabilityProfile > input[type=checkbox]:checked ~ label > span.glyphicon-triangle-bottom {
+    font-size: 10px;
+    display: inline-block;
+}
+
+.SUCCESS {
+    background: white;
+    color: black;
+}
+
+.FAILURE {
+    background: rgb(249, 249, 249);
+    color: maroon;
+}
+
+.UNKNOWN {
+    color: #b36200;
+}
+
+.Head {
+    font-weight: bold;
+}
+
+.glyphicon {
+    margin-right: 7px;
+}
+
+.glyphicon-link {
+    float: right;
+}
+
+.TrustExpressionDetail {
+    color: black;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: min-content;
+    margin-top: 7px;
+    padding-top: 7px;
+    padding-left: 21px;
+    border-top: 1px solid rgb(221, 221, 221);
+}
+
+.TrustExpressionDetail > div {
+    padding-bottom: 7px;
+    padding-top: 7px;
+}
+
+.TrustExpressionDetail > div:first-of-type {
+    padding-top: 0px;
+}
+
+.TrustExpressionDetail > div:last-of-type {
+    padding-bottom: 0px;
+}
+
+.TrustExpressionDetail .Head {
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
+
+.TrustInteroperabilityProfileReferenceList {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    grid-auto-rows: min-content;
+    row-gap: 7px;
+    column-gap: 7px;
+}
+
+.TrustInteroperabilityProfileReferenceList > div {
+    white-space: nowrap;
+}
+
+.code {
+    font-family: monospace;
+    font-size: 10px;
+    margin: 0 auto;
+    padding: 7px 0px 7px 0px;
+    display: inline;
+}
+
+.TrustExpressionEvaluation {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: max-content;
+}
+
+.TrustExpressionEvaluation input[type=radio] {
+    display: none;
+}
+
+.TrustExpressionEvaluation input[type=radio]:not(:checked) ~ div {
+    visibility: hidden;
+}
+
+.TrustExpressionContainer, .TrustExpressionEvaluatorFailureListContainer {
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    grid-column: 1;
+    grid-row: 1;
+    border-top: 1px solid darkgrey
+}
+
+.TrustExpressionContainer > .Body {
+    border-right: 1px solid darkgrey
+}
+
+.TrustExpressionContainer > .Body > .TrustExpression {
+    border-left: 1px solid darkgrey
+}
+
+.TrustInteroperabilityProfileContainer:last-child > .TrustInteroperabilityProfile > .TrustExpressionEvaluation > .TrustExpressionContainer > .Body {
+    border-bottom: 1px solid darkgrey
+}
+
+.TrustExpressionContainer > .Body, .TrustExpressionEvaluatorFailureListContainer > .Body {
+    width: 100%;
+}
+
+.TrustExpressionContainer > .Head, .TrustExpressionEvaluatorFailureListContainer > .Head {
+    position: relative;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 10px 15px 10px 15px;
+    width: min-content;
+    border-width: 1px;
+    display: block;
+    border-style: solid;
+    border-radius: 4px 4px 0 0;
+    text-align: center;
+    color: rgb(85, 85, 85);
+    white-space: nowrap;
+    margin-bottom: -1px;
+}
+
+.TrustExpressionEvaluatorFailureListContainer > .Head {
+    left: 138px;
+}
+
+.TrustExpressionEvaluation input[type=radio]:not(:checked) ~ .Head {
+    z-index: 1;
+    color: rgb(51, 122, 183);
+    border-color: transparent;
+}
+
+.TrustExpressionEvaluation input[type=radio]:not(:checked) ~ .Body {
+    z-index: 2;
+}
+
+.TrustExpressionEvaluation input[type=radio]:not(:checked) ~ .Head:hover {
+    background-color: rgb(238, 238, 238);
+    color: rgb(35, 82, 124);
+    border-color: rgb(221, 221, 221);
+    cursor: pointer;
+}
+
+.TrustExpressionEvaluation input[type=radio]:checked ~ .Head {
+    z-index: 2;
+    border-color: rgb(221, 221, 221);
+    border-bottom-color: white;
+}
+
+.TrustExpressionEvaluation input[type=radio]:checked ~ .Body {
+    z-index: 1;
+}
+
+.TrustInteroperabilityProfile > .Head {
+    font-weight: normal;
+    font-size: 14px;
+    padding: 5px;
+    color: rgb(51, 51, 51);
+    border-color: rgb(221, 221, 221);
+    border-width: 1px 1px 1px 1px;
+    display: block;
+    border-style: solid;
+    margin-bottom: -1px;
+    padding-left: 7px;
+}
+
+.PartnerSystemCandidate > .Head {
+    font-weight: normal;
+    font-size: 14px;
+    padding: 5px;
+    color: rgb(51, 51, 51);
+    border-color: rgb(221, 221, 221);
+    border-width: 1px 1px 1px 1px;
+    display: block;
+    border-style: solid;
+    margin-bottom: -1px;
+    padding-left: 7px;
+}
+
+.TrustExpressionEvaluatorFailure {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    color: black;
+    grid-auto-rows: min-content;
+    /*font-size: 7px;*/
+    border-width: 1px 1px 0px 0px;
+    border-style: solid;
+    border-color: rgb(221, 221, 221);
+}
+
+.TrustExpressionEvaluatorFailure > div {
+    padding: 7px 7px 7px 7px;
+    border-width: 0px 0px 1px 1px;
+    border-style: solid;
+    border-color: rgb(221, 221, 221);
+    width: 100%;
+}
+
+.TrustExpressionEvaluatorFailure > div.code {
+    padding: 4px 11px 4px 11px;
+}
+
+.TrustExpressionEvaluatorFailure > div:nth-child(n + 1) {
+    white-space: nowrap;
+}
+
+.PartnerSystemCandidateSummary,
+.ProtectedSystemSummary {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.ProtectedSystemSummary {
+    padding-top: 10px;
+}
+
+.PartnerSystemCandidateSummary {
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.PartnerSystemCandidateSummary.Separate {
+    border-top: 1px solid lightgray;
+}
+
+.PartnerSystemCandidateSummary .Head,
+.ProtectedSystemSummary .Head {
+    display: grid;
+    grid-gap: 5px;
+    grid-template-columns: 1fr min-content min-content min-content min-content;
+    grid-template-rows: 1fr;
+}
+
+.PartnerSystemCandidateSummary .Head div:not(:first-child),
+.ProtectedSystemSummary .Head div:not(:first-child) {
+    font-weight: normal;
+    padding-left: 5px;
+    border-left: 1px solid lightgray;
+}
+
+.PartnerSystemCandidateSummary .Head div,
+.ProtectedSystemSummary .Head div {
+    white-space: nowrap;
+}
+
+.PartnerSystemCandidateSummary .Head div:nth-child(1),
+.ProtectedSystemSummary .Head div:nth-child(1) {
+    font-size: 30px;
+}
+
+.PartnerSystemCandidateSummary .Body,
+.ProtectedSystemSummary .Body {
+    display: grid;
+    grid-gap: 5px;
+    grid-template-columns: min-content 1fr;
+    grid-template-rows: 1fr
+}
+
+.PartnerSystemCandidateSummary .Body > div:nth-child(2n - 1),
+.ProtectedSystemSummary .Body > div:nth-child(2n - 1) {
+    font-weight: bold;
+}
+
+.PartnerSystemCandidateSummary .Neck {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

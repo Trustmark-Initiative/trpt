@@ -2,17 +2,18 @@
 grails:
     profile: web
     codegen:
-        defaultPackage: tm.relying.party.tool
+        defaultPackage: edu.gatech.gtri.trustmark.trpt
     gorm:
         reactor:
             # Whether to translate GORM events into Reactor events
             # Disabled by default for performance reasons
             events: false
+    cors:
+        enabled: true
 info:
     app:
         name: '@info.app.name@'
         version: '@info.app.version@'
-        grailsVersion: '@info.app.grailsVersion@'
 spring:
     jmx:
         unique-names: true
@@ -95,8 +96,8 @@ management:
 hibernate:
     format_sql: true
     cache:
-        use_second_level_cache: true
-        use_query_cache: true
+        use_second_level_cache: false
+        use_query_cache: false
         region.factory_class: 'org.hibernate.cache.ehcache.EhCacheRegionFactory'
     search:
         default:
@@ -110,18 +111,19 @@ dataSource:
     driverClassName: com.mysql.cj.jdbc.Driver
     dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     dbCreate: update
-    url: jdbc:mysql://trptDatabase:3306/trpt_db
+    url: jdbc:mysql://trptDatabase:3306/trpt_db??verifyServerCertificate=false&useSSL=false&allowPublicKeyRetrieval=true
     username: trpt_user
     password: trpt_pw_11
+#    logSql: true
 
 ---
-
 environments:
     development:
         dataSource:
             properties:
                 testOnBorrow: true
                 testWhileIdle: true
+                defaultTransactionIsolation: 8
     production:
         dataSource:
             properties:
@@ -141,4 +143,4 @@ environments:
                 testWhileIdle: true
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
-                defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+                defaultTransactionIsolation: 8

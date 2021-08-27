@@ -1,0 +1,39 @@
+html {
+    font-size: 14px !important;
+}
+
+.card-hack {
+    border-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0
+}
+
+.card-header-hack {
+    border-bottom: 0;
+}
+
+.table-striped-hack > tbody > tr:nth-of-type(2n+1) {
+    background-color: rgba(0, 0, 0, .03);
+}
+
+td > div {
+    max-height: 1.5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.label-required:after {
+    content: "*";
+    color: #dc3545;
+}
+
+td {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 0;
+}
+
+.form-control:disabled, .form-control[readonly] {
+    background-color: rgba(0, 0, 0, .03);
+}

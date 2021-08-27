@@ -1,0 +1,23 @@
+body {
+    margin-top: 70px;
+}
+
+.header img {
+    height: 70px;
+}
+
+footer {
+    clear: both;
+    padding-top: 70px;
+    font-style: italic;
+    text-align: center;
+}
+
+.navbar-brand {
+    font-size: inherit;
+    font-weight: bold;
+}
+
+.navbar-right {
+    margin-right: 0px;
+}
