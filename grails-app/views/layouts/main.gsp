@@ -25,6 +25,7 @@
                                 <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "trustmarkBindingRegistry", action: "manage")}">Trustmark Binding Registries</a></li>
                                 <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "organization", action: "manage")}">Organizations</a></li>
                                 <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "user", action: "manage")}">Users</a></li>
+                                <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "mail", action: "manage")}">Mail</a></li>
                             </sec:ifAllGranted>
                         </sec:ifLoggedIn>
                     </ul>
@@ -43,7 +44,7 @@
                             </li>
                         </sec:ifLoggedIn>
                         <sec:ifNotLoggedIn>
-                            <li class="nav-item"><a class="nav-link"  href="${createLink(controller: "login")}">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="${createLink(controller: "login")}">Login</a></li>
                         </sec:ifNotLoggedIn>
                     </ul>
                 </div>

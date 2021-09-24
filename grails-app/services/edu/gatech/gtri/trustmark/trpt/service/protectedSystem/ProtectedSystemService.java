@@ -12,6 +12,10 @@ import org.gtri.fj.data.NonEmptyList;
 import org.gtri.fj.data.Validation;
 import org.gtri.fj.product.Unit;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
+import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForTrustInteroperabilityProfileUri.synchronizeTrustInteroperabilityProfileUri;
 import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.protectedSystemPartnerSystemCandidateResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.validationId;
 import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.validationIdList;
@@ -32,26 +36,33 @@ import static org.gtri.fj.product.Unit.unit;
 @Transactional
 public class ProtectedSystemService {
 
-    public List<ProtectedSystemTypeResponse> typeFindAll() {
+    public List<ProtectedSystemTypeResponse> typeFindAll(
+            final String requesterUsername) {
 
         return arrayList(ProtectedSystemType.values())
                 .map(ProtectedSystemUtility::protectedSystemTypeResponse);
     }
 
-    public List<ProtectedSystemResponse> findAll(final ProtectedSystemFindAllRequest protectedSystemFindAllRequest) {
+    public List<ProtectedSystemResponse> findAll(
+            final String requesterUsername,
+            final ProtectedSystemFindAllRequest protectedSystemFindAllRequest) {
 
         return ProtectedSystem
                 .findAllByOrderByNameAscHelper()
                 .map(ProtectedSystemUtility::protectedSystemResponse);
     }
 
-    public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponse> findOne(final ProtectedSystemFindOneRequest protectedSystemFindOneRequest) {
+    public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponse> findOne(
+            final String requesterUsername,
+            final ProtectedSystemFindOneRequest protectedSystemFindOneRequest) {
 
         return validationId(protectedSystemFindOneRequest.getId())
                 .map(ProtectedSystemUtility::protectedSystemResponse);
     }
 
-    public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponse> insert(final ProtectedSystemInsertRequest protectedSystemInsertRequest) {
+    public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponse> insert(
+            final String requesterUsername,
+            final ProtectedSystemInsertRequest protectedSystemInsertRequest) {
 
         return accumulate(
                 validationOrganization(protectedSystemInsertRequest.getOrganization()),
@@ -88,6 +99,8 @@ public class ProtectedSystemService {
                                     trustInteroperabilityProfileUri.setUri(uri);
                                     trustInteroperabilityProfileUri.saveHelper();
 
+                                    (new Thread(() -> synchronizeTrustInteroperabilityProfileUri(LocalDateTime.now(ZoneOffset.UTC), uri))).start();
+
                                     return trustInteroperabilityProfileUri;
                                 })));
 
@@ -99,7 +112,9 @@ public class ProtectedSystemService {
                 .map(ProtectedSystemUtility::protectedSystemResponse);
     }
 
-    public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponse> update(final ProtectedSystemUpdateRequest protectedSystemUpdateRequest) {
+    public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponse> update(
+            final String requesterUsername,
+            final ProtectedSystemUpdateRequest protectedSystemUpdateRequest) {
 
         return accumulate(
                 validationId(protectedSystemUpdateRequest.getId()),
@@ -150,6 +165,8 @@ public class ProtectedSystemService {
                                     final TrustInteroperabilityProfileUri trustInteroperabilityProfileUri = new TrustInteroperabilityProfileUri();
                                     trustInteroperabilityProfileUri.setUri(uri);
 
+                                    (new Thread(() -> synchronizeTrustInteroperabilityProfileUri(LocalDateTime.now(ZoneOffset.UTC), uri))).start();
+
                                     return trustInteroperabilityProfileUri.saveAndFlushHelper();
                                 })));
 
@@ -161,7 +178,9 @@ public class ProtectedSystemService {
                 .map(ProtectedSystemUtility::protectedSystemResponse);
     }
 
-    public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, Unit> delete(final ProtectedSystemDeleteAllRequest protectedSystemDeleteAllRequest) {
+    public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, Unit> delete(
+            final String requesterUsername,
+            final ProtectedSystemDeleteAllRequest protectedSystemDeleteAllRequest) {
 
         return validationIdList(iterableList(protectedSystemDeleteAllRequest.getIdList()))
                 .map(list -> list.map(ProtectedSystem -> {
@@ -173,6 +192,7 @@ public class ProtectedSystemService {
     }
 
     public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemPartnerSystemCandidateResponse> findOne(
+            final String requesterUsername,
             final ProtectedSystemPartnerSystemCandidateFindOneRequest protectedSystemPartnerSystemCandidateFindOneRequest) {
 
         return accumulate(

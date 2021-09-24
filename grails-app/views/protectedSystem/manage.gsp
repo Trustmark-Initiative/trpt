@@ -28,22 +28,22 @@
                         <th scope="col" style="width: 50%">Name</th>
                         <th scope="col" style="width: 25%">Type</th>
                         <th scope="col" style="width: 25%">Organization</th>
-                        <th scope="col"><span class="bi-box-arrow-in-right"></span></th>
+                        <th scope="col" style="width: 0%">TIP#</th>
                     </tr>
                 </thead>
                 <template id="protected-system-template-empty">
                     <tr>
-                        <td colspan="6">(No protected systems.)</td>
+                        <td colspan="5">(No protected systems.)</td>
                     </tr>
                 </template>
                 <template id="protected-system-template-summary">
                     <tr>
                         <td><a href="#" class="bi-pencil protected-system-action-update"></a></td>
                         <td><input type="checkbox" class="form-check-input protected-system-action-delete-queue"></td>
-                        <td><div class="protected-system-element-name"></div></td>
+                        <td><a class="protected-system-element-name"></a></td>
                         <td><div class="protected-system-element-type"></div></td>
                         <td><div class="protected-system-element-organization"></div></td>
-                        <td><a href="#" class="bi-box-arrow-in-right protected-system-action-detail"></a></td>
+                        <td><div class="text-center protected-system-element-tip-count"></div></td>
                     </tr>
                 </template>
                 <tbody id="protected-system-tbody">

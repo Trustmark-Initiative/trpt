@@ -7,7 +7,7 @@
     <body>
 
         <div class="container pt-4" style="max-width: 540px;">
-            <form action="/login/authenticate" method="POST" class="border rounded card" id="login-form" autocomplete="off">
+            <form action="${request.contextPath}/login/authenticate" method="POST" class="border rounded card" id="login-form" autocomplete="off">
                 <div class="card-header fw-bold">
                     <div class="row">
                         <div class="col-12">

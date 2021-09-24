@@ -1,25 +1,20 @@
 package edu.gatech.gtri.trustmark.trpt.service.organization;
 
-public final class OrganizationFindOneRequest
-{
+public final class OrganizationFindOneRequest {
     private long id;
 
-    OrganizationFindOneRequest()
-    {
+    OrganizationFindOneRequest() {
     }
 
-    OrganizationFindOneRequest(long id)
-    {
+    OrganizationFindOneRequest(long id) {
         this.id = id;
     }
 
-    public long getId()
-    {
+    public long getId() {
         return id;
     }
 
-    public void setId(long id)
-    {
+    public void setId(long id) {
         this.id = id;
     }
 }

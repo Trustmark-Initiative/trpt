@@ -48,6 +48,7 @@ public class ResponseUtility {
                         (field, lengthMinimumInclusive, length) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName()), p("lengthMinimumInclusive", lengthMinimumInclusive), p("length", length)),
                         (field, lengthMaximumInclusive, length) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName()), p("lengthMaximumInclusive", lengthMaximumInclusive), p("length", length)),
                         (field) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName())),
+                        (field) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName())),
                         (field, pattern) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName()), p("pattern", pattern)),
                         (field) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName())),
                         (field) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName())),

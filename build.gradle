@@ -39,7 +39,7 @@ apply plugin: 'org.grails.grails-gsp'
 
 // Maven coordinates.
 
-version '0.1'
+version '1.0'
 group 'edu.gatech.gtri.trustmark.trpt'
 
 // https://docs.gradle.org/current/userguide/declaring_repositories.html
@@ -63,8 +63,8 @@ configurations {
 }
 
 dependencies {
-    compile 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.15'
-    compile 'edu.gatech.gtri.trustmark:tf-api:1.4.9'
+    compile 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.17'
+    compile 'edu.gatech.gtri.trustmark:tf-api:1.4.10'
     compile 'log4j:log4j:1.2.16' // required by tf-api-impl
 
     compile 'org.grails.plugins:async'

@@ -8,7 +8,11 @@ import org.gtri.fj.data.NonEmptyList;
 import org.gtri.fj.data.Validation;
 import org.gtri.fj.product.Unit;
 
-import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.*;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationDescription;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationId;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationIdList;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationName;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationUri;
 import static org.gtri.fj.data.List.iterableList;
 import static org.gtri.fj.data.Validation.accumulate;
 import static org.gtri.fj.product.Unit.unit;
@@ -16,20 +20,26 @@ import static org.gtri.fj.product.Unit.unit;
 @Transactional
 public class OrganizationService {
 
-    public List<OrganizationResponse> findAll(final OrganizationFindAllRequest organizationFindAllRequest) {
+    public List<OrganizationResponse> findAll(
+            final String requesterUsername,
+            final OrganizationFindAllRequest organizationFindAllRequest) {
 
         return Organization
                 .findAllByOrderByNameAscHelper()
                 .map(OrganizationUtility::organizationResponse);
     }
 
-    public Validation<NonEmptyList<ValidationMessage<OrganizationField>>, OrganizationResponse> findOne(final OrganizationFindOneRequest organizationFindOneRequest) {
+    public Validation<NonEmptyList<ValidationMessage<OrganizationField>>, OrganizationResponse> findOne(
+            final String requesterUsername,
+            final OrganizationFindOneRequest organizationFindOneRequest) {
 
         return validationId(organizationFindOneRequest.getId())
                 .map(OrganizationUtility::organizationResponse);
     }
 
-    public Validation<NonEmptyList<ValidationMessage<OrganizationField>>, OrganizationResponse> insert(final OrganizationInsertRequest organizationInsertRequest) {
+    public Validation<NonEmptyList<ValidationMessage<OrganizationField>>, OrganizationResponse> insert(
+            final String requesterUsername,
+            final OrganizationInsertRequest organizationInsertRequest) {
 
         return accumulate(
                 validationName(organizationInsertRequest.getName()),
@@ -49,7 +59,9 @@ public class OrganizationService {
                 .map(OrganizationUtility::organizationResponse);
     }
 
-    public Validation<NonEmptyList<ValidationMessage<OrganizationField>>, OrganizationResponse> update(final OrganizationUpdateRequest organizationUpdateRequest) {
+    public Validation<NonEmptyList<ValidationMessage<OrganizationField>>, OrganizationResponse> update(
+            final String requesterUsername,
+            final OrganizationUpdateRequest organizationUpdateRequest) {
 
         return accumulate(
                 validationId(organizationUpdateRequest.getId()),
@@ -68,7 +80,9 @@ public class OrganizationService {
                 .map(OrganizationUtility::organizationResponse);
     }
 
-    public Validation<NonEmptyList<ValidationMessage<OrganizationField>>, Unit> delete(final OrganizationDeleteAllRequest organizationDeleteAllRequest) {
+    public Validation<NonEmptyList<ValidationMessage<OrganizationField>>, Unit> delete(
+            final String requesterUsername,
+            final OrganizationDeleteAllRequest organizationDeleteAllRequest) {
 
         return validationIdList(iterableList(organizationDeleteAllRequest.getIdList()))
                 .map(list -> list.map(organization -> {

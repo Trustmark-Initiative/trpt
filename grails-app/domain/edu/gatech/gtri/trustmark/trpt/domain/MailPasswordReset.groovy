@@ -1,6 +1,8 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
 import org.gtri.fj.data.Option
+import org.gtri.fj.function.Effect0
+import org.gtri.fj.function.F0
 
 import java.time.LocalDateTime
 
@@ -49,9 +51,24 @@ class MailPasswordReset {
                 .orSome(org.gtri.fj.data.List.<MailPasswordReset> nil())
     }
 
+    static final org.gtri.fj.data.List<MailPasswordReset> findAllByMailDateTimeIsNullHelper() {
+
+        fromNull(findAllByMailDateTimeIsNull())
+                .map({ list -> iterableList(list) })
+                .orSome(org.gtri.fj.data.List.<MailPasswordReset> nil())
+    }
+
     static final Option<MailPasswordReset> findByExternalHelper(
             final String external) {
 
         fromNull(findByExternal(external))
+    }
+
+    static final <T> T withTransactionHelper(final F0<T> f0) {
+        return withTransaction({ return f0.f() })
+    }
+
+    static final void withTransactionHelper(final Effect0 effect0) {
+        withTransaction({ return effect0.f() })
     }
 }

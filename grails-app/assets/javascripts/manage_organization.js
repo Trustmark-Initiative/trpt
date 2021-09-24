@@ -111,7 +111,6 @@ function initialize(
         document.getElementById("organization-input-name").value = organization.name
         document.getElementById("organization-input-uri").value = organization.uri
         document.getElementById("organization-input-description").value = organization.description
-
     }
 
     function onCancel() {
@@ -202,13 +201,13 @@ function initialize(
                     const organizationElementName = organizationElement.querySelector(".organization-element-name")
                     const organizationElementMessage = organizationElement.querySelector(".organization-element-message")
 
-                    organizationElementName.innerHTML = organizationList.find(organization => organization.id == idList[entry[0]]).name
+                    organizationElementName.innerHTML = `Could not delete "${organizationList.find(organization => organization.id == idList[entry[0]]).name}":`
 
                     Object.entries(entry[1]).forEach(entryInner => {
 
                         entryInner[1].forEach(message => {
 
-                            const organizationElementMessageInner = document.createElement("div")
+                            const organizationElementMessageInner = document.createElement("li")
                             organizationElementMessageInner.innerHTML = message;
 
                             organizationElementMessage.appendChild(organizationElementMessageInner)

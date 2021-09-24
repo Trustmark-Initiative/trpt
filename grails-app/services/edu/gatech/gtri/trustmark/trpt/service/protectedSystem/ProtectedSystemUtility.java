@@ -86,11 +86,11 @@ public final class ProtectedSystemUtility {
                 .bind(trustInteroperabilityProfileUri -> trustInteroperabilityProfileUri
                         .partnerSystemCandidateTrustInteroperabilityProfileUriSetHelper()
                         .filter(partnerSystemCandidateTrustInteroperabilityProfileUri -> partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper().idHelper() == partnerSystemCandidate.idHelper()))
-                .foldLeft((pInner, partnerSystemCandidateTrustInteroperabilityProfileUri) -> pInner
-                                .map1(o -> fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied()).orSome(0) + o)
-                                .map2(o -> fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()).orSome(0) + o)
-                                .map3(o -> (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 1 : 0) + o)
-                                .map4(o -> (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 0 : 1) + o),
+                .foldLeft((pInner, partnerSystemCandidateTrustInteroperabilityProfileUri) -> p(
+                                fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied()).orSome(0) + pInner._1(),
+                                fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()).orSome(0) + pInner._2(),
+                                (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 1 : 0) + pInner._3(),
+                                (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 0 : 1) + pInner._4()),
                         p(0, 0, 0, 0));
 
         return new ProtectedSystemPartnerSystemCandidateSummaryResponse(
@@ -112,15 +112,16 @@ public final class ProtectedSystemUtility {
                 .bind(trustInteroperabilityProfileUri -> trustInteroperabilityProfileUri
                         .partnerSystemCandidateTrustInteroperabilityProfileUriSetHelper()
                         .filter(partnerSystemCandidateTrustInteroperabilityProfileUri -> partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper().idHelper() == partnerSystemCandidate.idHelper()))
-                .foldLeft((pInner, partnerSystemCandidateTrustInteroperabilityProfileUri) -> pInner
-                                .map1(o -> fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied()).orSome(0) + o)
-                                .map2(o -> fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()).orSome(0) + o)
-                                .map3(o -> (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 1 : 0) + o)
-                                .map4(o -> (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 0 : 1) + o)
-                                .map5(o -> o.set(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(), new JSONObject(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression()))),
+                .foldLeft((pInner, partnerSystemCandidateTrustInteroperabilityProfileUri) -> p(
+                                fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied()).orSome(0) + pInner._1(),
+                                fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()).orSome(0) + pInner._2(),
+                                (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 1 : 0) + pInner._3(),
+                                (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 0 : 1) + pInner._4(),
+                                pInner._5().set(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(), partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : new JSONObject(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression()))),
                         p(0, 0, 0, 0, treeMap(stringOrd)));
 
         return new ProtectedSystemPartnerSystemCandidateResponse(
+                protectedSystem.organizationHelper().getName(),
                 protectedSystem.getName(),
                 partnerSystemCandidate.getName(),
                 partnerSystemCandidateResponse(partnerSystemCandidate),
@@ -146,7 +147,7 @@ public final class ProtectedSystemUtility {
                 nameInner -> Organization.findByIdHelper(organizationId)
                         .bind(organization -> ProtectedSystem.findByOrganizationAndNameHelper(organization, nameInner)),
                 1,
-                200,
+                1000,
                 name);
     }
 
@@ -158,7 +159,7 @@ public final class ProtectedSystemUtility {
                         .bind(organization -> ProtectedSystem.findByOrganizationAndNameHelper(organization, nameInner))
                         .filter(protectedSystem -> protectedSystem.idHelper() != id),
                 1,
-                200,
+                1000,
                 name);
     }
 
@@ -177,7 +178,7 @@ public final class ProtectedSystemUtility {
                 nonNullAndDistinct -> mustBeNonNullAndLength(
                         ProtectedSystemField.uri,
                         1,
-                        200,
+                        1000,
                         nonNullAndDistinct.getUri())
                         .map(uri -> p(TrustInteroperabilityProfileUri.findByUriHelper(uri).toEither(uri), nonNullAndDistinct.isMandatory())));
     }

@@ -50,7 +50,7 @@
             <div class="alert alert-danger">
                 <div class="text-decoration-underline organization-element-name"></div>
 
-                <div class="pt-4 organization-element-message"></div>
+                <ul class="pt-2 mb-0 organization-element-message"></ul>
             </div>
         </template>
 

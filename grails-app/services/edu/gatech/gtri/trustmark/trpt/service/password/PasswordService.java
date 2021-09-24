@@ -80,11 +80,11 @@ public class PasswordService {
     }
 
     public Validation<NonEmptyList<ValidationMessage<PasswordField>>, PasswordChangeResponseWithAuthentication> changeWithAuthenticationSubmit(
-            final String username,
+            final String requesterUsername,
             final PasswordChangeRequestWithAuthentication passwordChangeRequestWithAuthentication) {
 
         return accumulate(
-                validationOldPassword(springSecurityService, username, passwordChangeRequestWithAuthentication.getPasswordOld()),
+                validationOldPassword(springSecurityService, requesterUsername, passwordChangeRequestWithAuthentication.getPasswordOld()),
                 validationNewPassword(passwordChangeRequestWithAuthentication.getPasswordNew1(), passwordChangeRequestWithAuthentication.getPasswordNew2()),
                 (user, password) -> {
 

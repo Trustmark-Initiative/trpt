@@ -34,6 +34,19 @@ td {
     max-width: 0;
 }
 
+td.unhack {
+    overflow: visible;
+    white-space: normal;
+    text-overflow: clip;
+    max-width: max-content;
+}
+
+td.unhack > div {
+    max-height: max-content;
+    overflow: visible;
+    text-overflow: clip;
+}
+
 .form-control:disabled, .form-control[readonly] {
     background-color: rgba(0, 0, 0, .03);
 }

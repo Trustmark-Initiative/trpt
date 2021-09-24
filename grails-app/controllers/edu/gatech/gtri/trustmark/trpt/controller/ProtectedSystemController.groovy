@@ -9,6 +9,7 @@ import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemSer
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUpdateRequest
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
+import grails.plugin.springsecurity.userdetails.GrailsUser
 import groovy.transform.CompileStatic
 import org.gtri.fj.product.P2
 
@@ -26,39 +27,39 @@ class ProtectedSystemController {
 
     Object findAll(final ProtectedSystemFindAllRequest protectedSystemServiceFindAllRequest) {
 
-        respond protectedSystemService.findAll(protectedSystemServiceFindAllRequest).toJavaList()
+        respond protectedSystemService.findAll(((GrailsUser) getPrincipal()).username, protectedSystemServiceFindAllRequest).toJavaList()
     }
 
     Object findOne(final ProtectedSystemFindOneRequest protectedSystemFindOneRequest) {
 
-        final P2<Object, Integer> response = toResponse(protectedSystemService.findOne(protectedSystemFindOneRequest))
+        final P2<Object, Integer> response = toResponse(protectedSystemService.findOne(((GrailsUser) getPrincipal()).username, protectedSystemFindOneRequest))
 
         respond response._1(), status: response._2()
     }
 
     Object insert(final ProtectedSystemInsertRequest protectedSystemInsertRequest) {
 
-        final P2<Object, Integer> response = toResponse(protectedSystemService.insert(protectedSystemInsertRequest))
+        final P2<Object, Integer> response = toResponse(protectedSystemService.insert(((GrailsUser) getPrincipal()).username, protectedSystemInsertRequest))
 
         respond response._1(), status: response._2()
     }
 
     Object update(final ProtectedSystemUpdateRequest protectedSystemUpdateRequest) {
 
-        final P2<Object, Integer> response = toResponse(protectedSystemService.update(protectedSystemUpdateRequest))
+        final P2<Object, Integer> response = toResponse(protectedSystemService.update(((GrailsUser) getPrincipal()).username, protectedSystemUpdateRequest))
 
         respond response._1(), status: response._2()
     }
 
     Object delete(final ProtectedSystemDeleteAllRequest protectedSystemDeleteAllRequest) {
 
-        final P2<Object, Integer> response = toResponse(protectedSystemService.delete(protectedSystemDeleteAllRequest))
+        final P2<Object, Integer> response = toResponse(protectedSystemService.delete(((GrailsUser) getPrincipal()).username, protectedSystemDeleteAllRequest))
 
         respond response._1(), status: response._2()
     }
 
     Object typeFindAll() {
 
-        respond protectedSystemService.typeFindAll().toJavaList()
+        respond protectedSystemService.typeFindAll(((GrailsUser) getPrincipal()).username).toJavaList()
     }
 }

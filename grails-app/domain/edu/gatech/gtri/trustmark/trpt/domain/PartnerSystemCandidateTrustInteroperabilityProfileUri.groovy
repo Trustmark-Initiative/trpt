@@ -1,6 +1,8 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
 import org.gtri.fj.data.Option
+import org.gtri.fj.function.Effect0
+import org.gtri.fj.function.F0
 
 import java.time.LocalDateTime
 
@@ -8,6 +10,7 @@ import static org.gtri.fj.data.Option.fromNull
 
 class PartnerSystemCandidateTrustInteroperabilityProfileUri {
 
+    LocalDateTime evaluationAttemptLocalDateTime
     LocalDateTime evaluationLocalDateTime
 
     Boolean evaluationTrustExpressionSatisfied
@@ -23,6 +26,7 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
     ]
 
     static constraints = {
+        evaluationAttemptLocalDateTime nullable: true
         evaluationLocalDateTime nullable: true
         evaluationTrustExpressionSatisfied nullable: true
         evaluationTrustExpression nullable: true
@@ -58,5 +62,13 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
     static Option<PartnerSystemCandidateTrustInteroperabilityProfileUri> findByPartnerSystemCandidateAndTrustInteroperabilityProfileUriHelper(final PartnerSystemCandidate partnerSystemCandidate, final TrustInteroperabilityProfileUri trustInteroperabilityProfileUri) {
 
         fromNull(findByPartnerSystemCandidateAndTrustInteroperabilityProfileUri(partnerSystemCandidate, trustInteroperabilityProfileUri))
+    }
+
+    static final <T> T withTransactionHelper(final F0<T> f0) {
+        return withTransaction({ return f0.f() })
+    }
+
+    static final void withTransactionHelper(final Effect0 effect0) {
+        withTransaction({ return effect0.f() })
     }
 }

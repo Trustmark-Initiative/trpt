@@ -8,6 +8,7 @@ import org.gtri.fj.data.Option;
 import org.gtri.fj.data.Validation;
 import org.gtri.fj.function.F1;
 import org.gtri.fj.function.F2;
+import org.gtri.fj.function.Try;
 import org.gtri.fj.product.P2;
 import org.gtri.fj.product.Unit;
 
@@ -20,6 +21,7 @@ import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessag
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage.validationMessageMustBeLengthGreaterThanOrEqual;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage.validationMessageMustBeLengthLessThanOrEqual;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage.validationMessageMustBeNonNull;
+import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage.validationMessageMustBeNumeric;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage.validationMessageMustBePattern;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage.validationMessageMustBeReference;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage.validationMessageMustBeUnique;
@@ -33,6 +35,7 @@ import static org.gtri.fj.data.Validation.accumulate;
 import static org.gtri.fj.data.Validation.condition;
 import static org.gtri.fj.data.Validation.success;
 import static org.gtri.fj.data.Validation.validation;
+import static org.gtri.fj.product.P.p;
 import static org.gtri.fj.product.Unit.unit;
 
 public final class ValidationUtility {
@@ -125,6 +128,17 @@ public final class ValidationUtility {
                 value);
     }
 
+    public static <FIELD> Validation<NonEmptyList<ValidationMessage<FIELD>>, Long> mustBeNumeric(
+            final FIELD field,
+            final String value) {
+
+        requireNonNull(field);
+        requireNonNull(value);
+
+        return Try.f(() -> Long.parseLong(value))._1()
+                .f().map(runtimeException -> nel(validationMessageMustBeNumeric(field)));
+    }
+
     public static <FIELD> Validation<NonEmptyList<ValidationMessage<FIELD>>, String> mustBePattern(
             final FIELD field,
             final Pattern pattern,
@@ -178,10 +192,10 @@ public final class ValidationUtility {
         final List<P2<Option<Validation<NonEmptyList<ValidationMessage<FIELD>>, V2>>, Integer>> validationList = valueList
                 .map(Option::fromNull)
                 .zipIndex()
-                .map(p -> p.map1(option -> option.map(fValidation)));
+                .map(p -> p(p._1().map(fValidation), p._2()));
 
         Option<ValidationMessage<FIELD>> validationListMessageMustBeElementNonNullOption = fromList(validationList.filter(p -> p._1().isNone())).map(nelInner -> validationMessageMustBeElementNonNull(field, nelInner.map(P2::_2)));
-        Option<ValidationMessage<FIELD>> validationMessageNonEmptyListOption = fromList(validationList.filter(p -> p._1().map(Validation::isFail).orSome(false))).map(nelInner -> validationMessageNonEmptyList(field, nelInner.map(p -> p.map1(option -> option.some()).map1(validation -> validation.fail()))));
+        Option<ValidationMessage<FIELD>> validationMessageNonEmptyListOption = fromList(validationList.filter(p -> p._1().map(Validation::isFail).orSome(false))).map(nelInner -> validationMessageNonEmptyList(field, nelInner.map(p -> p(p._1().some().fail(), p._2()))));
         List<V2> list = validationList.filter(p -> p._1().map(Validation::isSuccess).orSome(false)).map(p -> p._1().some().success());
 
         return validation(validationListMessageMustBeElementNonNullOption
@@ -222,6 +236,14 @@ public final class ValidationUtility {
                 mustBeLengthLessThanOrEqual(field, lengthMaximumInclusive, value),
                 mustBeLengthGreaterThanOrEqual(field, lengthMinimumInclusive, value),
                 (value1, value2) -> value);
+    }
+
+    public static <FIELD> Validation<NonEmptyList<ValidationMessage<FIELD>>, Long> mustBeNonNullAndNumeric(
+            final FIELD field,
+            final String value) {
+
+        return mustBeNonNull(field, value)
+                .bind(nonNull -> mustBeNumeric(field, nonNull));
     }
 
     public static <FIELD> Validation<NonEmptyList<ValidationMessage<FIELD>>, String> mustBeNonNullAndLength(
@@ -272,5 +294,4 @@ public final class ValidationUtility {
                 success(value) :
                 validation.f(field, value);
     }
-
 }

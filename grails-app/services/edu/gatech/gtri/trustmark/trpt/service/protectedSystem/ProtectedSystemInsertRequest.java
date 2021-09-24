@@ -1,6 +1,7 @@
 package edu.gatech.gtri.trustmark.trpt.service.protectedSystem;
 
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemType;
+
 import java.util.List;
 
 public final class ProtectedSystemInsertRequest {

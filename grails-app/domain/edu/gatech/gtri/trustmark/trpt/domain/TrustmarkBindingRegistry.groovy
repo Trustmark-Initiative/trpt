@@ -25,8 +25,9 @@ class TrustmarkBindingRegistry {
     ]
 
     static mapping = {
-        name length: 200
-        description length: 200
+        table 'trustmark_binding_registry'
+        name length: 1000
+        description length: 1000
     }
 
     long idHelper() { id }

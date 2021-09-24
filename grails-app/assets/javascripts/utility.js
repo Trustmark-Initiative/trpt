@@ -57,6 +57,8 @@ function messageMap(failureMap, labelFor, messageFor) {
                 return `Length of ${labelFor(failureKey)} must be less than or equal to ${failureElement.lengthMaximumInclusive}; it is ${failureElement.length}.`
             case "ValidationMessageMustBeNonNull":
                 return `${labelFor(failureKey)} is required.`
+            case "ValidationMessageMustBeNumeric":
+                return `${labelFor(failureKey)} must be numeric.`
             case "ValidationMessageMustBeReference":
                 return `${labelFor(failureKey)} must be a reference.`
             case "ValidationMessageMustBeDistinct":
