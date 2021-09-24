@@ -18,11 +18,11 @@ class User {
     boolean passwordExpired
 
     static constraints = {
-        username nullable: true, length: 200
-        password nullable: true, length: 200
-        nameFamily nullable: true, length: 200
-        nameGiven nullable: true, length: 200
-        telephone nullable: true, length: 200
+        username nullable: true, length: 1000
+        password nullable: true, length: 1000
+        nameFamily nullable: true, length: 1000
+        nameGiven nullable: true, length: 1000
+        telephone nullable: true, length: 1000
         userEnabled nullable: true
         userLocked nullable: true
         userExpired nullable: true

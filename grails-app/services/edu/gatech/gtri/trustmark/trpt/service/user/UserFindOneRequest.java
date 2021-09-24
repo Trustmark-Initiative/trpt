@@ -1,25 +1,20 @@
 package edu.gatech.gtri.trustmark.trpt.service.user;
 
-public class UserFindOneRequest
-{
+public class UserFindOneRequest {
     private long id;
 
-    public UserFindOneRequest()
-    {
+    public UserFindOneRequest() {
     }
 
-    public UserFindOneRequest(final long id)
-    {
+    public UserFindOneRequest(final long id) {
         this.id = id;
     }
 
-    public long getId()
-    {
+    public long getId() {
         return id;
     }
 
-    public void setId(final long id)
-    {
+    public void setId(final long id) {
         this.id = id;
     }
 }

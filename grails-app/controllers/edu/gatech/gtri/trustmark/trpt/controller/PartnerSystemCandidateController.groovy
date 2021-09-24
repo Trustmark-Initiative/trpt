@@ -4,6 +4,7 @@ import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSyst
 import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateService
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
+import grails.plugin.springsecurity.userdetails.GrailsUser
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -15,6 +16,6 @@ class PartnerSystemCandidateController {
 
     Object findAll(final PartnerSystemCandidateFindAllRequest partnerSystemCandidateFindAllRequest) {
 
-        respond partnerSystemCandidateService.findAll(partnerSystemCandidateFindAllRequest).toJavaList()
+        respond partnerSystemCandidateService.findAll(((GrailsUser) getPrincipal()).username, partnerSystemCandidateFindAllRequest).toJavaList()
     }
 }

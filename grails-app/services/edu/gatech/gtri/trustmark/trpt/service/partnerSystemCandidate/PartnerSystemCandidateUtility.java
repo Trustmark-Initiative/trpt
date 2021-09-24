@@ -2,10 +2,6 @@ package edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate;
 
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidate;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateType;
-import edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility;
-import org.json.JSONObject;
-
-import java.util.Locale;
 
 import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.trustmarkBindingRegistryResponse;
 
@@ -23,7 +19,7 @@ public final class PartnerSystemCandidateUtility {
                 partnerSystemCandidate.getSuccessLocalDateTime(),
                 partnerSystemCandidate.getFailureLocalDateTime(),
                 partnerSystemCandidate.getFailureMessage(),
-                trustmarkBindingRegistryResponse(partnerSystemCandidate.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySetHelper().head()));
+                trustmarkBindingRegistryResponse(partnerSystemCandidate.trustmarkBindingRegistryUriTypeHelper().trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySetHelper().head()));
     }
 
     public static PartnerSystemCandidateTypeResponse partnerSystemCandidateTypeResponse(final PartnerSystemCandidateType partnerSystemCandidateType) {

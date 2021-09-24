@@ -7,7 +7,9 @@ import org.gtri.fj.data.List;
 @Transactional
 public class PartnerSystemCandidateService {
 
-    public List<PartnerSystemCandidateResponse> findAll(final PartnerSystemCandidateFindAllRequest partnerSystemCandidateFindAllRequest) {
+    public List<PartnerSystemCandidateResponse> findAll(
+            final String requesterUsername,
+            final PartnerSystemCandidateFindAllRequest partnerSystemCandidateFindAllRequest) {
 
         return PartnerSystemCandidate
                 .findAllByTypeInHelper(partnerSystemCandidateFindAllRequest.getProtectedSystemType().getPartnerSystemCandidateTypeList())

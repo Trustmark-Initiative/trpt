@@ -4,6 +4,7 @@ import edu.gatech.gtri.trustmark.trpt.service.role.RoleFindAllRequest
 import edu.gatech.gtri.trustmark.trpt.service.role.RoleService
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
+import grails.plugin.springsecurity.userdetails.GrailsUser
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -18,6 +19,6 @@ class RoleController {
 
     Object findAll(final RoleFindAllRequest roleFindAllRequest) {
 
-        respond roleService.findAll(roleFindAllRequest).toJavaList()
+        respond roleService.findAll(((GrailsUser) getPrincipal()).username, roleFindAllRequest).toJavaList()
     }
 }

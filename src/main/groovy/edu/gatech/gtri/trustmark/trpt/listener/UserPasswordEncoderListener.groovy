@@ -32,19 +32,19 @@ class UserPasswordEncoderListener implements InitializingBean {
 
     private void encodePasswordForEvent(AbstractPersistenceEvent event) {
         if (event.entityObject instanceof User) {
-            User u = event.entityObject as User
-            if (u.password && ((event instanceof PreInsertEvent) || (event instanceof PreUpdateEvent && u.isDirty('password')))) {
-                event.getEntityAccess().setProperty('password', encodePassword(u.password))
+            User user = event.entityObject as User
+            if (user.password && ((event instanceof PreInsertEvent) || (event instanceof PreUpdateEvent && user.isDirty('password')))) {
+                event.getEntityAccess().setProperty('password', encodePassword(user.password))
             }
         } else {
-            log.warn("EntityObject in event is not a User!  It is: " + event?.entityObject);
+            log.warn("The system expects a User object; it is ${event?.entityObject}.");
         }
     }
 
     private String encodePassword(String password) {
         String passwordEncoded = springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
         if (passwordEncoded.equals(password)) {
-            log.error("Error - could not successfully encode password: " + password);
+            log.error("The system could not encode the User password.");
         }
         return passwordEncoded
     }
@@ -52,8 +52,8 @@ class UserPasswordEncoderListener implements InitializingBean {
     @Override
     void afterPropertiesSet() throws Exception {
         if (springSecurityService == null)
-            throw new UnsupportedOperationException("Cannot configure ${getClass().simpleName} because there is no SpringSecurityService assigned!");
+            throw new UnsupportedOperationException("springSecurityService null.");
 
-        log.info("Successfully configured new " + this.getClass().getSimpleName() + "!");
+        log.info("The system configured '${this.getClass().getSimpleName()}'.");
     }
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class ProtectedSystemPartnerSystemCandidateResponse {
 
+    private final String organizationName;
     private final String protectedSystemName;
     private final String partnerSystemCandidateName;
     private final PartnerSystemCandidateResponse partnerSystemCandidate;
@@ -18,6 +19,7 @@ public class ProtectedSystemPartnerSystemCandidateResponse {
     private final Map<String, JSONObject> trustExpressionEvaluationMap;
 
     public ProtectedSystemPartnerSystemCandidateResponse(
+            final String organizationName,
             final String protectedSystemName,
             final String partnerSystemCandidateName,
             final PartnerSystemCandidateResponse partnerSystemCandidate,
@@ -27,6 +29,7 @@ public class ProtectedSystemPartnerSystemCandidateResponse {
             final Integer evaluationTrustExpressionSatisfied,
             final Integer evaluationTrustExpressionUnsatisfied,
             final Map<String, JSONObject> trustExpressionEvaluationMap) {
+        this.organizationName = organizationName;
         this.protectedSystemName = protectedSystemName;
         this.partnerSystemCandidateName = partnerSystemCandidateName;
         this.partnerSystemCandidate = partnerSystemCandidate;
@@ -36,6 +39,10 @@ public class ProtectedSystemPartnerSystemCandidateResponse {
         this.evaluationTrustExpressionSatisfied = evaluationTrustExpressionSatisfied;
         this.evaluationTrustExpressionUnsatisfied = evaluationTrustExpressionUnsatisfied;
         this.trustExpressionEvaluationMap = trustExpressionEvaluationMap;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
     }
 
     public String getProtectedSystemName() {

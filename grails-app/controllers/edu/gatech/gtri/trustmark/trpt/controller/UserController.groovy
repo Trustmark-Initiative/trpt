@@ -9,6 +9,7 @@ import edu.gatech.gtri.trustmark.trpt.service.user.UserService
 import edu.gatech.gtri.trustmark.trpt.service.user.UserUpdateRequest
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
+import grails.plugin.springsecurity.userdetails.GrailsUser
 import groovy.transform.CompileStatic
 import org.gtri.fj.product.P2
 
@@ -26,33 +27,33 @@ class UserController {
 
     Object findAll(final UserFindAllRequest userFindAllRequest) {
 
-        respond userService.findAll(userFindAllRequest).toJavaList()
+        respond userService.findAll(((GrailsUser) getPrincipal()).username, userFindAllRequest).toJavaList()
     }
 
     Object findOne(final UserFindOneRequest userFindOneRequest) {
 
-        P2<Object, Integer> response = toResponse(userService.findOne(userFindOneRequest))
+        P2<Object, Integer> response = toResponse(userService.findOne(((GrailsUser) getPrincipal()).username, userFindOneRequest))
 
         respond response._1(), status: response._2()
     }
 
     Object insert(final UserInsertRequest userInsertRequest) {
 
-        P2<Object, Integer> response = toResponse(userService.insert(userInsertRequest))
+        P2<Object, Integer> response = toResponse(userService.insert(((GrailsUser) getPrincipal()).username, userInsertRequest))
 
         respond response._1(), status: response._2()
     }
 
     Object update(final UserUpdateRequest userUpdateRequest) {
 
-        P2<Object, Integer> response = toResponse(userService.update(userUpdateRequest))
+        P2<Object, Integer> response = toResponse(userService.update(((GrailsUser) getPrincipal()).username, userUpdateRequest))
 
         respond response._1(), status: response._2()
     }
 
     Object delete(final UserDeleteAllRequest userDeleteAllRequest) {
 
-        P2<Object, Integer> response = toResponse(userService.delete(userDeleteAllRequest))
+        P2<Object, Integer> response = toResponse(userService.delete(((GrailsUser) getPrincipal()).username, userDeleteAllRequest))
 
         respond response._1(), status: response._2()
     }

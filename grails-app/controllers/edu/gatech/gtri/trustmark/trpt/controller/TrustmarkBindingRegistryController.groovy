@@ -9,6 +9,7 @@ import edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.Trustmark
 import edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUpdateRequest
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
+import grails.plugin.springsecurity.userdetails.GrailsUser
 import groovy.transform.CompileStatic
 import org.gtri.fj.product.P2
 
@@ -26,33 +27,33 @@ class TrustmarkBindingRegistryController {
 
     Object findAll(final TrustmarkBindingRegistryFindAllRequest trustmarkBindingRegistryFindAllRequest) {
 
-        respond trustmarkBindingRegistryService.findAll(trustmarkBindingRegistryFindAllRequest).toJavaList()
+        respond trustmarkBindingRegistryService.findAll(((GrailsUser) getPrincipal()).username, trustmarkBindingRegistryFindAllRequest).toJavaList()
     }
 
     Object findOne(final TrustmarkBindingRegistryFindOneRequest trustmarkBindingRegistryFindOneRequest) {
 
-        P2<Object, Integer> response = toResponse(trustmarkBindingRegistryService.findOne(trustmarkBindingRegistryFindOneRequest))
+        P2<Object, Integer> response = toResponse(trustmarkBindingRegistryService.findOne(((GrailsUser) getPrincipal()).username, trustmarkBindingRegistryFindOneRequest))
 
         respond response._1(), status: response._2()
     }
 
     Object insert(final TrustmarkBindingRegistryInsertRequest trustmarkBindingRegistryInsertRequest) {
 
-        P2<Object, Integer> response = toResponse(trustmarkBindingRegistryService.insert(trustmarkBindingRegistryInsertRequest))
+        P2<Object, Integer> response = toResponse(trustmarkBindingRegistryService.insert(((GrailsUser) getPrincipal()).username, trustmarkBindingRegistryInsertRequest))
 
         respond response._1(), status: response._2()
     }
 
     Object update(final TrustmarkBindingRegistryUpdateRequest trustmarkBindingRegistryUpdateRequest) {
 
-        P2<Object, Integer> response = toResponse(trustmarkBindingRegistryService.update(trustmarkBindingRegistryUpdateRequest))
+        P2<Object, Integer> response = toResponse(trustmarkBindingRegistryService.update(((GrailsUser) getPrincipal()).username, trustmarkBindingRegistryUpdateRequest))
 
         respond response._1(), status: response._2()
     }
 
     Object delete(final TrustmarkBindingRegistryDeleteAllRequest trustmarkBindingRegistryDeleteAllRequest) {
 
-        P2<Object, Integer> response = toResponse(trustmarkBindingRegistryService.delete(trustmarkBindingRegistryDeleteAllRequest))
+        P2<Object, Integer> response = toResponse(trustmarkBindingRegistryService.delete(((GrailsUser) getPrincipal()).username, trustmarkBindingRegistryDeleteAllRequest))
 
         respond response._1(), status: response._2()
     }

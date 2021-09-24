@@ -1,7 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate;
 
 import edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryResponse;
-import org.json.JSONObject;
 
 import java.time.LocalDateTime;
 

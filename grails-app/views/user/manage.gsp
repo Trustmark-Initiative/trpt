@@ -38,7 +38,7 @@
                 </thead>
                 <template id="user-template-empty">
                     <tr>
-                        <td colspan="6">(No users.)</td>
+                        <td colspan="11">(No users.)</td>
                     </tr>
                 </template>
                 <template id="user-template-summary">

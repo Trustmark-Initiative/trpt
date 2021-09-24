@@ -45,27 +45,27 @@ public final class UserUtility {
 
     public static Validation<NonEmptyList<ValidationMessage<UserField>>, String> validationUsername(final String username) {
 
-        return mustBeNonNullAndUniqueAndLength(UserField.username, User::findByUsernameHelper, 1, 200, username);
+        return mustBeNonNullAndUniqueAndLength(UserField.username, User::findByUsernameHelper, 1, 1000, username);
     }
 
     public static Validation<NonEmptyList<ValidationMessage<UserField>>, String> validationUsername(final long id, final String username) {
 
-        return mustBeNonNullAndUniqueAndLength(UserField.username, usernameInner -> findByUsernameHelper(usernameInner).filter(user -> user.idHelper() != id), 1, 200, username);
+        return mustBeNonNullAndUniqueAndLength(UserField.username, usernameInner -> findByUsernameHelper(usernameInner).filter(user -> user.idHelper() != id), 1, 1000, username);
     }
 
     public static Validation<NonEmptyList<ValidationMessage<UserField>>, String> validationNameFamily(final String nameFamily) {
 
-        return mustBeNonNullAndLength(UserField.nameFamily, 1, 200, nameFamily);
+        return mustBeNonNullAndLength(UserField.nameFamily, 1, 1000, nameFamily);
     }
 
     public static Validation<NonEmptyList<ValidationMessage<UserField>>, String> validationNameGiven(final String nameGiven) {
 
-        return mustBeNonNullAndLength(UserField.nameGiven, 1, 200, nameGiven);
+        return mustBeNonNullAndLength(UserField.nameGiven, 1, 1000, nameGiven);
     }
 
     public static Validation<NonEmptyList<ValidationMessage<UserField>>, String> validationTelephone(final String telephone) {
 
-        return mustBeNonNullAndLength(UserField.telephone, 1, 200, telephone);
+        return mustBeNonNullAndLength(UserField.telephone, 1, 1000, telephone);
     }
 
     public static Validation<NonEmptyList<ValidationMessage<UserField>>, Organization> validationOrganization(final long organization) {

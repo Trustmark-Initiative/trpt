@@ -13,7 +13,7 @@ class PartnerSystemCandidate {
     String uri
     String uriEntityDescriptor
     PartnerSystemCandidateType type
-    String trustmarkUriMapJson
+    String hash
     String json
     LocalDateTime requestLocalDateTime
     LocalDateTime successLocalDateTime
@@ -26,7 +26,7 @@ class PartnerSystemCandidate {
         uri nullable: true
         uriEntityDescriptor nullable: true
         type nullable: true
-        trustmarkUriMapJson nullable: true
+        hash nullable: true
         json nullable: true
         requestLocalDateTime nullable: true
         successLocalDateTime nullable: true
@@ -38,32 +38,37 @@ class PartnerSystemCandidate {
     static hasMany = [
             partnerSystemCandidateTrustInteroperabilityProfileUriSet: PartnerSystemCandidateTrustInteroperabilityProfileUri,
             protectedSystemPartnerSystemCandidateSet                : ProtectedSystemPartnerSystemCandidate,
+            partnerSystemCandidateTrustmarkUriSet                   : PartnerSystemCandidateTrustmarkUri
     ]
 
     static hasOne = [
-            trustmarkBindingRegistryUri: TrustmarkBindingRegistryUri
+            trustmarkBindingRegistryUriType: TrustmarkBindingRegistryUriType
     ]
 
     static mapping = {
         table 'partner_system_candidate'
-        name length: 200
-        uri length: 200
-        uriEntityDescriptor length: 200
-        type length: 200
-        trustmarkUriMapJson type: 'text'
+        name length: 1000
+        uri length: 1000
+        uriEntityDescriptor length: 1000
+        type length: 1000
+        hash type: 'text'
         json type: 'text'
-        failureMessage length: 200
+        failureMessage length: 1000
     }
 
     long idHelper() { id }
 
-    void trustmarkBindingRegistryUriHelper(final TrustmarkBindingRegistryUri trustmarkBindingRegistryUri) { setTrustmarkBindingRegistryUri(trustmarkBindingRegistryUri) }
+    void trustmarkBindingRegistryUriTypeHelper(final TrustmarkBindingRegistryUriType trustmarkBindingRegistryUriType) { this.setTrustmarkBindingRegistryUriType(trustmarkBindingRegistryUriType) }
 
-    TrustmarkBindingRegistryUri trustmarkBindingRegistryUriHelper() { getTrustmarkBindingRegistryUri() }
+    TrustmarkBindingRegistryUriType trustmarkBindingRegistryUriTypeHelper() { this.getTrustmarkBindingRegistryUriType() }
 
     org.gtri.fj.data.List<PartnerSystemCandidateTrustInteroperabilityProfileUri> partnerSystemCandidateTrustInteroperabilityProfileUriSetHelper() { fromNull(getPartnerSystemCandidateTrustInteroperabilityProfileUriSet()).map({ list -> iterableList(list) }).orSome(org.gtri.fj.data.List.<PartnerSystemCandidateTrustInteroperabilityProfileUri> nil()) }
 
     void partnerSystemCandidateTrustInteroperabilityProfileUriSetHelper(final org.gtri.fj.data.List<PartnerSystemCandidateTrustInteroperabilityProfileUri> partnerSystemCandidateTrustInteroperabilityProfileUriSet) { setPartnerSystemCandidateTrustInteroperabilityProfileUriSet(new HashSet<>(partnerSystemCandidateTrustInteroperabilityProfileUriSet.toJavaList())) }
+
+    org.gtri.fj.data.List<PartnerSystemCandidateTrustmarkUri> partnerSystemCandidateTrustmarkUriSetHelper() { fromNull(getPartnerSystemCandidateTrustmarkUriSet()).map({ list -> iterableList(list) }).orSome(org.gtri.fj.data.List.<PartnerSystemCandidateTrustmarkUri> nil()) }
+
+    void partnerSystemCandidateTrustmarkUriSetHelper(final org.gtri.fj.data.List<PartnerSystemCandidateTrustmarkUri> partnerSystemCandidateTrustmarkUriSet) { setPartnerSystemCandidateTrustmarkUriSet(new HashSet<>(partnerSystemCandidateTrustmarkUriSet.toJavaList())) }
 
     org.gtri.fj.data.List<ProtectedSystemPartnerSystemCandidate> protectedSystemPartnerSystemCandidateSetHelper() { fromNull(getProtectedSystemPartnerSystemCandidateSet()).map({ list -> iterableList(list) }).orSome(org.gtri.fj.data.List.<ProtectedSystemPartnerSystemCandidate> nil()) }
 
@@ -77,14 +82,7 @@ class PartnerSystemCandidate {
 
     PartnerSystemCandidate saveAndFlushHelper() { save(flush: true, failOnError: true) }
 
-    static final Option<PartnerSystemCandidate> findByTrustmarkBindingRegistryUriAndUriHelper(final TrustmarkBindingRegistryUri trustmarkBindingRegistryUri, final String uri) { fromNull(findByTrustmarkBindingRegistryUriAndUri(trustmarkBindingRegistryUri, uri)) }
-
-    static final org.gtri.fj.data.List<PartnerSystemCandidate> findAllByTrustmarkBindingRegistryUriAndTypeHelper(final TrustmarkBindingRegistryUri trustmarkBindingRegistryUri, final PartnerSystemCandidateType type) {
-
-        fromNull(findAllByTrustmarkBindingRegistryUriAndType(trustmarkBindingRegistryUri, type))
-                .map({ list -> iterableList(list) })
-                .orSome(org.gtri.fj.data.List.<PartnerSystemCandidate> nil());
-    }
+    static final Option<PartnerSystemCandidate> findByTrustmarkBindingRegistryUriTypeAndUriHelper(final TrustmarkBindingRegistryUriType trustmarkBindingRegistryUriType, final String uri) { fromNull(findByTrustmarkBindingRegistryUriTypeAndUri(trustmarkBindingRegistryUriType, uri)) }
 
     static final org.gtri.fj.data.List<PartnerSystemCandidate> findAllHelper() {
 

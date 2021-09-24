@@ -17,41 +17,39 @@
 
     <body>
         <div class="container pt-4">
-            <h2>Trust Dashboard for <span id="protected-system-element-name"></span></h2>
+            <h2>Trust Dashboard for <span class="protected-system-element-name"></span></h2>
 
-            <table class="pt-2 table table-bordered table-striped-hack mb-0">
+            <div class="fw-bold mt-2">Trust Policy for <span class="protected-system-element-name"></span></div>
+
+            <div class="mt-2">
+                Add trust interoperability profiles to this table to define the trust policy for <span class="protected-system-element-name"></span>, a <span class="protected-system-element-type"></span>.
+            </div>
+            <table class="mt-2 table table-bordered table-striped-hack mb-0">
                 <thead>
-                    <tr>
-                        <th scope="col" colspan="9">Trust Interoperability Profiles</th>
-                    </tr>
                     <tr>
                         <th scope="col"><a href="#" class="bi-plus-lg" id="trust-interoperability-profile-action-insert"></a></th>
                         <th scope="col"><a href="#" class="bi-trash" id="trust-interoperability-profile-action-delete"></a></th>
-                        <th scope="col" style="width: 20%">URL</th>
-                        <th scope="col" style="width: 20%">Name</th>
-                        <th scope="col" style="width: 20%">Description</th>
-                        <th scope="col" style="width: 20%">Issuer</th>
-                        <th scope="col" style="width: 20%">Issuer Identifier</th>
-                        <th scope="col"><span class="bi-exclamation-circle" title="Trust Interoperability Profile Required"></span></th>
-                        <th scope="col"><span class="bi-cloud" title="Trust Interoperability Profile Down"></span></th>
+                        <th scope="col" style="width: 75%">Name</th>
+                        <th scope="col" style="width: 25%">Issuer</th>
+                        <th scope="col"><span class="bi-exclamation-circle" title="Require Full Compliance"></span></th>
                     </tr>
                 </thead>
                 <template id="trust-interoperability-profile-template-empty">
                     <tr>
-                        <td colspan="6">(No trust interoperability profiles.)</td>
+                        <td colspan="5">(No trust interoperability profiles.)</td>
                     </tr>
                 </template>
                 <template id="trust-interoperability-profile-template-summary">
                     <tr class="trust-interoperability-profile-summary">
                         <td><a href="#" class="bi-pencil trust-interoperability-profile-action-update"></a></td>
                         <td><input type="checkbox" class="form-check-input trust-interoperability-profile-action-delete-queue"></td>
-                        <td><a target="_blank" class="trust-interoperability-profile-element-uri"></a></td>
-                        <td><div class="trust-interoperability-profile-element-name"></div></td>
-                        <td><div class="trust-interoperability-profile-element-description"></div></td>
-                        <td><div class="trust-interoperability-profile-element-issuer"></div></td>
-                        <td><a target="_blank" class="trust-interoperability-profile-element-issuer-identifier"></a></td>
+                        <td class="unhack">
+                            <a target="_blank" class="trust-interoperability-profile-element-name"></a>
+
+                            <div class="trust-interoperability-profile-element-description"></div>
+                        </td>
+                        <td><a target="_blank" class="trust-interoperability-profile-element-issuer"></a></td>
                         <td class="trust-interoperability-profile-element-mandatory"></td>
-                        <td class="trust-interoperability-profile-element-status"></td>
                     </tr>
                 </template>
                 <tbody id="trust-interoperability-profile-tbody">
@@ -189,35 +187,39 @@
         </div>
 
         <div class="container pt-4">
-            <table class="pt-2 table table-bordered table-striped-hack mb-0">
+            <div class="fw-bold">Candidate Partner Systems for <span class="protected-system-element-name"></span></div>
+
+            <div class="mt-2">
+                This table allows you to control which candidate partner <span class="partner-system-candidate-element-type"></span> systems are trusted by <span class="protected-system-element-name"></span>.
+            </div>
+
+            <table class="mt-2 table table-bordered table-striped-hack mb-0">
                 <thead>
                     <tr>
-                        <th scope="col" colspan="9">Partner System Candidates</th>
-                    </tr>
-                    <tr>
-                        <th scope="col"><span class="bi-award" title="Trust"></span></th>
-                        <th scope="col" style="width: 33%">Name</th>
-                        <th scope="col" style="width: 33%">Type</th>
-                        <th scope="col" style="width: 33%">Trust Fabric Metadata</th>
-                        <th scope="col">TDR%</th>
+                        <th scope="col" class="w-100">Name</th>
+                        <th scope="col">&nbsp;TD%</th>
                         <th scope="col">TIP%</th>
-                        <th scope="col"><span class="bi-box-arrow-in-right" title="Detail"></span></th>
+                        <th scope="col">Trusted</th>
                     </tr>
                 </thead>
                 <template id="partner-system-candidate-template-empty">
                     <tr>
-                        <td colspan="6">(No partner system candidates.)</td>
+                        <td colspan="4">(No candidate partner systems.)</td>
                     </tr>
                 </template>
                 <template id="partner-system-candidate-template-summary">
                     <tr class="partner-system-candidate-summary">
-                        <td><input type="checkbox" form-check-input class="partner-system-candidate-element-trust"/></td>
-                        <td><div class="partner-system-candidate-element-name"></div></td>
-                        <td><div class="partner-system-candidate-element-type"></div></td>
-                        <td><a target="_blank" class="partner-system-candidate-element-trust-fabric-metadata"></a></td>
+                        <td>
+                            <a class="partner-system-candidate-element-name"></a>
+                            <a target="_blank" class="partner-system-candidate-element-trust-fabric-metadata"></a>
+                        </td>
                         <td class="text-center partner-system-candidate-element-percent-trustmark-definition-requirement"></td>
                         <td class="text-center partner-system-candidate-element-percent-trust-interoperability-profile"></td>
-                        <td><a href="#" class="bi-box-arrow-in-right partner-system-candidate-action-detail"></a></td>
+                        <td>
+                            <div class="d-flex justify-content-center form-check form-switch">
+                                <input type="checkbox" class="form-check-input partner-system-candidate-element-trust" data-bs-toggle="modal" data-bs-target="#modal-trust"/>
+                            </div>
+                        </td>
                     </tr>
                 </template>
                 <tbody id="partner-system-candidate-tbody">
@@ -225,67 +227,91 @@
             </table>
         </div>
 
-        %{--        <div>${protectedSystem.name} is a ${protectedSystem.protectedSystemTypeLabel}. The following systems are ${protectedSystem.partnerSystemCandidateList.get(0).typeLabel}s that the system may elect to trust.</div>--}%
+        <div class="modal" tabindex="-1" id="modal-trust">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header d-none" id="modal-header-trust">
+                        <h5 class="modal-title">Trust <span class="partner-system-candidate-element-name"></span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
 
-        %{--        <div class="ProtectedSystemSummary">--}%
-        %{--            <div class="Body">--}%
-        %{--                <div>Organization</div>--}%
+                    <div class="modal-body d-none" id="modal-body-trust">
+                        <p>
+                            By toggling this trust control, you have chosen to configure
+                            <span class="protected-system-element-name fw-bold"></span>
+                            to trust
+                            <span class="partner-system-candidate-element-name fw-bold"></span>.
+                        Please
+                        take note of the following implications of your decision.
+                        </p>
 
-        %{--                <div><a href="${protectedSystem.organizationUri}">${protectedSystem.organizationName}</a></div>--}%
+                        <ol>
+                            <li class="mb-3">You must download a copy of the SAML metadata for <span class="partner-system-candidate-element-name fw-bold"></span>,
+                            and install it within <span class="protected-system-element-name fw-bold"></span>,
+                            to enable <span class="protected-system-element-name fw-bold"></span> to trust <span class="partner-system-candidate-element-name fw-bold"></span>.
+                            This is a manual reconfiguration process of <span class="protected-system-element-name fw-bold"></span>
+                                that depends on its implementation details, including the software platform
+                                on which <span class="protected-system-element-name fw-bold"></span> is built. Completion
+                            of this process typically requires you to have administrative access to <span class="protected-system-element-name fw-bold"></span>.
+                            To download a copy of the SAML metadata for <span class="partner-system-candidate-element-name fw-bold"></span>,
+                            click <a target="_blank" class="partner-system-candidate-element-trust-fabric-metadata fw-bold"></a>.</li>
 
-        %{--                <div>Type</div>--}%
 
-        %{--                <div>${protectedSystem.protectedSystemTypeLabel}</div>--}%
+                            <li>
+                                Because you have chosen to trust <span class="partner-system-candidate-element-name fw-bold"></span>,
+                            this tool will begin to closely monitor <span class="partner-system-candidate-element-name fw-bold"></span>
+                                for changes in its trustmark disposition with respect to the trust policy that
+                                you have defined for <span class="protected-system-element-name fw-bold"></span>. If
+                            any future changes should occur – e.g., if any trustmark bound to <span class="partner-system-candidate-element-name fw-bold"></span>
+                                should expire or become revoked by its issuer, or if you change your trust policy
+                                for <span class="protected-system-element-name fw-bold"></span> – you will receive an
+                            automated email from this tool, informing you of the change and cautioning you about
+                            important steps to take at that time. If you receive such an email, you should immediately
+                            revisit this Trust Dashboard page, reassess your decision to trust <span class="partner-system-candidate-element-name fw-bold"></span>,
+                            and change <span class="protected-system-element-name fw-bold"></span>'s trust perspective
+                            on <span class="partner-system-candidate-element-name fw-bold"></span> if appropriate.
+                            </li>
+                        </ol>
+                    </div>
 
-        %{--                <div>Description</div>--}%
+                    <div class="modal-header d-none" id="modal-header-do-not-trust">
+                        <h5 class="modal-title">Do Not Trust <span class="partner-system-candidate-element-name"></span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
 
-        %{--                <div>${protectedSystem.organizationDescription}</div>--}%
-        %{--            </div>--}%
-        %{--        </div>--}%
+                    <div class="modal-body d-none" id="modal-body-do-not-trust">
+                        <p>
+                            By toggling this trust control, you have chosen to configure <span class="protected-system-element-name fw-bold"></span>
+                            to stop trusting <span class="partner-system-candidate-element-name fw-bold"></span>.
+                        Please take note of the following implications of your decision.</p>
 
-        %{--        <g:each in="${protectedSystem.partnerSystemCandidateList}" var="partnerSystemCandidate">--}%
-        %{--            <div class="PartnerSystemCandidateSummary Separate">--}%
-        %{--                <div class="Head">--}%
-        %{--                    <div>--}%
-        %{--                        <a href="${createLink(controller: 'protectedSystem', action: 'partnerSystemCandidate', params: [protectedSystemId: protectedSystem.id, partnerSystemCandidateId: partnerSystemCandidate.id])}">--}%
-        %{--                            ${partnerSystemCandidate.name}--}%
-        %{--                        </a>--}%
-        %{--                    </div>--}%
+                        <ol>
+                            <li class="mb-3">You must immediately reconfigure <span class="protected-system-element-name fw-bold"></span>
+                                so that it no longer trusts <span class="partner-system-candidate-element-name fw-bold"></span>.
+                            This is a manual reconfiguration process of <span class="protected-system-element-name fw-bold"></span>
+                                that depends on its implementation details, including the software platform on
+                                which <span class="protected-system-element-name fw-bold"></span> is built. Typically,
+                            this process involves editing <span class="protected-system-element-name fw-bold"></span>'s
+                            list of trusted remote partner systems, so that the list no longer includes <span class="partner-system-candidate-element-name fw-bold"></span>.
+                            Completion of this process typically requires you to have administrative access to
+                                <span class="protected-system-element-name fw-bold"></span>.</li>
 
-        %{--                    <div>--}%
-        %{--                        Full 1--}%
-        %{--                    </div>--}%
+                            <li>Because you have chosen to stop trusting <span class="partner-system-candidate-element-name fw-bold"></span>,
+                            this tool will no longer monitor <span class="partner-system-candidate-element-name fw-bold"></span>
+                                for changes in its trustmark disposition with respect to the trust policy for
+                                <span class="protected-system-element-name fw-bold"></span>. If at any future point in
+                            time, you want to change <span class="protected-system-element-name fw-bold"></span>'s trust
+                            perspective on <span class="partner-system-candidate-element-name fw-bold"></span>, you
+                            can do so by toggling the trust control for <span class="partner-system-candidate-element-name fw-bold"></span>
+                                on this page.</li>
+                        </ol>
+                    </div>
 
-        %{--                    <div>--}%
-        %{--                        Partial  1--}%
-        %{--                    </div>--}%
-
-        %{--                    <div>--}%
-        %{--                        None 1--}%
-        %{--                    </div>--}%
-
-        %{--                    <div>--}%
-        %{--                        Trusted? <input type="checkbox">--}%
-        %{--                    </div>--}%
-        %{--                </div>--}%
-
-        %{--                <div class="Body">--}%
-        %{--                    <div>Type</div>--}%
-
-        %{--                    <div>${partnerSystemCandidate.typeLabel}</div>--}%
-
-        %{--                    <div>URI</div>--}%
-
-        %{--                    <div>--}%
-        %{--                        <g:if test="${partnerSystemCandidate.uri}">--}%
-        %{--                            <a href="${partnerSystemCandidate.uri}">${partnerSystemCandidate.uri}</a>--}%
-        %{--                        </g:if>--}%
-        %{--                        <g:else>--}%
-        %{--                            (none)--}%
-        %{--                        </g:else>--}%
-        %{--                    </div>--}%
-        %{--                </div>--}%
-        %{--            </div>--}%
-        %{--        </g:each>--}%
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

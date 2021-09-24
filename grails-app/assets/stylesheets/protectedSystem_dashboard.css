@@ -11,7 +11,7 @@
 }
 
 .ProtectedSystemContainer label,
-.TrustInteroperabilityProfileContainer  label {
+.TrustInteroperabilityProfileContainer label {
     width: 100%;
     font-weight: normal;
 }
@@ -28,17 +28,29 @@
     border-right: 1px solid rgb(221, 221, 221);
 }
 
-.TrustExpressionContainer > .Body > .TrustExpressionBorder {
+.TrustExpressionContainer > .Body > .TrustExpressionSub {
     border-bottom: 1px solid darkgrey;
 }
 
-.ProtectedSystemContainer, .TrustInteroperabilityProfileContainer, .PartnerSystemCandidateContainer, .PartnerSystemCandidate, .TrustExpressionEvaluationContainer, .TrustExpressionEvaluation, .TrustExpressionEvaluatorFailureListContainer, .TrustExpressionEvaluatorFailureListContainer > .Body, .TrustExpressionEvaluatorFailureListContainer > .Body .TrustExpressionParserFailureURI, .TrustExpressionEvaluatorFailureListContainer > .Body .TrustExpressionEvaluatorFailureResolve {
+.ProtectedSystemContainer,
+.TrustInteroperabilityProfileContainer,
+.PartnerSystemCandidateContainer,
+.PartnerSystemCandidate,
+.TrustExpressionEvaluationContainer,
+.TrustExpressionEvaluation,
+.TrustExpressionEvaluatorFailureListContainer,
+.TrustExpressionEvaluatorFailureListContainer > .Body,
+.TrustExpressionEvaluatorFailureListContainer > .Body .TrustExpressionParserFailureURI,
+.TrustExpressionEvaluatorFailureListContainer > .Body .TrustExpressionEvaluatorFailureResolve {
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: min-content;
 }
 
-.TrustExpressionContainer, .TrustExpressionContainer > .Body, .TrustExpressionContainer > .Body .TrustExpression {
+.TrustExpressionContainer,
+.TrustExpressionContainer > .Body,
+.TrustExpressionContainer > .Body .TrustExpression,
+.TrustExpressionContainer > .Body .TrustExpressionTop {
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: min-content;
@@ -52,7 +64,7 @@
     border-left: 1px solid rgb(221, 221, 221);
 }
 
-.TrustExpressionBorder {
+.TrustExpressionSub {
     border-top: 1px solid darkgray;
     border-left: 1px solid darkgray;
 }
@@ -89,16 +101,18 @@
     /*border-left: 1px solid rgb(221, 221, 221);*/
 }
 
-.TrustExpressionBorder > input[type=checkbox],
+.TrustExpressionSub > input[type=checkbox],
 .TrustExpression > input[type=checkbox],
+.TrustExpressionTop > input[type=checkbox],
 .TrustExpressionTerminal > input[type=checkbox],
 .PartnerSystemCandidate > input[type=checkbox],
 .TrustInteroperabilityProfile > input[type=checkbox] {
     display: none;
 }
 
-.TrustExpressionBorder > input[type=checkbox] ~ label,
+.TrustExpressionSub > input[type=checkbox] ~ label,
 .TrustExpression > input[type=checkbox] ~ label,
+.TrustExpressionTop > input[type=checkbox] ~ label,
 .TrustExpressionTerminal > input[type=checkbox] ~ label,
 .PartnerSystemCandidate > input[type=checkbox] ~ label,
 .TrustInteroperabilityProfile > input[type=checkbox] ~ label {
@@ -106,8 +120,9 @@
     white-space: nowrap;
 }
 
-.TrustExpressionBorder > input[type=checkbox]:not(:checked) ~ div,
+.TrustExpressionSub > input[type=checkbox]:not(:checked) ~ div,
 .TrustExpression > input[type=checkbox]:not(:checked) ~ div,
+.TrustExpressionTop > input[type=checkbox]:not(:checked) ~ div,
 .TrustExpressionTerminal > input[type=checkbox]:not(:checked) ~ div,
 .PartnerSystemCandidate > input[type=checkbox]:not(:checked) ~ div,
 .TrustInteroperabilityProfile > input[type=checkbox]:not(:checked) ~ div {
@@ -116,7 +131,6 @@
 
 .PartnerSystemCandidate > label > span.glyphicon-triangle-bottom,
 .PartnerSystemCandidate > input[type=checkbox]:checked ~ label > span.glyphicon-triangle-right
-
 .PartnerSystemCandidate > input[type=checkbox]:not(:checked) ~ label > span.glyphicon-triangle-bottom,
 .PartnerSystemCandidate > input[type=checkbox]:checked ~ label > span.glyphicon-triangle-right,
 .TrustInteroperabilityProfile > input[type=checkbox]:not(:checked) ~ label > span.glyphicon-triangle-bottom,
@@ -222,7 +236,8 @@
     visibility: hidden;
 }
 
-.TrustExpressionContainer, .TrustExpressionEvaluatorFailureListContainer {
+.TrustExpressionContainer,
+.TrustExpressionEvaluatorFailureListContainer {
     width: 100%;
     margin: 0px 0px 0px 0px;
     grid-column: 1;
@@ -234,7 +249,8 @@
     border-right: 1px solid darkgrey
 }
 
-.TrustExpressionContainer > .Body > .TrustExpression {
+.TrustExpressionContainer > .Body > .TrustExpression,
+.TrustExpressionContainer > .Body > .TrustExpressionTop {
     border-left: 1px solid darkgrey
 }
 

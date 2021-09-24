@@ -1,6 +1,8 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
 import org.gtri.fj.data.Option
+import org.gtri.fj.function.Effect0
+import org.gtri.fj.function.F0
 
 import java.time.LocalDateTime
 
@@ -46,14 +48,14 @@ class TrustInteroperabilityProfileUri {
 
     static mapping = {
         table 'trust_interoperability_profile_uri'
-        uri length: 200
-        name length: 200
-        description length: 200
-        issuerName length: 200
-        issuerIdentifier length: 200
-        hash length: 200
+        uri length: 1000
+        name length: 1000
+        description length: 1000
+        issuerName length: 1000
+        issuerIdentifier length: 1000
+        hash length: 1000
         json type: 'text'
-        failureMessage length: 200
+        failureMessage length: 1000
     }
 
     long idHelper() { id }
@@ -80,4 +82,11 @@ class TrustInteroperabilityProfileUri {
 
     static final Option<TrustInteroperabilityProfileUri> findByUriHelper(final String uri) { fromNull(findByUri(uri)) }
 
+    static final <T> T withTransactionHelper(final F0<T> f0) {
+        return withTransaction({ return f0.f() })
+    }
+
+    static final void withTransactionHelper(final Effect0 effect0) {
+        withTransaction({ return effect0.f() })
+    }
 }

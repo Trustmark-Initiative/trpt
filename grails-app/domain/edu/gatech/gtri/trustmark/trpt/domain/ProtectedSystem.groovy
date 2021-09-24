@@ -26,8 +26,8 @@ class ProtectedSystem {
 
     static mapping = {
         table 'protected_system'
-        name length: 200
-        type length: 200
+        name length: 1000
+        type length: 1000
     }
 
     long idHelper() { getId() }

@@ -8,7 +8,9 @@ import static edu.gatech.gtri.trustmark.trpt.domain.Role.findAllByOrderByNameAsc
 @Transactional
 public class RoleService {
 
-    public List<RoleResponse> findAll(final RoleFindAllRequest roleFindAllRequest) {
+    public List<RoleResponse> findAll(
+            final String requesterUsername,
+            final RoleFindAllRequest roleFindAllRequest) {
 
         return findAllByOrderByNameAscHelper()
                 .map(RoleUtility::roleResponse);

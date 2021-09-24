@@ -60,20 +60,23 @@ function initialize(
 
                 const protectedSystemElementActionUpdate = protectedSystemElement.querySelector(".protected-system-action-update")
                 const protectedSystemElementActionDeleteQueue = protectedSystemElement.querySelector(".protected-system-action-delete-queue")
-                const protectedSystemElementActionDetail = protectedSystemElement.querySelector(".protected-system-action-detail")
                 const protectedSystemElementName = protectedSystemElement.querySelector(".protected-system-element-name")
                 const protectedSystemElementType = protectedSystemElement.querySelector(".protected-system-element-type")
                 const protectedSystemElementOrganization = protectedSystemElement.querySelector(".protected-system-element-organization")
+                const protectedSystemElementTipCount = protectedSystemElement.querySelector(".protected-system-element-tip-count")
+
 
                 protectedSystemElementActionUpdate.addEventListener("click", () => onUpdateOpen(protectedSystem))
                 protectedSystemElementActionDeleteQueue.dataset.id = protectedSystem.id
-                protectedSystemElementActionDetail.href = protectedSystemDashboard + "?" + new URLSearchParams({"id": protectedSystem.id})
                 protectedSystemElementName.innerHTML = protectedSystem.name
                 protectedSystemElementName.title = protectedSystem.name
+                protectedSystemElementName.href = protectedSystemDashboard + "?" + new URLSearchParams({"id": protectedSystem.id})
                 protectedSystemElementType.innerHTML = protectedSystem.type.label
                 protectedSystemElementType.title = protectedSystem.type.label
                 protectedSystemElementOrganization.innerHTML = protectedSystem.organization.name
                 protectedSystemElementOrganization.title = protectedSystem.organization.name
+                protectedSystemElementTipCount.innerHTML = protectedSystem.protectedSystemTrustInteroperabilityProfileList.length
+                protectedSystemElementTipCount.title = protectedSystem.protectedSystemTrustInteroperabilityProfileList.length
 
                 protectedSystemTBody.appendChild(protectedSystemElement)
             })

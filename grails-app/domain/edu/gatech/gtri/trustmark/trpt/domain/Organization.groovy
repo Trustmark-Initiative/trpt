@@ -26,9 +26,9 @@ class Organization {
     ]
 
     static mapping = {
-        name length: 200
-        description length: 200
-        uri length: 200
+        name length: 1000
+        description length: 1000
+        uri length: 1000
     }
 
     long idHelper() { id }
@@ -48,7 +48,7 @@ class Organization {
         save(failOnError: true);
     }
 
-    void saveHelper() {
+    Organization saveHelper() {
 
         save(failOnError: true);
     }

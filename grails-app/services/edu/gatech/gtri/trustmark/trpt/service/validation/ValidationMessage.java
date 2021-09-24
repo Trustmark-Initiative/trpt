@@ -23,6 +23,7 @@ public abstract class ValidationMessage<FIELD> {
             F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
             F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
             F1<FIELD, T1> fValidationMessageMustBeNonNull,
+            F1<FIELD, T1> fValidationMessageMustBeNumeric,
             F2<FIELD, String, T1> fValidationMessageMustBePattern,
             F1<FIELD, T1> fValidationMessageMustBeReference,
             F1<FIELD, T1> fValidationMessageMustBeUnique,
@@ -54,6 +55,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
+                F1<FIELD, T1> fValidationMessageMustBeNumeric,
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
@@ -66,6 +68,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBeLengthGreaterThanOrEqual);
             requireNonNull(fValidationMessageMustBeLengthLessThanOrEqual);
             requireNonNull(fValidationMessageMustBeNonNull);
+            requireNonNull(fValidationMessageMustBeNumeric);
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
@@ -101,6 +104,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
+                F1<FIELD, T1> fValidationMessageMustBeNumeric,
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
@@ -113,6 +117,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBeLengthGreaterThanOrEqual);
             requireNonNull(fValidationMessageMustBeLengthLessThanOrEqual);
             requireNonNull(fValidationMessageMustBeNonNull);
+            requireNonNull(fValidationMessageMustBeNumeric);
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
@@ -150,6 +155,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
+                F1<FIELD, T1> fValidationMessageMustBeNumeric,
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
@@ -162,6 +168,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBeLengthGreaterThanOrEqual);
             requireNonNull(fValidationMessageMustBeLengthLessThanOrEqual);
             requireNonNull(fValidationMessageMustBeNonNull);
+            requireNonNull(fValidationMessageMustBeNumeric);
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
@@ -201,6 +208,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
+                F1<FIELD, T1> fValidationMessageMustBeNumeric,
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
@@ -213,6 +221,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBeLengthGreaterThanOrEqual);
             requireNonNull(fValidationMessageMustBeLengthLessThanOrEqual);
             requireNonNull(fValidationMessageMustBeNonNull);
+            requireNonNull(fValidationMessageMustBeNumeric);
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
@@ -257,6 +266,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
+                F1<FIELD, T1> fValidationMessageMustBeNumeric,
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
@@ -269,6 +279,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBeLengthGreaterThanOrEqual);
             requireNonNull(fValidationMessageMustBeLengthLessThanOrEqual);
             requireNonNull(fValidationMessageMustBeNonNull);
+            requireNonNull(fValidationMessageMustBeNumeric);
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
@@ -313,6 +324,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
+                F1<FIELD, T1> fValidationMessageMustBeNumeric,
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
@@ -325,6 +337,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBeLengthGreaterThanOrEqual);
             requireNonNull(fValidationMessageMustBeLengthLessThanOrEqual);
             requireNonNull(fValidationMessageMustBeNonNull);
+            requireNonNull(fValidationMessageMustBeNumeric);
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
@@ -355,6 +368,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
+                F1<FIELD, T1> fValidationMessageMustBeNumeric,
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
@@ -367,6 +381,51 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBeLengthGreaterThanOrEqual);
             requireNonNull(fValidationMessageMustBeLengthLessThanOrEqual);
             requireNonNull(fValidationMessageMustBeNonNull);
+            requireNonNull(fValidationMessageMustBeNumeric);
+            requireNonNull(fValidationMessageMustBePattern);
+            requireNonNull(fValidationMessageMustBeReference);
+            requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageNonEmptyList);
+
+            return fValidationMessageMustBeNonNull.f(field);
+        }
+    }
+
+    public static final class ValidationMessageMustBeNumeric<FIELD> extends ValidationMessage<FIELD> {
+
+        private final FIELD field;
+
+        public ValidationMessageMustBeNumeric(
+                final FIELD field) {
+            this.field = field;
+        }
+
+        public FIELD getField() {
+            return field;
+        }
+
+        public <T1> T1 match(
+                F2<FIELD, NonEmptyList<Integer>, T1> fValidationMessageMustBeDistinct,
+                F2<FIELD, NonEmptyList<Integer>, T1> fValidationMessageMustBeElementNonNull,
+                F2<FIELD, Integer, T1> fValidationMessageMustBeEmpty,
+                F3<FIELD, FIELD, FIELD, T1> fValidationMessageMustBeEqual,
+                F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
+                F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
+                F1<FIELD, T1> fValidationMessageMustBeNonNull,
+                F1<FIELD, T1> fValidationMessageMustBeNumeric,
+                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F1<FIELD, T1> fValidationMessageMustBeReference,
+                F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
+
+            requireNonNull(fValidationMessageMustBeDistinct);
+            requireNonNull(fValidationMessageMustBeElementNonNull);
+            requireNonNull(fValidationMessageMustBeEmpty);
+            requireNonNull(fValidationMessageMustBeEqual);
+            requireNonNull(fValidationMessageMustBeLengthGreaterThanOrEqual);
+            requireNonNull(fValidationMessageMustBeLengthLessThanOrEqual);
+            requireNonNull(fValidationMessageMustBeNonNull);
+            requireNonNull(fValidationMessageMustBeNumeric);
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
@@ -404,6 +463,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
+                F1<FIELD, T1> fValidationMessageMustBeNumeric,
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
@@ -416,6 +476,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBeLengthGreaterThanOrEqual);
             requireNonNull(fValidationMessageMustBeLengthLessThanOrEqual);
             requireNonNull(fValidationMessageMustBeNonNull);
+            requireNonNull(fValidationMessageMustBeNumeric);
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
@@ -446,6 +507,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
+                F1<FIELD, T1> fValidationMessageMustBeNumeric,
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
@@ -458,6 +520,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBeLengthGreaterThanOrEqual);
             requireNonNull(fValidationMessageMustBeLengthLessThanOrEqual);
             requireNonNull(fValidationMessageMustBeNonNull);
+            requireNonNull(fValidationMessageMustBeNumeric);
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
@@ -488,6 +551,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
+                F1<FIELD, T1> fValidationMessageMustBeNumeric,
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
@@ -500,6 +564,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBeLengthGreaterThanOrEqual);
             requireNonNull(fValidationMessageMustBeLengthLessThanOrEqual);
             requireNonNull(fValidationMessageMustBeNonNull);
+            requireNonNull(fValidationMessageMustBeNumeric);
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
@@ -537,6 +602,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
+                F1<FIELD, T1> fValidationMessageMustBeNumeric,
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
@@ -549,6 +615,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBeLengthGreaterThanOrEqual);
             requireNonNull(fValidationMessageMustBeLengthLessThanOrEqual);
             requireNonNull(fValidationMessageMustBeNonNull);
+            requireNonNull(fValidationMessageMustBeNumeric);
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
@@ -606,6 +673,12 @@ public abstract class ValidationMessage<FIELD> {
             final FIELD field) {
 
         return new ValidationMessageMustBeNonNull<>(field);
+    }
+
+    public static <FIELD> ValidationMessageMustBeNumeric<FIELD> validationMessageMustBeNumeric(
+            final FIELD field) {
+
+        return new ValidationMessageMustBeNumeric<>(field);
     }
 
     public static <FIELD> ValidationMessageMustBePattern<FIELD> validationMessageMustBePattern(

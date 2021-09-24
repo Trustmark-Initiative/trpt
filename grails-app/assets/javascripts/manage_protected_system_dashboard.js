@@ -33,7 +33,11 @@ function initialize(
         document.getElementById("trust-interoperability-profile-action-insert").addEventListener("click", () => onInsertOpen(protectedSystem))
         document.getElementById("trust-interoperability-profile-action-delete").addEventListener("click", () => onDeleteSubmit(protectedSystem))
 
-        document.getElementById("protected-system-element-name").innerHTML = protectedSystem.name
+        Array.from(document.querySelectorAll(".protected-system-element-name"))
+            .map(element => element.innerHTML = protectedSystem.name)
+
+        Array.from(document.querySelectorAll(".protected-system-element-type"))
+            .map(element => element.innerHTML = protectedSystem.type.label)
 
         const trustInteroperabilityProfileTBody = document.getElementById("trust-interoperability-profile-tbody")
         trustInteroperabilityProfileTBody.innerHTML = ""
@@ -58,36 +62,21 @@ function initialize(
                 const trustInteroperabilityProfileElementIssuer = trustInteroperabilityProfileElement.querySelector(".trust-interoperability-profile-element-issuer")
                 const trustInteroperabilityProfileElementIssuerIdentifier = trustInteroperabilityProfileElement.querySelector(".trust-interoperability-profile-element-issuer-identifier")
                 const trustInteroperabilityProfileElementMandatory = trustInteroperabilityProfileElement.querySelector(".trust-interoperability-profile-element-mandatory")
-                const trustInteroperabilityProfileElementStatus = trustInteroperabilityProfileElement.querySelector(".trust-interoperability-profile-element-status")
 
                 trustInteroperabilityProfileElementActionUpdate.addEventListener("click", () => onUpdateOpen(protectedSystem, protectedSystemTrustInteroperabilityProfile))
                 trustInteroperabilityProfileElementActionDeleteQueue.dataset.uri = protectedSystemTrustInteroperabilityProfile.uri
                 trustInteroperabilityProfileElementName.innerHTML = protectedSystemTrustInteroperabilityProfile.name
                 trustInteroperabilityProfileElementName.title = protectedSystemTrustInteroperabilityProfile.name
-                trustInteroperabilityProfileElementUri.innerHTML = protectedSystemTrustInteroperabilityProfile.uri
-                trustInteroperabilityProfileElementUri.title = protectedSystemTrustInteroperabilityProfile.uri
-                trustInteroperabilityProfileElementUri.href = protectedSystemTrustInteroperabilityProfile.uri
+                trustInteroperabilityProfileElementName.href = protectedSystemTrustInteroperabilityProfile.uri
                 trustInteroperabilityProfileElementDescription.innerHTML = protectedSystemTrustInteroperabilityProfile.description
                 trustInteroperabilityProfileElementDescription.title = protectedSystemTrustInteroperabilityProfile.description
                 trustInteroperabilityProfileElementIssuer.innerHTML = protectedSystemTrustInteroperabilityProfile.issuerName
                 trustInteroperabilityProfileElementIssuer.title = protectedSystemTrustInteroperabilityProfile.issuerName
-                trustInteroperabilityProfileElementIssuerIdentifier.innerHTML = protectedSystemTrustInteroperabilityProfile.issuerIdentifier
-                trustInteroperabilityProfileElementIssuerIdentifier.title = protectedSystemTrustInteroperabilityProfile.issuerIdentifier
-                trustInteroperabilityProfileElementIssuerIdentifier.href = protectedSystemTrustInteroperabilityProfile.issuerIdentifier
+                trustInteroperabilityProfileElementIssuer.href = protectedSystemTrustInteroperabilityProfile.issuerIdentifier
 
                 if (protectedSystemTrustInteroperabilityProfile.mandatory) {
 
                     trustInteroperabilityProfileElementMandatory.classList.add("bi-exclamation-circle")
-                }
-
-                if (protectedSystemTrustInteroperabilityProfile.requestLocalDateTime == null) {
-
-                    trustInteroperabilityProfileElementStatus.classList.add("bi-cloud-plus")
-
-                } else if (protectedSystemTrustInteroperabilityProfile.successLocalDateTime == null || protectedSystemTrustInteroperabilityProfile.successLocalDateTime < protectedSystemTrustInteroperabilityProfile.failureLocalDateTime) {
-
-                    trustInteroperabilityProfileElementStatus.classList.add("bi-cloud-slash")
-                    trustInteroperabilityProfileElementStatus.title = protectedSystemTrustInteroperabilityProfile.failureMessage
                 }
 
                 trustInteroperabilityProfileTBody.appendChild(trustInteroperabilityProfileElement)
@@ -107,12 +96,13 @@ function initialize(
 
             protectedSystem.protectedSystemPartnerSystemCandidateList.forEach(protectedSystemPartnerSystemCandidate => {
 
+                Array.from(document.querySelectorAll(".partner-system-candidate-element-type"))
+                    .map(element => element.innerHTML = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.type.label)
+
                 const partnerSystemCandidateElement = document.getElementById("partner-system-candidate-template-summary").content.cloneNode(true)
 
                 const partnerSystemCandidateElementTrust = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-trust")
-                // const partnerSystemCandidateElementTrustmarkBindingRegistry = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-trustmark-binding-registry")
                 const partnerSystemCandidateElementName = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-name")
-                const partnerSystemCandidateElementType = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-type")
                 const partnerSystemCandidateElementTrustFabricMetadata = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-trust-fabric-metadata")
                 const partnerSystemCandidateElementPercentTrustmarkDefinitionRequirement = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-percent-trustmark-definition-requirement")
                 const partnerSystemCandidateElementPercentTrustInteroperabilityProfile = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-percent-trust-interoperability-profile")
@@ -120,18 +110,80 @@ function initialize(
 
                 partnerSystemCandidateElementTrust.checked = protectedSystemPartnerSystemCandidate.trust
                 if (partnerSystemCandidateElementTrust.checked) {
-                    partnerSystemCandidateElementTrust.addEventListener("click", () => onUpdateSubmitForPartnerSystemCandidateRemove(protectedSystem, protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id));
+                    partnerSystemCandidateElementTrust.addEventListener("click", () => {
+
+                        document.getElementById("modal-header-trust").classList.add("d-none")
+                        document.getElementById("modal-body-trust").classList.add("d-none")
+
+                        document.getElementById("modal-header-do-not-trust").classList.remove("d-none")
+                        document.getElementById("modal-body-do-not-trust").classList.remove("d-none")
+
+                        Array.from(document.querySelectorAll("#modal-trust .partner-system-candidate-element-trust-fabric-metadata"))
+                            .forEach(element => {
+                                if (protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor == null) {
+
+                                    element.innerHTML = "the link"
+                                    element.title = ""
+                                    element.href = ""
+
+                                } else {
+
+                                    element.innerHTML = `${protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor}`
+                                    element.title = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
+                                    element.href = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
+                                }
+                            })
+
+                        Array.from(document.querySelectorAll("#modal-trust .partner-system-candidate-element-name"))
+                            .forEach(element => element.innerHTML = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.name)
+
+                        onUpdateSubmitForPartnerSystemCandidateRemove(protectedSystem, protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id)
+                    });
                 } else {
-                    partnerSystemCandidateElementTrust.addEventListener("click", () => onUpdateSubmitForPartnerSystemCandidateAdd(protectedSystem, protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id));
+                    partnerSystemCandidateElementTrust.addEventListener("click", () => {
+
+                        document.getElementById("modal-header-trust").classList.remove("d-none")
+                        document.getElementById("modal-body-trust").classList.remove("d-none")
+
+                        document.getElementById("modal-header-do-not-trust").classList.add("d-none")
+                        document.getElementById("modal-body-do-not-trust").classList.add("d-none")
+
+                        Array.from(document.querySelectorAll("#modal-trust .partner-system-candidate-element-trust-fabric-metadata"))
+                            .forEach(element => {
+                                if (protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor == null) {
+
+                                    element.innerHTML = "the link"
+                                    element.title = ""
+                                    element.href = ""
+
+                                } else {
+
+                                    element.innerHTML = `${protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor}`
+                                    element.title = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
+                                    element.href = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
+                                }
+                            })
+
+                        Array.from(document.querySelectorAll("#modal-trust .partner-system-candidate-element-name"))
+                            .forEach(element => element.innerHTML = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.name)
+
+                        onUpdateSubmitForPartnerSystemCandidateAdd(protectedSystem, protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id)
+                    });
                 }
 
                 partnerSystemCandidateElementName.innerHTML = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.name
                 partnerSystemCandidateElementName.title = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.name
-                partnerSystemCandidateElementType.innerHTML = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.type.label
-                partnerSystemCandidateElementType.title = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.type.label
-                partnerSystemCandidateElementTrustFabricMetadata.innerHTML = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
-                partnerSystemCandidateElementTrustFabricMetadata.title = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
-                partnerSystemCandidateElementTrustFabricMetadata.href = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
+                partnerSystemCandidateElementName.href = partnerSystemCandidateDashboard + "?" + new URLSearchParams({"id": protectedSystem.id, "partnerSystemCandidate": protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id})
+
+                if (protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor == null) {
+
+                    partnerSystemCandidateElementTrustFabricMetadata.parentNode.removeChild(partnerSystemCandidateElementTrustFabricMetadata)
+                } else {
+                    partnerSystemCandidateElementTrustFabricMetadata.innerHTML = `(${protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor})`
+                    partnerSystemCandidateElementTrustFabricMetadata.title = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
+                    partnerSystemCandidateElementTrustFabricMetadata.href = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
+                }
+
                 partnerSystemCandidateElementPercentTrustmarkDefinitionRequirement.innerHTML =
                     protectedSystemPartnerSystemCandidate.evaluationTrustmarkDefinitionRequirementUnsatisfied + protectedSystemPartnerSystemCandidate.evaluationTrustmarkDefinitionRequirementSatisfied === 0 ?
                         "(NA)" :
@@ -154,9 +206,6 @@ function initialize(
                     protectedSystemPartnerSystemCandidate.evaluationTrustExpressionUnsatisfied + protectedSystemPartnerSystemCandidate.evaluationTrustExpressionSatisfied === 0 ?
                         "(NA)" :
                         `${protectedSystemPartnerSystemCandidate.evaluationTrustExpressionSatisfied} of ${(protectedSystemPartnerSystemCandidate.evaluationTrustExpressionUnsatisfied + protectedSystemPartnerSystemCandidate.evaluationTrustExpressionSatisfied)}`
-
-
-                partnerSystemCandidateElementActionDetail.href = partnerSystemCandidateDashboard + "?" + new URLSearchParams({"id": protectedSystem.id, "partnerSystemCandidate": protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id})
 
                 partnerSystemCandidateTBody.appendChild(partnerSystemCandidateElement)
             })

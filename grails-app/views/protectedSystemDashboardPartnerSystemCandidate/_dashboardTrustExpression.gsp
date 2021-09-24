@@ -17,7 +17,7 @@
         <g:set var="trustInteroperabilityProfileURI" value="${trustInteroperabilityProfile.get("Identifier")}"/>
         <g:set var="trustInteroperabilityProfileName" value="${trustInteroperabilityProfile.get("Name")}"/>
 
-        <div class="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI && trustInteroperabilityProfileParentURI != "" ? "TrustExpressionBorder" : "TrustExpression"} FAILURE">
+        <div class="${trustInteroperabilityProfileParentURI == "" ? "TrustExpressionTop" : trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI ? "TrustExpressionSub" : "TrustExpression"} FAILURE">
             <g:if test="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI}">
                 <g:set var="id" value="${UUID.randomUUID().toString()}"/>
                 <input type="checkbox" id="id-${id}" ${trustInteroperabilityProfileParentURI != "" ? "checked" : ""}>
@@ -49,7 +49,7 @@
         <g:set var="trustExpressionEvaluatorDataValue" value="${trustExpressionData.get("TrustExpressionEvaluatorDataValue")}"/>
         <g:set var="trustExpressionEvaluatorState" value="${(trustInteroperabilityProfileParentURI == "" && trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString() && trustExpressionEvaluatorDataValue == true) || trustInteroperabilityProfileParentURI != "" ? "SUCCESS" : "FAILURE"}"/>
 
-        <div class="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI && trustInteroperabilityProfileParentURI != "" ? "TrustExpressionBorder" : "TrustExpression"} ${trustExpressionEvaluatorState}">
+        <div class="${trustInteroperabilityProfileParentURI == "" ? "TrustExpressionTop" : trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI ? "TrustExpressionSub" : "TrustExpression"} ${trustExpressionEvaluatorState}">
             <g:if test="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI}">
                 <g:set var="id" value="${UUID.randomUUID().toString()}"/>
                 <input type="checkbox" id="id-${id}" ${trustInteroperabilityProfileParentURI != "" ? "checked" : ""}>
@@ -94,7 +94,7 @@
         <g:set var="trustInteroperabilityProfileURI" value="${trustInteroperabilityProfile.get("Identifier")}"/>
         <g:set var="trustInteroperabilityProfileName" value="${trustInteroperabilityProfile.get("Name")}"/>
 
-        <div class="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI && trustInteroperabilityProfileParentURI != "" ? "TrustExpressionBorder" : "TrustExpression"} FAILURE">
+        <div class="${trustInteroperabilityProfileParentURI == "" ? "TrustExpressionTop" : trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI ? "TrustExpressionSub" : "TrustExpression"} FAILURE">
             <g:if test="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI}">
                 <g:set var="id" value="${UUID.randomUUID().toString()}"/>
                 <input type="checkbox" id="id-${id}" ${trustInteroperabilityProfileParentURI != "" ? "checked" : ""}>
@@ -135,7 +135,7 @@
         <g:set var="trustExpressionEvaluatorDataValue" value="${trustExpressionData.get("TrustExpressionEvaluatorDataValue")}"/>
         <g:set var="trustExpressionEvaluatorState" value="${trustInteroperabilityProfileParentURI == "" ? (trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString() ? (trustExpressionEvaluatorDataValue ? "SUCCESS" : "FAILURE") : "FAILURE") : (trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString() ? (trustExpressionEvaluatorDataValue ? "SUCCESS" : "FAILURE") : "UNKNOWN")}"/>
 
-        <div class="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI && trustInteroperabilityProfileParentURI != "" ? "TrustExpressionBorder" : "TrustExpression"} ${trustExpressionEvaluatorState}">
+        <div class="${trustInteroperabilityProfileParentURI == "" ? "TrustExpressionTop" : trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI ? "TrustExpressionSub" : "TrustExpression"} ${trustExpressionEvaluatorState}">
             <g:if test="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI}">
                 <g:set var="id" value="${UUID.randomUUID().toString()}"/>
                 <input type="checkbox" id="id-${id}" ${trustInteroperabilityProfileParentURI != "" ? "checked" : ""}>
@@ -184,7 +184,7 @@
     <g:set var="trustInteroperabilityProfileName" value="${trustInteroperabilityProfile.get("Name")}"/>
     <g:set var="trustExpressionEvaluatorState" value="${trustInteroperabilityProfileParentURI == "" ? (trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString() ? (trustExpressionEvaluatorDataValue ? "SUCCESS" : "FAILURE") : "FAILURE") : (trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString() ? (trustExpressionEvaluatorDataValue ? "SUCCESS" : "FAILURE") : "UNKNOWN")}"/>
 
-    <div class="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI && trustInteroperabilityProfileParentURI != "" ? "TrustExpressionBorder" : "TrustExpression"} ${trustExpressionEvaluatorState}">
+    <div class="${trustInteroperabilityProfileParentURI == "" ? "TrustExpressionTop" : trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI ? "TrustExpressionSub" : "TrustExpression"} ${trustExpressionEvaluatorState}">
         <g:if test="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI}">
             <g:set var="id" value="${UUID.randomUUID().toString()}"/>
             <input type="checkbox" id="id-${id}" ${trustInteroperabilityProfileParentURI != "" ? "checked" : ""}>
@@ -423,7 +423,7 @@
     <g:set var="trustInteroperabilityProfileURI" value="${trustInteroperabilityProfile.get("Identifier")}"/>
     <g:set var="trustInteroperabilityProfileName" value="${trustInteroperabilityProfile.get("Name")}"/>
 
-    <div class="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI && trustInteroperabilityProfileParentURI != "" ? "TrustExpressionBorder" : "TrustExpression"} FAILURE">
+    <div class="${trustInteroperabilityProfileParentURI == "" ? "TrustExpressionTop" : trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI ? "TrustExpressionSub" : "TrustExpression"} FAILURE">
         <g:if test="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI}">
             <div class="TrustInteroperabilityProfileInner"><span class="glyphicon bi-list-ul"></span>${trustInteroperabilityProfileName}</div>
         </g:if>

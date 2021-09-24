@@ -26,19 +26,25 @@ import static org.gtri.fj.product.Unit.unit;
 @Transactional
 public class UserService {
 
-    public List<UserResponse> findAll(final UserFindAllRequest userFindAllRequest) {
+    public List<UserResponse> findAll(
+            final String requesterUsername,
+            final UserFindAllRequest userFindAllRequest) {
 
         return findAllByOrderByNameFamilyAscNameGivenAscHelper()
                 .map(UserUtility::userResponse);
     }
 
-    public Validation<NonEmptyList<ValidationMessage<UserField>>, UserResponse> findOne(final UserFindOneRequest userFindOneRequest) {
+    public Validation<NonEmptyList<ValidationMessage<UserField>>, UserResponse> findOne(
+            final String requesterUsername,
+            final UserFindOneRequest userFindOneRequest) {
 
         return validationId(userFindOneRequest.getId())
                 .map(UserUtility::userResponse);
     }
 
-    public Validation<NonEmptyList<ValidationMessage<UserField>>, UserResponse> insert(final UserInsertRequest userInsertRequest) {
+    public Validation<NonEmptyList<ValidationMessage<UserField>>, UserResponse> insert(
+            final String requesterUsername,
+            final UserInsertRequest userInsertRequest) {
 
         return accumulate(
                 validationUsername(userInsertRequest.getUsername()),
@@ -73,7 +79,9 @@ public class UserService {
                 .map(UserUtility::userResponse);
     }
 
-    public Validation<NonEmptyList<ValidationMessage<UserField>>, UserResponse> update(final UserUpdateRequest userUpdateRequest) {
+    public Validation<NonEmptyList<ValidationMessage<UserField>>, UserResponse> update(
+            final String requesterUsername,
+            final UserUpdateRequest userUpdateRequest) {
 
         return accumulate(
                 validationId(userUpdateRequest.getId()),
@@ -114,7 +122,9 @@ public class UserService {
                 .map(UserUtility::userResponse);
     }
 
-    public Validation<NonEmptyList<ValidationMessage<UserField>>, Unit> delete(final UserDeleteAllRequest userDeleteAllRequest) {
+    public Validation<NonEmptyList<ValidationMessage<UserField>>, Unit> delete(
+            final String requesterUsername,
+            final UserDeleteAllRequest userDeleteAllRequest) {
 
         return validationIdList(iterableList(userDeleteAllRequest.getIdList()))
                 .map(list -> list.map(user -> {

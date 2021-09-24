@@ -63,8 +63,8 @@ public final class PasswordUtility {
             final String password2) {
 
         return accumulate(
-                mustBeNonNullAndLength(PasswordField.passwordNew1, 1, 200, password1),
-                mustBeNonNullAndLength(PasswordField.passwordNew2, 1, 200, password2),
+                mustBeNonNullAndLength(PasswordField.passwordNew1, 1, 1000, password1),
+                mustBeNonNullAndLength(PasswordField.passwordNew2, 1, 1000, password2),
                 (password1Inner, password2Inner) -> p(password1Inner, password2Inner))
                 .bind(p -> mustBeEqual(PasswordField.passwordNew1, PasswordField.passwordNew2, stringEqual, p._1(), p._2()));
     }
