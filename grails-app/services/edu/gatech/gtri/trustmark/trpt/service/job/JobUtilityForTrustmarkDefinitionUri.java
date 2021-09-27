@@ -44,20 +44,6 @@ public class JobUtilityForTrustmarkDefinitionUri {
 
         final LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 
-        final Effect1<TrustmarkDefinitionUri> historyEffect = trustmarkDefinitionUri -> {
-
-            final TrustmarkDefinitionUriHistory trustmarkDefinitionUriHistory = new TrustmarkDefinitionUriHistory();
-            trustmarkDefinitionUriHistory.setUri(trustmarkDefinitionUri.getUri());
-            trustmarkDefinitionUriHistory.setHash(trustmarkDefinitionUri.getHash());
-            trustmarkDefinitionUriHistory.setXml(trustmarkDefinitionUri.getXml());
-            trustmarkDefinitionUriHistory.setRequestLocalDateTime(trustmarkDefinitionUri.getRequestLocalDateTime());
-            trustmarkDefinitionUriHistory.setSuccessLocalDateTime(trustmarkDefinitionUri.getSuccessLocalDateTime());
-            trustmarkDefinitionUriHistory.setFailureLocalDateTime(trustmarkDefinitionUri.getFailureLocalDateTime());
-            trustmarkDefinitionUriHistory.setChangeLocalDateTime(trustmarkDefinitionUri.getChangeLocalDateTime());
-            trustmarkDefinitionUriHistory.setFailureMessage(trustmarkDefinitionUri.getFailureMessage());
-            trustmarkDefinitionUriHistory.saveHelper();
-        };
-
         TrustmarkDefinitionUri
                 .withTransactionHelper(() -> TrustmarkDefinitionUri.findAllHelper())
                 .map(trustmarkDefinitionUri -> trustmarkDefinitionUri.getUri())

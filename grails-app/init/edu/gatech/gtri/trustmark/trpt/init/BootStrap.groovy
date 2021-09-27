@@ -10,6 +10,7 @@ import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistry
 import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistryUri
 import edu.gatech.gtri.trustmark.trpt.domain.User
 import edu.gatech.gtri.trustmark.trpt.domain.UserRole
+import edu.gatech.gtri.trustmark.trpt.job.JobForMailEvaluationUpdate
 import edu.gatech.gtri.trustmark.trpt.job.JobForMailPasswordReset
 import edu.gatech.gtri.trustmark.trpt.job.JobForPartnerSystemCandidateTrustInteroperabilityProfileUri
 import edu.gatech.gtri.trustmark.trpt.job.JobForTrustInteroperabilityProfileUri
@@ -22,6 +23,7 @@ import org.gtri.fj.data.NonEmptyList
 import org.gtri.fj.data.Option
 import org.json.JSONArray
 import org.json.JSONObject
+import org.quartz.Job
 import org.quartz.JobBuilder
 import org.quartz.JobDetail
 import org.quartz.JobKey
@@ -144,7 +146,7 @@ class BootStrap {
                     .map({ Role roleRequired ->
 
                         log.info("Inserting role '${roleRequired.name}' ...")
-                        roleRequired.saveHelper()
+                        roleRequired.saveAndFlushHelper()
                     })
         }
     }
@@ -298,79 +300,39 @@ class BootStrap {
     private static final String propertyNameJobForTrustmarkBindingRegistryUriCronExpression = 'jobForTrustmarkBindingRegistryUri.cronExpression'
     private static final String propertyNameJobForTrustInteroperabilityProfileUriCronExpression = 'jobForTrustInteroperabilityProfileUri.cronExpression'
     private static final String propertyNameJobForMailPasswordResetCronExpression = 'jobForMailPasswordReset.cronExpression'
+    private static final String propertyNameJobForMailEvaluationUpdateCronExpression = 'jobForMailEvaluationUpdate.cronExpression'
 
     private void initializeJob() {
 
         final SchedulerFactory schedulerFactory = new StdSchedulerFactory()
         final Scheduler scheduler = schedulerFactory.getScheduler()
 
-        final String partnerSystemCandidateTrustInteroperabilityProfileUriJobCronExpressionCronExpression = grailsApplication.config[propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriCronExpression]
-
-        final JobDetail partnerSystemCandidateTrustInteroperabilityProfileUriJob = JobBuilder.newJob(JobForPartnerSystemCandidateTrustInteroperabilityProfileUri.class)
-                .withIdentity(JobForPartnerSystemCandidateTrustInteroperabilityProfileUri.simpleName, "trpt")
-                .build();
-
-        final Trigger partnerSystemCandidateTrustInteroperabilityProfileUriJobTrigger = TriggerBuilder.newTrigger()
-                .forJob(JobKey.jobKey(JobForPartnerSystemCandidateTrustInteroperabilityProfileUri.simpleName, "trpt"))
-                .withSchedule(cronSchedule(partnerSystemCandidateTrustInteroperabilityProfileUriJobCronExpressionCronExpression))
-                .build()
-
-        scheduler.scheduleJob(partnerSystemCandidateTrustInteroperabilityProfileUriJob, partnerSystemCandidateTrustInteroperabilityProfileUriJobTrigger)
-
-        final String trustmarkUriJobCronExpressionCronExpression = grailsApplication.config[propertyNameJobForTrustmarkUriCronExpression]
-
-        final JobDetail trustmarkUriJob = JobBuilder.newJob(JobForTrustmarkUri.class)
-                .withIdentity(JobForTrustmarkUri.simpleName, "trpt")
-                .build();
-
-        final Trigger trustmarkUriJobTrigger = TriggerBuilder.newTrigger()
-                .forJob(JobKey.jobKey(JobForTrustmarkUri.simpleName, "trpt"))
-                .withSchedule(cronSchedule(trustmarkUriJobCronExpressionCronExpression))
-                .build()
-
-        scheduler.scheduleJob(trustmarkUriJob, trustmarkUriJobTrigger)
-
-        final String trustmarkBindingRegistryUriJobCronExpressionCronExpression = grailsApplication.config[propertyNameJobForTrustmarkBindingRegistryUriCronExpression]
-
-        final JobDetail trustmarkBindingRegistryUriJob = JobBuilder.newJob(JobForTrustmarkBindingRegistryUri.class)
-                .withIdentity(JobForTrustmarkBindingRegistryUri.simpleName, "trpt")
-                .build();
-
-        final Trigger trustmarkBindingRegistryUriJobTrigger = TriggerBuilder.newTrigger()
-                .forJob(JobKey.jobKey(JobForTrustmarkBindingRegistryUri.simpleName, "trpt"))
-                .withSchedule(cronSchedule(trustmarkBindingRegistryUriJobCronExpressionCronExpression))
-                .build()
-
-        scheduler.scheduleJob(trustmarkBindingRegistryUriJob, trustmarkBindingRegistryUriJobTrigger)
-
-        final String trustInteroperabilityProfileUriJobCronExpressionCronExpression = grailsApplication.config[propertyNameJobForTrustInteroperabilityProfileUriCronExpression]
-
-        final JobDetail trustInteroperabilityProfileUriJob = JobBuilder.newJob(JobForTrustInteroperabilityProfileUri.class)
-                .withIdentity(JobForTrustInteroperabilityProfileUri.simpleName, "trpt")
-                .build();
-
-        final Trigger trustInteroperabilityProfileUriJobTrigger = TriggerBuilder.newTrigger()
-                .forJob(JobKey.jobKey(JobForTrustInteroperabilityProfileUri.simpleName, "trpt"))
-                .withSchedule(cronSchedule(trustInteroperabilityProfileUriJobCronExpressionCronExpression))
-                .build()
-
-        scheduler.scheduleJob(trustInteroperabilityProfileUriJob, trustInteroperabilityProfileUriJobTrigger)
-
-        final String mailPasswordResetJobCronExpressionCronExpression = grailsApplication.config[propertyNameJobForMailPasswordResetCronExpression]
-
-        final JobDetail mailPasswordResetJob = JobBuilder.newJob(JobForMailPasswordReset.class)
-                .withIdentity(JobForMailPasswordReset.simpleName, "trpt")
-                .build();
-
-        final Trigger mailPasswordResetJobTrigger = TriggerBuilder.newTrigger()
-                .forJob(JobKey.jobKey(JobForMailPasswordReset.simpleName, "trpt"))
-                .withSchedule(cronSchedule(mailPasswordResetJobCronExpressionCronExpression))
-                .build()
-
-        scheduler.scheduleJob(mailPasswordResetJob, mailPasswordResetJobTrigger)
+        initializeJobHelper(scheduler, JobForPartnerSystemCandidateTrustInteroperabilityProfileUri.class, propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriCronExpression)
+        initializeJobHelper(scheduler, JobForTrustmarkUri.class, propertyNameJobForTrustmarkUriCronExpression)
+        initializeJobHelper(scheduler, JobForTrustmarkBindingRegistryUri.class, propertyNameJobForTrustmarkBindingRegistryUriCronExpression)
+        initializeJobHelper(scheduler, JobForTrustInteroperabilityProfileUri.class, propertyNameJobForTrustInteroperabilityProfileUriCronExpression)
+        initializeJobHelper(scheduler, JobForMailPasswordReset.class, propertyNameJobForMailPasswordResetCronExpression)
+        initializeJobHelper(scheduler, JobForMailEvaluationUpdate.class, propertyNameJobForMailEvaluationUpdateCronExpression)
 
         scheduler.start()
     }
+
+    private void initializeJobHelper(final Scheduler scheduler, final Class<? extends Job> jobForClass, final String propertyNameForCronExpression) {
+
+        final String cronExpression = grailsApplication.config[propertyNameForCronExpression]
+
+        final JobDetail jobDetail = JobBuilder.newJob(jobForClass)
+                .withIdentity(jobForClass.simpleName, "trpt")
+                .build();
+
+        final Trigger jobTrigger = TriggerBuilder.newTrigger()
+                .forJob(JobKey.jobKey(jobForClass.simpleName, "trpt"))
+                .withSchedule(cronSchedule(cronExpression))
+                .build()
+
+        scheduler.scheduleJob(jobDetail, jobTrigger)
+    }
+
 
     private void initializeJson() {
         JSON.registerObjectMarshaller(LocalDateTime) { final LocalDateTime it ->

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import static java.lang.String.format;
+import static org.gtri.fj.data.NonEmptyList.nel;
 
 public class JobUtilityForMailPasswordReset {
 
@@ -25,7 +26,7 @@ public class JobUtilityForMailPasswordReset {
         MailPasswordReset.withTransactionHelper(() -> MailPasswordReset.findAllByMailDateTimeIsNullHelper()
                 .forEach(mailPasswordReset -> {
                     MailUtility.send(
-                            mailPasswordReset.userHelper().getUsername(),
+                            nel(mailPasswordReset.userHelper().getUsername()),
                             "The system has reset your password.",
                             format(
                                     "The system has reset your password.%n%n" +

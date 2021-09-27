@@ -16,6 +16,7 @@ import static edu.gatech.gtri.trustmark.trpt.service.mail.MailUtility.validation
 import static edu.gatech.gtri.trustmark.trpt.service.mail.MailUtility.validationPort;
 import static edu.gatech.gtri.trustmark.trpt.service.mail.MailUtility.validationRecipient;
 import static edu.gatech.gtri.trustmark.trpt.service.mail.MailUtility.validationUsername;
+import static org.gtri.fj.data.NonEmptyList.nel;
 import static org.gtri.fj.data.Validation.accumulate;
 import static org.gtri.fj.product.Unit.unit;
 
@@ -62,7 +63,7 @@ public class MailService {
         return validationRecipient(mailTestRequest.getRecipient())
                 .map(recipient -> {
 
-                    send(mailTestRequest.getRecipient(), "Relying Party Tool Mail Relay Test", "This is a test of the relying party tool mail relay.");
+                    send(nel(mailTestRequest.getRecipient()), "Relying Party Tool Mail Relay Test", "This is a test of the relying party tool mail relay.");
 
                     return unit();
                 });

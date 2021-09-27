@@ -53,19 +53,25 @@ class TrustInteroperabilityProfileUriHistory {
         failureMessage length: 1000
     }
 
-    long idHelper() { id }
+    long idHelper() {
+        id
+    }
 
-    void deleteHelper() { delete(failOnError: true) }
+    void deleteHelper() {
+        delete(failOnError: true);
+    }
 
-    void deleteAndFlushHelper() { delete(flush: true, failOnError: true) }
+    void deleteAndFlushHelper() {
+        delete(flush: true, failOnError: true)
+    }
 
-    TrustInteroperabilityProfileUriHistory saveHelper() { save(failOnError: true) }
+    TrustInteroperabilityProfileUriHistory saveHelper() {
+        save(failOnError: true)
+    }
 
-    TrustInteroperabilityProfileUriHistory saveAndFlushHelper() { save(flush: true, failOnError: true) }
-
-    static final org.gtri.fj.data.List<TrustInteroperabilityProfileUriHistory> findAllHelper() { fromNull(findAll()).map({ List<TrustInteroperabilityProfileUriHistory> list -> iterableList(list) }) orSome(org.gtri.fj.data.List.<TrustInteroperabilityProfileUriHistory> nil()) }
-
-    static final Option<TrustInteroperabilityProfileUriHistory> findByIdHelper(long id) { fromNull(findById(id)) }
+    TrustInteroperabilityProfileUriHistory saveAndFlushHelper() {
+        save(flush: true, failOnError: true)
+    }
 
     static final <T> T withTransactionHelper(final F0<T> f0) {
         return withTransaction({ return f0.f() })
@@ -73,5 +79,15 @@ class TrustInteroperabilityProfileUriHistory {
 
     static final void withTransactionHelper(final Effect0 effect0) {
         withTransaction({ return effect0.f() })
+    }
+
+    static Option<TrustInteroperabilityProfileUriHistory> findByIdHelper(final long id) {
+        fromNull(findById(id))
+    }
+
+    static org.gtri.fj.data.List<TrustInteroperabilityProfileUriHistory> findAllHelper() {
+        fromNull(findAll())
+                .map({ collection -> iterableList(collection) })
+                .orSome(org.gtri.fj.data.List.<TrustInteroperabilityProfileUriHistory> nil());
     }
 }

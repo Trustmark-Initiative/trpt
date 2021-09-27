@@ -7,20 +7,19 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForMailEvaluation.synchronizeMailEvaluation;
-import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForMailPasswordReset.synchronizeMailPasswordReset;
+import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForMailEvaluationUpdate.synchronizeMailEvaluationUpdate;
 import static java.lang.String.format;
 
 @DisallowConcurrentExecution
-public class JobForMailEvaluation implements Job {
+public class JobForMailEvaluationUpdate implements Job {
 
-    private static final Log log = LogFactory.getLog(JobForMailEvaluation.class);
+    private static final Log log = LogFactory.getLog(JobForMailEvaluationUpdate.class);
 
     @Override
     public void execute(final JobExecutionContext context) throws JobExecutionException {
 
         log.info(format("%s: previous at %s; next at %s.", getClass().getSimpleName(), context.getPreviousFireTime(), context.getNextFireTime()));
 
-        synchronizeMailEvaluation();
+        synchronizeMailEvaluationUpdate();
     }
 }

@@ -9,49 +9,29 @@ import java.time.LocalDateTime
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
-class MailPasswordReset {
+class MailEvaluationUpdate {
 
-    String external
     LocalDateTime requestDateTime
     LocalDateTime mailDateTime
-    LocalDateTime resetDateTime
-    LocalDateTime expireDateTime
 
     static constraints = {
-        external nullable: true, length: 36
         requestDateTime nullable: true
         mailDateTime nullable: true
-        resetDateTime nullable: true
-        expireDateTime nullable: true
     }
 
     static belongsTo = [
-            user: User
+            partnerSystemCandidateTrustInteroperabilityProfileUri: PartnerSystemCandidateTrustInteroperabilityProfileUri
     ]
 
-    User userHelper() { getUser() }
+    PartnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUriHelper() { getPartnerSystemCandidateTrustInteroperabilityProfileUri() }
 
-    void userHelper(final User user) { setUser(user) }
+    void partnerSystemCandidateTrustInteroperabilityProfileUriHelper(final PartnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUri) { setPartnerSystemCandidateTrustInteroperabilityProfileUri(partnerSystemCandidateTrustInteroperabilityProfileUri) }
 
-    static final org.gtri.fj.data.List<MailPasswordReset> findAllByUserHelper(
-            final User user) {
-
-        fromNull(findAllByUser(user))
-                .map({ collection -> iterableList(collection) })
-                .orSome(org.gtri.fj.data.List.<MailPasswordReset> nil())
-    }
-
-    static final org.gtri.fj.data.List<MailPasswordReset> findAllByMailDateTimeIsNullHelper() {
+    static final org.gtri.fj.data.List<MailEvaluationUpdate> findAllByMailDateTimeIsNullHelper() {
 
         fromNull(findAllByMailDateTimeIsNull())
                 .map({ collection -> iterableList(collection) })
-                .orSome(org.gtri.fj.data.List.<MailPasswordReset> nil())
-    }
-
-    static final Option<MailPasswordReset> findByExternalHelper(
-            final String external) {
-
-        fromNull(findByExternal(external))
+                .orSome(org.gtri.fj.data.List.<MailEvaluationUpdate> nil())
     }
 
     long idHelper() {
@@ -66,11 +46,11 @@ class MailPasswordReset {
         delete(flush: true, failOnError: true)
     }
 
-    MailPasswordReset saveHelper() {
+    MailEvaluationUpdate saveHelper() {
         save(failOnError: true)
     }
 
-    MailPasswordReset saveAndFlushHelper() {
+    MailEvaluationUpdate saveAndFlushHelper() {
         save(flush: true, failOnError: true)
     }
 
@@ -82,13 +62,13 @@ class MailPasswordReset {
         withTransaction({ return effect0.f() })
     }
 
-    static Option<MailPasswordReset> findByIdHelper(final long id) {
+    static Option<MailEvaluationUpdate> findByIdHelper(final long id) {
         fromNull(findById(id))
     }
 
-    static org.gtri.fj.data.List<MailPasswordReset> findAllHelper() {
+    static org.gtri.fj.data.List<MailEvaluationUpdate> findAllHelper() {
         fromNull(findAll())
                 .map({ collection -> iterableList(collection) })
-                .orSome(org.gtri.fj.data.List.<MailPasswordReset> nil());
+                .orSome(org.gtri.fj.data.List.<MailEvaluationUpdate> nil());
     }
 }

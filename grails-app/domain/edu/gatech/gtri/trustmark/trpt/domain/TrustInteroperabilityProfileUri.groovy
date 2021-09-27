@@ -41,11 +41,6 @@ class TrustInteroperabilityProfileUri {
         failureMessage nullable: true
     }
 
-    static hasMany = [
-            partnerSystemCandidateTrustInteroperabilityProfileUriSet: PartnerSystemCandidateTrustInteroperabilityProfileUri,
-            protectedSystemTrustInteroperabilityProfileUriSet       : ProtectedSystemTrustInteroperabilityProfileUri
-    ]
-
     static mapping = {
         table 'trust_interoperability_profile_uri'
         uri length: 1000
@@ -58,29 +53,40 @@ class TrustInteroperabilityProfileUri {
         failureMessage length: 1000
     }
 
-    long idHelper() { id }
+    static hasMany = [
+            partnerSystemCandidateTrustInteroperabilityProfileUriSet: PartnerSystemCandidateTrustInteroperabilityProfileUri,
+            protectedSystemTrustInteroperabilityProfileUriSet       : ProtectedSystemTrustInteroperabilityProfileUri
+    ]
 
-    org.gtri.fj.data.List<PartnerSystemCandidateTrustInteroperabilityProfileUri> partnerSystemCandidateTrustInteroperabilityProfileUriSetHelper() { fromNull(getPartnerSystemCandidateTrustInteroperabilityProfileUriSet()).map({ list -> iterableList(list) }).orSome(org.gtri.fj.data.List.<PartnerSystemCandidateTrustInteroperabilityProfileUri> nil()) }
+    org.gtri.fj.data.List<PartnerSystemCandidateTrustInteroperabilityProfileUri> partnerSystemCandidateTrustInteroperabilityProfileUriSetHelper() { fromNull(getPartnerSystemCandidateTrustInteroperabilityProfileUriSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<PartnerSystemCandidateTrustInteroperabilityProfileUri> nil()) }
 
     void partnerSystemCandidateTrustInteroperabilityProfileUriSetHelper(final org.gtri.fj.data.List<PartnerSystemCandidateTrustInteroperabilityProfileUri> partnerSystemCandidateTrustInteroperabilityProfileUriSet) { setPartnerSystemCandidateTrustInteroperabilityProfileUriSet(new HashSet<>(partnerSystemCandidateTrustInteroperabilityProfileUriSet.toJavaList())) }
 
-    org.gtri.fj.data.List<ProtectedSystemTrustInteroperabilityProfileUri> protectedSystemTrustInteroperabilityProfileUriSetHelper() { fromNull(getProtectedSystemTrustInteroperabilityProfileUriSet()).map({ list -> iterableList(list) }).orSome(org.gtri.fj.data.List.<ProtectedSystemTrustInteroperabilityProfileUri> nil()) }
+    org.gtri.fj.data.List<ProtectedSystemTrustInteroperabilityProfileUri> protectedSystemTrustInteroperabilityProfileUriSetHelper() { fromNull(getProtectedSystemTrustInteroperabilityProfileUriSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<ProtectedSystemTrustInteroperabilityProfileUri> nil()) }
 
     void protectedSystemTrustInteroperabilityProfileUriSetHelper(final org.gtri.fj.data.List<ProtectedSystemTrustInteroperabilityProfileUri> protectedSystemTrustInteroperabilityProfileUriSet) { setProtectedSystemTrustInteroperabilityProfileUriSet(new HashSet<>(protectedSystemTrustInteroperabilityProfileUriSet.toJavaList())) }
 
-    void deleteHelper() { delete(failOnError: true) }
-
-    void deleteAndFlushHelper() { delete(flush: true, failOnError: true) }
-
-    TrustInteroperabilityProfileUri saveHelper() { save(failOnError: true) }
-
-    TrustInteroperabilityProfileUri saveAndFlushHelper() { save(flush: true, failOnError: true) }
-
-    static final org.gtri.fj.data.List<TrustInteroperabilityProfileUri> findAllHelper() { fromNull(findAll()).map({ List<TrustInteroperabilityProfileUri> list -> iterableList(list) }) orSome(org.gtri.fj.data.List.<TrustInteroperabilityProfileUri> nil()) }
-
-    static final Option<TrustInteroperabilityProfileUri> findByIdHelper(long id) { fromNull(findById(id)) }
-
     static final Option<TrustInteroperabilityProfileUri> findByUriHelper(final String uri) { fromNull(findByUri(uri)) }
+
+    long idHelper() {
+        id
+    }
+
+    void deleteHelper() {
+        delete(failOnError: true);
+    }
+
+    void deleteAndFlushHelper() {
+        delete(flush: true, failOnError: true)
+    }
+
+    TrustInteroperabilityProfileUri saveHelper() {
+        save(failOnError: true)
+    }
+
+    TrustInteroperabilityProfileUri saveAndFlushHelper() {
+        save(flush: true, failOnError: true)
+    }
 
     static final <T> T withTransactionHelper(final F0<T> f0) {
         return withTransaction({ return f0.f() })
@@ -88,5 +94,15 @@ class TrustInteroperabilityProfileUri {
 
     static final void withTransactionHelper(final Effect0 effect0) {
         withTransaction({ return effect0.f() })
+    }
+
+    static Option<TrustInteroperabilityProfileUri> findByIdHelper(final long id) {
+        fromNull(findById(id))
+    }
+
+    static org.gtri.fj.data.List<TrustInteroperabilityProfileUri> findAllHelper() {
+        fromNull(findAll())
+                .map({ collection -> iterableList(collection) })
+                .orSome(org.gtri.fj.data.List.<TrustInteroperabilityProfileUri> nil());
     }
 }

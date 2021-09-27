@@ -39,26 +39,27 @@ class TrustmarkDefinitionUri {
         failureMessage length: 1000
     }
 
-    long idHelper() { id }
+    static final Option<TrustmarkDefinitionUri> findByUriHelper(final String uri) { fromNull(findByUri(uri)) }
 
-    void deleteHelper() { delete(failOnError: true) }
-
-    void deleteAndFlushHelper() { delete(flush: true, failOnError: true) }
-
-    TrustmarkDefinitionUri saveHelper() { save(failOnError: true) }
-
-    TrustmarkDefinitionUri saveAndFlushHelper() { save(flush: true, failOnError: true) }
-
-    static final org.gtri.fj.data.List<TrustmarkDefinitionUri> findAllHelper() {
-
-        fromNull(findAll())
-                .map({ list -> iterableList(list) })
-                .orSome(org.gtri.fj.data.List.<TrustmarkDefinitionUri> nil());
+    long idHelper() {
+        id
     }
 
-    static final Option<TrustmarkDefinitionUri> findByIdHelper(long id) { fromNull(findById(id)) }
+    void deleteHelper() {
+        delete(failOnError: true);
+    }
 
-    static final Option<TrustmarkDefinitionUri> findByUriHelper(final String uri) { fromNull(findByUri(uri)) }
+    void deleteAndFlushHelper() {
+        delete(flush: true, failOnError: true)
+    }
+
+    TrustmarkDefinitionUri saveHelper() {
+        save(failOnError: true)
+    }
+
+    TrustmarkDefinitionUri saveAndFlushHelper() {
+        save(flush: true, failOnError: true)
+    }
 
     static final <T> T withTransactionHelper(final F0<T> f0) {
         return withTransaction({ return f0.f() })
@@ -66,5 +67,15 @@ class TrustmarkDefinitionUri {
 
     static final void withTransactionHelper(final Effect0 effect0) {
         withTransaction({ return effect0.f() })
+    }
+
+    static Option<TrustmarkDefinitionUri> findByIdHelper(final long id) {
+        fromNull(findById(id))
+    }
+
+    static org.gtri.fj.data.List<TrustmarkDefinitionUri> findAllHelper() {
+        fromNull(findAll())
+                .map({ collection -> iterableList(collection) })
+                .orSome(org.gtri.fj.data.List.<TrustmarkDefinitionUri> nil());
     }
 }

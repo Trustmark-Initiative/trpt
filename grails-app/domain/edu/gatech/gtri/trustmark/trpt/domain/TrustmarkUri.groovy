@@ -31,10 +31,6 @@ class TrustmarkUri {
         failureMessage nullable: true
     }
 
-    static hasMany = [
-            partnerSystemCandidateTrustmarkUriSet: PartnerSystemCandidateTrustmarkUri
-    ]
-
     static mapping = {
         table 'trustmark_uri'
         uri length: 1000
@@ -43,30 +39,35 @@ class TrustmarkUri {
         failureMessage length: 1000
     }
 
-    long idHelper() { id }
+    static hasMany = [
+            partnerSystemCandidateTrustmarkUriSet: PartnerSystemCandidateTrustmarkUri
+    ]
 
-    org.gtri.fj.data.List<PartnerSystemCandidateTrustmarkUri> partnerSystemCandidateTrustmarkUriSetHelper() { fromNull(getPartnerSystemCandidateTrustmarkUriSet()).map({ list -> iterableList(list) }).orSome(org.gtri.fj.data.List.<PartnerSystemCandidateTrustmarkUri> nil()) }
+    org.gtri.fj.data.List<PartnerSystemCandidateTrustmarkUri> partnerSystemCandidateTrustmarkUriSetHelper() { fromNull(getPartnerSystemCandidateTrustmarkUriSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<PartnerSystemCandidateTrustmarkUri> nil()) }
 
     void partnerSystemCandidateTrustmarkUriSetHelper(final org.gtri.fj.data.List<PartnerSystemCandidateTrustmarkUri> partnerSystemCandidateTrustmarkUriSet) { setPartnerSystemCandidateTrustmarkUriSet(new HashSet<>(partnerSystemCandidateTrustmarkUriSet.toJavaList())) }
 
-    void deleteHelper() { delete(failOnError: true) }
+    static final Option<TrustmarkUri> findByUriHelper(final String uri) { fromNull(findByUri(uri)) }
 
-    void deleteAndFlushHelper() { delete(flush: true, failOnError: true) }
-
-    TrustmarkUri saveHelper() { save(failOnError: true) }
-
-    TrustmarkUri saveAndFlushHelper() { save(flush: true, failOnError: true) }
-
-    static final org.gtri.fj.data.List<TrustmarkUri> findAllHelper() {
-
-        fromNull(findAll())
-                .map({ list -> iterableList(list) })
-                .orSome(org.gtri.fj.data.List.<TrustmarkUri> nil());
+    long idHelper() {
+        id
     }
 
-    static final Option<TrustmarkUri> findByIdHelper(long id) { fromNull(findById(id)) }
+    void deleteHelper() {
+        delete(failOnError: true);
+    }
 
-    static final Option<TrustmarkUri> findByUriHelper(final String uri) { fromNull(findByUri(uri)) }
+    void deleteAndFlushHelper() {
+        delete(flush: true, failOnError: true)
+    }
+
+    TrustmarkUri saveHelper() {
+        save(failOnError: true)
+    }
+
+    TrustmarkUri saveAndFlushHelper() {
+        save(flush: true, failOnError: true)
+    }
 
     static final <T> T withTransactionHelper(final F0<T> f0) {
         return withTransaction({ return f0.f() })
@@ -74,5 +75,15 @@ class TrustmarkUri {
 
     static final void withTransactionHelper(final Effect0 effect0) {
         withTransaction({ return effect0.f() })
+    }
+
+    static Option<TrustmarkUri> findByIdHelper(final long id) {
+        fromNull(findById(id))
+    }
+
+    static org.gtri.fj.data.List<TrustmarkUri> findAllHelper() {
+        fromNull(findAll())
+                .map({ collection -> iterableList(collection) })
+                .orSome(org.gtri.fj.data.List.<TrustmarkUri> nil());
     }
 }

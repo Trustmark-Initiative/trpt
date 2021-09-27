@@ -7,7 +7,6 @@ import org.gtri.fj.function.F0
 import java.time.LocalDateTime
 
 import static org.gtri.fj.data.List.iterableList
-import static org.gtri.fj.data.List.nil
 import static org.gtri.fj.data.Option.fromNull
 
 class TrustmarkBindingRegistryUriTypeHistory {
@@ -41,17 +40,25 @@ class TrustmarkBindingRegistryUriTypeHistory {
         failureMessage length: 1000
     }
 
-    long idHelper() { id }
+    long idHelper() {
+        id
+    }
 
-    void deleteHelper() { delete(failOnError: true) }
+    void deleteHelper() {
+        delete(failOnError: true);
+    }
 
-    void deleteAndFlushHelper() { delete(flush: true, failOnError: true) }
+    void deleteAndFlushHelper() {
+        delete(flush: true, failOnError: true)
+    }
 
-    TrustmarkBindingRegistryUriTypeHistory saveHelper() { save(failOnError: true) }
+    TrustmarkBindingRegistryUriTypeHistory saveHelper() {
+        save(failOnError: true)
+    }
 
-    TrustmarkBindingRegistryUriTypeHistory saveAndFlushHelper() { save(flush: true, failOnError: true) }
-
-    static final Option<TrustmarkBindingRegistryUriTypeHistory> findByIdHelper(long id) { fromNull(findById(id)) }
+    TrustmarkBindingRegistryUriTypeHistory saveAndFlushHelper() {
+        save(flush: true, failOnError: true)
+    }
 
     static final <T> T withTransactionHelper(final F0<T> f0) {
         return withTransaction({ return f0.f() })
@@ -59,5 +66,15 @@ class TrustmarkBindingRegistryUriTypeHistory {
 
     static final void withTransactionHelper(final Effect0 effect0) {
         withTransaction({ return effect0.f() })
+    }
+
+    static Option<TrustmarkBindingRegistryUriTypeHistory> findByIdHelper(final long id) {
+        fromNull(findById(id))
+    }
+
+    static org.gtri.fj.data.List<TrustmarkBindingRegistryUriTypeHistory> findAllHelper() {
+        fromNull(findAll())
+                .map({ collection -> iterableList(collection) })
+                .orSome(org.gtri.fj.data.List.<TrustmarkBindingRegistryUriTypeHistory> nil());
     }
 }

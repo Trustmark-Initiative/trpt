@@ -1,5 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.service.job;
 
+import edu.gatech.gtri.trustmark.trpt.domain.MailEvaluationUpdate;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidate;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateTrustInteroperabilityProfileUri;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateTrustmarkUri;
@@ -172,6 +173,14 @@ public class JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri 
                                                                             .filter(pInner -> pInner._2().isEmpty())
                                                                             .length())
                                                                     .orSuccess((Integer) null));
+
+                                                    final MailEvaluationUpdate mailEvaluationUpdate = new MailEvaluationUpdate();
+                                                    mailEvaluationUpdate.partnerSystemCandidateTrustInteroperabilityProfileUriHelper(partnerSystemCandidateTrustInteroperabilityProfileUriInner);
+                                                    mailEvaluationUpdate.setRequestDateTime(now);
+                                                    mailEvaluationUpdate.saveHelper();
+
+                                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.mailEvaluationUpdateSetHelper(
+                                                            partnerSystemCandidateTrustInteroperabilityProfileUriInner.mailEvaluationUpdateSetHelper().snoc(mailEvaluationUpdate));
 
                                                     partnerSystemCandidateTrustInteroperabilityProfileUriInner.saveHelper();
                                                 }));
