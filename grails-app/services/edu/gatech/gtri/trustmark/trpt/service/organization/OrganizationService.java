@@ -8,11 +8,14 @@ import org.gtri.fj.data.NonEmptyList;
 import org.gtri.fj.data.Validation;
 import org.gtri.fj.product.Unit;
 
+import static edu.gatech.gtri.trustmark.trpt.domain.PermissionName.ORGANIZATION_INSERT;
 import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationDescription;
 import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationId;
 import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationIdList;
 import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationName;
 import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationUri;
+import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionUtility.organizationListAdministrator;
+import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionUtility.userMay;
 import static org.gtri.fj.data.List.iterableList;
 import static org.gtri.fj.data.Validation.accumulate;
 import static org.gtri.fj.product.Unit.unit;
@@ -24,8 +27,7 @@ public class OrganizationService {
             final String requesterUsername,
             final OrganizationFindAllRequest organizationFindAllRequest) {
 
-        return Organization
-                .findAllByOrderByNameAscHelper()
+        return organizationListAdministrator(requesterUsername)
                 .map(OrganizationUtility::organizationResponse);
     }
 
@@ -33,7 +35,7 @@ public class OrganizationService {
             final String requesterUsername,
             final OrganizationFindOneRequest organizationFindOneRequest) {
 
-        return validationId(organizationFindOneRequest.getId())
+        return validationId(organizationFindOneRequest.getId(), organizationListAdministrator(requesterUsername))
                 .map(OrganizationUtility::organizationResponse);
     }
 
@@ -41,7 +43,7 @@ public class OrganizationService {
             final String requesterUsername,
             final OrganizationInsertRequest organizationInsertRequest) {
 
-        return accumulate(
+        return userMay(requesterUsername, ORGANIZATION_INSERT, user -> accumulate(
                 validationName(organizationInsertRequest.getName()),
                 validationUri(organizationInsertRequest.getUri()),
                 validationDescription(organizationInsertRequest.getDescription()),
@@ -56,7 +58,7 @@ public class OrganizationService {
 
                     return organization;
                 })
-                .map(OrganizationUtility::organizationResponse);
+                .map(OrganizationUtility::organizationResponse));
     }
 
     public Validation<NonEmptyList<ValidationMessage<OrganizationField>>, OrganizationResponse> update(
@@ -64,7 +66,7 @@ public class OrganizationService {
             final OrganizationUpdateRequest organizationUpdateRequest) {
 
         return accumulate(
-                validationId(organizationUpdateRequest.getId()),
+                validationId(organizationUpdateRequest.getId(), organizationListAdministrator(requesterUsername)),
                 validationName(organizationUpdateRequest.getId(), organizationUpdateRequest.getName()),
                 validationUri(organizationUpdateRequest.getId(), organizationUpdateRequest.getUri()),
                 validationDescription(organizationUpdateRequest.getDescription()),
@@ -84,7 +86,7 @@ public class OrganizationService {
             final String requesterUsername,
             final OrganizationDeleteAllRequest organizationDeleteAllRequest) {
 
-        return validationIdList(iterableList(organizationDeleteAllRequest.getIdList()))
+        return validationIdList(iterableList(organizationDeleteAllRequest.getIdList()), organizationListAdministrator(requesterUsername))
                 .map(list -> list.map(organization -> {
                     organization.deleteAndFlushHelper();
 

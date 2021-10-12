@@ -15,11 +15,11 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
     LocalDateTime evaluationLocalDateTime
 
     Boolean evaluationTrustExpressionSatisfied
-    String evaluationTrustExpression
+    byte[] evaluationTrustExpression
 
     Integer evaluationTrustmarkDefinitionRequirementSatisfied
     Integer evaluationTrustmarkDefinitionRequirementUnsatisfied
-    String evaluationTrustmarkDefinitionRequirement
+    byte[] evaluationTrustmarkDefinitionRequirement
 
     static constraints = {
         evaluationAttemptLocalDateTime nullable: true
@@ -33,8 +33,8 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
 
     static mapping = {
         table 'partner_system_candidate_trust_interoperability_profile_uri'
-        evaluationTrustExpression type: 'text'
-        evaluationTrustmarkDefinitionRequirement type: 'text'
+        evaluationTrustExpression sqlType: 'blob'
+        evaluationTrustmarkDefinitionRequirement sqlType: 'blob'
     }
 
     static belongsTo = [

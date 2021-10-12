@@ -46,9 +46,12 @@ class ProtectedSystem {
 
     void protectedSystemTrustInteroperabilityProfileUriSetHelper(final org.gtri.fj.data.List<ProtectedSystemTrustInteroperabilityProfileUri> protectedSystemTrustInteroperabilityProfileUriSet) { setProtectedSystemTrustInteroperabilityProfileUriSet(new HashSet<>(protectedSystemTrustInteroperabilityProfileUriSet.toJavaList())) }
 
-    static final org.gtri.fj.data.List<ProtectedSystem> findAllByOrderByNameAscHelper() {
+    static final org.gtri.fj.data.List<ProtectedSystem> findAllByOrderByNameAscHelper(final org.gtri.fj.data.List<Organization> organizationList) {
 
-        fromNull(findAll(sort: 'name', order: 'asc'))
+        fromNull(ProtectedSystem.createCriteria().list {
+            'in'("organization", organizationList.toJavaList())
+            order('name', 'asc')
+        })
                 .map({ collection -> iterableList(collection) })
                 .orSome(org.gtri.fj.data.List.<ProtectedSystem> nil());
     }

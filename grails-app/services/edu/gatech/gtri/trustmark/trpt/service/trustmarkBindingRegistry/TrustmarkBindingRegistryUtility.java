@@ -17,6 +17,7 @@ import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtilit
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndUniqueAndLength;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNullOr;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeReference;
+import static org.gtri.fj.Equal.equal;
 import static org.gtri.fj.Ord.ord;
 import static org.gtri.fj.lang.LongUtility.longOrd;
 
@@ -110,19 +111,19 @@ public final class TrustmarkBindingRegistryUtility {
         return mustBeNullOr(TrustmarkBindingRegistryField.description, description, (field, value) -> mustBeNonNullAndLength(field, 1, 1000, value));
     }
 
-    public static Validation<NonEmptyList<ValidationMessage<TrustmarkBindingRegistryField>>, TrustmarkBindingRegistry> validationId(final long id) {
+    public static Validation<NonEmptyList<ValidationMessage<TrustmarkBindingRegistryField>>, TrustmarkBindingRegistry> validationId(final long id, final List<Organization> organizationList) {
 
-        return mustBeReference(TrustmarkBindingRegistryField.id, TrustmarkBindingRegistry::findByIdHelper, id);
+        return mustBeReference(TrustmarkBindingRegistryField.id, TrustmarkBindingRegistry::findByIdHelper, id, trustmarkBindingRegistry -> organizationList.exists(organization -> trustmarkBindingRegistry.organizationHelper().idHelper() == organization.idHelper()));
     }
 
-    public static Validation<NonEmptyList<ValidationMessage<TrustmarkBindingRegistryField>>, List<TrustmarkBindingRegistry>> validationIdList(final List<Long> idList) {
+    public static Validation<NonEmptyList<ValidationMessage<TrustmarkBindingRegistryField>>, List<TrustmarkBindingRegistry>> validationIdList(final List<Long> idList, final List<Organization> organizationList) {
 
-        return mustBeNonNullAndDistinctAndValid(TrustmarkBindingRegistryField.idList, idList, longOrd, TrustmarkBindingRegistryUtility::validationId);
+        return mustBeNonNullAndDistinctAndValid(TrustmarkBindingRegistryField.idList, idList, longOrd, id -> validationId(id, organizationList));
     }
 
-    public static Validation<NonEmptyList<ValidationMessage<TrustmarkBindingRegistryField>>, Organization> validationOrganization(final long organizationId) {
+    public static Validation<NonEmptyList<ValidationMessage<TrustmarkBindingRegistryField>>, Organization> validationOrganization(final long organizationId, final List<Organization> organizationList) {
 
-        return mustBeReference(TrustmarkBindingRegistryField.organization, Organization::findByIdHelper, organizationId);
+        return mustBeReference(TrustmarkBindingRegistryField.organization, Organization::findByIdHelper, organizationId, organizationList, equal((o1, o2) -> o1.idHelper() == o2.idHelper()));
     }
 
 }

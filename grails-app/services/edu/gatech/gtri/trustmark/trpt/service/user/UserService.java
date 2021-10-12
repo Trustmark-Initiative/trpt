@@ -10,6 +10,10 @@ import org.gtri.fj.data.Validation;
 import org.gtri.fj.product.Unit;
 
 import static edu.gatech.gtri.trustmark.trpt.domain.User.findAllByOrderByNameFamilyAscNameGivenAscHelper;
+import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionUtility.organizationListAdministrator;
+import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionUtility.roleListAdministrator;
+import static edu.gatech.gtri.trustmark.trpt.service.user.UserUtility.userResponse;
+import static edu.gatech.gtri.trustmark.trpt.service.user.UserUtility.validationEditable;
 import static edu.gatech.gtri.trustmark.trpt.service.user.UserUtility.validationId;
 import static edu.gatech.gtri.trustmark.trpt.service.user.UserUtility.validationIdList;
 import static edu.gatech.gtri.trustmark.trpt.service.user.UserUtility.validationNameFamily;
@@ -30,16 +34,16 @@ public class UserService {
             final String requesterUsername,
             final UserFindAllRequest userFindAllRequest) {
 
-        return findAllByOrderByNameFamilyAscNameGivenAscHelper()
-                .map(UserUtility::userResponse);
+        return findAllByOrderByNameFamilyAscNameGivenAscHelper(organizationListAdministrator(requesterUsername), roleListAdministrator(requesterUsername))
+                .map(user -> userResponse(user, !user.getUsername().equals(requesterUsername)));
     }
 
     public Validation<NonEmptyList<ValidationMessage<UserField>>, UserResponse> findOne(
             final String requesterUsername,
             final UserFindOneRequest userFindOneRequest) {
 
-        return validationId(userFindOneRequest.getId())
-                .map(UserUtility::userResponse);
+        return validationId(userFindOneRequest.getId(), organizationListAdministrator(requesterUsername))
+                .map(user -> userResponse(user, !user.getUsername().equals(requesterUsername)));
     }
 
     public Validation<NonEmptyList<ValidationMessage<UserField>>, UserResponse> insert(
@@ -51,8 +55,8 @@ public class UserService {
                 validationNameFamily(userInsertRequest.getNameFamily()),
                 validationNameGiven(userInsertRequest.getNameGiven()),
                 validationTelephone(userInsertRequest.getTelephone()),
-                validationOrganization(userInsertRequest.getOrganization()),
-                validationRole(userInsertRequest.getRole()),
+                validationOrganization(userInsertRequest.getOrganization(), organizationListAdministrator(requesterUsername)),
+                validationRole(userInsertRequest.getRole(), roleListAdministrator(requesterUsername)),
                 (username, nameFamily, nameGiven, telephone, organization, role) -> {
 
                     final User user = new User();
@@ -67,7 +71,7 @@ public class UserService {
                     user.setUserExpired(userInsertRequest.isUserExpired());
                     user.setPasswordExpired(userInsertRequest.isPasswordExpired());
                     user.organizationHelper(organization);
-                    user.userRoleHelper(arrayList(userRole));
+                    user.userRoleSetHelper(arrayList(userRole));
 
                     userRole.userHelper(user);
                     userRole.roleHelper(role);
@@ -76,7 +80,7 @@ public class UserService {
 
                     return user;
                 })
-                .map(UserUtility::userResponse);
+                .map(user -> userResponse(user, !user.getUsername().equals(requesterUsername)));
     }
 
     public Validation<NonEmptyList<ValidationMessage<UserField>>, UserResponse> update(
@@ -84,16 +88,17 @@ public class UserService {
             final UserUpdateRequest userUpdateRequest) {
 
         return accumulate(
-                validationId(userUpdateRequest.getId()),
+                validationEditable(userUpdateRequest.getId(), requesterUsername),
+                validationId(userUpdateRequest.getId(), organizationListAdministrator(requesterUsername)),
                 validationUsername(userUpdateRequest.getId(), userUpdateRequest.getUsername()),
                 validationNameFamily(userUpdateRequest.getNameFamily()),
                 validationNameGiven(userUpdateRequest.getNameGiven()),
                 validationTelephone(userUpdateRequest.getTelephone()),
-                validationOrganization(userUpdateRequest.getOrganization()),
-                validationRole(userUpdateRequest.getRole()),
-                (user, username, nameFamily, nameGiven, telephone, organization, role) -> {
+                validationOrganization(userUpdateRequest.getOrganization(), organizationListAdministrator(requesterUsername)),
+                validationRole(userUpdateRequest.getRole(), roleListAdministrator(requesterUsername)),
+                (editable, user, username, nameFamily, nameGiven, telephone, organization, role) -> {
 
-                    user.userRoleHelper().forEach(userRole -> {
+                    user.userRoleSetHelper().forEach(userRole -> {
                         userRole.userHelper(null);
                         userRole.roleHelper(null);
                         userRole.deleteHelper();
@@ -110,7 +115,7 @@ public class UserService {
                     user.setUserExpired(userUpdateRequest.isUserExpired());
                     user.setPasswordExpired(userUpdateRequest.isPasswordExpired());
                     user.organizationHelper(organization);
-                    user.userRoleHelper(arrayList(userRole));
+                    user.userRoleSetHelper(arrayList(userRole));
 
                     userRole.userHelper(user);
                     userRole.roleHelper(role);
@@ -119,14 +124,14 @@ public class UserService {
 
                     return user;
                 })
-                .map(UserUtility::userResponse);
+                .map(user -> userResponse(user, !user.getUsername().equals(requesterUsername)));
     }
 
     public Validation<NonEmptyList<ValidationMessage<UserField>>, Unit> delete(
             final String requesterUsername,
             final UserDeleteAllRequest userDeleteAllRequest) {
 
-        return validationIdList(iterableList(userDeleteAllRequest.getIdList()))
+        return validationIdList(iterableList(userDeleteAllRequest.getIdList()), organizationListAdministrator(requesterUsername))
                 .map(list -> list.map(user -> {
                     user.deleteAndFlushHelper();
 

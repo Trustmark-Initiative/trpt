@@ -76,12 +76,18 @@ class PartnerSystemCandidate {
 
     static final Option<PartnerSystemCandidate> findByTrustmarkBindingRegistryUriTypeAndUriHelper(final TrustmarkBindingRegistryUriType trustmarkBindingRegistryUriType, final String uri) { fromNull(findByTrustmarkBindingRegistryUriTypeAndUri(trustmarkBindingRegistryUriType, uri)) }
 
-    static final org.gtri.fj.data.List<PartnerSystemCandidate> findAllByTypeInHelper(final org.gtri.fj.data.List<PartnerSystemCandidateType> typeList) {
-        fromNull(PartnerSystemCandidate.withCriteria {
-            'in' 'type', typeList.toJavaList()
-        })
-                .map({ collection -> iterableList(collection) })
-                .orSome(org.gtri.fj.data.List.<PartnerSystemCandidate> nil());
+    static final org.gtri.fj.data.List<PartnerSystemCandidate> findAllByTypeInHelper(final org.gtri.fj.data.List<Organization> organizationList, final org.gtri.fj.data.List<PartnerSystemCandidateType> typeList) {
+
+        fromNull(ProtectedSystem.executeQuery("SELECT DISTINCT partnerSystemCandidate " +
+                "FROM PartnerSystemCandidate partnerSystemCandidate " +
+                "JOIN partnerSystemCandidate.trustmarkBindingRegistryUriType trustmarkBindingRegistryUriType " +
+                "JOIN trustmarkBindingRegistryUriType.trustmarkBindingRegistryUri trustmarkBindingRegistryUri " +
+                "JOIN trustmarkBindingRegistryUri.trustmarkBindingRegistrySet trustmarkBindingRegistry " +
+                "WHERE trustmarkBindingRegistry.organization IN (:organizationList) " +
+                "AND partnerSystemCandidate.type IN (:typeList)",
+                [organizationList: organizationList.toJavaList(), typeList: typeList.toJavaList()]))
+                .map({ list -> iterableList(list).map({ Object[] array -> array[0] }) })
+                .orSome(org.gtri.fj.data.List.nil())
     }
 
     long idHelper() {

@@ -17,11 +17,7 @@ public class JobUtilityForMailPasswordReset {
     private JobUtilityForMailPasswordReset() {
     }
 
-    private static final Log log = LogFactory.getLog(JobUtilityForMailPasswordReset.class);
-
     public static void synchronizeMailPasswordReset() {
-
-        final LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 
         MailPasswordReset.withTransactionHelper(() -> MailPasswordReset.findAllByMailDateTimeIsNullHelper()
                 .forEach(mailPasswordReset -> {
@@ -33,7 +29,7 @@ public class JobUtilityForMailPasswordReset {
                                             "You may change your password here:%n%n" +
                                             "%spassword/changeWithoutAuthentication?external=%s", Server.findAllHelper().head().getUrl(), mailPasswordReset.getExternal()));
 
-                    mailPasswordReset.setMailDateTime(now);
+                    mailPasswordReset.setMailDateTime(LocalDateTime.now(ZoneOffset.UTC));
                     mailPasswordReset.saveHelper();
                 }));
     }

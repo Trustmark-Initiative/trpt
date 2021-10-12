@@ -8,6 +8,7 @@ import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemTrustInteroperabilit
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemType;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustInteroperabilityProfileUri;
 import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
+import net.sf.ehcache.search.expression.Or;
 import org.gtri.fj.Ordering;
 import org.gtri.fj.data.Either;
 import org.gtri.fj.data.List;
@@ -19,6 +20,7 @@ import org.gtri.fj.product.P4;
 import org.gtri.fj.product.P5;
 import org.json.JSONObject;
 
+import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri.gunzip;
 import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.organizationResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateUtility.partnerSystemCandidateResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNull;
@@ -26,6 +28,7 @@ import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtilit
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndLength;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndUniqueAndLength;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeReference;
+import static org.gtri.fj.Equal.equal;
 import static org.gtri.fj.Ord.ord;
 import static org.gtri.fj.data.Option.fromNull;
 import static org.gtri.fj.data.TreeMap.treeMap;
@@ -37,7 +40,7 @@ public final class ProtectedSystemUtility {
     private ProtectedSystemUtility() {
     }
 
-    public static ProtectedSystemResponse protectedSystemResponse(final ProtectedSystem protectedSystem) {
+    public static ProtectedSystemResponse protectedSystemResponse(final ProtectedSystem protectedSystem, final List<Organization> organizationList) {
 
         return new ProtectedSystemResponse(
                 organizationResponse(protectedSystem.organizationHelper()),
@@ -50,7 +53,7 @@ public final class ProtectedSystemUtility {
                         .sort(ord((o1, o2) -> stringOrd.compare(o1.getUri(), o2.getUri())))
                         .toJavaList(),
                 PartnerSystemCandidate
-                        .findAllByTypeInHelper(protectedSystem.getType().getPartnerSystemCandidateTypeList())
+                        .findAllByTypeInHelper(organizationList, protectedSystem.getType().getPartnerSystemCandidateTypeList())
                         .map(partnerSystemCandidate -> protectedSystemPartnerSystemCandidateSummaryResponse(protectedSystem, partnerSystemCandidate))
                         .sort(ord((o1, o2) -> stringOrd.compare(o1.getPartnerSystemCandidate().getName(), o2.getPartnerSystemCandidate().getName())))
                         .toJavaList());
@@ -117,7 +120,7 @@ public final class ProtectedSystemUtility {
                                 fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()).orSome(0) + pInner._2(),
                                 (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 1 : 0) + pInner._3(),
                                 (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 0 : 1) + pInner._4(),
-                                pInner._5().set(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(), partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : new JSONObject(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression()))),
+                                pInner._5().set(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(), partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : gunzip(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression()).toOption().map(JSONObject::new).toNull())),
                         p(0, 0, 0, 0, treeMap(stringOrd)));
 
         return new ProtectedSystemPartnerSystemCandidateResponse(
@@ -135,9 +138,9 @@ public final class ProtectedSystemUtility {
                 p._5().toMutableMap());
     }
 
-    public static Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, Organization> validationOrganization(final long organizationId) {
+    public static Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, Organization> validationOrganization(final long organizationId, final List<Organization> organizationList) {
 
-        return mustBeReference(ProtectedSystemField.organization, Organization::findByIdHelper, organizationId);
+        return mustBeReference(ProtectedSystemField.organization, Organization::findByIdHelper, organizationId, organizationList, equal((o1, o2) -> o1.idHelper() == o2.idHelper()));
     }
 
     public static Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, String> validationName(final long organizationId, final String name) {
@@ -205,13 +208,13 @@ public final class ProtectedSystemUtility {
         return mustBeNonNull(ProtectedSystemField.type, protectedSystemType);
     }
 
-    public static Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystem> validationId(final long id) {
+    public static Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystem> validationId(final long id, final List<Organization> organizationList) {
 
-        return mustBeReference(ProtectedSystemField.id, ProtectedSystem::findByIdHelper, id);
+        return mustBeReference(ProtectedSystemField.id, ProtectedSystem::findByIdHelper, id, protectedSystem -> organizationList.exists(organization -> protectedSystem.organizationHelper().idHelper() == organization.idHelper()));
     }
 
-    public static Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, List<ProtectedSystem>> validationIdList(final List<Long> idList) {
+    public static Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, List<ProtectedSystem>> validationIdList(final List<Long> idList, final List<Organization> organizationList) {
 
-        return mustBeNonNullAndDistinctAndValid(ProtectedSystemField.idList, idList, longOrd, ProtectedSystemUtility::validationId);
+        return mustBeNonNullAndDistinctAndValid(ProtectedSystemField.idList, idList, longOrd, id -> validationId(id, organizationList));
     }
 }

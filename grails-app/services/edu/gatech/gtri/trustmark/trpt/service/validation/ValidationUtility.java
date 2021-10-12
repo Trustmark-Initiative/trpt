@@ -165,6 +165,36 @@ public final class ValidationUtility {
         return findBy.f(key).toValidation(nel(validationMessageMustBeReference(field)));
     }
 
+    public static <FIELD, KEY, VALUE> Validation<NonEmptyList<ValidationMessage<FIELD>>, VALUE> mustBeReference(
+            final FIELD field,
+            final F1<KEY, Option<VALUE>> findBy,
+            final KEY key,
+            final List<VALUE> valueList,
+            final Equal<VALUE> eq) {
+
+        requireNonNull(field);
+        requireNonNull(findBy);
+        requireNonNull(key);
+        requireNonNull(valueList);
+        requireNonNull(eq);
+
+        return mustBeReference(field, findBy, key, value -> valueList.exists(valueInner -> eq.eq(value, valueInner)));
+    }
+
+    public static <FIELD, KEY, VALUE> Validation<NonEmptyList<ValidationMessage<FIELD>>, VALUE> mustBeReference(
+            final FIELD field,
+            final F1<KEY, Option<VALUE>> findBy,
+            final KEY key,
+            final F1<VALUE, Boolean> exists) {
+
+        requireNonNull(field);
+        requireNonNull(findBy);
+        requireNonNull(key);
+        requireNonNull(exists);
+
+        return findBy.f(key).filter(exists).toValidation(nel(validationMessageMustBeReference(field)));
+    }
+
     public static <FIELD, KEY, VALUE> Validation<NonEmptyList<ValidationMessage<FIELD>>, Unit> mustBeUnique(
             final FIELD field,
             final F1<KEY, Option<VALUE>> findBy,

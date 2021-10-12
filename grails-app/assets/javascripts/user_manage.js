@@ -182,6 +182,7 @@ function initialize(
             option.value = organization.id
             option.innerHTML = organization.name
             option.selected = organization.id === user.organization.id
+            if (organization.id !== user.organization.id && !user.editable) option.disabled = true
 
             document.getElementById("user-input-organization").add(option)
         })
@@ -192,9 +193,22 @@ function initialize(
             option.value = role.id
             option.innerHTML = role.label
             option.selected = role.id === user.role.id
+            if (role.id !== user.role.id && !user.editable) option.disabled = true
 
             document.getElementById("user-input-role").add(option)
         })
+
+        document.getElementById("user-input-username").disabled = !user.editable
+        document.getElementById("user-input-nameFamily").disabled = !user.editable
+        document.getElementById("user-input-nameGiven").disabled = !user.editable
+        document.getElementById("user-input-telephone").disabled = !user.editable
+        document.getElementById("user-input-userDisabled").disabled = !user.editable
+        document.getElementById("user-input-userLocked").disabled = !user.editable
+        document.getElementById("user-input-userExpired").disabled = !user.editable
+        document.getElementById("user-input-passwordExpired").disabled = !user.editable
+        document.getElementById("user-input-organization").disabled = !user.editable
+        document.getElementById("user-input-role").disabled = !user.editable
+        document.getElementById("user-action-submit-update").disabled = !user.editable
     }
 
     function onCancel() {

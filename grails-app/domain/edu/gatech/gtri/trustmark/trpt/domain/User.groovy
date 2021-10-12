@@ -44,24 +44,28 @@ class User {
 
     void organizationHelper(final Organization organization) { setOrganization(organization) }
 
-    org.gtri.fj.data.List<UserRole> userRoleHelper() { fromNull(userRoleSet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<UserRole> nil()) }
+    org.gtri.fj.data.List<UserRole> userRoleSetHelper() { fromNull(userRoleSet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<UserRole> nil()) }
 
-    void userRoleHelper(org.gtri.fj.data.List<UserRole> userRole) { setUserRoleSet(new HashSet<UserRole>(userRole.toJavaList())) }
+    void userRoleSetHelper(org.gtri.fj.data.List<UserRole> userRole) { setUserRoleSet(new HashSet<UserRole>(userRole.toJavaList())) }
 
     org.gtri.fj.data.List<MailPasswordReset> mailPasswordResetSetHelper() { fromNull(mailPasswordResetSet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<MailPasswordReset> nil()) }
 
     void mailPasswordSetResetHelper(final org.gtri.fj.data.List<MailPasswordReset> mailPasswordResetSet) { setMailPasswordResetSet(mailPasswordResetSet.toJavaList()) }
 
-    static final org.gtri.fj.data.List<User> findAllByOrderByNameFamilyAscNameGivenAscHelper() {
+    static final org.gtri.fj.data.List<User> findAllByOrderByNameFamilyAscNameGivenAscHelper(final org.gtri.fj.data.List<Organization> organizationList, final org.gtri.fj.data.List<Role> roleList) {
 
-        fromNull(findAll(sort: 'nameFamily', order: 'asc'))
-                .map({ collection -> iterableList(collection) })
-                .orSome(org.gtri.fj.data.List.<User> nil());
+        fromNull(ProtectedSystem.executeQuery("SELECT DISTINCT user FROM User user " +
+                "JOIN user.userRoleSet userRole " +
+                "WHERE userRole.role IN (:roleList) " +
+                "AND user.organization IN (:organizationList)",
+                [roleList: roleList.toJavaList(), organizationList: organizationList.toJavaList()]))
+                .map({ list -> iterableList(list).map({ Object[] array -> array[0] }) })
+                .orSome(org.gtri.fj.data.List.nil())
     }
 
     static final Option<User> findByUsernameHelper(final String username) { fromNull(findByUsername(username)) }
 
-    Set<Role> getAuthorities() { new HashSet<>(userRoleHelper().map({ UserRole userRole -> userRole.roleHelper() }).toJavaList()) }
+    Set<Role> getAuthorities() { new HashSet<>(userRoleSetHelper().map({ UserRole userRole -> userRole.roleHelper() }).toJavaList()) }
 
     long idHelper() {
         id

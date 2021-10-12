@@ -27,6 +27,7 @@ public abstract class ValidationMessage<FIELD> {
             F2<FIELD, String, T1> fValidationMessageMustBePattern,
             F1<FIELD, T1> fValidationMessageMustBeReference,
             F1<FIELD, T1> fValidationMessageMustBeUnique,
+            F1<FIELD, T1> fValidationMessageMustHavePermission,
             F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList);
 
     public static class ValidationMessageMustBeDistinct<FIELD> extends ValidationMessage<FIELD> {
@@ -59,6 +60,7 @@ public abstract class ValidationMessage<FIELD> {
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F1<FIELD, T1> fValidationMessageMustHavePermission,
                 F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
 
             requireNonNull(fValidationMessageMustBeDistinct);
@@ -72,6 +74,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageMustHavePermission);
             requireNonNull(fValidationMessageNonEmptyList);
 
             return fValidationMessageMustBeDistinct.f(field, indexNonEmptyList);
@@ -108,6 +111,7 @@ public abstract class ValidationMessage<FIELD> {
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F1<FIELD, T1> fValidationMessageMustHavePermission,
                 F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
 
             requireNonNull(fValidationMessageMustBeDistinct);
@@ -121,6 +125,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageMustHavePermission);
             requireNonNull(fValidationMessageNonEmptyList);
 
             return fValidationMessageMustBeElementNonNull.f(field, indexNonEmptyList);
@@ -159,6 +164,7 @@ public abstract class ValidationMessage<FIELD> {
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F1<FIELD, T1> fValidationMessageMustHavePermission,
                 F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
 
             requireNonNull(fValidationMessageMustBeDistinct);
@@ -172,6 +178,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageMustHavePermission);
             requireNonNull(fValidationMessageNonEmptyList);
 
             return fValidationMessageMustBeEmpty.f(field, size);
@@ -212,6 +219,7 @@ public abstract class ValidationMessage<FIELD> {
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F1<FIELD, T1> fValidationMessageMustHavePermission,
                 F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
 
             requireNonNull(fValidationMessageMustBeDistinct);
@@ -225,6 +233,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageMustHavePermission);
             requireNonNull(fValidationMessageNonEmptyList);
 
             return fValidationMessageMustBeEqual.f(field1, field1, field2);
@@ -270,6 +279,7 @@ public abstract class ValidationMessage<FIELD> {
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F1<FIELD, T1> fValidationMessageMustHavePermission,
                 F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
 
             requireNonNull(fValidationMessageMustBeDistinct);
@@ -283,6 +293,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageMustHavePermission);
             requireNonNull(fValidationMessageNonEmptyList);
 
             return fValidationMessageMustBeLengthGreaterThanOrEqual.f(field, lengthMinimumInclusive, length);
@@ -328,6 +339,7 @@ public abstract class ValidationMessage<FIELD> {
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F1<FIELD, T1> fValidationMessageMustHavePermission,
                 F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
 
             requireNonNull(fValidationMessageMustBeDistinct);
@@ -341,6 +353,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageMustHavePermission);
             requireNonNull(fValidationMessageNonEmptyList);
 
             return fValidationMessageMustBeLengthLessThanOrEqual.f(field, lengthMaximumInclusive, length);
@@ -372,6 +385,7 @@ public abstract class ValidationMessage<FIELD> {
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F1<FIELD, T1> fValidationMessageMustHavePermission,
                 F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
 
             requireNonNull(fValidationMessageMustBeDistinct);
@@ -385,6 +399,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageMustHavePermission);
             requireNonNull(fValidationMessageNonEmptyList);
 
             return fValidationMessageMustBeNonNull.f(field);
@@ -416,6 +431,7 @@ public abstract class ValidationMessage<FIELD> {
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F1<FIELD, T1> fValidationMessageMustHavePermission,
                 F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
 
             requireNonNull(fValidationMessageMustBeDistinct);
@@ -429,6 +445,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageMustHavePermission);
             requireNonNull(fValidationMessageNonEmptyList);
 
             return fValidationMessageMustBeNonNull.f(field);
@@ -467,6 +484,7 @@ public abstract class ValidationMessage<FIELD> {
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F1<FIELD, T1> fValidationMessageMustHavePermission,
                 F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
 
             requireNonNull(fValidationMessageMustBeDistinct);
@@ -480,6 +498,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageMustHavePermission);
             requireNonNull(fValidationMessageNonEmptyList);
 
             return fValidationMessageMustBeNonNull.f(field);
@@ -511,6 +530,7 @@ public abstract class ValidationMessage<FIELD> {
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F1<FIELD, T1> fValidationMessageMustHavePermission,
                 F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
 
             requireNonNull(fValidationMessageMustBeDistinct);
@@ -524,6 +544,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageMustHavePermission);
             requireNonNull(fValidationMessageNonEmptyList);
 
             return fValidationMessageMustBeReference.f(field);
@@ -555,6 +576,7 @@ public abstract class ValidationMessage<FIELD> {
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F1<FIELD, T1> fValidationMessageMustHavePermission,
                 F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
 
             requireNonNull(fValidationMessageMustBeDistinct);
@@ -568,6 +590,53 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageMustHavePermission);
+            requireNonNull(fValidationMessageNonEmptyList);
+
+            return fValidationMessageMustBeUnique.f(field);
+        }
+    }
+
+    public static final class ValidationMessageMustHavePermission<FIELD> extends ValidationMessage<FIELD> {
+
+        private final FIELD field;
+
+        public ValidationMessageMustHavePermission(
+                final FIELD field) {
+            this.field = field;
+        }
+
+        public FIELD getField() {
+            return field;
+        }
+
+        public <T1> T1 match(
+                F2<FIELD, NonEmptyList<Integer>, T1> fValidationMessageMustBeDistinct,
+                F2<FIELD, NonEmptyList<Integer>, T1> fValidationMessageMustBeElementNonNull,
+                F2<FIELD, Integer, T1> fValidationMessageMustBeEmpty,
+                F3<FIELD, FIELD, FIELD, T1> fValidationMessageMustBeEqual,
+                F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthGreaterThanOrEqual,
+                F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
+                F1<FIELD, T1> fValidationMessageMustBeNonNull,
+                F1<FIELD, T1> fValidationMessageMustBeNumeric,
+                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F1<FIELD, T1> fValidationMessageMustBeReference,
+                F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F1<FIELD, T1> fValidationMessageMustHavePermission,
+                F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
+
+            requireNonNull(fValidationMessageMustBeDistinct);
+            requireNonNull(fValidationMessageMustBeElementNonNull);
+            requireNonNull(fValidationMessageMustBeEmpty);
+            requireNonNull(fValidationMessageMustBeEqual);
+            requireNonNull(fValidationMessageMustBeLengthGreaterThanOrEqual);
+            requireNonNull(fValidationMessageMustBeLengthLessThanOrEqual);
+            requireNonNull(fValidationMessageMustBeNonNull);
+            requireNonNull(fValidationMessageMustBeNumeric);
+            requireNonNull(fValidationMessageMustBePattern);
+            requireNonNull(fValidationMessageMustBeReference);
+            requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageMustHavePermission);
             requireNonNull(fValidationMessageNonEmptyList);
 
             return fValidationMessageMustBeUnique.f(field);
@@ -606,6 +675,7 @@ public abstract class ValidationMessage<FIELD> {
                 F2<FIELD, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
+                F1<FIELD, T1> fValidationMessageMustHavePermission,
                 F2<FIELD, NonEmptyList<P2<NonEmptyList<ValidationMessage<FIELD>>, Integer>>, T1> fValidationMessageNonEmptyList) {
 
             requireNonNull(fValidationMessageMustBeDistinct);
@@ -619,6 +689,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustBePattern);
             requireNonNull(fValidationMessageMustBeReference);
             requireNonNull(fValidationMessageMustBeUnique);
+            requireNonNull(fValidationMessageMustHavePermission);
             requireNonNull(fValidationMessageNonEmptyList);
 
             return fValidationMessageNonEmptyList.f(field, validationMessageNonEmptyList);
@@ -698,6 +769,12 @@ public abstract class ValidationMessage<FIELD> {
             final FIELD field) {
 
         return new ValidationMessageMustBeUnique<>(field);
+    }
+
+    public static <FIELD> ValidationMessageMustHavePermission<FIELD> validationMessageMustHavePermission(
+            final FIELD field) {
+
+        return new ValidationMessageMustHavePermission<>(field);
     }
 
     public static <FIELD> ValidationMessageNonEmptyList<FIELD> validationMessageNonEmptyList(

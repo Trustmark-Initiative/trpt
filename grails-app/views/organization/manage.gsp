@@ -1,6 +1,6 @@
 <html>
     <head>
-        <asset:javascript src="manage_organization.js"/>
+        <asset:javascript src="organization_manage.js"/>
 
         <meta name="layout" content="main"/>
 
@@ -20,7 +20,10 @@
             <table class="table table-bordered table-striped-hack mb-0">
                 <thead>
                     <tr>
-                        <th scope="col"><a href="#" class="bi-plus-lg" id="organization-action-insert"></a></th>
+                        <th scope="col">
+                            <sec:ifAllGranted roles="ROLE_ADMINISTRATOR"><a href="#" class="bi-plus-lg" id="organization-action-insert"></a></sec:ifAllGranted>
+                            <sec:ifNotGranted roles="ROLE_ADMINISTRATOR"><div style="width: 17px"></div></sec:ifNotGranted>
+                        </th>
                         <th scope="col"><a href="#" class="bi-trash" id="organization-action-delete"></a></th>
                         <th scope="col" style="width:33%">Name</th>
                         <th scope="col" style="width:33%">URL</th>

@@ -63,8 +63,8 @@ configurations {
 }
 
 dependencies {
-    compile 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.17'
-    compile 'edu.gatech.gtri.trustmark:tf-api:1.4.10'
+    compile 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.19'
+    compile 'edu.gatech.gtri.trustmark:tf-api:1.4.11'
     compile 'log4j:log4j:1.2.16' // required by tf-api-impl
 
     compile 'org.grails.plugins:async'

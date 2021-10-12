@@ -19,7 +19,9 @@ public final class PartnerSystemCandidateUtility {
                 partnerSystemCandidate.getSuccessLocalDateTime(),
                 partnerSystemCandidate.getFailureLocalDateTime(),
                 partnerSystemCandidate.getFailureMessage(),
-                trustmarkBindingRegistryResponse(partnerSystemCandidate.trustmarkBindingRegistryUriTypeHelper().trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySetHelper().head()));
+                partnerSystemCandidate.trustmarkBindingRegistryUriTypeHelper().trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySetHelper().isEmpty() ?
+                        null :
+                        trustmarkBindingRegistryResponse(partnerSystemCandidate.trustmarkBindingRegistryUriTypeHelper().trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySetHelper().head()));
     }
 
     public static PartnerSystemCandidateTypeResponse partnerSystemCandidateTypeResponse(final PartnerSystemCandidateType partnerSystemCandidateType) {

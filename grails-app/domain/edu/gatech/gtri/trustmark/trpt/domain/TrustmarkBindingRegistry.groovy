@@ -40,9 +40,12 @@ class TrustmarkBindingRegistry {
 
     void trustmarkBindingRegistryUriHelper(final TrustmarkBindingRegistryUri trustmarkBindingRegistryUri) { setTrustmarkBindingRegistryUri(trustmarkBindingRegistryUri) }
 
-    static final org.gtri.fj.data.List<TrustmarkBindingRegistry> findAllByOrderByNameAscHelper() {
+    static final org.gtri.fj.data.List<TrustmarkBindingRegistry> findAllByOrderByNameAscHelper(final org.gtri.fj.data.List<Organization> organizationList) {
 
-        fromNull(findAll(sort: 'name', order: 'asc'))
+        fromNull(TrustmarkBindingRegistry.createCriteria().list {
+            'in'("organization", organizationList.toJavaList())
+            order('name', 'asc')
+        })
                 .map({ collection -> iterableList(collection) })
                 .orSome(org.gtri.fj.data.List.<TrustmarkBindingRegistry> nil());
     }

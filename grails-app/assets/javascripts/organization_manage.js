@@ -28,10 +28,12 @@ function initialize(
 
         stateReset()
 
-        document.getElementById("organization-action-insert").outerHTML = document.getElementById("organization-action-insert").outerHTML
-        document.getElementById("organization-action-delete").outerHTML = document.getElementById("organization-action-delete").outerHTML
+        if(document.getElementById("organization-action-insert") != null) {
+            document.getElementById("organization-action-insert").outerHTML = document.getElementById("organization-action-insert").outerHTML
+            document.getElementById("organization-action-insert").addEventListener("click", onInsertOpen)
+        }
 
-        document.getElementById("organization-action-insert").addEventListener("click", onInsertOpen)
+        document.getElementById("organization-action-delete").outerHTML = document.getElementById("organization-action-delete").outerHTML
         document.getElementById("organization-action-delete").addEventListener("click", () => onDeleteSubmit(organizationList))
 
         const organizationTBody = document.getElementById("organization-tbody")

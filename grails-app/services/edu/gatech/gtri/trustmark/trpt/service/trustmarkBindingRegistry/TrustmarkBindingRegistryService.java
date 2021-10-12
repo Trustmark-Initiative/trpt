@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForTrustmarkBindingRegistryUri.synchronizeTrustmarkBindingRegistryUri;
+import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionUtility.organizationListAdministrator;
 import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.validationDescription;
 import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.validationId;
 import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.validationIdList;
@@ -31,7 +32,7 @@ public class TrustmarkBindingRegistryService {
             final TrustmarkBindingRegistryFindAllRequest trustmarkBindingRegistryFindAllRequest) {
 
         return TrustmarkBindingRegistry
-                .findAllByOrderByNameAscHelper()
+                .findAllByOrderByNameAscHelper(organizationListAdministrator(requesterUsername))
                 .map(TrustmarkBindingRegistryUtility::trustmarkBindingRegistryResponse);
     }
 
@@ -39,7 +40,7 @@ public class TrustmarkBindingRegistryService {
             final String requesterUsername,
             final TrustmarkBindingRegistryFindOneRequest trustmarkBindingRegistryFindOneRequest) {
 
-        return validationId(trustmarkBindingRegistryFindOneRequest.getId())
+        return validationId(trustmarkBindingRegistryFindOneRequest.getId(), organizationListAdministrator(requesterUsername))
                 .map(TrustmarkBindingRegistryUtility::trustmarkBindingRegistryResponse);
     }
 
@@ -48,7 +49,7 @@ public class TrustmarkBindingRegistryService {
             final TrustmarkBindingRegistryInsertRequest trustmarkBindingRegistryInsertRequest) {
 
         return accumulate(
-                validationOrganization(trustmarkBindingRegistryInsertRequest.getOrganization()),
+                validationOrganization(trustmarkBindingRegistryInsertRequest.getOrganization(), organizationListAdministrator(requesterUsername)),
                 validationName(trustmarkBindingRegistryInsertRequest.getOrganization(), trustmarkBindingRegistryInsertRequest.getName()),
                 validationUri(trustmarkBindingRegistryInsertRequest.getOrganization(), trustmarkBindingRegistryInsertRequest.getUri()),
                 validationDescription(trustmarkBindingRegistryInsertRequest.getDescription()),
@@ -74,8 +75,8 @@ public class TrustmarkBindingRegistryService {
             final TrustmarkBindingRegistryUpdateRequest trustmarkBindingRegistryUpdateRequest) {
 
         return accumulate(
-                validationId(trustmarkBindingRegistryUpdateRequest.getId()),
-                validationOrganization(trustmarkBindingRegistryUpdateRequest.getOrganization()),
+                validationId(trustmarkBindingRegistryUpdateRequest.getId(), organizationListAdministrator(requesterUsername)),
+                validationOrganization(trustmarkBindingRegistryUpdateRequest.getOrganization(), organizationListAdministrator(requesterUsername)),
                 validationName(trustmarkBindingRegistryUpdateRequest.getId(), trustmarkBindingRegistryUpdateRequest.getOrganization(), trustmarkBindingRegistryUpdateRequest.getName()),
                 validationUri(trustmarkBindingRegistryUpdateRequest.getId(), trustmarkBindingRegistryUpdateRequest.getOrganization(), trustmarkBindingRegistryUpdateRequest.getUri()),
                 validationDescription(trustmarkBindingRegistryUpdateRequest.getDescription()),
@@ -98,7 +99,7 @@ public class TrustmarkBindingRegistryService {
             final String requesterUsername,
             final TrustmarkBindingRegistryDeleteAllRequest trustmarkBindingRegistryDeleteAllRequest) {
 
-        return validationIdList(iterableList(trustmarkBindingRegistryDeleteAllRequest.getIdList()))
+        return validationIdList(iterableList(trustmarkBindingRegistryDeleteAllRequest.getIdList()), organizationListAdministrator(requesterUsername))
                 .map(list -> list.map(trustmarkBindingRegistry -> {
                     trustmarkBindingRegistry.deleteAndFlushHelper();
 

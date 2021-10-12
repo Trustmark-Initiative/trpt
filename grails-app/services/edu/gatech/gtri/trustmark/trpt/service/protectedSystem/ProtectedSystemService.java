@@ -16,7 +16,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForTrustInteroperabilityProfileUri.synchronizeTrustInteroperabilityProfileUri;
+import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionUtility.organizationListAdministrator;
 import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.protectedSystemPartnerSystemCandidateResponse;
+import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.protectedSystemResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.validationId;
 import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.validationIdList;
 import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.validationName;
@@ -48,16 +50,16 @@ public class ProtectedSystemService {
             final ProtectedSystemFindAllRequest protectedSystemFindAllRequest) {
 
         return ProtectedSystem
-                .findAllByOrderByNameAscHelper()
-                .map(ProtectedSystemUtility::protectedSystemResponse);
+                .findAllByOrderByNameAscHelper(organizationListAdministrator(requesterUsername))
+                .map(protectedSystem -> protectedSystemResponse(protectedSystem, organizationListAdministrator(requesterUsername)));
     }
 
     public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponse> findOne(
             final String requesterUsername,
             final ProtectedSystemFindOneRequest protectedSystemFindOneRequest) {
 
-        return validationId(protectedSystemFindOneRequest.getId())
-                .map(ProtectedSystemUtility::protectedSystemResponse);
+        return validationId(protectedSystemFindOneRequest.getId(), organizationListAdministrator(requesterUsername))
+                .map(protectedSystem -> protectedSystemResponse(protectedSystem, organizationListAdministrator(requesterUsername)));
     }
 
     public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponse> insert(
@@ -65,7 +67,7 @@ public class ProtectedSystemService {
             final ProtectedSystemInsertRequest protectedSystemInsertRequest) {
 
         return accumulate(
-                validationOrganization(protectedSystemInsertRequest.getOrganization()),
+                validationOrganization(protectedSystemInsertRequest.getOrganization(), organizationListAdministrator(requesterUsername)),
                 validationProtectedSystemTrustInteroperabilityProfileList(iterableList(protectedSystemInsertRequest.getProtectedSystemTrustInteroperabilityProfileList())),
                 validationPartnerSystemCandidateList(iterableList(protectedSystemInsertRequest.getPartnerSystemCandidateList())),
                 validationName(protectedSystemInsertRequest.getOrganization(), protectedSystemInsertRequest.getName()),
@@ -109,7 +111,7 @@ public class ProtectedSystemService {
 
                     return protectedSystem.saveAndFlushHelper();
                 })
-                .map(ProtectedSystemUtility::protectedSystemResponse);
+                .map(protectedSystem -> protectedSystemResponse(protectedSystem, organizationListAdministrator(requesterUsername)));
     }
 
     public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponse> update(
@@ -117,10 +119,10 @@ public class ProtectedSystemService {
             final ProtectedSystemUpdateRequest protectedSystemUpdateRequest) {
 
         return accumulate(
-                validationId(protectedSystemUpdateRequest.getId()),
+                validationId(protectedSystemUpdateRequest.getId(), organizationListAdministrator(requesterUsername)),
                 validationProtectedSystemTrustInteroperabilityProfileList(iterableList(protectedSystemUpdateRequest.getProtectedSystemTrustInteroperabilityProfileList())),
                 validationPartnerSystemCandidateList(iterableList(protectedSystemUpdateRequest.getPartnerSystemCandidateList())),
-                validationOrganization(protectedSystemUpdateRequest.getOrganization()),
+                validationOrganization(protectedSystemUpdateRequest.getOrganization(), organizationListAdministrator(requesterUsername)),
                 validationName(protectedSystemUpdateRequest.getId(), protectedSystemUpdateRequest.getOrganization(), protectedSystemUpdateRequest.getName()),
                 validationType(protectedSystemUpdateRequest.getType()),
                 (protectedSystem, protectedSystemTrustInteroperabilityProfileList, partnerSystemCandidateList, organization, name, type) -> {
@@ -175,14 +177,14 @@ public class ProtectedSystemService {
 
                     return protectedSystem.saveAndFlushHelper();
                 })
-                .map(ProtectedSystemUtility::protectedSystemResponse);
+                .map(protectedSystem -> protectedSystemResponse(protectedSystem, organizationListAdministrator(requesterUsername)));
     }
 
     public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, Unit> delete(
             final String requesterUsername,
             final ProtectedSystemDeleteAllRequest protectedSystemDeleteAllRequest) {
 
-        return validationIdList(iterableList(protectedSystemDeleteAllRequest.getIdList()))
+        return validationIdList(iterableList(protectedSystemDeleteAllRequest.getIdList()), organizationListAdministrator(requesterUsername))
                 .map(list -> list.map(ProtectedSystem -> {
                     ProtectedSystem.deleteAndFlushHelper();
 
@@ -196,7 +198,7 @@ public class ProtectedSystemService {
             final ProtectedSystemPartnerSystemCandidateFindOneRequest protectedSystemPartnerSystemCandidateFindOneRequest) {
 
         return accumulate(
-                validationId(protectedSystemPartnerSystemCandidateFindOneRequest.getId()),
+                validationId(protectedSystemPartnerSystemCandidateFindOneRequest.getId(), organizationListAdministrator(requesterUsername)),
                 validationPartnerSystemCandidate(protectedSystemPartnerSystemCandidateFindOneRequest.getPartnerSystemCandidate()),
                 (protectedSystem, partnerSystemCandidate) -> p(protectedSystem, partnerSystemCandidate))
                 .map(p -> protectedSystemPartnerSystemCandidateResponse(p._1(), p._2()));

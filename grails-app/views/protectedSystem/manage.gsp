@@ -1,6 +1,6 @@
 <html>
     <head>
-        <asset:javascript src="manage_protected_system.js"/>
+        <asset:javascript src="protectedSystem_manage.js"/>
 
         <meta name="layout" content="main"/>
 

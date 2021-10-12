@@ -2,7 +2,7 @@
 <%@ page import="org.json.JSONArray" contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
-        <asset:javascript src="manage_protected_system_dashboard_partner_system_candidate.js"/>
+        <asset:javascript src="protectedSystemDashboardPartnerSystemCandidate_manage.js"/>
         <asset:stylesheet src="protectedSystem_dashboard.css"/>
 
         <meta name="layout" content="main"/>

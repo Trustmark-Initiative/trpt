@@ -38,11 +38,11 @@
                     <div class="row">
                         <div class="col-3"></div>
 
-                        <div class="col-1 text-start">
+                        <div class="col-2 text-start">
                             <input id="login-action-submit-login" type="submit" class="btn btn-primary" value="Login">
                         </div>
 
-                        <div class="col-8 d-flex align-items-center">
+                        <div class="col-7 d-flex align-items-center">
                             <a href="${createLink(controller: "password", action: "reset")}" class="ms-auto">Forgot Password?</a>
                         </div>
                     </div>

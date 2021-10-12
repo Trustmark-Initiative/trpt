@@ -1,6 +1,6 @@
 <html>
     <head>
-        <asset:javascript src="manage_trustmark_binding_registry.js"/>
+        <asset:javascript src="trustmarkBindingRegistry_manage.js"/>
 
         <meta name="layout" content="main"/>
 

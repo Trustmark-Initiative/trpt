@@ -1,4 +1,10 @@
-<%@ page import="edu.gatech.gtri.trustmark.v1_0.tip.trustexpression.TrustExpressionType; org.json.JSONObject" contentType="text/html;charset=UTF-8" %>
+<%@ page import="edu.gatech.gtri.trustmark.v1_0.tip.trustexpression.TrustExpressionType.TrustExpressionTypeBoolean" contentType="text/html;charset=UTF-8" %>
+<%@ page import="edu.gatech.gtri.trustmark.v1_0.tip.trustexpression.TrustExpressionType.TrustExpressionTypeDateTimeStamp" contentType="text/html;charset=UTF-8" %>
+<%@ page import="edu.gatech.gtri.trustmark.v1_0.tip.trustexpression.TrustExpressionType.TrustExpressionTypeDecimal" contentType="text/html;charset=UTF-8" %>
+<%@ page import="edu.gatech.gtri.trustmark.v1_0.tip.trustexpression.TrustExpressionType.TrustExpressionTypeString" contentType="text/html;charset=UTF-8" %>
+<%@ page import="edu.gatech.gtri.trustmark.v1_0.tip.trustexpression.TrustExpressionType.TrustExpressionTypeStringList" contentType="text/html;charset=UTF-8" %>
+<%@ page import="edu.gatech.gtri.trustmark.v1_0.tip.trustexpression.TrustExpressionType.TrustExpressionTypeNone" contentType="text/html;charset=UTF-8" %>
+<%@ page import="org.json.JSONObject" contentType="text/html;charset=UTF-8" %>
 <%@ page import="org.json.JSONArray" contentType="text/html;charset=UTF-8" %>
 
 <g:set var="trustExpressionType" value="${(trustExpression as JSONObject).get("\$Type")}"/>
@@ -47,7 +53,7 @@
 
         <g:set var="trustExpressionEvaluatorDataType" value="${trustExpressionData.get("TrustExpressionEvaluatorDataType")}"/>
         <g:set var="trustExpressionEvaluatorDataValue" value="${trustExpressionData.get("TrustExpressionEvaluatorDataValue")}"/>
-        <g:set var="trustExpressionEvaluatorState" value="${(trustInteroperabilityProfileParentURI == "" && trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString() && trustExpressionEvaluatorDataValue == true) || trustInteroperabilityProfileParentURI != "" ? "SUCCESS" : "FAILURE"}"/>
+        <g:set var="trustExpressionEvaluatorState" value="${(trustInteroperabilityProfileParentURI == "" && trustExpressionEvaluatorDataType == TrustExpressionTypeBoolean.TYPE_BOOLEAN.getClass().getSimpleName() && trustExpressionEvaluatorDataValue == true) || trustInteroperabilityProfileParentURI != "" ? "SUCCESS" : "FAILURE"}"/>
 
         <div class="${trustInteroperabilityProfileParentURI == "" ? "TrustExpressionTop" : trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI ? "TrustExpressionSub" : "TrustExpression"} ${trustExpressionEvaluatorState}">
             <g:if test="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI}">
@@ -133,7 +139,7 @@
 
         <g:set var="trustExpressionEvaluatorDataType" value="${trustExpressionData.get("TrustExpressionEvaluatorDataType")}"/>
         <g:set var="trustExpressionEvaluatorDataValue" value="${trustExpressionData.get("TrustExpressionEvaluatorDataValue")}"/>
-        <g:set var="trustExpressionEvaluatorState" value="${trustInteroperabilityProfileParentURI == "" ? (trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString() ? (trustExpressionEvaluatorDataValue ? "SUCCESS" : "FAILURE") : "FAILURE") : (trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString() ? (trustExpressionEvaluatorDataValue ? "SUCCESS" : "FAILURE") : "UNKNOWN")}"/>
+        <g:set var="trustExpressionEvaluatorState" value="${trustInteroperabilityProfileParentURI == "" ? (trustExpressionEvaluatorDataType == TrustExpressionTypeBoolean.TYPE_BOOLEAN.getClass().getSimpleName() ? (trustExpressionEvaluatorDataValue ? "SUCCESS" : "FAILURE") : "FAILURE") : (trustExpressionEvaluatorDataType == TrustExpressionTypeBoolean.TYPE_BOOLEAN.getClass().getSimpleName() ? (trustExpressionEvaluatorDataValue ? "SUCCESS" : "FAILURE") : "UNKNOWN")}"/>
 
         <div class="${trustInteroperabilityProfileParentURI == "" ? "TrustExpressionTop" : trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI ? "TrustExpressionSub" : "TrustExpression"} ${trustExpressionEvaluatorState}">
             <g:if test="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI}">
@@ -182,7 +188,7 @@
     <g:set var="trustInteroperabilityProfile" value="${trustInteroperabilityProfileList[0] as JSONObject}"/>
     <g:set var="trustInteroperabilityProfileURI" value="${trustInteroperabilityProfile.get("Identifier")}"/>
     <g:set var="trustInteroperabilityProfileName" value="${trustInteroperabilityProfile.get("Name")}"/>
-    <g:set var="trustExpressionEvaluatorState" value="${trustInteroperabilityProfileParentURI == "" ? (trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString() ? (trustExpressionEvaluatorDataValue ? "SUCCESS" : "FAILURE") : "FAILURE") : (trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString() ? (trustExpressionEvaluatorDataValue ? "SUCCESS" : "FAILURE") : "UNKNOWN")}"/>
+    <g:set var="trustExpressionEvaluatorState" value="${trustInteroperabilityProfileParentURI == "" ? (trustExpressionEvaluatorDataType == TrustExpressionTypeBoolean.TYPE_BOOLEAN.getClass().getSimpleName() ? (trustExpressionEvaluatorDataValue ? "SUCCESS" : "FAILURE") : "FAILURE") : (trustExpressionEvaluatorDataType == TrustExpressionTypeBoolean.TYPE_BOOLEAN.getClass().getSimpleName() ? (trustExpressionEvaluatorDataValue ? "SUCCESS" : "FAILURE") : "UNKNOWN")}"/>
 
     <div class="${trustInteroperabilityProfileParentURI == "" ? "TrustExpressionTop" : trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI ? "TrustExpressionSub" : "TrustExpression"} ${trustExpressionEvaluatorState}">
         <g:if test="${trustInteroperabilityProfileParentURI != trustInteroperabilityProfileURI}">
@@ -196,19 +202,19 @@
 
                 <g:set var="id" value="${UUID.randomUUID().toString()}"/>
                 <input type="checkbox" id="id-${id}">
-                <g:if test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString()}">
+                <g:if test="${trustExpressionEvaluatorDataType == TrustExpressionTypeBoolean.TYPE_BOOLEAN.getClass().getSimpleName()}">
                     <label for="id-${id}" title="A literal boolean."><span class="glyphicon bi-chat-left"></span>${trustExpressionEvaluatorDataValue}</label>
                 </g:if>
-                <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_DATE_TIME_STAMP.toString()}">
+                <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeDateTimeStamp.TYPE_DATE_TIME_STAMP.getClass().getSimpleName()}">
                     <label for="id-${id}" title="A literal date time stamp."><span class="glyphicon bi-chat-left"></span>${trustExpressionEvaluatorDataValue}</label>
                 </g:elseif>
-                <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_DECIMAL.toString()}">
+                <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeDecimal.TYPE_DECIMAL.getClass().getSimpleName()}">
                     <label for="id-${id}" title="A literal decimal."><span class="glyphicon bi-chat-left"></span>${trustExpressionEvaluatorDataValue}</label>
                 </g:elseif>
-                <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_STRING.toString()}">
+                <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeString.TYPE_STRING.getClass().getSimpleName()}">
                     <label for="id-${id}" title="A literal string."><span class="glyphicon bi-chat-left"></span>"${trustExpressionEvaluatorDataValue}"</label>
                 </g:elseif>
-                <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_STRING_LIST.toString()}">
+                <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeStringList.TYPE_STRING_LIST.getClass().getSimpleName()}">
                     <g:if test="${(trustExpressionEvaluatorDataValue as JSONArray).isEmpty()}">
                         <label for="id-${id}" title="A literal string list."><span class="glyphicon bi-chat-left"></span>()</label>
                     </g:if>
@@ -224,7 +230,7 @@
                         </label>
                     </g:else>
                 </g:elseif>
-                <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_NONE.toString()}">
+                <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeNone.TYPE_NONE.getClass().getSimpleName()}">
                     <label for="id-${id}" title="A literal none."><span class="glyphicon bi-chat-left"></span>none</label>
                 </g:elseif>
                 </label>
@@ -233,20 +239,20 @@
 
                     <div class="Head">
                         Evaluation:
-                        <g:if test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString()}">Boolean</g:if>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_DATE_TIME_STAMP.toString()}">Date Time Stamp</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_DECIMAL.toString()}">Decimal</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_STRING.toString()}">String</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_STRING_LIST.toString()}">String List</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_NONE.toString()}">None</g:elseif>
+                        <g:if test="${trustExpressionEvaluatorDataType == TrustExpressionTypeBoolean.TYPE_BOOLEAN.getClass().getSimpleName()}">Boolean</g:if>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeDateTimeStamp.TYPE_DATE_TIME_STAMP.getClass().getSimpleName()}">Date Time Stamp</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeDecimal.TYPE_DECIMAL.getClass().getSimpleName()}">Decimal</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeString.TYPE_STRING.getClass().getSimpleName()}">String</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeStringList.TYPE_STRING_LIST.getClass().getSimpleName()}">String List</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeNone.TYPE_NONE.getClass().getSimpleName()}">None</g:elseif>
                     </div>
 
                     <div>
-                        A literal <g:if test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString()}">boolean: ${trustExpressionEvaluatorDataValue}.</g:if>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_DATE_TIME_STAMP.toString()}">date time stamp: ${trustExpressionEvaluatorDataValue}.</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_DECIMAL.toString()}">decimal: ${trustExpressionEvaluatorDataValue}.</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_STRING.toString()}">string: "${trustExpressionEvaluatorDataValue}".</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_STRING_LIST.toString()}">
+                        A literal <g:if test="${trustExpressionEvaluatorDataType == TrustExpressionTypeBoolean.TYPE_BOOLEAN.getClass().getSimpleName()}">boolean: ${trustExpressionEvaluatorDataValue}.</g:if>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeDateTimeStamp.TYPE_DATE_TIME_STAMP.getClass().getSimpleName()}">date time stamp: ${trustExpressionEvaluatorDataValue}.</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeDecimal.TYPE_DECIMAL.getClass().getSimpleName()}">decimal: ${trustExpressionEvaluatorDataValue}.</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeString.TYPE_STRING.getClass().getSimpleName()}">string: "${trustExpressionEvaluatorDataValue}".</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeStringList.TYPE_STRING_LIST.getClass().getSimpleName()}">
                             <g:if test="${(trustExpressionEvaluatorDataValue as JSONArray).isEmpty()}">list of strings; the list is empty.</g:if>
                             <g:elseif test="${(trustExpressionEvaluatorDataValue as JSONArray).length() == 1}">list of strings: "${(trustExpressionEvaluatorDataValue as JSONArray)[0]}".</g:elseif>
                             <g:else>list of strings: <ul>
@@ -257,7 +263,7 @@
                             </ul>
                             </g:else>
                         </g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_NONE.toString()}">none.</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeNone.TYPE_NONE.getClass().getSimpleName()}">none.</g:elseif>
                     </div>
 
                     <div class="Head">
@@ -350,12 +356,12 @@
                 <div class="TrustExpressionDetail">
                     <div class="Head">
                         Evaluation:
-                        <g:if test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString()}">Boolean</g:if>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_DATE_TIME_STAMP.toString()}">Date Time Stamp</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_DECIMAL.toString()}">Decimal</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_STRING.toString()}">String</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_STRING_LIST.toString()}">String List</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_NONE.toString()}">None</g:elseif>
+                        <g:if test="${trustExpressionEvaluatorDataType == TrustExpressionTypeBoolean.TYPE_BOOLEAN.getClass().getSimpleName()}">Boolean</g:if>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeDateTimeStamp.TYPE_DATE_TIME_STAMP.getClass().getSimpleName()}">Date Time Stamp</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeDecimal.TYPE_DECIMAL.getClass().getSimpleName()}">Decimal</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeString.TYPE_STRING.getClass().getSimpleName()}">String</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeStringList.TYPE_STRING_LIST.getClass().getSimpleName()}">String List</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeNone.TYPE_NONE.getClass().getSimpleName()}">None</g:elseif>
                     </div>
 
                     <div>
@@ -369,19 +375,19 @@
                     </g:each>
 
                     <div>
-                        The parameter "${trustmarkDefinitionParameter}" is bound to a <g:if test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_BOOLEAN.toString()}">boolean: ${trustExpressionEvaluatorDataValue}.</g:if>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_DATE_TIME_STAMP.toString()}">date time stamp: ${trustExpressionEvaluatorDataValue}.</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_DECIMAL.toString()}">decimal: ${trustExpressionEvaluatorDataValue}.</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_STRING.toString()}">string: "${trustExpressionEvaluatorDataValue}".</g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_STRING_LIST.toString()}">
+                        The parameter "${trustmarkDefinitionParameter}" is bound to a <g:if test="${trustExpressionEvaluatorDataType == TrustExpressionTypeBoolean.TYPE_BOOLEAN.getClass().getSimpleName()}">boolean: ${trustExpressionEvaluatorDataValue}.</g:if>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeDateTimeStamp.TYPE_DATE_TIME_STAMP.getClass().getSimpleName()}">date time stamp: ${trustExpressionEvaluatorDataValue}.</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeDecimal.TYPE_DECIMAL.getClass().getSimpleName()}">decimal: ${trustExpressionEvaluatorDataValue}.</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeString.TYPE_STRING.getClass().getSimpleName()}">string: "${trustExpressionEvaluatorDataValue}".</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeStringList.TYPE_STRING_LIST.getClass().getSimpleName()}">
                             <g:if test="${(trustExpressionEvaluatorDataValue as JSONArray).isEmpty()}">list of strings; the list is empty.</g:if>
                             <g:elseif test="${(trustExpressionEvaluatorDataValue as JSONArray).length() == 1}">list of strings: "${(trustExpressionEvaluatorDataValue as JSONArray)[0]}".</g:elseif>
                             <g:else>list of strings:</g:else>
                         </g:elseif>
-                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_NONE.toString()}">none.</g:elseif>
+                        <g:elseif test="${trustExpressionEvaluatorDataType == TrustExpressionTypeNone.TYPE_NONE.getClass().getSimpleName()}">none.</g:elseif>
                     </div>
 
-                    <g:if test="${trustExpressionEvaluatorDataType == TrustExpressionType.TYPE_STRING_LIST.toString() && (trustExpressionEvaluatorDataValue as JSONArray).length() > 1}">
+                    <g:if test="${trustExpressionEvaluatorDataType == TrustExpressionTypeStringList.TYPE_STRING_LIST.getClass().getSimpleName() && (trustExpressionEvaluatorDataValue as JSONArray).length() > 1}">
                         <ul>
                             <g:each in="${trustExpressionEvaluatorDataValue as JSONArray}" var="it" status="index">
                                 <g:if test="${index == 0}"><li>"${it}"</li></g:if>

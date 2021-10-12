@@ -4,6 +4,8 @@ import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidate;
 import grails.gorm.transactions.Transactional;
 import org.gtri.fj.data.List;
 
+import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionUtility.organizationListAdministrator;
+
 @Transactional
 public class PartnerSystemCandidateService {
 
@@ -12,7 +14,7 @@ public class PartnerSystemCandidateService {
             final PartnerSystemCandidateFindAllRequest partnerSystemCandidateFindAllRequest) {
 
         return PartnerSystemCandidate
-                .findAllByTypeInHelper(partnerSystemCandidateFindAllRequest.getProtectedSystemType().getPartnerSystemCandidateTypeList())
+                .findAllByTypeInHelper(organizationListAdministrator(requesterUsername), partnerSystemCandidateFindAllRequest.getProtectedSystemType().getPartnerSystemCandidateTypeList())
                 .map(PartnerSystemCandidateUtility::partnerSystemCandidateResponse);
     }
 }

@@ -23,11 +23,7 @@ public class JobUtilityForMailEvaluationUpdate {
     private JobUtilityForMailEvaluationUpdate() {
     }
 
-    private static final Log log = LogFactory.getLog(JobUtilityForMailEvaluationUpdate.class);
-
     public static void synchronizeMailEvaluationUpdate() {
-
-        final LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 
         ProtectedSystem.withTransactionHelper(() -> {
 
@@ -75,7 +71,7 @@ public class JobUtilityForMailEvaluationUpdate {
 
             MailEvaluationUpdate.findAllByMailDateTimeIsNullHelper()
                     .forEach(mailEvaluationUpdate -> {
-                        mailEvaluationUpdate.setMailDateTime(now);
+                        mailEvaluationUpdate.setMailDateTime(LocalDateTime.now(ZoneOffset.UTC));
                         mailEvaluationUpdate.saveHelper();
                     });
         });
