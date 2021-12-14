@@ -64,19 +64,20 @@ function initialize(
                 const trustInteroperabilityProfileElementMandatory = trustInteroperabilityProfileElement.querySelector(".trust-interoperability-profile-element-mandatory")
 
                 trustInteroperabilityProfileElementActionUpdate.addEventListener("click", () => onUpdateOpen(protectedSystem, protectedSystemTrustInteroperabilityProfile))
-                trustInteroperabilityProfileElementActionDeleteQueue.dataset.uri = protectedSystemTrustInteroperabilityProfile.uri
-                trustInteroperabilityProfileElementName.innerHTML = protectedSystemTrustInteroperabilityProfile.name
-                trustInteroperabilityProfileElementName.title = protectedSystemTrustInteroperabilityProfile.name
-                trustInteroperabilityProfileElementName.href = protectedSystemTrustInteroperabilityProfile.uri
-                trustInteroperabilityProfileElementDescription.innerHTML = protectedSystemTrustInteroperabilityProfile.description
-                trustInteroperabilityProfileElementDescription.title = protectedSystemTrustInteroperabilityProfile.description
-                trustInteroperabilityProfileElementIssuer.innerHTML = protectedSystemTrustInteroperabilityProfile.issuerName
-                trustInteroperabilityProfileElementIssuer.title = protectedSystemTrustInteroperabilityProfile.issuerName
-                trustInteroperabilityProfileElementIssuer.href = protectedSystemTrustInteroperabilityProfile.issuerIdentifier
+                trustInteroperabilityProfileElementActionDeleteQueue.dataset.uri = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.uri
+                trustInteroperabilityProfileElementName.innerHTML = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.name === null ? protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.uri : protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.name;
+                trustInteroperabilityProfileElementName.title = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.name === null ? protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.uri : protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.name;
+                trustInteroperabilityProfileElementName.href = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.uri
+                trustInteroperabilityProfileElementDescription.innerHTML = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.description
+                trustInteroperabilityProfileElementDescription.title = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.description
+                trustInteroperabilityProfileElementIssuer.innerHTML = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.issuerName
+                trustInteroperabilityProfileElementIssuer.title = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.issuerName
+                trustInteroperabilityProfileElementIssuer.href = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.issuerIdentifier
 
                 if (protectedSystemTrustInteroperabilityProfile.mandatory) {
 
                     trustInteroperabilityProfileElementMandatory.classList.add("bi-exclamation-circle")
+                    trustInteroperabilityProfileElementMandatory.title = "Require Full Compliance"
                 }
 
                 trustInteroperabilityProfileTBody.appendChild(trustInteroperabilityProfileElement)
@@ -103,9 +104,11 @@ function initialize(
 
                 const partnerSystemCandidateElementTrust = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-trust")
                 const partnerSystemCandidateElementName = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-name")
+                const partnerSystemCandidateElementTrustmarkBindingRegistry = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-trustmark-binding-registry")
                 const partnerSystemCandidateElementTrustFabricMetadata = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-trust-fabric-metadata")
                 const partnerSystemCandidateElementPercentTrustmarkDefinitionRequirement = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-percent-trustmark-definition-requirement")
                 const partnerSystemCandidateElementPercentTrustInteroperabilityProfile = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-percent-trust-interoperability-profile")
+                const partnerSystemCandidateElementTrustInteroperabilityProfileEvaluationLocalDateTime = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-trust-interoperability-profile-evaluation-local-date-time")
                 const partnerSystemCandidateElementActionDetail = partnerSystemCandidateElement.querySelector(".partner-system-candidate-action-detail")
 
                 partnerSystemCandidateElementTrust.checked = protectedSystemPartnerSystemCandidate.trust
@@ -175,6 +178,10 @@ function initialize(
                 partnerSystemCandidateElementName.title = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.name
                 partnerSystemCandidateElementName.href = partnerSystemCandidateDashboard + "?" + new URLSearchParams({"id": protectedSystem.id, "partnerSystemCandidate": protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id})
 
+                partnerSystemCandidateElementTrustmarkBindingRegistry.innerHTML = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.trustmarkBindingRegistry.name
+                partnerSystemCandidateElementTrustmarkBindingRegistry.title = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.trustmarkBindingRegistry.name
+                partnerSystemCandidateElementTrustmarkBindingRegistry.href = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.trustmarkBindingRegistry.uri
+
                 if (protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor == null) {
 
                     partnerSystemCandidateElementTrustFabricMetadata.parentNode.removeChild(partnerSystemCandidateElementTrustFabricMetadata)
@@ -196,18 +203,70 @@ function initialize(
                         "(NA)" :
                         `${protectedSystemPartnerSystemCandidate.evaluationTrustmarkDefinitionRequirementSatisfied} of ${(protectedSystemPartnerSystemCandidate.evaluationTrustmarkDefinitionRequirementUnsatisfied + protectedSystemPartnerSystemCandidate.evaluationTrustmarkDefinitionRequirementSatisfied)}`
 
-                partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML =
-                    protectedSystemPartnerSystemCandidate.evaluationTrustExpressionUnsatisfied + protectedSystemPartnerSystemCandidate.evaluationTrustExpressionSatisfied === 0 ?
-                        "(NA)" :
-                        Math.round(protectedSystemPartnerSystemCandidate.evaluationTrustExpressionSatisfied /
-                            (protectedSystemPartnerSystemCandidate.evaluationTrustExpressionUnsatisfied + protectedSystemPartnerSystemCandidate.evaluationTrustExpressionSatisfied) *
-                            100) + "%"
-                partnerSystemCandidateElementPercentTrustInteroperabilityProfile.title =
-                    protectedSystemPartnerSystemCandidate.evaluationTrustExpressionUnsatisfied + protectedSystemPartnerSystemCandidate.evaluationTrustExpressionSatisfied === 0 ?
-                        "(NA)" :
-                        `${protectedSystemPartnerSystemCandidate.evaluationTrustExpressionSatisfied} of ${(protectedSystemPartnerSystemCandidate.evaluationTrustExpressionUnsatisfied + protectedSystemPartnerSystemCandidate.evaluationTrustExpressionSatisfied)}`
+                const partnerSystemCandidateElementTrustInteroperabilityProfileEvaluationLocalDateTimeList = protectedSystemPartnerSystemCandidate.partnerSystemCandidateTrustInteroperabilityProfileList
+                    .map(partnerSystemCandidateTrustInteroperabilityProfile => partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime)
+                    .filter(evaluationLocalDateTime => evaluationLocalDateTime !== null)
+                    .sort((evaluationLocalDateTime1, evaluationLocalDateTime2) => new Date(evaluationLocalDateTime1) - new Date(evaluationLocalDateTime2))
+
+                partnerSystemCandidateElementTrustInteroperabilityProfileEvaluationLocalDateTime.innerHTML = partnerSystemCandidateElementTrustInteroperabilityProfileEvaluationLocalDateTimeList.length === 0 ?
+                    "(NA)" :
+                    moment(partnerSystemCandidateElementTrustInteroperabilityProfileEvaluationLocalDateTimeList[0]).format('MMMM Do YYYY, h:mm:ss A UTC')
+
+                partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML = ""
+                partnerSystemCandidateElementPercentTrustInteroperabilityProfile.addEventListener("click", () => onToggleDetail(protectedSystemPartnerSystemCandidate.partnerSystemCandidate))
+
+                protectedSystemPartnerSystemCandidate.partnerSystemCandidateTrustInteroperabilityProfileList.forEach(partnerSystemCandidateTrustInteroperabilityProfile => {
+
+                    if (partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime == null) {
+                        partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
+                            `<span class="bi-question-circle" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name}"></span>`
+                    } else if (partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === true) {
+                        partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
+                            `<span class="bi-check-circle" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
+                    } else if (partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === false) {
+                        partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
+                            `<span class="bi-x-circle-fill" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
+                    }
+                });
 
                 partnerSystemCandidateTBody.appendChild(partnerSystemCandidateElement)
+
+                protectedSystemPartnerSystemCandidate.partnerSystemCandidateTrustInteroperabilityProfileList.forEach(partnerSystemCandidateTrustInteroperabilityProfile => {
+
+                    const partnerSystemCandidateDetailElement = document.getElementById("partner-system-candidate-template-detail").content.cloneNode(true)
+                    partnerSystemCandidateDetailElement.firstElementChild.dataset.partnerSystemCandidateId = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id
+
+                    const partnerSystemCandidateDetailElementTrustInteroperabilityProfileName = partnerSystemCandidateDetailElement.querySelector(".trust-interoperability-profile-name")
+                    const partnerSystemCandidateDetailElementTrustInteroperabilityProfileEvaluationLocalDateTime = partnerSystemCandidateDetailElement.querySelector(".trust-interoperability-profile-evaluation-local-date-time")
+                    const partnerSystemCandidateDetailElementTrustInteroperabilityProfileSatisfied = partnerSystemCandidateDetailElement.querySelector(".trust-interoperability-profile-evaluation-satisfied")
+                    const partnerSystemCandidateDetailElementTrustInteroperabilityProfileTrustmarkDefinition = partnerSystemCandidateDetailElement.querySelector(".trust-interoperability-profile-trustmark-definition")
+
+                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileName.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name == null ?
+                        partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.uri :
+                        partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name
+
+                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileEvaluationLocalDateTime.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime === null ?
+                        "(NA)" :
+                        moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')
+
+                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileSatisfied.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime === null || partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === null ?
+                        `<span class="bi-question-circle"></span>` :
+                        partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === true ?
+                            `<span class="bi-check-circle"></span>` :
+                            `<span class="bi-x-circle-fill"></span>`
+
+                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileTrustmarkDefinition.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied === 0 ?
+                        "(NA)" :
+                        Math.round(partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied /
+                            (partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied) *
+                            100) + "%"
+
+                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileTrustmarkDefinition.title = partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied === 0 ?
+                        "(NA)" :
+                        `${partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied} of ${(partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied)}`
+
+                    partnerSystemCandidateTBody.appendChild(partnerSystemCandidateDetailElement);
+                });
             })
         }
     }
@@ -242,16 +301,20 @@ function initialize(
         document.getElementById("trust-interoperability-profile-action-submit-update").classList.remove("d-none")
         document.getElementById("trust-interoperability-profile-status").classList.remove("d-none")
 
-        document.getElementById("trust-interoperability-profile-input-uri").value = protectedSystemTrustInteroperabilityProfile.uri
+        document.getElementById("trust-interoperability-profile-input-uri").value = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.uri
         document.getElementById("trust-interoperability-profile-input-mandatory").checked = protectedSystemTrustInteroperabilityProfile.mandatory
-        document.getElementById("trust-interoperability-profile-input-name").value = protectedSystemTrustInteroperabilityProfile.name
-        document.getElementById("trust-interoperability-profile-input-description").value = protectedSystemTrustInteroperabilityProfile.description
-        document.getElementById("trust-interoperability-profile-input-issuer").value = protectedSystemTrustInteroperabilityProfile.issuerName
-        document.getElementById("trust-interoperability-profile-input-issuer-identifier").value = protectedSystemTrustInteroperabilityProfile.issuerIdentifier
-        document.getElementById("trust-interoperability-profile-input-request-date-time").value = protectedSystemTrustInteroperabilityProfile.requestLocalDateTime
-        document.getElementById("trust-interoperability-profile-input-success-date-time").value = protectedSystemTrustInteroperabilityProfile.successLocalDateTime
-        document.getElementById("trust-interoperability-profile-input-failure-date-time").value = protectedSystemTrustInteroperabilityProfile.failureLocalDateTime
-        document.getElementById("trust-interoperability-profile-input-failure-message").value = protectedSystemTrustInteroperabilityProfile.failureMessage
+        document.getElementById("trust-interoperability-profile-input-name").value = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.name
+        document.getElementById("trust-interoperability-profile-input-description").value = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.description
+        document.getElementById("trust-interoperability-profile-input-issuer").value = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.issuerName
+        document.getElementById("trust-interoperability-profile-input-issuer-identifier").value = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.issuerIdentifier
+        document.getElementById("trust-interoperability-profile-input-document-request-date-time").value = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.documentRequestLocalDateTime == null ? "" : moment(protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.documentRequestLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC');
+        document.getElementById("trust-interoperability-profile-input-document-success-date-time").value = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.documentSuccessLocalDateTime == null ? "" : moment(protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.documentSuccessLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC');
+        document.getElementById("trust-interoperability-profile-input-document-failure-date-time").value = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.documentFailureLocalDateTime == null ? "" : moment(protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.documentFailureLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC');
+        document.getElementById("trust-interoperability-profile-input-document-failure-message").value = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.documentFailureMessage
+        document.getElementById("trust-interoperability-profile-input-server-request-date-time").value = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.serverRequestLocalDateTime == null ? "" : moment(protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.serverRequestLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC');
+        document.getElementById("trust-interoperability-profile-input-server-success-date-time").value = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.serverSuccessLocalDateTime == null ? "" : moment(protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.serverSuccessLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC');
+        document.getElementById("trust-interoperability-profile-input-server-failure-date-time").value = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.serverFailureLocalDateTime == null ? "" : moment(protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.serverFailureLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC');
+        document.getElementById("trust-interoperability-profile-input-server-failure-message").value = protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.serverFailureMessage
     }
 
     function onCancel() {
@@ -266,11 +329,18 @@ function initialize(
             name: protectedSystem.name,
             type: protectedSystem.type.value,
             organization: protectedSystem.organization.id,
-            protectedSystemTrustInteroperabilityProfileList: protectedSystem.protectedSystemTrustInteroperabilityProfileList.concat(
-                [{
-                    "mandatory": document.getElementById("trust-interoperability-profile-input-mandatory").checked,
-                    "uri": document.getElementById("trust-interoperability-profile-input-uri").value
-                }]),
+            protectedSystemTrustInteroperabilityProfileList: protectedSystem.protectedSystemTrustInteroperabilityProfileList
+                .map(protectedSystemTrustInteroperabilityProfileInner => {
+                    return {
+                        "mandatory": protectedSystemTrustInteroperabilityProfileInner.mandatory,
+                        "uri": protectedSystemTrustInteroperabilityProfileInner.trustInteroperabilityProfile.uri
+                    }
+                })
+                .concat(
+                    [{
+                        "mandatory": document.getElementById("trust-interoperability-profile-input-mandatory").checked,
+                        "uri": document.getElementById("trust-interoperability-profile-input-uri").value
+                    }]),
             partnerSystemCandidateList: protectedSystem.protectedSystemPartnerSystemCandidateList
                 .filter(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.trust)
                 .map(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id)
@@ -289,7 +359,13 @@ function initialize(
             organization: protectedSystem.organization.id,
             protectedSystemTrustInteroperabilityProfileList:
                 protectedSystem.protectedSystemTrustInteroperabilityProfileList
-                    .filter(protectedSystemTrustInteroperabilityProfileInner => protectedSystemTrustInteroperabilityProfile.uri !== protectedSystemTrustInteroperabilityProfileInner.uri)
+                    .filter(protectedSystemTrustInteroperabilityProfileInner => protectedSystemTrustInteroperabilityProfile.trustInteroperabilityProfile.uri !== protectedSystemTrustInteroperabilityProfileInner.trustInteroperabilityProfile.uri)
+                    .map(protectedSystemTrustInteroperabilityProfileInner => {
+                        return {
+                            "mandatory": protectedSystemTrustInteroperabilityProfileInner.mandatory,
+                            "uri": protectedSystemTrustInteroperabilityProfileInner.trustInteroperabilityProfile.uri
+                        }
+                    })
                     .concat(
                         [{
                             "mandatory": document.getElementById("trust-interoperability-profile-input-mandatory").checked,
@@ -313,6 +389,12 @@ function initialize(
             organization: protectedSystem.organization.id,
             protectedSystemTrustInteroperabilityProfileList:
                 protectedSystem.protectedSystemTrustInteroperabilityProfileList
+                    .map(protectedSystemTrustInteroperabilityProfileInner => {
+                        return {
+                            "mandatory": protectedSystemTrustInteroperabilityProfileInner.mandatory,
+                            "uri": protectedSystemTrustInteroperabilityProfileInner.trustInteroperabilityProfile.uri
+                        }
+                    })
                     .filter(protectedSystemTrustInteroperabilityProfileInner => !Array.from(document.querySelectorAll(".trust-interoperability-profile-action-delete-queue:checked")).map(element => element.dataset.uri).includes(protectedSystemTrustInteroperabilityProfileInner.uri)),
             partnerSystemCandidateList: protectedSystem.protectedSystemPartnerSystemCandidateList
                 .filter(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.trust)
@@ -330,7 +412,13 @@ function initialize(
             name: protectedSystem.name,
             type: protectedSystem.type.value,
             organization: protectedSystem.organization.id,
-            protectedSystemTrustInteroperabilityProfileList: protectedSystem.protectedSystemTrustInteroperabilityProfileList,
+            protectedSystemTrustInteroperabilityProfileList: protectedSystem.protectedSystemTrustInteroperabilityProfileList
+                .map(protectedSystemTrustInteroperabilityProfileInner => {
+                    return {
+                        "mandatory": protectedSystemTrustInteroperabilityProfileInner.mandatory,
+                        "uri": protectedSystemTrustInteroperabilityProfileInner.trustInteroperabilityProfile.uri
+                    }
+                }),
             partnerSystemCandidateList: protectedSystem.protectedSystemPartnerSystemCandidateList
                 .filter(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.trust)
                 .map(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id).filter(idInner => idInner !== id)
@@ -347,7 +435,13 @@ function initialize(
             name: protectedSystem.name,
             type: protectedSystem.type.value,
             organization: protectedSystem.organization.id,
-            protectedSystemTrustInteroperabilityProfileList: protectedSystem.protectedSystemTrustInteroperabilityProfileList,
+            protectedSystemTrustInteroperabilityProfileList: protectedSystem.protectedSystemTrustInteroperabilityProfileList
+                .map(protectedSystemTrustInteroperabilityProfileInner => {
+                    return {
+                        "mandatory": protectedSystemTrustInteroperabilityProfileInner.mandatory,
+                        "uri": protectedSystemTrustInteroperabilityProfileInner.trustInteroperabilityProfile.uri
+                    }
+                }),
             partnerSystemCandidateList: protectedSystem.protectedSystemPartnerSystemCandidateList
                 .filter(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.trust)
                 .map(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id).concat([id])
@@ -355,6 +449,12 @@ function initialize(
             .then(response => response.status !== 200 ?
                 onFailure(response.json()) :
                 findOne())
+    }
+
+    function onToggleDetail(partnerSystemCandidate) {
+
+        Array.from(document.querySelectorAll(`.partner-system-candidate-detail[data-partner-system-candidate-id="${partnerSystemCandidate.id}"]`))
+            .forEach(element => element.classList.contains("d-none") ? element.classList.remove("d-none") : element.classList.add("d-none"));
     }
 
     function onFailure(failureMapPromise) {
@@ -403,10 +503,14 @@ function initialize(
         document.getElementById("trust-interoperability-profile-input-description").value = ""
         document.getElementById("trust-interoperability-profile-input-issuer").value = ""
         document.getElementById("trust-interoperability-profile-input-issuer-identifier").value = ""
-        document.getElementById("trust-interoperability-profile-input-request-date-time").value = ""
-        document.getElementById("trust-interoperability-profile-input-success-date-time").value = ""
-        document.getElementById("trust-interoperability-profile-input-failure-date-time").value = ""
-        document.getElementById("trust-interoperability-profile-input-failure-message").value = ""
+        document.getElementById("trust-interoperability-profile-input-document-request-date-time").value = ""
+        document.getElementById("trust-interoperability-profile-input-document-success-date-time").value = ""
+        document.getElementById("trust-interoperability-profile-input-document-failure-date-time").value = ""
+        document.getElementById("trust-interoperability-profile-input-document-failure-message").value = ""
+        document.getElementById("trust-interoperability-profile-input-server-request-date-time").value = ""
+        document.getElementById("trust-interoperability-profile-input-server-success-date-time").value = ""
+        document.getElementById("trust-interoperability-profile-input-server-failure-date-time").value = ""
+        document.getElementById("trust-interoperability-profile-input-server-failure-message").value = ""
 
         formResetValidation()
     }

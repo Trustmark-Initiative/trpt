@@ -5,8 +5,6 @@ import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystem;
 import edu.gatech.gtri.trustmark.trpt.domain.Server;
 import edu.gatech.gtri.trustmark.trpt.domain.User;
 import edu.gatech.gtri.trustmark.trpt.service.mail.MailUtility;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.gtri.fj.Ordering;
 
 import java.time.LocalDateTime;

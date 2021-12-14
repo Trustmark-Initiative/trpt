@@ -24,7 +24,7 @@ public abstract class ValidationMessage<FIELD> {
             F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
             F1<FIELD, T1> fValidationMessageMustBeNonNull,
             F1<FIELD, T1> fValidationMessageMustBeNumeric,
-            F2<FIELD, String, T1> fValidationMessageMustBePattern,
+            F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
             F1<FIELD, T1> fValidationMessageMustBeReference,
             F1<FIELD, T1> fValidationMessageMustBeUnique,
             F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -57,7 +57,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
                 F1<FIELD, T1> fValidationMessageMustBeNumeric,
-                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
                 F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -108,7 +108,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
                 F1<FIELD, T1> fValidationMessageMustBeNumeric,
-                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
                 F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -161,7 +161,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
                 F1<FIELD, T1> fValidationMessageMustBeNumeric,
-                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
                 F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -216,7 +216,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
                 F1<FIELD, T1> fValidationMessageMustBeNumeric,
-                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
                 F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -276,7 +276,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
                 F1<FIELD, T1> fValidationMessageMustBeNumeric,
-                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
                 F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -336,7 +336,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
                 F1<FIELD, T1> fValidationMessageMustBeNumeric,
-                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
                 F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -382,7 +382,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
                 F1<FIELD, T1> fValidationMessageMustBeNumeric,
-                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
                 F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -428,7 +428,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
                 F1<FIELD, T1> fValidationMessageMustBeNumeric,
-                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
                 F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -456,12 +456,15 @@ public abstract class ValidationMessage<FIELD> {
 
         private final FIELD field;
         private final String pattern;
+        private final String description;
 
         public ValidationMessageMustBePattern(
                 final FIELD field,
-                final String pattern) {
+                final String pattern,
+                final String description) {
             this.field = field;
             this.pattern = pattern;
+            this.description = description;
         }
 
         public FIELD getField() {
@@ -481,7 +484,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
                 F1<FIELD, T1> fValidationMessageMustBeNumeric,
-                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
                 F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -501,7 +504,7 @@ public abstract class ValidationMessage<FIELD> {
             requireNonNull(fValidationMessageMustHavePermission);
             requireNonNull(fValidationMessageNonEmptyList);
 
-            return fValidationMessageMustBeNonNull.f(field);
+            return fValidationMessageMustBePattern.f(field, pattern, description);
         }
     }
 
@@ -527,7 +530,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
                 F1<FIELD, T1> fValidationMessageMustBeNumeric,
-                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
                 F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -573,7 +576,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
                 F1<FIELD, T1> fValidationMessageMustBeNumeric,
-                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
                 F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -619,7 +622,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
                 F1<FIELD, T1> fValidationMessageMustBeNumeric,
-                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
                 F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -672,7 +675,7 @@ public abstract class ValidationMessage<FIELD> {
                 F3<FIELD, Integer, Integer, T1> fValidationMessageMustBeLengthLessThanOrEqual,
                 F1<FIELD, T1> fValidationMessageMustBeNonNull,
                 F1<FIELD, T1> fValidationMessageMustBeNumeric,
-                F2<FIELD, String, T1> fValidationMessageMustBePattern,
+                F3<FIELD, String, String, T1> fValidationMessageMustBePattern,
                 F1<FIELD, T1> fValidationMessageMustBeReference,
                 F1<FIELD, T1> fValidationMessageMustBeUnique,
                 F1<FIELD, T1> fValidationMessageMustHavePermission,
@@ -754,9 +757,10 @@ public abstract class ValidationMessage<FIELD> {
 
     public static <FIELD> ValidationMessageMustBePattern<FIELD> validationMessageMustBePattern(
             final FIELD field,
-            final String pattern) {
+            final String pattern,
+            final String description) {
 
-        return new ValidationMessageMustBePattern<>(field, pattern);
+        return new ValidationMessageMustBePattern<>(field, pattern, description);
     }
 
     public static <FIELD> ValidationMessageMustBeReference<FIELD> validationMessageMustBeReference(

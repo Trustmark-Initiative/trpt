@@ -1,10 +1,13 @@
 package edu.gatech.gtri.trustmark.trpt.service.protectedSystem;
 
+import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidate;
+import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateTrustInteroperabilityProfileUri;
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystem;
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemPartnerSystemCandidate;
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemTrustInteroperabilityProfileUri;
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemType;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustInteroperabilityProfileUri;
+import edu.gatech.gtri.trustmark.trpt.service.job.urisynchronizer.UriSynchronizerForTrustInteroperabilityProfile;
 import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
 import grails.gorm.transactions.Transactional;
 import org.gtri.fj.data.List;
@@ -15,10 +18,9 @@ import org.gtri.fj.product.Unit;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForTrustInteroperabilityProfileUri.synchronizeTrustInteroperabilityProfileUri;
 import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionUtility.organizationListAdministrator;
-import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.protectedSystemPartnerSystemCandidateResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.protectedSystemResponse;
+import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.protectedSystemResponseWithTrustExpressionEvaluation;
 import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.validationId;
 import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.validationIdList;
 import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.validationName;
@@ -51,7 +53,7 @@ public class ProtectedSystemService {
 
         return ProtectedSystem
                 .findAllByOrderByNameAscHelper(organizationListAdministrator(requesterUsername))
-                .map(protectedSystem -> protectedSystemResponse(protectedSystem, organizationListAdministrator(requesterUsername)));
+                .map(protectedSystem -> protectedSystemResponse(protectedSystem));
     }
 
     public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponse> findOne(
@@ -59,7 +61,7 @@ public class ProtectedSystemService {
             final ProtectedSystemFindOneRequest protectedSystemFindOneRequest) {
 
         return validationId(protectedSystemFindOneRequest.getId(), organizationListAdministrator(requesterUsername))
-                .map(protectedSystem -> protectedSystemResponse(protectedSystem, organizationListAdministrator(requesterUsername)));
+                .map(protectedSystem -> protectedSystemResponse(protectedSystem));
     }
 
     public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponse> insert(
@@ -101,17 +103,26 @@ public class ProtectedSystemService {
                                     trustInteroperabilityProfileUri.setUri(uri);
                                     trustInteroperabilityProfileUri.saveHelper();
 
-                                    (new Thread(() -> synchronizeTrustInteroperabilityProfileUri(LocalDateTime.now(ZoneOffset.UTC), uri))).start();
+                                    (new Thread(() -> UriSynchronizerForTrustInteroperabilityProfile.INSTANCE.synchronizeUri(LocalDateTime.now(ZoneOffset.UTC), uri))).start();
 
                                     return trustInteroperabilityProfileUri;
                                 })));
+
+                        PartnerSystemCandidate.findAllHelper().map(partnerSystemCandidate ->
+                                PartnerSystemCandidateTrustInteroperabilityProfileUri.findByPartnerSystemCandidateAndTrustInteroperabilityProfileUriHelper(partnerSystemCandidate, protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper())
+                                        .orSome(() -> {
+                                            final PartnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUri = new PartnerSystemCandidateTrustInteroperabilityProfileUri();
+                                            partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper(partnerSystemCandidate);
+                                            partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper(protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper());
+                                            return partnerSystemCandidateTrustInteroperabilityProfileUri;
+                                        }).saveHelper());
 
                         return protectedSystemTrustInteroperabilityProfileUri.saveHelper();
                     }));
 
                     return protectedSystem.saveAndFlushHelper();
                 })
-                .map(protectedSystem -> protectedSystemResponse(protectedSystem, organizationListAdministrator(requesterUsername)));
+                .map(protectedSystem -> protectedSystemResponse(protectedSystem));
     }
 
     public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponse> update(
@@ -132,6 +143,7 @@ public class ProtectedSystemService {
                         protectedSystemTrustInteroperabilityProfileUri.protectedSystemHelper(null);
                         protectedSystemTrustInteroperabilityProfileUri.deleteHelper();
                     });
+
                     protectedSystem.protectedSystemTrustInteroperabilityProfileUriSetHelper(nil());
                     protectedSystem.saveAndFlushHelper();
 
@@ -167,17 +179,26 @@ public class ProtectedSystemService {
                                     final TrustInteroperabilityProfileUri trustInteroperabilityProfileUri = new TrustInteroperabilityProfileUri();
                                     trustInteroperabilityProfileUri.setUri(uri);
 
-                                    (new Thread(() -> synchronizeTrustInteroperabilityProfileUri(LocalDateTime.now(ZoneOffset.UTC), uri))).start();
+                                    (new Thread(() -> UriSynchronizerForTrustInteroperabilityProfile.INSTANCE.synchronizeUri(LocalDateTime.now(ZoneOffset.UTC), uri))).start();
 
                                     return trustInteroperabilityProfileUri.saveAndFlushHelper();
                                 })));
+
+                        PartnerSystemCandidate.findAllHelper().map(partnerSystemCandidate ->
+                                PartnerSystemCandidateTrustInteroperabilityProfileUri.findByPartnerSystemCandidateAndTrustInteroperabilityProfileUriHelper(partnerSystemCandidate, protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper())
+                                        .orSome(() -> {
+                                            final PartnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUri = new PartnerSystemCandidateTrustInteroperabilityProfileUri();
+                                            partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper(partnerSystemCandidate);
+                                            partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper(protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper());
+                                            return partnerSystemCandidateTrustInteroperabilityProfileUri;
+                                        }).saveHelper());
 
                         return protectedSystemTrustInteroperabilityProfileUri.saveAndFlushHelper();
                     }));
 
                     return protectedSystem.saveAndFlushHelper();
                 })
-                .map(protectedSystem -> protectedSystemResponse(protectedSystem, organizationListAdministrator(requesterUsername)));
+                .map(protectedSystem -> protectedSystemResponse(protectedSystem));
     }
 
     public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, Unit> delete(
@@ -193,7 +214,7 @@ public class ProtectedSystemService {
                 .map(ignore -> unit());
     }
 
-    public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemPartnerSystemCandidateResponse> findOne(
+    public Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponseWithTrustExpressionEvaluation> findOne(
             final String requesterUsername,
             final ProtectedSystemPartnerSystemCandidateFindOneRequest protectedSystemPartnerSystemCandidateFindOneRequest) {
 
@@ -201,6 +222,6 @@ public class ProtectedSystemService {
                 validationId(protectedSystemPartnerSystemCandidateFindOneRequest.getId(), organizationListAdministrator(requesterUsername)),
                 validationPartnerSystemCandidate(protectedSystemPartnerSystemCandidateFindOneRequest.getPartnerSystemCandidate()),
                 (protectedSystem, partnerSystemCandidate) -> p(protectedSystem, partnerSystemCandidate))
-                .map(p -> protectedSystemPartnerSystemCandidateResponse(p._1(), p._2()));
+                .map(p -> protectedSystemResponseWithTrustExpressionEvaluation(p._1(), p._2()));
     }
 }

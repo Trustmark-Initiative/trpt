@@ -14,6 +14,7 @@ grails.plugin.springsecurity.userLookup.passwordExpiredPropertyName = 'passwordE
 
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         [pattern: '/**', access: ['ROLE_ADMINISTRATOR_ORGANIZATION', 'ROLE_ADMINISTRATOR']],
+        [pattern: '/actuator/health', access: ['permitAll']],
         [pattern: '/password/reset', access: ['permitAll']],
         [pattern: '/password/resetSubmit', access: ['permitAll']],
         [pattern: '/password/resetStatus', access: ['permitAll']],

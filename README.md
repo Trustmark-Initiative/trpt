@@ -1,3 +1,6 @@
-# Trustmark Relying Party Tool (TRPT)
-
-**NOTE**: The TRPT is not yet ready for operational use. We expect to release TRPT 1.0 for operational use in September 2021.
+```shell
+$ ./gradlew clean build
+$ docker build .
+$ docker-compose up
+$ open http://localhost:8083/trpt/ # username: admin password: admin11!
+```

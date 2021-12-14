@@ -10,10 +10,14 @@ public final class TrustmarkBindingRegistryResponse {
     private final String name;
     private final String description;
     private final String uri;
-    private final LocalDateTime requestLocalDateTime;
-    private final LocalDateTime successLocalDateTime;
-    private final LocalDateTime failureLocalDateTime;
-    private final String failureMessage;
+    private final LocalDateTime documentRequestLocalDateTime;
+    private final LocalDateTime documentSuccessLocalDateTime;
+    private final LocalDateTime documentFailureLocalDateTime;
+    private final String documentFailureMessage;
+    private final LocalDateTime serverRequestLocalDateTime;
+    private final LocalDateTime serverSuccessLocalDateTime;
+    private final LocalDateTime serverFailureLocalDateTime;
+    private final String serverFailureMessage;
     private final int partnerSystemCandidateCount;
     private final OrganizationResponse organization;
 
@@ -22,10 +26,14 @@ public final class TrustmarkBindingRegistryResponse {
             final String name,
             final String description,
             final String uri,
-            final LocalDateTime requestLocalDateTime,
-            final LocalDateTime successLocalDateTime,
-            final LocalDateTime failureLocalDateTime,
-            final String failureMessage,
+            final LocalDateTime documentRequestLocalDateTime,
+            final LocalDateTime documentSuccessLocalDateTime,
+            final LocalDateTime documentFailureLocalDateTime,
+            final String documentFailureMessage,
+            final LocalDateTime serverRequestLocalDateTime,
+            final LocalDateTime serverSuccessLocalDateTime,
+            final LocalDateTime serverFailureLocalDateTime,
+            final String serverFailureMessage,
             final int partnerSystemCandidateCount,
             final OrganizationResponse organization) {
 
@@ -33,10 +41,14 @@ public final class TrustmarkBindingRegistryResponse {
         this.name = name;
         this.description = description;
         this.uri = uri;
-        this.requestLocalDateTime = requestLocalDateTime;
-        this.successLocalDateTime = successLocalDateTime;
-        this.failureLocalDateTime = failureLocalDateTime;
-        this.failureMessage = failureMessage;
+        this.documentRequestLocalDateTime = documentRequestLocalDateTime;
+        this.documentSuccessLocalDateTime = documentSuccessLocalDateTime;
+        this.documentFailureLocalDateTime = documentFailureLocalDateTime;
+        this.documentFailureMessage = documentFailureMessage;
+        this.serverRequestLocalDateTime = serverRequestLocalDateTime;
+        this.serverSuccessLocalDateTime = serverSuccessLocalDateTime;
+        this.serverFailureLocalDateTime = serverFailureLocalDateTime;
+        this.serverFailureMessage = serverFailureMessage;
         this.partnerSystemCandidateCount = partnerSystemCandidateCount;
         this.organization = organization;
     }
@@ -57,20 +69,36 @@ public final class TrustmarkBindingRegistryResponse {
         return uri;
     }
 
-    public LocalDateTime getRequestLocalDateTime() {
-        return requestLocalDateTime;
+    public LocalDateTime getDocumentRequestLocalDateTime() {
+        return documentRequestLocalDateTime;
     }
 
-    public LocalDateTime getSuccessLocalDateTime() {
-        return successLocalDateTime;
+    public LocalDateTime getDocumentSuccessLocalDateTime() {
+        return documentSuccessLocalDateTime;
     }
 
-    public LocalDateTime getFailureLocalDateTime() {
-        return failureLocalDateTime;
+    public LocalDateTime getDocumentFailureLocalDateTime() {
+        return documentFailureLocalDateTime;
     }
 
-    public String getFailureMessage() {
-        return failureMessage;
+    public String getDocumentFailureMessage() {
+        return documentFailureMessage;
+    }
+
+    public LocalDateTime getServerRequestLocalDateTime() {
+        return serverRequestLocalDateTime;
+    }
+
+    public LocalDateTime getServerSuccessLocalDateTime() {
+        return serverSuccessLocalDateTime;
+    }
+
+    public LocalDateTime getServerFailureLocalDateTime() {
+        return serverFailureLocalDateTime;
+    }
+
+    public String getServerFailureMessage() {
+        return serverFailureMessage;
     }
 
     public int getPartnerSystemCandidateCount() {

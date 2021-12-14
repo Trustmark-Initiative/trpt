@@ -142,6 +142,7 @@ public final class ValidationUtility {
     public static <FIELD> Validation<NonEmptyList<ValidationMessage<FIELD>>, String> mustBePattern(
             final FIELD field,
             final Pattern pattern,
+            final String description,
             final String value) {
 
         requireNonNull(field);
@@ -149,7 +150,7 @@ public final class ValidationUtility {
 
         return condition(
                 pattern.matcher(value).matches(),
-                nel(validationMessageMustBePattern(field, pattern.pattern())),
+                nel(validationMessageMustBePattern(field, pattern.pattern(), description)),
                 value);
     }
 
@@ -253,6 +254,24 @@ public final class ValidationUtility {
                         (distinct, valid) -> valid));
     }
 
+    public static <FIELD, VALUE> Validation<NonEmptyList<ValidationMessage<FIELD>>, VALUE> mustBeNonNullAndEqual(
+            final FIELD field1,
+            final FIELD field2,
+            final Equal<VALUE> eq,
+            final VALUE value1,
+            final VALUE value2) {
+
+        requireNonNull(field1);
+        requireNonNull(field2);
+        requireNonNull(eq);
+
+        return accumulate(
+                mustBeNonNull(field1, value1),
+                mustBeNonNull(field2, value2),
+                (value1Inner, value2Inner) -> mustBeEqual(field1, field2, eq, value1, value2))
+                .bind(value -> value);
+    }
+
     public static <FIELD> Validation<NonEmptyList<ValidationMessage<FIELD>>, String> mustBeLength(
             final FIELD field,
             final int lengthMinimumInclusive,
@@ -284,6 +303,16 @@ public final class ValidationUtility {
 
         return mustBeNonNull(field, value)
                 .bind(nonNull -> mustBeLength(field, lengthMinimumInclusive, lengthMaximumInclusive, nonNull));
+    }
+
+    public static <FIELD> Validation<NonEmptyList<ValidationMessage<FIELD>>, String> mustBeNonNullAndPattern(
+            final FIELD field,
+            final Pattern pattern,
+            final String description,
+            final String value) {
+
+        return mustBeNonNull(field, value)
+                .bind(nonNull -> mustBePattern(field, pattern, description, nonNull));
     }
 
     public static <FIELD, VALUE> Validation<NonEmptyList<ValidationMessage<FIELD>>, String> mustBeNonNullAndUniqueAndLength(

@@ -2,21 +2,19 @@ package edu.gatech.gtri.trustmark.trpt.service.protectedSystem;
 
 import edu.gatech.gtri.trustmark.trpt.domain.Organization;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidate;
+import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateTrustInteroperabilityProfileUri;
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystem;
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemPartnerSystemCandidate;
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemTrustInteroperabilityProfileUri;
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemType;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustInteroperabilityProfileUri;
 import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
-import net.sf.ehcache.search.expression.Or;
 import org.gtri.fj.Ordering;
 import org.gtri.fj.data.Either;
 import org.gtri.fj.data.List;
 import org.gtri.fj.data.NonEmptyList;
-import org.gtri.fj.data.TreeMap;
 import org.gtri.fj.data.Validation;
 import org.gtri.fj.product.P2;
-import org.gtri.fj.product.P4;
 import org.gtri.fj.product.P5;
 import org.json.JSONObject;
 
@@ -30,8 +28,9 @@ import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtilit
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeReference;
 import static org.gtri.fj.Equal.equal;
 import static org.gtri.fj.Ord.ord;
+import static org.gtri.fj.data.List.arrayList;
+import static org.gtri.fj.data.List.nil;
 import static org.gtri.fj.data.Option.fromNull;
-import static org.gtri.fj.data.TreeMap.treeMap;
 import static org.gtri.fj.lang.LongUtility.longOrd;
 import static org.gtri.fj.lang.StringUtility.stringOrd;
 import static org.gtri.fj.product.P.p;
@@ -40,7 +39,16 @@ public final class ProtectedSystemUtility {
     private ProtectedSystemUtility() {
     }
 
-    public static ProtectedSystemResponse protectedSystemResponse(final ProtectedSystem protectedSystem, final List<Organization> organizationList) {
+    public static ProtectedSystemTypeResponse protectedSystemTypeResponse(
+            final ProtectedSystemType protectedSystemType) {
+
+        return new ProtectedSystemTypeResponse(
+                protectedSystemType.name(),
+                protectedSystemType.getName());
+    }
+
+    public static ProtectedSystemResponse protectedSystemResponse(
+            final ProtectedSystem protectedSystem) {
 
         return new ProtectedSystemResponse(
                 organizationResponse(protectedSystem.organizationHelper()),
@@ -50,66 +58,49 @@ public final class ProtectedSystemUtility {
                 protectedSystem
                         .protectedSystemTrustInteroperabilityProfileUriSetHelper()
                         .map(ProtectedSystemUtility::protectedSystemTrustInteroperabilityProfileResponse)
-                        .sort(ord((o1, o2) -> stringOrd.compare(o1.getUri(), o2.getUri())))
+                        .sort(ord((o1, o2) -> o1.getTrustInteroperabilityProfile().getName() != null && o2.getTrustInteroperabilityProfile().getName() != null ?
+                                stringOrd.compare(o1.getTrustInteroperabilityProfile().getName(), o2.getTrustInteroperabilityProfile().getName()) :
+                                o1.getTrustInteroperabilityProfile().getName() != null ?
+                                        Ordering.LT :
+                                        o2.getTrustInteroperabilityProfile().getName() != null ?
+                                                Ordering.GT :
+                                                stringOrd.compare(o1.getTrustInteroperabilityProfile().getUri(), o2.getTrustInteroperabilityProfile().getUri())))
                         .toJavaList(),
                 PartnerSystemCandidate
-                        .findAllByTypeInHelper(organizationList, protectedSystem.getType().getPartnerSystemCandidateTypeList())
-                        .map(partnerSystemCandidate -> protectedSystemPartnerSystemCandidateSummaryResponse(protectedSystem, partnerSystemCandidate))
+                        .findAllByTypeInHelper(arrayList(protectedSystem.organizationHelper()), protectedSystem.getType().getPartnerSystemCandidateTypeList())
+                        .map(partnerSystemCandidate -> protectedSystemPartnerSystemCandidateResponse(protectedSystem, partnerSystemCandidate))
                         .sort(ord((o1, o2) -> stringOrd.compare(o1.getPartnerSystemCandidate().getName(), o2.getPartnerSystemCandidate().getName())))
                         .toJavaList());
     }
 
-    public static ProtectedSystemTypeResponse protectedSystemTypeResponse(final ProtectedSystemType protectedSystemType) {
-        return new ProtectedSystemTypeResponse(
-                protectedSystemType.name(),
-                protectedSystemType.getName());
+    public static ProtectedSystemResponseWithTrustExpressionEvaluation protectedSystemResponseWithTrustExpressionEvaluation(
+            final ProtectedSystem protectedSystem,
+            final PartnerSystemCandidate partnerSystemCandidate) {
+
+        return new ProtectedSystemResponseWithTrustExpressionEvaluation(
+                organizationResponse(protectedSystem.organizationHelper()),
+                protectedSystem.idHelper(),
+                protectedSystemTypeResponse(protectedSystem.getType()),
+                protectedSystem.getName(),
+                protectedSystem
+                        .protectedSystemTrustInteroperabilityProfileUriSetHelper()
+                        .map(ProtectedSystemUtility::protectedSystemTrustInteroperabilityProfileResponse)
+                        .sort(ord((o1, o2) -> o1.getTrustInteroperabilityProfile().getName() != null && o2.getTrustInteroperabilityProfile().getName() != null ?
+                                stringOrd.compare(o1.getTrustInteroperabilityProfile().getName(), o2.getTrustInteroperabilityProfile().getName()) :
+                                o1.getTrustInteroperabilityProfile().getName() != null ?
+                                        Ordering.LT :
+                                        o2.getTrustInteroperabilityProfile().getName() != null ?
+                                                Ordering.GT :
+                                                stringOrd.compare(o1.getTrustInteroperabilityProfile().getUri(), o2.getTrustInteroperabilityProfile().getUri())))
+                        .toJavaList(),
+                arrayList(protectedSystemPartnerSystemCandidateResponseWithTrustExpressionEvaluation(protectedSystem, partnerSystemCandidate)).toJavaList());
     }
 
-    public static ProtectedSystemTrustInteroperabilityProfileResponse protectedSystemTrustInteroperabilityProfileResponse(final ProtectedSystemTrustInteroperabilityProfileUri protectedSystemTrustInteroperabilityProfileUri) {
-        return new ProtectedSystemTrustInteroperabilityProfileResponse(
-                protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().idHelper(),
-                protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(),
-                protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getName(),
-                protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getDescription(),
-                protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getPublicationLocalDateTime(),
-                protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getIssuerName(),
-                protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getIssuerIdentifier(),
-                protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getRequestLocalDateTime(),
-                protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getSuccessLocalDateTime(),
-                protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getFailureLocalDateTime(),
-                protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getFailureMessage(),
-                protectedSystemTrustInteroperabilityProfileUri.isMandatory());
-    }
+    private static ProtectedSystemPartnerSystemCandidateResponse protectedSystemPartnerSystemCandidateResponse(
+            final ProtectedSystem protectedSystem,
+            final PartnerSystemCandidate partnerSystemCandidate) {
 
-    public static ProtectedSystemPartnerSystemCandidateSummaryResponse protectedSystemPartnerSystemCandidateSummaryResponse(final ProtectedSystem protectedSystem, final PartnerSystemCandidate partnerSystemCandidate) {
-
-        final P4<Integer, Integer, Integer, Integer> p = protectedSystem
-                .protectedSystemTrustInteroperabilityProfileUriSetHelper()
-                .map(ProtectedSystemTrustInteroperabilityProfileUri::trustInteroperabilityProfileUriHelper)
-                .bind(trustInteroperabilityProfileUri -> trustInteroperabilityProfileUri
-                        .partnerSystemCandidateTrustInteroperabilityProfileUriSetHelper()
-                        .filter(partnerSystemCandidateTrustInteroperabilityProfileUri -> partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper().idHelper() == partnerSystemCandidate.idHelper()))
-                .foldLeft((pInner, partnerSystemCandidateTrustInteroperabilityProfileUri) -> p(
-                                fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied()).orSome(0) + pInner._1(),
-                                fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()).orSome(0) + pInner._2(),
-                                (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 1 : 0) + pInner._3(),
-                                (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 0 : 1) + pInner._4()),
-                        p(0, 0, 0, 0));
-
-        return new ProtectedSystemPartnerSystemCandidateSummaryResponse(
-                partnerSystemCandidateResponse(partnerSystemCandidate),
-                protectedSystem.protectedSystemPartnerSystemCandidateSetHelper()
-                        .map(ProtectedSystemPartnerSystemCandidate::partnerSystemCandidateHelper)
-                        .exists(partnerSystemCandidateInner -> partnerSystemCandidateInner.idHelper() == partnerSystemCandidate.idHelper()),
-                p._1(),
-                p._2(),
-                p._3(),
-                p._4());
-    }
-
-    public static ProtectedSystemPartnerSystemCandidateResponse protectedSystemPartnerSystemCandidateResponse(final ProtectedSystem protectedSystem, final PartnerSystemCandidate partnerSystemCandidate) {
-
-        final P5<Integer, Integer, Integer, Integer, TreeMap<String, JSONObject>> p = protectedSystem
+        final P5<Integer, Integer, Integer, Integer, List<PartnerSystemCandidateTrustInteroperabilityProfileResponse>> p = protectedSystem
                 .protectedSystemTrustInteroperabilityProfileUriSetHelper()
                 .map(ProtectedSystemTrustInteroperabilityProfileUri::trustInteroperabilityProfileUriHelper)
                 .bind(trustInteroperabilityProfileUri -> trustInteroperabilityProfileUri
@@ -120,13 +111,10 @@ public final class ProtectedSystemUtility {
                                 fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()).orSome(0) + pInner._2(),
                                 (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 1 : 0) + pInner._3(),
                                 (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 0 : 1) + pInner._4(),
-                                pInner._5().set(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(), partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : gunzip(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression()).toOption().map(JSONObject::new).toNull())),
-                        p(0, 0, 0, 0, treeMap(stringOrd)));
+                                pInner._5().snoc(partnerSystemCandidateTrustInteroperabilityProfileResponse(partnerSystemCandidateTrustInteroperabilityProfileUri))),
+                        p(0, 0, 0, 0, nil()));
 
         return new ProtectedSystemPartnerSystemCandidateResponse(
-                protectedSystem.organizationHelper().getName(),
-                protectedSystem.getName(),
-                partnerSystemCandidate.getName(),
                 partnerSystemCandidateResponse(partnerSystemCandidate),
                 protectedSystem.protectedSystemPartnerSystemCandidateSetHelper()
                         .map(ProtectedSystemPartnerSystemCandidate::partnerSystemCandidateHelper)
@@ -135,7 +123,107 @@ public final class ProtectedSystemUtility {
                 p._2(),
                 p._3(),
                 p._4(),
-                p._5().toMutableMap());
+                p._5()
+                        .sort(ord((o1, o2) -> o1.getTrustInteroperabilityProfile().getName() != null && o2.getTrustInteroperabilityProfile().getName() != null ?
+                                stringOrd.compare(o1.getTrustInteroperabilityProfile().getName(), o2.getTrustInteroperabilityProfile().getName()) :
+                                o1.getTrustInteroperabilityProfile().getName() != null ?
+                                        Ordering.LT :
+                                        o2.getTrustInteroperabilityProfile().getName() != null ?
+                                                Ordering.GT :
+                                                stringOrd.compare(o1.getTrustInteroperabilityProfile().getUri(), o2.getTrustInteroperabilityProfile().getUri())))
+                        .toJavaList());
+    }
+
+    private static ProtectedSystemPartnerSystemCandidateResponseWithTrustExpressionEvaluation protectedSystemPartnerSystemCandidateResponseWithTrustExpressionEvaluation(
+            final ProtectedSystem protectedSystem,
+            final PartnerSystemCandidate partnerSystemCandidate) {
+
+        final P5<Integer, Integer, Integer, Integer, List<PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation>> p = protectedSystem
+                .protectedSystemTrustInteroperabilityProfileUriSetHelper()
+                .map(ProtectedSystemTrustInteroperabilityProfileUri::trustInteroperabilityProfileUriHelper)
+                .bind(trustInteroperabilityProfileUri -> trustInteroperabilityProfileUri
+                        .partnerSystemCandidateTrustInteroperabilityProfileUriSetHelper()
+                        .filter(partnerSystemCandidateTrustInteroperabilityProfileUri -> partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper().idHelper() == partnerSystemCandidate.idHelper()))
+                .foldLeft((pInner, partnerSystemCandidateTrustInteroperabilityProfileUri) -> p(
+                                fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied()).orSome(0) + pInner._1(),
+                                fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()).orSome(0) + pInner._2(),
+                                (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 1 : 0) + pInner._3(),
+                                (fromNull(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied()).orSome(false) ? 0 : 1) + pInner._4(),
+                                pInner._5().snoc(partnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation(partnerSystemCandidateTrustInteroperabilityProfileUri))),
+                        p(0, 0, 0, 0, nil()));
+
+        return new ProtectedSystemPartnerSystemCandidateResponseWithTrustExpressionEvaluation(
+                partnerSystemCandidateResponse(partnerSystemCandidate),
+                protectedSystem.protectedSystemPartnerSystemCandidateSetHelper()
+                        .map(ProtectedSystemPartnerSystemCandidate::partnerSystemCandidateHelper)
+                        .exists(partnerSystemCandidateInner -> partnerSystemCandidateInner.idHelper() == partnerSystemCandidate.idHelper()),
+                p._1(),
+                p._2(),
+                p._3(),
+                p._4(),
+                p._5()
+                        .sort(ord((o1, o2) -> o1.getTrustInteroperabilityProfile().getName() != null && o2.getTrustInteroperabilityProfile().getName() != null ?
+                                stringOrd.compare(o1.getTrustInteroperabilityProfile().getName(), o2.getTrustInteroperabilityProfile().getName()) :
+                                o1.getTrustInteroperabilityProfile().getName() != null ?
+                                        Ordering.LT :
+                                        o2.getTrustInteroperabilityProfile().getName() != null ?
+                                                Ordering.GT :
+                                                stringOrd.compare(o1.getTrustInteroperabilityProfile().getUri(), o2.getTrustInteroperabilityProfile().getUri())))
+                        .toJavaList());
+    }
+
+    private static PartnerSystemCandidateTrustInteroperabilityProfileResponse partnerSystemCandidateTrustInteroperabilityProfileResponse(
+            final PartnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUri) {
+
+        return new PartnerSystemCandidateTrustInteroperabilityProfileResponse(
+                trustInteroperabilityProfileResponse(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationAttemptLocalDateTime(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied());
+    }
+
+    private static PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation partnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation(
+            final PartnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUri) {
+
+        return new PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation(
+                trustInteroperabilityProfileResponse(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationAttemptLocalDateTime(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : gunzip(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression()).toOption().map(JSONObject::new).toNull());
+    }
+
+    private static ProtectedSystemTrustInteroperabilityProfileResponse protectedSystemTrustInteroperabilityProfileResponse(
+            final ProtectedSystemTrustInteroperabilityProfileUri protectedSystemTrustInteroperabilityProfileUri) {
+
+        return new ProtectedSystemTrustInteroperabilityProfileResponse(
+                trustInteroperabilityProfileResponse(protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
+                protectedSystemTrustInteroperabilityProfileUri.isMandatory());
+    }
+
+    private static TrustInteroperabilityProfileResponse trustInteroperabilityProfileResponse(
+            final TrustInteroperabilityProfileUri trustInteroperabilityProfileUri) {
+
+        return new TrustInteroperabilityProfileResponse(
+                trustInteroperabilityProfileUri.idHelper(),
+                trustInteroperabilityProfileUri.getUri(),
+                trustInteroperabilityProfileUri.getName(),
+                trustInteroperabilityProfileUri.getDescription(),
+                trustInteroperabilityProfileUri.getPublicationLocalDateTime(),
+                trustInteroperabilityProfileUri.getIssuerName(),
+                trustInteroperabilityProfileUri.getIssuerIdentifier(),
+                trustInteroperabilityProfileUri.getDocumentRequestLocalDateTime(),
+                trustInteroperabilityProfileUri.getDocumentSuccessLocalDateTime(),
+                trustInteroperabilityProfileUri.getDocumentFailureLocalDateTime(),
+                trustInteroperabilityProfileUri.getDocumentFailureMessage(),
+                trustInteroperabilityProfileUri.getServerRequestLocalDateTime(),
+                trustInteroperabilityProfileUri.getServerSuccessLocalDateTime(),
+                trustInteroperabilityProfileUri.getServerFailureLocalDateTime(),
+                trustInteroperabilityProfileUri.getServerFailureMessage());
     }
 
     public static Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, Organization> validationOrganization(final long organizationId, final List<Organization> organizationList) {

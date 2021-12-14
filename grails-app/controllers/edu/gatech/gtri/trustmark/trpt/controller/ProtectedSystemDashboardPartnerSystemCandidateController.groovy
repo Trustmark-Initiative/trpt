@@ -1,7 +1,8 @@
 package edu.gatech.gtri.trustmark.trpt.controller
 
-import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemFindOneRequest
+
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemPartnerSystemCandidateFindOneRequest
+import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemResponseWithTrustExpressionEvaluation
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemService
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
@@ -22,6 +23,6 @@ class ProtectedSystemDashboardPartnerSystemCandidateController {
 
         final P2<Object, Integer> response = toResponse(protectedSystemService.findOne(((GrailsUser) getPrincipal()).username, protectedSystemPartnerSystemCandidateFindOneRequest))
 
-        [protectedSystemPartnerSystemCandidate: response._1()]
+        [protectedSystem: response._1()]
     }
 }

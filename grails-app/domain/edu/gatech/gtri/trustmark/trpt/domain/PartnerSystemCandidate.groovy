@@ -1,5 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import edu.gatech.gtri.trustmark.v1_0.model.TrustmarkBindingRegistrySystemType
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -14,7 +15,8 @@ class PartnerSystemCandidate {
     String name
     String uri
     String uriEntityDescriptor
-    PartnerSystemCandidateType type
+    String trustmarkRecipientIdentifierArrayJson
+    TrustmarkBindingRegistrySystemType type
     String hash
     String json
     LocalDateTime requestLocalDateTime
@@ -27,6 +29,7 @@ class PartnerSystemCandidate {
         name nullable: true
         uri nullable: true
         uriEntityDescriptor nullable: true
+        trustmarkRecipientIdentifierArrayJson nullable: true
         type nullable: true
         hash nullable: true
         json nullable: true
@@ -42,6 +45,7 @@ class PartnerSystemCandidate {
         name length: 1000
         uri length: 1000
         uriEntityDescriptor length: 1000
+        trustmarkRecipientIdentifierArrayJson length: 1000
         type length: 1000
         hash type: 'text'
         json type: 'text'
@@ -76,7 +80,7 @@ class PartnerSystemCandidate {
 
     static final Option<PartnerSystemCandidate> findByTrustmarkBindingRegistryUriTypeAndUriHelper(final TrustmarkBindingRegistryUriType trustmarkBindingRegistryUriType, final String uri) { fromNull(findByTrustmarkBindingRegistryUriTypeAndUri(trustmarkBindingRegistryUriType, uri)) }
 
-    static final org.gtri.fj.data.List<PartnerSystemCandidate> findAllByTypeInHelper(final org.gtri.fj.data.List<Organization> organizationList, final org.gtri.fj.data.List<PartnerSystemCandidateType> typeList) {
+    static final org.gtri.fj.data.List<PartnerSystemCandidate> findAllByTypeInHelper(final org.gtri.fj.data.List<Organization> organizationList, final org.gtri.fj.data.List<TrustmarkBindingRegistrySystemType> typeList) {
 
         fromNull(ProtectedSystem.executeQuery("SELECT DISTINCT partnerSystemCandidate " +
                 "FROM PartnerSystemCandidate partnerSystemCandidate " +

@@ -26,6 +26,7 @@
                                 <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "organization", action: "manage")}">Organizations</a></li>
                                 <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "user", action: "manage")}">Users</a></li>
                                 <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "mail", action: "manage")}">Mail</a></li>
+                                <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "uriSet", action: "manage")}">Status</a></li>
                             </sec:ifAllGranted>
                             <sec:ifAllGranted roles="ROLE_ADMINISTRATOR_ORGANIZATION">
                                 <li class="nav-item ps-4 pe-4"><a class="nav-link" href="${createLink(controller: "protectedSystem", action: "manage")}">Protected Systems</a></li>
@@ -40,7 +41,7 @@
                         <sec:ifLoggedIn>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Profile
+                                    <sec:username/>
                                 </a>
 
                                 <ul class="dropdown-menu">

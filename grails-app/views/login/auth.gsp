@@ -43,7 +43,7 @@
                         </div>
 
                         <div class="col-7 d-flex align-items-center">
-                            <a href="${createLink(controller: "password", action: "reset")}" class="ms-auto">Forgot Password?</a>
+                            <a href="${createLink(controller: "password", action: "reset")}" class="ms-auto">Reset Password</a>
                         </div>
                     </div>
                 </div>

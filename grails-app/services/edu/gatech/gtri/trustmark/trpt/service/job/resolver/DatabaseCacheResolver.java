@@ -1,9 +1,7 @@
-package edu.gatech.gtri.trustmark.trpt.service.job;
+package edu.gatech.gtri.trustmark.trpt.service.job.resolver;
 
 import edu.gatech.gtri.trustmark.v1_0.io.ArtifactResolver;
 import edu.gatech.gtri.trustmark.v1_0.io.ResolveException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.gtri.fj.data.NonEmptyList;
 import org.gtri.fj.data.Option;
 import org.gtri.fj.data.Validation;
@@ -20,17 +18,15 @@ import static java.util.Objects.requireNonNull;
 
 public abstract class DatabaseCacheResolver<T1, T2> implements ArtifactResolver<T1> {
 
-    private static final Log log = LogFactory.getLog(DatabaseCacheResolver.class);
-
     private final ArtifactResolver<T1> artifactResolver;
     private final F1<String, Option<T2>> findByUri;
-    private final F1<T2, String> serialize;
+    private final F1<T2, Option<String>> serialize;
     private final F1<String, Validation<NonEmptyList<Exception>, T1>> synchronize;
 
     public DatabaseCacheResolver(
             final ArtifactResolver<T1> artifactResolver,
             final F1<String, Option<T2>> findByUri,
-            final F1<T2, String> serialize,
+            final F1<T2, Option<String>> serialize,
             final F1<String, Validation<NonEmptyList<Exception>, T1>> synchronize) {
 
         requireNonNull(artifactResolver);
@@ -46,7 +42,8 @@ public abstract class DatabaseCacheResolver<T1, T2> implements ArtifactResolver<
     private T1 resolveByUri(final String uriString, final Boolean aBoolean) throws ResolveException {
 
         final Validation<NonEmptyList<Exception>, T1> validation = findByUri.f(uriString)
-                .map(artifact -> Try.<T1, Exception>f(() -> resolve(serialize.f(artifact), aBoolean))._1().f().map(NonEmptyList::nel))
+                .bind(serialize)
+                .map(document -> Try.<T1, Exception>f(() -> resolve(document, aBoolean))._1().f().map(NonEmptyList::nel))
                 .orSome(() -> synchronize.f(uriString));
 
         if (validation.isSuccess()) {

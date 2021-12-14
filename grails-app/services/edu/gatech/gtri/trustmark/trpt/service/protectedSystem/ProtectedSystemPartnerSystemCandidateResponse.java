@@ -1,56 +1,34 @@
 package edu.gatech.gtri.trustmark.trpt.service.protectedSystem;
 
 import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateResponse;
-import org.json.JSONObject;
 
-import java.util.Map;
+import java.util.List;
 
 public class ProtectedSystemPartnerSystemCandidateResponse {
 
-    private final String organizationName;
-    private final String protectedSystemName;
-    private final String partnerSystemCandidateName;
     private final PartnerSystemCandidateResponse partnerSystemCandidate;
     private final boolean trust;
     private final Integer evaluationTrustmarkDefinitionRequirementSatisfied;
     private final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied;
     private final Integer evaluationTrustExpressionSatisfied;
     private final Integer evaluationTrustExpressionUnsatisfied;
-    private final Map<String, JSONObject> trustExpressionEvaluationMap;
+    private final List<PartnerSystemCandidateTrustInteroperabilityProfileResponse> partnerSystemCandidateTrustInteroperabilityProfileList;
 
     public ProtectedSystemPartnerSystemCandidateResponse(
-            final String organizationName,
-            final String protectedSystemName,
-            final String partnerSystemCandidateName,
             final PartnerSystemCandidateResponse partnerSystemCandidate,
             final boolean trust,
             final Integer evaluationTrustmarkDefinitionRequirementSatisfied,
             final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied,
             final Integer evaluationTrustExpressionSatisfied,
             final Integer evaluationTrustExpressionUnsatisfied,
-            final Map<String, JSONObject> trustExpressionEvaluationMap) {
-        this.organizationName = organizationName;
-        this.protectedSystemName = protectedSystemName;
-        this.partnerSystemCandidateName = partnerSystemCandidateName;
+            final List<PartnerSystemCandidateTrustInteroperabilityProfileResponse> partnerSystemCandidateTrustInteroperabilityProfileList) {
         this.partnerSystemCandidate = partnerSystemCandidate;
         this.trust = trust;
         this.evaluationTrustmarkDefinitionRequirementSatisfied = evaluationTrustmarkDefinitionRequirementSatisfied;
         this.evaluationTrustmarkDefinitionRequirementUnsatisfied = evaluationTrustmarkDefinitionRequirementUnsatisfied;
         this.evaluationTrustExpressionSatisfied = evaluationTrustExpressionSatisfied;
         this.evaluationTrustExpressionUnsatisfied = evaluationTrustExpressionUnsatisfied;
-        this.trustExpressionEvaluationMap = trustExpressionEvaluationMap;
-    }
-
-    public String getOrganizationName() {
-        return organizationName;
-    }
-
-    public String getProtectedSystemName() {
-        return protectedSystemName;
-    }
-
-    public String getPartnerSystemCandidateName() {
-        return partnerSystemCandidateName;
+        this.partnerSystemCandidateTrustInteroperabilityProfileList = partnerSystemCandidateTrustInteroperabilityProfileList;
     }
 
     public PartnerSystemCandidateResponse getPartnerSystemCandidate() {
@@ -77,7 +55,7 @@ public class ProtectedSystemPartnerSystemCandidateResponse {
         return evaluationTrustExpressionUnsatisfied;
     }
 
-    public Map<String, JSONObject> getTrustExpressionEvaluationMap() {
-        return trustExpressionEvaluationMap;
+    public List<PartnerSystemCandidateTrustInteroperabilityProfileResponse> getPartnerSystemCandidateTrustInteroperabilityProfileList() {
+        return partnerSystemCandidateTrustInteroperabilityProfileList;
     }
 }

@@ -1,5 +1,8 @@
 <%@ page import="org.json.JSONObject" contentType="text/html;charset=UTF-8" %>
 <%@ page import="org.json.JSONArray" contentType="text/html;charset=UTF-8" %>
+
+<g:set var="protectedSystemPartnerSystemCandidate" value="${protectedSystem.protectedSystemPartnerSystemCandidateList[0]}"/>
+
 <html>
     <head>
         <asset:javascript src="protectedSystemDashboardPartnerSystemCandidate_manage.js"/>
@@ -18,7 +21,7 @@
         <div class="container pt-4">
             <h2 class="d-flex justify-content-between">
                 <div>
-                    Trust Dashboard for ${protectedSystemPartnerSystemCandidate.protectedSystemName} with ${protectedSystemPartnerSystemCandidate.partnerSystemCandidateName}
+                    Trust Dashboard for ${protectedSystem.name} with ${protectedSystemPartnerSystemCandidate.partnerSystemCandidate.name}
                 </div>
 
                 <div class="d-flex">
@@ -31,13 +34,15 @@
                 </div>
             </h2>
 
-            <div class="pt-2 pb-2">
-                This page provides details about how well ${protectedSystemPartnerSystemCandidate.partnerSystemCandidateName}
-                satisfies the trust policy for ${protectedSystemPartnerSystemCandidate.protectedSystemName}
-                at ${protectedSystemPartnerSystemCandidate.organizationName}.</div>
+            <div class="pt-2">
+                This page provides details about how well ${protectedSystemPartnerSystemCandidate.partnerSystemCandidate.name}
+                satisfies the trust policy for ${protectedSystem.name}
+                at ${protectedSystem.organization.name}.</div>
+        </div>
 
-            <g:each in="${protectedSystemPartnerSystemCandidate.trustExpressionEvaluationMap.values()}" var="json">
-
+        <div class="container pt-4">
+            <g:each in="${protectedSystemPartnerSystemCandidate.partnerSystemCandidateTrustInteroperabilityProfileList}" var="partnerSystemCandidateTrustInteroperabilityProfile">
+                <g:set var="json" value="${partnerSystemCandidateTrustInteroperabilityProfile.trustExpressionEvaluation}"/>
                 <g:if test="${json != null}">
                     <div class="TrustInteroperabilityProfileContainer Body">
                         <g:set var="trustExpression" value="${json.get("TrustExpression") as JSONObject}"/>
@@ -48,41 +53,111 @@
                                 <div class="TrustExpressionContainer">
                                     <div class="Body">
                                         <g:render template="dashboardTrustExpression"
-                                                  model="${[trustExpression: trustExpression, trustInteroperabilityProfileParentURI: ""]}"/>
+                                                  model="${[evaluationLocalDateTime: partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime.format("MMMM dd YYYY, h:mm:ss a") + " UTC", trustExpression: trustExpression, trustInteroperabilityProfileParentURI: ""]}"/>
                                     </div>
                                 </div>
-
-                                <g:if test="${trustExpressionEvaluatorFailureList.isEmpty()}">
-                                </g:if>
-                                <g:else>
-                                    <div class="TrustExpressionEvaluatorFailureListContainer Body">
-                                        <div class="TrustExpressionEvaluatorFailure">
-
-                                            <g:each in="${trustInteroperabilityProfile.trustExpressionEvaluatorFailureList}"
-                                                    var="failure">
-                                                <g:if test="${(failure as JSONObject).get("\$Type").equals("TrustExpressionFailureURI")}">
-                                                    <div class="Message">${(failure as JSONObject).get("Message")}</div>
-
-                                                    <div class="UriString code">${(failure as JSONObject).get("UriString")}</div>
-                                                </g:if>
-                                            </g:each>
-                                            <g:each in="${trustInteroperabilityProfile.trustExpressionEvaluatorFailureList}"
-                                                    var="failure">
-                                                <g:if test="${(failure as JSONObject).get("\$Type").equals("TrustExpressionEvaluatorFailureResolve")}">
-                                                    <div class="Message">${(failure as JSONObject).get("Message")}</div>
-
-                                                    <div class="Uri code">${(failure as JSONObject).get("Uri")}</div>
-                                                </g:if>
-                                            </g:each>
-                                        </div>
-                                    </div>
-                                </g:else>
                             </div>
+
+                            <g:if test="${trustExpressionEvaluatorFailureList.isEmpty()}">
+                            </g:if>
+                            <g:else>
+                                <div class="TrustExpressionEvaluatorFailureListContainer Body">
+                                    <div class="TrustExpressionEvaluatorFailure">
+                                        <g:each in="${trustExpressionEvaluatorFailureList}"
+                                                var="failure">
+                                            <g:if test="${(failure as JSONObject).get("\$Type").equals("TrustExpressionFailureURI")}">
+                                                <div class="Message">The system could not parse the URI.</div>
+
+                                                <div class="UriString code">${(failure as JSONObject).get("UriString")}</div>
+                                            </g:if>
+                                        </g:each>
+                                        <g:each in="${trustExpressionEvaluatorFailureList}"
+                                                var="failure">
+                                            <g:if test="${(failure as JSONObject).get("\$Type").equals("TrustExpressionEvaluatorFailureResolve")}">
+                                                <div class="Message">The system could not resolve the URI.</div>
+
+                                                <div class="Uri code">The system could not parse the URI ${(failure as JSONObject).get("Uri")}</div>
+                                            </g:if>
+                                        </g:each>
+                                    </div>
+                                </div>
+                            </g:else>
                         </div>
                     </div>
                 </g:if>
             </g:each>
         </div>
+
+        <div class="container pt-4" style="max-width: 540px;">
+            <div class="border rounded card">
+                <div class="card-header fw-bold">
+                    <div class="row">
+                        <div class="col-12">
+                            <div>Legend</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="TrustInteroperabilityProfileContainer Body">
+                        <div class="TrustInteroperabilityProfile">
+                            <div class="TrustExpressionEvaluation Body">
+                                <div class="TrustExpressionContainer">
+                                    <div class="Body">
+                                        <div class="TrustExpressionTop TRUE">
+                                            <label class="TrustInteroperabilityProfileInner">Black text indicates an expression that evaluates to the boolean value true.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="TrustInteroperabilityProfileContainer Body">
+                        <div class="TrustInteroperabilityProfile">
+                            <div class="TrustExpressionEvaluation Body">
+                                <div class="TrustExpressionContainer">
+                                    <div class="Body">
+                                        <div class="TrustExpressionTop FALSE">
+                                            <label class="TrustInteroperabilityProfileInner">Red text on a grey background indicates an expression that evaluates to the boolean value false.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="TrustInteroperabilityProfileContainer Body">
+                        <div class="TrustInteroperabilityProfile">
+                            <div class="TrustExpressionEvaluation Body">
+                                <div class="TrustExpressionContainer">
+                                    <div class="Body">
+                                        <div class="TrustExpressionTop FAILURE">
+                                            <label class="TrustInteroperabilityProfileInner">Red italic text on a grey brackground indicates an expression that fails to evaluate.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="TrustInteroperabilityProfileContainer Body">
+                        <div class="TrustInteroperabilityProfile">
+                            <div class="TrustExpressionEvaluation Body">
+                                <div class="TrustExpressionContainer">
+                                    <div class="Body">
+                                        <div class="TrustExpressionTop UNKNOWN">
+                                            <label class="TrustInteroperabilityProfileInner">Orange text indicates an expression that evaluates to a non-boolean value; for example, a string.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div class="modal" tabindex="-1" id="modal-trust">
             <div class="modal-dialog modal-dialog-centered">

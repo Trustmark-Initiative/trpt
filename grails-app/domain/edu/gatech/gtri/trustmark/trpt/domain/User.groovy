@@ -50,7 +50,7 @@ class User {
 
     org.gtri.fj.data.List<MailPasswordReset> mailPasswordResetSetHelper() { fromNull(mailPasswordResetSet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<MailPasswordReset> nil()) }
 
-    void mailPasswordSetResetHelper(final org.gtri.fj.data.List<MailPasswordReset> mailPasswordResetSet) { setMailPasswordResetSet(mailPasswordResetSet.toJavaList()) }
+    void mailPasswordResetSetHelper(final org.gtri.fj.data.List<MailPasswordReset> mailPasswordResetSet) { setMailPasswordResetSet(mailPasswordResetSet.toJavaList()) }
 
     static final org.gtri.fj.data.List<User> findAllByOrderByNameFamilyAscNameGivenAscHelper(final org.gtri.fj.data.List<Organization> organizationList, final org.gtri.fj.data.List<Role> roleList) {
 

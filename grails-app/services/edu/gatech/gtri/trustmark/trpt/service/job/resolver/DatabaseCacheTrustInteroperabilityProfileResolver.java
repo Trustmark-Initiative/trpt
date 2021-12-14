@@ -1,6 +1,7 @@
-package edu.gatech.gtri.trustmark.trpt.service.job;
+package edu.gatech.gtri.trustmark.trpt.service.job.resolver;
 
 import edu.gatech.gtri.trustmark.trpt.domain.TrustInteroperabilityProfileUri;
+import edu.gatech.gtri.trustmark.trpt.service.job.urisynchronizer.UriSynchronizerForTrustInteroperabilityProfile;
 import edu.gatech.gtri.trustmark.v1_0.FactoryLoader;
 import edu.gatech.gtri.trustmark.v1_0.io.TrustInteroperabilityProfileResolver;
 import edu.gatech.gtri.trustmark.v1_0.model.TrustInteroperabilityProfile;
@@ -8,7 +9,7 @@ import edu.gatech.gtri.trustmark.v1_0.model.TrustInteroperabilityProfile;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForTrustInteroperabilityProfileUri.synchronizeTrustInteroperabilityProfileUri;
+import static org.gtri.fj.data.Option.fromNull;
 
 public final class DatabaseCacheTrustInteroperabilityProfileResolver extends DatabaseCacheResolver<TrustInteroperabilityProfile, TrustInteroperabilityProfileUri> implements TrustInteroperabilityProfileResolver {
 
@@ -16,7 +17,7 @@ public final class DatabaseCacheTrustInteroperabilityProfileResolver extends Dat
         super(
                 FactoryLoader.getInstance(TrustInteroperabilityProfileResolver.class),
                 (uriString) -> TrustInteroperabilityProfileUri.withTransactionHelper(() -> TrustInteroperabilityProfileUri.findByUriHelper(uriString)),
-                TrustInteroperabilityProfileUri::getJson,
-                (uriString) -> synchronizeTrustInteroperabilityProfileUri(LocalDateTime.now(ZoneOffset.UTC), uriString));
+                uri -> fromNull(uri.getDocument()),
+                (uriString) -> UriSynchronizerForTrustInteroperabilityProfile.INSTANCE.synchronizeUri(LocalDateTime.now(ZoneOffset.UTC), uriString));
     }
 }

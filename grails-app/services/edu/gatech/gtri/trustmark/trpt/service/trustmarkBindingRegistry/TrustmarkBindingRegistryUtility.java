@@ -30,19 +30,23 @@ public final class TrustmarkBindingRegistryUtility {
     public static TrustmarkBindingRegistryResponse trustmarkBindingRegistryResponse(final TrustmarkBindingRegistry trustmarkBindingRegistry) {
 
         return trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistryUriTypeSetHelper().maximumOption(ord((o1, o2) ->
-                        o1.getRequestLocalDateTime() == null && o2.getRequestLocalDateTime() == null ? Ordering.EQ :
-                                o1.getRequestLocalDateTime() == null ? Ordering.LT :
-                                        o2.getRequestLocalDateTime() == null ? Ordering.GT :
-                                                Ordering.fromInt(o1.getRequestLocalDateTime().compareTo(o2.getRequestLocalDateTime()))))
+                        o1.getDocumentRequestLocalDateTime() == null && o2.getDocumentRequestLocalDateTime() == null ? Ordering.EQ :
+                                o1.getDocumentRequestLocalDateTime() == null ? Ordering.LT :
+                                        o2.getDocumentRequestLocalDateTime() == null ? Ordering.GT :
+                                                Ordering.fromInt(o1.getDocumentRequestLocalDateTime().compareTo(o2.getDocumentRequestLocalDateTime()))))
                 .map(trustmarkBindingRegistryUriType -> new TrustmarkBindingRegistryResponse(
                         trustmarkBindingRegistry.idHelper(),
                         trustmarkBindingRegistry.getName(),
                         trustmarkBindingRegistry.getDescription(),
                         trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().getUri(),
-                        trustmarkBindingRegistryUriType.getRequestLocalDateTime(),
-                        trustmarkBindingRegistryUriType.getSuccessLocalDateTime(),
-                        trustmarkBindingRegistryUriType.getFailureLocalDateTime(),
-                        trustmarkBindingRegistryUriType.getFailureMessage(),
+                        trustmarkBindingRegistryUriType.getDocumentRequestLocalDateTime(),
+                        trustmarkBindingRegistryUriType.getDocumentSuccessLocalDateTime(),
+                        trustmarkBindingRegistryUriType.getDocumentFailureLocalDateTime(),
+                        trustmarkBindingRegistryUriType.getDocumentFailureMessage(),
+                        trustmarkBindingRegistryUriType.getServerRequestLocalDateTime(),
+                        trustmarkBindingRegistryUriType.getServerSuccessLocalDateTime(),
+                        trustmarkBindingRegistryUriType.getServerFailureLocalDateTime(),
+                        trustmarkBindingRegistryUriType.getServerFailureMessage(),
                         trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistryUriTypeSetHelper().foldLeft((sum, trustmarkBindingRegistryUriTypeInner) -> sum + trustmarkBindingRegistryUriTypeInner.partnerSystemCandidateSetHelper().length(), 0),
                         organizationResponse(trustmarkBindingRegistry.organizationHelper())))
                 .orSome(() -> new TrustmarkBindingRegistryResponse(
@@ -50,6 +54,10 @@ public final class TrustmarkBindingRegistryUtility {
                         trustmarkBindingRegistry.getName(),
                         trustmarkBindingRegistry.getDescription(),
                         trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().getUri(),
+                        null,
+                        null,
+                        null,
+                        null,
                         null,
                         null,
                         null,

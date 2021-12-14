@@ -77,14 +77,22 @@ function initialize(
                 trustmarkBindingRegistryElementPartnerSystemCandidateCount.innerHTML = trustmarkBindingRegistry.partnerSystemCandidateCount
                 trustmarkBindingRegistryElementPartnerSystemCandidateCount.title = trustmarkBindingRegistry.partnerSystemCandidateCount
 
-                if (trustmarkBindingRegistry.requestLocalDateTime == null) {
+                if (trustmarkBindingRegistry.documentRequestLocalDateTime == null) {
 
-                    trustmarkBindingRegistryElementStatus.classList.add("bi-cloud-plus")
+                    trustmarkBindingRegistryElementStatus.classList.add("bi-question-circle")
+                    trustmarkBindingRegistryElementStatus.classList.add("text-warning")
 
-                } else if (trustmarkBindingRegistry.successLocalDateTime == null || trustmarkBindingRegistry.successLocalDateTime < trustmarkBindingRegistry.failureLocalDateTime) {
+                } else if (trustmarkBindingRegistry.documentSuccessLocalDateTime == null || trustmarkBindingRegistry.documentSuccessLocalDateTime < trustmarkBindingRegistry.documentFailureLocalDateTime) {
 
-                    trustmarkBindingRegistryElementStatus.classList.add("bi-cloud-slash")
-                    trustmarkBindingRegistryElementStatus.title = trustmarkBindingRegistry.failureMessage
+                    trustmarkBindingRegistryElementStatus.classList.add("bi-emoji-frown")
+                    trustmarkBindingRegistryElementStatus.classList.add("text-danger")
+                    trustmarkBindingRegistryElementStatus.title = trustmarkBindingRegistry.documentFailureMessage
+                }
+                else  {
+
+                    trustmarkBindingRegistryElementStatus.classList.add("bi-emoji-smile")
+                    trustmarkBindingRegistryElementStatus.classList.add("text-success")
+                    trustmarkBindingRegistryElementStatus.title = moment(trustmarkBindingRegistry.documentSuccessLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')
                 }
 
                 trustmarkBindingRegistryTBody.appendChild(trustmarkBindingRegistryElement)
@@ -153,10 +161,14 @@ function initialize(
             document.getElementById("trustmark-binding-registry-input-organization").add(option)
         })
 
-        document.getElementById("trustmark-binding-registry-input-request-date-time").value = trustmarkBindingRegistry.requestLocalDateTime == null ? "" : moment(trustmarkBindingRegistry.requestLocalDateTime).format('MMMM Do YYYY, h:mm:ss a');
-        document.getElementById("trustmark-binding-registry-input-success-date-time").value = trustmarkBindingRegistry.successLocalDateTime == null ? "" : moment(trustmarkBindingRegistry.successLocalDateTime).format('MMMM Do YYYY, h:mm:ss a');
-        document.getElementById("trustmark-binding-registry-input-failure-date-time").value = trustmarkBindingRegistry.failureLocalDateTime == null ? "" : moment(trustmarkBindingRegistry.failureLocalDateTime).format('MMMM Do YYYY, h:mm:ss a');
-        document.getElementById("trustmark-binding-registry-input-failure-message").value = trustmarkBindingRegistry.failureMessage
+        document.getElementById("trustmark-binding-registry-input-document-request-date-time").value = trustmarkBindingRegistry.documentRequestLocalDateTime == null ? "" : moment(trustmarkBindingRegistry.documentRequestLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC');
+        document.getElementById("trustmark-binding-registry-input-document-success-date-time").value = trustmarkBindingRegistry.documentSuccessLocalDateTime == null ? "" : moment(trustmarkBindingRegistry.documentSuccessLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC');
+        document.getElementById("trustmark-binding-registry-input-document-failure-date-time").value = trustmarkBindingRegistry.documentFailureLocalDateTime == null ? "" : moment(trustmarkBindingRegistry.documentFailureLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC');
+        document.getElementById("trustmark-binding-registry-input-document-failure-message").value = trustmarkBindingRegistry.documentFailureMessage
+        document.getElementById("trustmark-binding-registry-input-server-request-date-time").value = trustmarkBindingRegistry.serverRequestLocalDateTime == null ? "" : moment(trustmarkBindingRegistry.serverRequestLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC');
+        document.getElementById("trustmark-binding-registry-input-server-success-date-time").value = trustmarkBindingRegistry.serverSuccessLocalDateTime == null ? "" : moment(trustmarkBindingRegistry.serverSuccessLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC');
+        document.getElementById("trustmark-binding-registry-input-server-failure-date-time").value = trustmarkBindingRegistry.serverFailureLocalDateTime == null ? "" : moment(trustmarkBindingRegistry.serverFailureLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC');
+        document.getElementById("trustmark-binding-registry-input-server-failure-message").value = trustmarkBindingRegistry.serverFailureMessage
         document.getElementById("trustmark-binding-registry-input-partner-system-candidate-count").value = trustmarkBindingRegistry.partnerSystemCandidateCount
 
     }

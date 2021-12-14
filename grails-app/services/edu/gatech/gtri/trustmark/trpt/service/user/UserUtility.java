@@ -7,7 +7,6 @@ import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
 import org.gtri.fj.data.List;
 import org.gtri.fj.data.NonEmptyList;
 import org.gtri.fj.data.Validation;
-import org.gtri.fj.product.Unit;
 
 import static edu.gatech.gtri.trustmark.trpt.domain.User.findByUsernameHelper;
 import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.organizationResponse;

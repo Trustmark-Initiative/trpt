@@ -2,7 +2,9 @@ package edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry;
 
 import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistry;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistryUri;
+import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistryUriType;
 import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
+import edu.gatech.gtri.trustmark.v1_0.model.TrustmarkBindingRegistrySystemType;
 import grails.gorm.transactions.Transactional;
 import org.gtri.fj.data.List;
 import org.gtri.fj.data.NonEmptyList;
@@ -12,7 +14,7 @@ import org.gtri.fj.product.Unit;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForTrustmarkBindingRegistryUri.synchronizeTrustmarkBindingRegistryUri;
+import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForTrustmarkBindingRegistry.synchronizeTrustmarkBindingRegistryUriAndDependencies;
 import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionUtility.organizationListAdministrator;
 import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.validationDescription;
 import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.validationId;
@@ -20,6 +22,7 @@ import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.Tr
 import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.validationName;
 import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.validationOrganization;
 import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.validationUri;
+import static org.gtri.fj.data.List.arrayList;
 import static org.gtri.fj.data.List.iterableList;
 import static org.gtri.fj.data.Validation.accumulate;
 import static org.gtri.fj.product.Unit.unit;
@@ -63,7 +66,7 @@ public class TrustmarkBindingRegistryService {
                     trustmarkBindingRegistry.organizationHelper(organization);
                     trustmarkBindingRegistry.saveAndFlushHelper();
 
-                    (new Thread(() -> synchronizeTrustmarkBindingRegistryUri(LocalDateTime.now(ZoneOffset.UTC), uri))).start();
+                    (new Thread(() -> synchronizeTrustmarkBindingRegistryUriAndDependencies(LocalDateTime.now(ZoneOffset.UTC), uri))).start();
 
                     return trustmarkBindingRegistry;
                 })
@@ -88,7 +91,7 @@ public class TrustmarkBindingRegistryService {
                     trustmarkBindingRegistry.organizationHelper(organization);
                     trustmarkBindingRegistry.saveAndFlushHelper();
 
-                    (new Thread(() -> synchronizeTrustmarkBindingRegistryUri(LocalDateTime.now(ZoneOffset.UTC), uri))).start();
+                    (new Thread(() -> synchronizeTrustmarkBindingRegistryUriAndDependencies(LocalDateTime.now(ZoneOffset.UTC), uri))).start();
 
                     return trustmarkBindingRegistry;
                 })
@@ -112,10 +115,10 @@ public class TrustmarkBindingRegistryService {
 
         return TrustmarkBindingRegistryUri.findByUriHelper(uri).orSome(() -> {
 
-            final TrustmarkBindingRegistryUri trustmarkBindingRegistryUri = new TrustmarkBindingRegistryUri();
-            trustmarkBindingRegistryUri.setUri(uri);
+            final TrustmarkBindingRegistryUri trustmarkBindingRegistryUriInner = new TrustmarkBindingRegistryUri();
+            trustmarkBindingRegistryUriInner.setUri(uri);
 
-            return trustmarkBindingRegistryUri.saveHelper();
+            return trustmarkBindingRegistryUriInner.saveAndFlushHelper();
         });
     }
 }

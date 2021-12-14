@@ -8,13 +8,18 @@ import org.gtri.fj.data.NonEmptyList;
 import org.gtri.fj.data.Validation;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.regex.Pattern;
+
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeEqual;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNull;
-import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndLength;
+import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndEqual;
+import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndPattern;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndReference;
+import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNullOr;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeReference;
 import static org.gtri.fj.Equal.equal;
 import static org.gtri.fj.data.Validation.accumulate;
+import static org.gtri.fj.data.Validation.success;
 import static org.gtri.fj.lang.StringUtility.stringEqual;
 import static org.gtri.fj.product.P.p;
 
@@ -59,13 +64,14 @@ public final class PasswordUtility {
     }
 
     public static Validation<NonEmptyList<ValidationMessage<PasswordField>>, String> validationNewPassword(
+            final Pattern passwordPattern,
+            final String passwordPatternDescription,
             final String password1,
             final String password2) {
 
         return accumulate(
-                mustBeNonNullAndLength(PasswordField.passwordNew1, 1, 1000, password1),
-                mustBeNonNullAndLength(PasswordField.passwordNew2, 1, 1000, password2),
-                (password1Inner, password2Inner) -> p(password1Inner, password2Inner))
-                .bind(p -> mustBeEqual(PasswordField.passwordNew1, PasswordField.passwordNew2, stringEqual, p._1(), p._2()));
+                mustBeNullOr(PasswordField.passwordNew1, password1, (field, value) -> mustBeNonNullAndPattern(field, passwordPattern, passwordPatternDescription, value)),
+                mustBeNonNullAndEqual(PasswordField.passwordNew2, PasswordField.passwordNew1, stringEqual, password2, password1),
+                (password1Inner, password2Inner) -> password1Inner);
     }
 }

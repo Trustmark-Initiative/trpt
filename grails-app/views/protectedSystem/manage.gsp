@@ -33,7 +33,7 @@
                 </thead>
                 <template id="protected-system-template-empty">
                     <tr>
-                        <td colspan="5">(No protected systems.)</td>
+                        <td colspan="6">(No protected systems.)</td>
                     </tr>
                 </template>
                 <template id="protected-system-template-summary">

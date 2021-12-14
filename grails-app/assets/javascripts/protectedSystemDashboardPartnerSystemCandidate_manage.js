@@ -105,7 +105,13 @@ function initialize(
             name: protectedSystem.name,
             type: protectedSystem.type.value,
             organization: protectedSystem.organization.id,
-            protectedSystemTrustInteroperabilityProfileList: protectedSystem.protectedSystemTrustInteroperabilityProfileList,
+            protectedSystemTrustInteroperabilityProfileList: protectedSystem.protectedSystemTrustInteroperabilityProfileList
+                .map(protectedSystemTrustInteroperabilityProfileInner => {
+                    return {
+                        "mandatory": protectedSystemTrustInteroperabilityProfileInner.mandatory,
+                        "uri": protectedSystemTrustInteroperabilityProfileInner.trustInteroperabilityProfile.uri
+                    }
+                }),
             partnerSystemCandidateList: protectedSystem.protectedSystemPartnerSystemCandidateList
                 .filter(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.trust)
                 .map(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id).filter(idInner => idInner !== id)
@@ -122,7 +128,13 @@ function initialize(
             name: protectedSystem.name,
             type: protectedSystem.type.value,
             organization: protectedSystem.organization.id,
-            protectedSystemTrustInteroperabilityProfileList: protectedSystem.protectedSystemTrustInteroperabilityProfileList,
+            protectedSystemTrustInteroperabilityProfileList: protectedSystem.protectedSystemTrustInteroperabilityProfileList
+                .map(protectedSystemTrustInteroperabilityProfileInner => {
+                    return {
+                        "mandatory": protectedSystemTrustInteroperabilityProfileInner.mandatory,
+                        "uri": protectedSystemTrustInteroperabilityProfileInner.trustInteroperabilityProfile.uri
+                    }
+                }),
             partnerSystemCandidateList: protectedSystem.protectedSystemPartnerSystemCandidateList
                 .filter(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.trust)
                 .map(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id).concat([id])
