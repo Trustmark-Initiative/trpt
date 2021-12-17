@@ -318,6 +318,18 @@ function initialize(
         document.getElementById("user-input-organization").innerHTML = ""
         document.getElementById("user-input-role").innerHTML = ""
 
+        document.getElementById("user-input-username").disabled = false
+        document.getElementById("user-input-nameFamily").disabled = false
+        document.getElementById("user-input-nameGiven").disabled = false
+        document.getElementById("user-input-telephone").disabled = false
+        document.getElementById("user-input-userDisabled").disabled = false
+        document.getElementById("user-input-userLocked").disabled = false
+        document.getElementById("user-input-userExpired").disabled = false
+        document.getElementById("user-input-passwordExpired").disabled = false
+        document.getElementById("user-input-organization").disabled = false
+        document.getElementById("user-input-role").disabled = false
+        document.getElementById("user-action-submit-update").disabled = false
+
         formResetValidation()
     }
 

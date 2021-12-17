@@ -33,7 +33,7 @@
                 </thead>
                 <template id="trustmark-binding-registry-template-empty">
                     <tr>
-                        <td colspan="6">(No trustmark binding registries.)</td>
+                        <td colspan="8">(No trustmark binding registries.)</td>
                     </tr>
                 </template>
                 <template id="trustmark-binding-registry-template-summary">
@@ -192,7 +192,7 @@
                     </div>
 
                     <div class="row pb-2">
-                        <label id="trustmark-binding-registry-label-document-failure-message" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-failure-message">Last Failure Message</label>
+                        <label id="trustmark-binding-registry-label-document-failure-message" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-document-failure-message">Last Failure Message</label>
 
                         <div class="col-9">
                             <input type="text" id="trustmark-binding-registry-input-document-failure-message" name="failure-message" class="form-control" readonly>
@@ -235,7 +235,7 @@
                     </div>
 
                     <div class="row pb-2">
-                        <label id="trustmark-binding-registry-label-server-failure-message" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-failure-message">Last Failure Message</label>
+                        <label id="trustmark-binding-registry-label-server-failure-message" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-server-failure-message">Last Failure Message</label>
 
                         <div class="col-9">
                             <input type="text" id="trustmark-binding-registry-input-server-failure-message" name="failure-message" class="form-control" readonly>

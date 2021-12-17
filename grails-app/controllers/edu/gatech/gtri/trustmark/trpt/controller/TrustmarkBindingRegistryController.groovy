@@ -27,7 +27,9 @@ class TrustmarkBindingRegistryController {
 
     Object findAll(final TrustmarkBindingRegistryFindAllRequest trustmarkBindingRegistryFindAllRequest) {
 
-        respond trustmarkBindingRegistryService.findAll(((GrailsUser) getPrincipal()).username, trustmarkBindingRegistryFindAllRequest).toJavaList()
+        P2<Object, Integer> response = toResponse(trustmarkBindingRegistryService.findAll(((GrailsUser) getPrincipal()).username, trustmarkBindingRegistryFindAllRequest).map(list -> list.toJavaList()))
+
+        respond response._1(), status: response._2()
     }
 
     Object findOne(final TrustmarkBindingRegistryFindOneRequest trustmarkBindingRegistryFindOneRequest) {

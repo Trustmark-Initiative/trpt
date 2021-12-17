@@ -7,6 +7,8 @@ import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemFin
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemInsertRequest
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemService
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUpdateRequest
+import edu.gatech.gtri.trustmark.trpt.service.protectedSystemType.ProtectedSystemTypeFindAllRequest
+import edu.gatech.gtri.trustmark.trpt.service.protectedSystemType.ProtectedSystemTypeService
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
 import grails.plugin.springsecurity.userdetails.GrailsUser
@@ -21,13 +23,16 @@ import static edu.gatech.gtri.trustmark.trpt.controller.ResponseUtility.toRespon
 class ProtectedSystemController {
 
     ProtectedSystemService protectedSystemService
+    ProtectedSystemTypeService protectedSystemTypeService
 
     Object manage() {
     }
 
     Object findAll(final ProtectedSystemFindAllRequest protectedSystemServiceFindAllRequest) {
 
-        respond protectedSystemService.findAll(((GrailsUser) getPrincipal()).username, protectedSystemServiceFindAllRequest).toJavaList()
+        final P2<Object, Integer> response = toResponse(protectedSystemService.findAll(((GrailsUser) getPrincipal()).username, protectedSystemServiceFindAllRequest).map(list -> list.toJavaList()))
+
+        respond response._1(), status: response._2()
     }
 
     Object findOne(final ProtectedSystemFindOneRequest protectedSystemFindOneRequest) {
@@ -58,8 +63,10 @@ class ProtectedSystemController {
         respond response._1(), status: response._2()
     }
 
-    Object typeFindAll() {
+    Object typeFindAll(final ProtectedSystemTypeFindAllRequest protectedSystemTypeFindAllRequest) {
 
-        respond protectedSystemService.typeFindAll(((GrailsUser) getPrincipal()).username).toJavaList()
+        final P2<Object, Integer> response = toResponse(protectedSystemTypeService.findAll(((GrailsUser) getPrincipal()).username, protectedSystemTypeFindAllRequest).map(list -> list.toJavaList()))
+
+        respond response._1(), status: response._2()
     }
 }

@@ -1,7 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.service.permission;
 
 import edu.gatech.gtri.trustmark.trpt.domain.Organization;
-import edu.gatech.gtri.trustmark.trpt.domain.PermissionName;
 import edu.gatech.gtri.trustmark.trpt.domain.Role;
 import edu.gatech.gtri.trustmark.trpt.domain.RoleName;
 import edu.gatech.gtri.trustmark.trpt.domain.User;
@@ -9,7 +8,7 @@ import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
 import org.gtri.fj.data.List;
 import org.gtri.fj.data.NonEmptyList;
 import org.gtri.fj.data.Validation;
-import org.gtri.fj.function.F1;
+import org.gtri.fj.function.F3;
 
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage.validationMessageMustHavePermission;
 import static org.gtri.fj.data.List.arrayList;
@@ -56,12 +55,12 @@ public class PermissionUtility {
                 .orSome(nil());
     }
 
-    public static <T1, T2> Validation<NonEmptyList<ValidationMessage<T1>>, T2> userMay(final String requesterUserName, final PermissionName permissionName, final F1<User, Validation<NonEmptyList<ValidationMessage<T1>>, T2>> f) {
+    public static <T1, T2> Validation<NonEmptyList<ValidationMessage<T1>>, T2> userMay(final String requesterUserName, final PermissionName permissionName, final F3<User, List<Organization>, List<Role>, Validation<NonEmptyList<ValidationMessage<T1>>, T2>> f) {
 
         return User
                 .findByUsernameHelper(requesterUserName)
-                .filter(user -> user.userRoleSetHelper().exists(userRole -> RoleName.valueOf(userRole.roleHelper().getName()).equals(RoleName.ROLE_ADMINISTRATOR)))
-                .map(user -> f.f(user))
+                .filter(user -> user.userRoleSetHelper().exists(userRole -> permissionName.getRoleNameList().exists(roleName -> RoleName.valueOf(userRole.roleHelper().getName()).equals(roleName))))
+                .map(user -> f.f(user, organizationListAdministrator(requesterUserName), roleListAdministrator(requesterUserName)))
                 .orSome(fail(nel(validationMessageMustHavePermission(null))));
     }
 }

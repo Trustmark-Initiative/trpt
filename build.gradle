@@ -63,9 +63,9 @@ configurations {
 }
 
 dependencies {
-    implementation 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.28'
-    implementation 'edu.gatech.gtri.trustmark:tf-api:1.4.19'
-    implementation 'org.apache.logging.log4j:log4j-core:2.15.0' // required by tf-api-impl
+    implementation 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.29'
+    implementation 'edu.gatech.gtri.trustmark:tf-api:1.4.20'
+    implementation 'org.apache.logging.log4j:log4j-core:2.16.0' // required by tf-api-impl
 
     implementation 'org.grails.plugins:async'
     implementation 'org.grails.plugins:cache'

@@ -7,11 +7,14 @@ import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
 import grails.plugin.springsecurity.userdetails.GrailsUser
 import groovy.transform.CompileStatic
+import org.gtri.fj.product.P2
+
+import static edu.gatech.gtri.trustmark.trpt.controller.ResponseUtility.toResponse
 
 
 @CompileStatic
 @Transactional
-@Secured('hasAnyRole("ROLE_ADMINISTRATOR", "ROLE_ADMINISTRATOR_ORGANIZATION")')
+@Secured('hasAnyRole("ROLE_ADMINISTRATOR")')
 class UriSetController {
 
     UriSetService uriSetService
@@ -21,6 +24,8 @@ class UriSetController {
 
     Object findOne(final UriSetFindAllRequest uriFindAllRequest) {
 
-        respond uriSetService.findOne(((GrailsUser) getPrincipal()).username, uriFindAllRequest)
+        P2<Object, Integer> response = toResponse(uriSetService.findOne(((GrailsUser) getPrincipal()).username, uriFindAllRequest))
+
+        respond response._1(), status: response._2()
     }
 }

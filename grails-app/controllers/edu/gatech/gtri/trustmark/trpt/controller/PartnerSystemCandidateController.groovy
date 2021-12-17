@@ -6,6 +6,9 @@ import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
 import grails.plugin.springsecurity.userdetails.GrailsUser
 import groovy.transform.CompileStatic
+import org.gtri.fj.product.P2
+
+import static edu.gatech.gtri.trustmark.trpt.controller.ResponseUtility.toResponse
 
 @CompileStatic
 @Transactional
@@ -16,6 +19,8 @@ class PartnerSystemCandidateController {
 
     Object findAll(final PartnerSystemCandidateFindAllRequest partnerSystemCandidateFindAllRequest) {
 
-        respond partnerSystemCandidateService.findAll(((GrailsUser) getPrincipal()).username, partnerSystemCandidateFindAllRequest).toJavaList()
+        final P2<Object, Integer> response = toResponse(partnerSystemCandidateService.findAll(((GrailsUser) getPrincipal()).username, partnerSystemCandidateFindAllRequest).map(list -> list.toJavaList()))
+
+        respond response._1(), status: response._2()
     }
 }

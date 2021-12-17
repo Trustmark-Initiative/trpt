@@ -33,8 +33,8 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
 
     static mapping = {
         table 'partner_system_candidate_trust_interoperability_profile_uri'
-        evaluationTrustExpression sqlType: 'blob'
-        evaluationTrustmarkDefinitionRequirement sqlType: 'blob'
+        evaluationTrustExpression sqlType: 'mediumblob'
+        evaluationTrustmarkDefinitionRequirement sqlType: 'mediumblob'
     }
 
     static belongsTo = [

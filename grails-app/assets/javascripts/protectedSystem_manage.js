@@ -188,7 +188,13 @@ function initialize(
             name: document.getElementById("protected-system-input-name").value,
             type: document.getElementById("protected-system-input-type").value,
             organization: document.getElementById("protected-system-input-organization").value,
-            protectedSystemTrustInteroperabilityProfileList: protectedSystem.protectedSystemTrustInteroperabilityProfileList,
+            protectedSystemTrustInteroperabilityProfileList: protectedSystem.protectedSystemTrustInteroperabilityProfileList
+                .map(protectedSystemTrustInteroperabilityProfileInner => {
+                    return {
+                        "mandatory": protectedSystemTrustInteroperabilityProfileInner.mandatory,
+                        "uri": protectedSystemTrustInteroperabilityProfileInner.trustInteroperabilityProfile.uri
+                    }
+                }),
             partnerSystemCandidateList: protectedSystem.protectedSystemPartnerSystemCandidateList
                 .filter(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.trust)
                 .map(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id)
