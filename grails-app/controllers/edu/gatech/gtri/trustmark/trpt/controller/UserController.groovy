@@ -27,7 +27,9 @@ class UserController {
 
     Object findAll(final UserFindAllRequest userFindAllRequest) {
 
-        respond userService.findAll(((GrailsUser) getPrincipal()).username, userFindAllRequest).toJavaList()
+        P2<Object, Integer> response = toResponse(userService.findAll(((GrailsUser) getPrincipal()).username, userFindAllRequest).map(list -> list.toJavaList()))
+
+        respond response._1(), status: response._2()
     }
 
     Object findOne(final UserFindOneRequest userFindOneRequest) {

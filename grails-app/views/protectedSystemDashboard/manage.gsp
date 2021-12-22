@@ -2,7 +2,8 @@
 <%@ page import="org.json.JSONArray" contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
-        <asset:javascript src="manage_protected_system_dashboard.js"/>
+        <asset:javascript src="protectedSystemDashboard_manage.js"/>
+        <asset:stylesheet src="protectedSystemDashboard_manage.css"/>
 
         <meta name="layout" content="main"/>
 
@@ -22,15 +23,15 @@
             <div class="fw-bold mt-2">Trust Policy for <span class="protected-system-element-name"></span></div>
 
             <div class="mt-2">
-                Add trust interoperability profiles to this table to define the trust policy for <span class="protected-system-element-name"></span>, a <span class="protected-system-element-type"></span>.
+                Add trust interoperability profiles (TIPs) to this table to define the trust policy for <span class="protected-system-element-name"></span>, a <span class="protected-system-element-type"></span>.
             </div>
             <table class="mt-2 table table-bordered table-striped-hack mb-0">
                 <thead>
                     <tr>
                         <th scope="col"><a href="#" class="bi-plus-lg" id="trust-interoperability-profile-action-insert"></a></th>
                         <th scope="col"><a href="#" class="bi-trash" id="trust-interoperability-profile-action-delete"></a></th>
-                        <th scope="col" style="width: 75%">Name</th>
-                        <th scope="col" style="width: 25%">Issuer</th>
+                        <th scope="col" style="width: 75%">TIP Name</th>
+                        <th scope="col" style="width: 25%">TIP Issuer</th>
                         <th scope="col"><span class="bi-exclamation-circle" title="Require Full Compliance"></span></th>
                     </tr>
                 </thead>
@@ -151,35 +152,89 @@
                         </div>
                     </div>
 
+                </div>
+
+                <div class="card-header fw-bold">
+                    <div class="row">
+                        <div class="col-11">
+                            Document Status
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
                     <div class="row pb-2">
-                        <label id="trust-interoperability-profile-label-request-date-time" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-request-date-time">Last Request</label>
+                        <label id="trust-interoperability-profile-label-document-request-date-time" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-document-request-date-time">Last Request</label>
 
                         <div class="col-9">
-                            <input type="text" id="trust-interoperability-profile-input-request-date-time" name="request-date-time" class="form-control" readonly>
+                            <input type="text" id="trust-interoperability-profile-input-document-request-date-time" name="document-request-date-time" class="form-control" readonly>
                         </div>
                     </div>
 
                     <div class="row pb-2">
-                        <label id="trust-interoperability-profile-label-success-date-time" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-success-date-time">Last Success</label>
+                        <label id="trust-interoperability-profile-label-document-success-date-time" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-document-success-date-time">Last Success</label>
 
                         <div class="col-9">
-                            <input type="text" id="trust-interoperability-profile-input-success-date-time" name="success-date-time" class="form-control" readonly>
+                            <input type="text" id="trust-interoperability-profile-input-document-success-date-time" name="document-success-date-time" class="form-control" readonly>
                         </div>
                     </div>
 
                     <div class="row pb-2">
-                        <label id="trust-interoperability-profile-label-failure-date-time" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-failure-date-time">Last Failure</label>
+                        <label id="trust-interoperability-profile-label-document-failure-date-time" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-document-failure-date-time">Last Failure</label>
 
                         <div class="col-9">
-                            <input type="text" id="trust-interoperability-profile-input-failure-date-time" name="success-date-time" class="form-control" readonly>
+                            <input type="text" id="trust-interoperability-profile-input-document-failure-date-time" name="document-success-date-time" class="form-control" readonly>
                         </div>
                     </div>
 
                     <div class="row pb-2">
-                        <label id="trust-interoperability-profile-label-failure-message" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-failure-message">Last Failure Message</label>
+                        <label id="trust-interoperability-profile-label-document-failure-message" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-failure-message">Last Failure Message</label>
 
                         <div class="col-9">
-                            <input type="text" id="trust-interoperability-profile-input-failure-message" name="failure-message" class="form-control" readonly>
+                            <input type="text" id="trust-interoperability-profile-input-document-failure-message" name="failure-message" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-header fw-bold">
+                    <div class="row">
+                        <div class="col-11">
+                            Server Status
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row pb-2">
+                        <label id="trust-interoperability-profile-label-server-request-date-time" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-server-request-date-time">Last Request</label>
+
+                        <div class="col-9">
+                            <input type="text" id="trust-interoperability-profile-input-server-request-date-time" name="server-request-date-time" class="form-control" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row pb-2">
+                        <label id="trust-interoperability-profile-label-server-success-date-time" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-server-success-date-time">Last Success</label>
+
+                        <div class="col-9">
+                            <input type="text" id="trust-interoperability-profile-input-server-success-date-time" name="server-success-date-time" class="form-control" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row pb-2">
+                        <label id="trust-interoperability-profile-label-server-failure-date-time" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-server-failure-date-time">Last Failure</label>
+
+                        <div class="col-9">
+                            <input type="text" id="trust-interoperability-profile-input-server-failure-date-time" name="server-success-date-time" class="form-control" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row pb-2">
+                        <label id="trust-interoperability-profile-label-server-failure-message" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-failure-message">Last Failure Message</label>
+
+                        <div class="col-9">
+                            <input type="text" id="trust-interoperability-profile-input-server-failure-message" name="failure-message" class="form-control" readonly>
                         </div>
                     </div>
                 </div>
@@ -193,18 +248,20 @@
                 This table allows you to control which candidate partner <span class="partner-system-candidate-element-type"></span> systems are trusted by <span class="protected-system-element-name"></span>.
             </div>
 
-            <table class="mt-2 table table-bordered table-striped-hack mb-0">
+            <table class="mt-2 table table-bordered mb-0">
                 <thead>
                     <tr>
-                        <th scope="col" class="w-100">Name</th>
-                        <th scope="col">&nbsp;TD%</th>
-                        <th scope="col">TIP%</th>
-                        <th scope="col">Trusted</th>
+                        <th scope="col" style="width: 25%">System Name</th>
+                        <th scope="col" style="width: 25%">Trustmark Binding Registry</th>
+                        <th scope="col" style="width: 25%">Last Evaluation</th>
+                        <th scope="col" style="width: 25%" class="text-center">TIP Satisfaction</th>
+                        <th scope="col" class="text-center">&nbsp;&nbsp;&nbsp;TD%&nbsp;&nbsp;</th>
+                        <th scope="col" class="text-center">Trusted</th>
                     </tr>
                 </thead>
                 <template id="partner-system-candidate-template-empty">
                     <tr>
-                        <td colspan="4">(No candidate partner systems.)</td>
+                        <td colspan="6">(No candidate partner systems.)</td>
                     </tr>
                 </template>
                 <template id="partner-system-candidate-template-summary">
@@ -213,13 +270,32 @@
                             <a class="partner-system-candidate-element-name"></a>
                             <a target="_blank" class="partner-system-candidate-element-trust-fabric-metadata"></a>
                         </td>
-                        <td class="text-center partner-system-candidate-element-percent-trustmark-definition-requirement"></td>
-                        <td class="text-center partner-system-candidate-element-percent-trust-interoperability-profile"></td>
+                        <td>
+                            <a class="partner-system-candidate-element-trustmark-binding-registry"></a>
+                        </td>
+                        <td class="partner-system-candidate-element-trust-interoperability-profile-evaluation-local-date-time"></td>
+                        <td>
+                            <div class="partner-system-candidate-element-percent-trust-interoperability-profile d-flex justify-content-around">
+                            </div>
+                        </td>
+                        <td class="partner-system-candidate-element-percent-trustmark-definition-requirement text-center"></td>
                         <td>
                             <div class="d-flex justify-content-center form-check form-switch">
                                 <input type="checkbox" class="form-check-input partner-system-candidate-element-trust" data-bs-toggle="modal" data-bs-target="#modal-trust"/>
                             </div>
                         </td>
+                    </tr>
+                </template>
+                <template id="partner-system-candidate-template-detail">
+                    <tr class="partner-system-candidate-detail d-none">
+                        <td colspan="2"><span class="glyphicon bi-list-ul me-2"></span><span class="trust-interoperability-profile-name"></span></td>
+                        <td class="trust-interoperability-profile-evaluation-local-date-time"></td>
+                        <td>
+                            <div class="trust-interoperability-profile-evaluation-satisfied d-flex justify-content-around">
+                            </div>
+                        </td>
+                        <td class="trust-interoperability-profile-trustmark-definition text-center"></td>
+                        <td></td>
                     </tr>
                 </template>
                 <tbody id="partner-system-candidate-tbody">

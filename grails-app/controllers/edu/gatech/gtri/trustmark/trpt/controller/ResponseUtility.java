@@ -1,6 +1,7 @@
 package edu.gatech.gtri.trustmark.trpt.controller;
 
 import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
+import org.gtri.fj.Ordering;
 import org.gtri.fj.data.Either;
 import org.gtri.fj.data.HashMap;
 import org.gtri.fj.data.NonEmptyList;
@@ -32,7 +33,14 @@ public class ResponseUtility {
     private static <FIELD extends Enum<FIELD>> Map<FIELD, java.util.List<Map<String, Object>>> toMap(final NonEmptyList<ValidationMessage<FIELD>> validationMessageNonEmptyList) {
 
         return validationMessageNonEmptyList.toList()
-                .groupBy(ValidationMessage::getField, ord((f1, f2) -> fromInt(f1.compareTo(f2))))
+                .groupBy(ValidationMessage::getField, ord((f1, f2) ->
+                        f1 == null && f2 == null ?
+                                Ordering.EQ :
+                                f1 == null ?
+                                        Ordering.LT :
+                                        f2 == null ?
+                                                Ordering.GT :
+                                                fromInt(f1.compareTo(f2))))
                 .map(list -> list.map(ResponseUtility::toMap))
                 .map(list -> list.toJavaList())
                 .toMutableMap();
@@ -49,7 +57,8 @@ public class ResponseUtility {
                         (field, lengthMaximumInclusive, length) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName()), p("lengthMaximumInclusive", lengthMaximumInclusive), p("length", length)),
                         (field) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName())),
                         (field) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName())),
-                        (field, pattern) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName()), p("pattern", pattern)),
+                        (field, pattern, description) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName()), p("pattern", pattern), p("description", description)),
+                        (field) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName())),
                         (field) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName())),
                         (field) -> arrayHashMap(p("type", validationMessage.getClass().getSimpleName())),
                         (field, validationMessageNonEmptyListIndexed) -> iterableHashMap(validationMessageNonEmptyListIndexed.map(p -> p.swap().map1(Object::toString).map2(ResponseUtility::toMap).map2(value -> value))))

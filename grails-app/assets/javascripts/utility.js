@@ -67,6 +67,8 @@ function messageMap(failureMap, labelFor, messageFor) {
                 return `${labelFor(failureKey)} must be unique.`
             case "ValidationMessageMustBeEqual":
                 return `${labelFor(failureElement.field1)} and ${labelFor(failureElement.field2)} must be equal.`
+            case "ValidationMessageMustBePattern":
+                return `${labelFor(failureKey)} must meet the following criteria: ${failureElement.description}`
             default :
                 return `${labelFor(failureKey)} invalid.`
         }

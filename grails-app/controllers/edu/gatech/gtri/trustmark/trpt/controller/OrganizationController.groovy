@@ -26,7 +26,9 @@ class OrganizationController {
 
     Object findAll(final OrganizationFindAllRequest organizationFindAllRequest) {
 
-        respond organizationService.findAll(((GrailsUser) getPrincipal()).username, organizationFindAllRequest).toJavaList()
+        P2<Object, Integer> response = toResponse(organizationService.findAll(((GrailsUser) getPrincipal()).username, organizationFindAllRequest).map(list -> list.toJavaList()))
+
+        respond response._1(), status: response._2()
     }
 
     Object findOne(final OrganizationFindOneRequest organizationFindOneRequest) {

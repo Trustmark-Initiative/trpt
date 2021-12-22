@@ -1,6 +1,6 @@
 <html>
     <head>
-        <asset:javascript src="manage_trustmark_binding_registry.js"/>
+        <asset:javascript src="trustmarkBindingRegistry_manage.js"/>
 
         <meta name="layout" content="main"/>
 
@@ -28,12 +28,12 @@
                         <th scope="col" style="width: 20%">Organization</th>
                         <th scope="col" style="width: 20%">Description</th>
                         <th scope="col"><span class="bi-laptop" title="Partner System Candidate Count"></span></th>
-                        <th scope="col"><span class="bi-cloud" title="Trustmark Binding Registry Down"></span></th>
+                        <th scope="col"><span class="bi-question-circle" title="Trustmark Binding Registry Status"></span></th>
                     </tr>
                 </thead>
                 <template id="trustmark-binding-registry-template-empty">
                     <tr>
-                        <td colspan="6">(No trustmark binding registries.)</td>
+                        <td colspan="8">(No trustmark binding registries.)</td>
                     </tr>
                 </template>
                 <template id="trustmark-binding-registry-template-summary">
@@ -156,36 +156,89 @@
                             <input type="text" id="trustmark-binding-registry-input-partner-system-candidate-count" name="partner-system-candidate-count" class="form-control" readonly>
                         </div>
                     </div>
+                </div>
 
+                <div class="card-header fw-bold">
+                    <div class="row">
+                        <div class="col-11">
+                            Document Status
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
                     <div class="row pb-2">
-                        <label id="trustmark-binding-registry-label-request-date-time" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-request-date-time">Last Request</label>
+                        <label id="trustmark-binding-registry-label-document-request-date-time" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-document-request-date-time">Last Request</label>
 
                         <div class="col-9">
-                            <input type="text" id="trustmark-binding-registry-input-request-date-time" name="request-date-time" class="form-control" readonly>
+                            <input type="text" id="trustmark-binding-registry-input-document-request-date-time" name="document-request-date-time" class="form-control" readonly>
                         </div>
                     </div>
 
                     <div class="row pb-2">
-                        <label id="trustmark-binding-registry-label-success-date-time" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-success-date-time">Last Success</label>
+                        <label id="trustmark-binding-registry-label-document-success-date-time" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-document-success-date-time">Last Success</label>
 
                         <div class="col-9">
-                            <input type="text" id="trustmark-binding-registry-input-success-date-time" name="success-date-time" class="form-control" readonly>
+                            <input type="text" id="trustmark-binding-registry-input-document-success-date-time" name="document-success-date-time" class="form-control" readonly>
                         </div>
                     </div>
 
                     <div class="row pb-2">
-                        <label id="trustmark-binding-registry-label-failure-date-time" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-failure-date-time">Last Failure</label>
+                        <label id="trustmark-binding-registry-label-document-failure-date-time" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-document-failure-date-time">Last Failure</label>
 
                         <div class="col-9">
-                            <input type="text" id="trustmark-binding-registry-input-failure-date-time" name="success-date-time" class="form-control" readonly>
+                            <input type="text" id="trustmark-binding-registry-input-document-failure-date-time" name="document-success-date-time" class="form-control" readonly>
                         </div>
                     </div>
 
                     <div class="row pb-2">
-                        <label id="trustmark-binding-registry-label-failure-message" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-failure-message">Last Failure Message</label>
+                        <label id="trustmark-binding-registry-label-document-failure-message" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-document-failure-message">Last Failure Message</label>
 
                         <div class="col-9">
-                            <input type="text" id="trustmark-binding-registry-input-failure-message" name="failure-message" class="form-control" readonly>
+                            <input type="text" id="trustmark-binding-registry-input-document-failure-message" name="failure-message" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-header fw-bold">
+                    <div class="row">
+                        <div class="col-11">
+                            Server Status
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row pb-2">
+                        <label id="trustmark-binding-registry-label-server-request-date-time" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-server-request-date-time">Last Request</label>
+
+                        <div class="col-9">
+                            <input type="text" id="trustmark-binding-registry-input-server-request-date-time" name="server-request-date-time" class="form-control" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row pb-2">
+                        <label id="trustmark-binding-registry-label-server-success-date-time" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-server-success-date-time">Last Success</label>
+
+                        <div class="col-9">
+                            <input type="text" id="trustmark-binding-registry-input-server-success-date-time" name="server-success-date-time" class="form-control" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row pb-2">
+                        <label id="trustmark-binding-registry-label-server-failure-date-time" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-server-failure-date-time">Last Failure</label>
+
+                        <div class="col-9">
+                            <input type="text" id="trustmark-binding-registry-input-server-failure-date-time" name="server-success-date-time" class="form-control" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row pb-2">
+                        <label id="trustmark-binding-registry-label-server-failure-message" class="col-3 col-form-label text-end" for="trustmark-binding-registry-input-server-failure-message">Last Failure Message</label>
+
+                        <div class="col-9">
+                            <input type="text" id="trustmark-binding-registry-input-server-failure-message" name="failure-message" class="form-control" readonly>
                         </div>
                     </div>
                 </div>

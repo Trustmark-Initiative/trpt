@@ -1,5 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import edu.gatech.gtri.trustmark.v1_0.model.TrustmarkBindingRegistrySystemType
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -10,27 +11,47 @@ import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.List.nil
 import static org.gtri.fj.data.Option.fromNull
 
-class TrustmarkBindingRegistryUriType {
+class TrustmarkBindingRegistryUriType implements Uri {
 
     String uri
-    PartnerSystemCandidateType type
+    TrustmarkBindingRegistrySystemType type
     String hash
-    String json
-    LocalDateTime requestLocalDateTime
-    LocalDateTime successLocalDateTime
-    LocalDateTime failureLocalDateTime
-    LocalDateTime changeLocalDateTime
-    String failureMessage
+    String document
+    LocalDateTime documentRequestLocalDateTime
+    LocalDateTime documentSuccessLocalDateTime
+    LocalDateTime documentFailureLocalDateTime
+    LocalDateTime documentChangeLocalDateTime
+    String documentFailureMessage
+    LocalDateTime serverRequestLocalDateTime
+    LocalDateTime serverSuccessLocalDateTime
+    LocalDateTime serverFailureLocalDateTime
+    LocalDateTime serverChangeLocalDateTime
+    String serverFailureMessage
 
     static constraints = {
         uri nullable: true
+        type nullable: true
         hash nullable: true
-        json nullable: true
-        requestLocalDateTime nullable: true
-        successLocalDateTime nullable: true
-        failureLocalDateTime nullable: true
-        changeLocalDateTime nullable: true
-        failureMessage nullable: true
+        document nullable: true
+        documentRequestLocalDateTime nullable: true
+        documentSuccessLocalDateTime nullable: true
+        documentFailureLocalDateTime nullable: true
+        documentChangeLocalDateTime nullable: true
+        documentFailureMessage nullable: true
+        serverRequestLocalDateTime nullable: true
+        serverSuccessLocalDateTime nullable: true
+        serverFailureLocalDateTime nullable: true
+        serverChangeLocalDateTime nullable: true
+        serverFailureMessage nullable: true
+    }
+
+    static mapping = {
+        table 'trustmark_binding_registry_uri_type'
+        uri length: 1000
+        hash length: 1000
+        document type: 'text'
+        documentFailureMessage length: 1000
+        serverFailureMessage length: 1000
     }
 
     static hasMany = [
@@ -41,42 +62,42 @@ class TrustmarkBindingRegistryUriType {
             trustmarkBindingRegistryUri: TrustmarkBindingRegistryUri
     ]
 
-    static mapping = {
-        table 'trustmark_binding_registry_uri_type'
-        uri length: 1000
-        hash length: 1000
-        json type: 'text'
-        failureMessage length: 1000
-    }
+    org.gtri.fj.data.List<PartnerSystemCandidate> partnerSystemCandidateSetHelper() { fromNull(getPartnerSystemCandidateSet()).map({ collection -> iterableList(collection) }).orSome(nil()) }
 
-    long idHelper() { id }
+    void partnerSystemCandidateSetHelper(final org.gtri.fj.data.List<PartnerSystemCandidate> partnerSystemCandidateSet) { setPartnerSystemCandidateSet(new HashSet<>(partnerSystemCandidateSet.toJavaList())) }
 
     TrustmarkBindingRegistryUri trustmarkBindingRegistryUriHelper() { getTrustmarkBindingRegistryUri() }
 
     void trustmarkBindingRegistryUriHelper(final TrustmarkBindingRegistryUri trustmarkBindingRegistryUri) { setTrustmarkBindingRegistryUri(trustmarkBindingRegistryUri) }
 
-    org.gtri.fj.data.List<PartnerSystemCandidate> partnerSystemCandidateSetHelper() { fromNull(getPartnerSystemCandidateSet()).map({ set -> iterableList(set) }).orSome(nil()) }
-
-    void partnerSystemCandidateSetHelper(final org.gtri.fj.data.List<PartnerSystemCandidate> partnerSystemCandidateSet) { setPartnerSystemCandidateSet(new HashSet<>(partnerSystemCandidateSet.toJavaList())) }
-
-    void deleteHelper() { delete(failOnError: true) }
-
-    void deleteAndFlushHelper() { delete(flush: true, failOnError: true) }
-
-    TrustmarkBindingRegistryUriType saveHelper() { save(failOnError: true) }
-
-    TrustmarkBindingRegistryUriType saveAndFlushHelper() { save(flush: true, failOnError: true) }
-
     static final org.gtri.fj.data.List<TrustmarkBindingRegistryUriType> findAllByOrderByUriAscHelper() {
 
         fromNull(findAll(sort: 'uri', order: 'asc'))
-                .map({ list -> iterableList(list) })
+                .map({ collection -> iterableList(collection) })
                 .orSome(org.gtri.fj.data.List.<TrustmarkBindingRegistryUriType> nil());
     }
 
-    static final Option<TrustmarkBindingRegistryUriType> findByIdHelper(long id) { fromNull(findById(id)) }
-
     static final Option<TrustmarkBindingRegistryUriType> findByUriHelper(final String uri) { fromNull(findByUri(uri)) }
+
+    long idHelper() {
+        id
+    }
+
+    void deleteHelper() {
+        delete(failOnError: true);
+    }
+
+    void deleteAndFlushHelper() {
+        delete(flush: true, failOnError: true)
+    }
+
+    TrustmarkBindingRegistryUriType saveHelper() {
+        save(failOnError: true)
+    }
+
+    TrustmarkBindingRegistryUriType saveAndFlushHelper() {
+        save(flush: true, failOnError: true)
+    }
 
     static final <T> T withTransactionHelper(final F0<T> f0) {
         return withTransaction({ return f0.f() })
@@ -84,5 +105,15 @@ class TrustmarkBindingRegistryUriType {
 
     static final void withTransactionHelper(final Effect0 effect0) {
         withTransaction({ return effect0.f() })
+    }
+
+    static Option<TrustmarkBindingRegistryUriType> findByIdHelper(final long id) {
+        fromNull(findById(id))
+    }
+
+    static org.gtri.fj.data.List<TrustmarkBindingRegistryUriType> findAllHelper() {
+        fromNull(findAll())
+                .map({ collection -> iterableList(collection) })
+                .orSome(org.gtri.fj.data.List.<TrustmarkBindingRegistryUriType> nil());
     }
 }

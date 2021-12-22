@@ -1,6 +1,6 @@
 <html>
     <head>
-        <asset:javascript src="manage_protected_system.js"/>
+        <asset:javascript src="protectedSystem_manage.js"/>
 
         <meta name="layout" content="main"/>
 
@@ -33,7 +33,7 @@
                 </thead>
                 <template id="protected-system-template-empty">
                     <tr>
-                        <td colspan="5">(No protected systems.)</td>
+                        <td colspan="6">(No protected systems.)</td>
                     </tr>
                 </template>
                 <template id="protected-system-template-summary">

@@ -48,11 +48,11 @@ class PasswordController {
         respond response._1(), status: response._2()
     }
 
-    @Secured
+    @Secured('hasAnyRole("ROLE_ADMINISTRATOR", "ROLE_ADMINISTRATOR_ORGANIZATION")')
     def changeWithAuthentication() {
     }
 
-    @Secured
+    @Secured('hasAnyRole("ROLE_ADMINISTRATOR", "ROLE_ADMINISTRATOR_ORGANIZATION")')
     def changeWithAuthenticationSubmit(final PasswordChangeRequestWithAuthentication passwordChangeRequestWithAuthentication) {
 
         P2<Object, Integer> response = toResponse(passwordService.changeWithAuthenticationSubmit(((GrailsUser) getPrincipal()).username, passwordChangeRequestWithAuthentication))

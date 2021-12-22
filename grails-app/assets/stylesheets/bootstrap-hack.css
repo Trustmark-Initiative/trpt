@@ -2,14 +2,18 @@ html {
     font-size: 14px !important;
 }
 
+th {
+    vertical-align: top;
+}
+
 .card-hack {
     border-bottom: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0
 }
 
-.card-header-hack {
-    border-bottom: 0;
+.card-header ~ .card-header {
+    border-top: 1px solid rgba(0,0,0,0.125);
 }
 
 .table-striped-hack > tbody > tr:nth-of-type(2n+1) {
@@ -49,4 +53,8 @@ td.unhack > div {
 
 .form-control:disabled, .form-control[readonly] {
     background-color: rgba(0, 0, 0, .03);
+}
+
+.invalid-feedback ul, .invalid-feedback ol, .invalid-feedback dl {
+    margin-bottom: 0px;
 }

@@ -63,43 +63,64 @@ public class MailUtility {
 
     private static final Log log = LogFactory.getLog(MailUtility.class);
 
-    public static void send(final String recipient, final String subject, final String body) {
+    public static void send(final NonEmptyList<String> recipientNonEmptyList, final String subject, final String body) {
 
         final Mail mail = Mail.findAllHelper().head();
+
+        final TrustmarkMailClientImpl trustmarkMailClientImpl = (TrustmarkMailClientImpl) new TrustmarkMailClientImpl()
+                .setSmtpHost(mail.getHost())
+                .setSmtpPort(String.valueOf(mail.getPort()))
+                .setFromAddress(mail.getAuthor())
+                .setSmtpTimeout(1000)
+                .setSubject(subject)
+                .setText(body);
 
         if ((mail.getUsername() == null || mail.getUsername().trim().isEmpty()) && (mail.getPassword() == null || mail.getPassword().trim().isEmpty())) {
 
             log.info(format("Mail Settings: '%s', '%s'", mail.getHost(), mail.getPort()));
-            log.info(format("From: %s%nTo: %s%nSubject: %s%n%n%s", mail.getAuthor(), recipient, subject, body));
 
-            new TrustmarkMailClientImpl()
-                    .setSmtpHost(mail.getHost())
-                    .setSmtpPort(String.valueOf(mail.getPort()))
-                    .setFromAddress(mail.getAuthor())
-                    .setSmtpAuthorization(false)
-                    .setSmtpTimeout(1000)
-                    .setSubject(subject)
-                    .addRecipient(recipient)
-                    .setText(body)
-                    .sendMail();
+            if (recipientNonEmptyList.length() == 1) {
+                log.info(format("From: %s%nTo: %s%nSubject: %s%n%n%s", mail.getAuthor(), recipientNonEmptyList.head(), subject, body));
+
+                trustmarkMailClientImpl
+                        .addRecipient(recipientNonEmptyList.head())
+                        .setSmtpAuthorization(false)
+                        .sendMail();
+
+            } else {
+                log.info(format("From: %s%nBcc: %s%nSubject: %s%n%n%s", mail.getAuthor(), String.join("; ", recipientNonEmptyList.toList().toJavaList()), subject, body));
+
+                recipientNonEmptyList.toList()
+                        .foldLeft((trustmarkMailClientImplInner, recipient) -> (TrustmarkMailClientImpl) trustmarkMailClientImpl.addBCCRecipient(recipient), trustmarkMailClientImpl)
+                        .setSmtpAuthorization(false)
+                        .sendMail();
+            }
 
         } else {
 
             log.info(format("Mail Settings: '%s', '%s', '%s'", mail.getHost(), mail.getPort(), mail.getUsername()));
-            log.info(format("From: %s%nTo: %s%nSubject: %s%n%n%s", mail.getAuthor(), recipient, subject, body));
 
-            new TrustmarkMailClientImpl()
-                    .setUser(mail.getUsername())
-                    .setPswd(mail.getPassword())
-                    .setSmtpHost(mail.getHost())
-                    .setSmtpPort(String.valueOf(mail.getPort()))
-                    .setFromAddress(mail.getAuthor())
-                    .setSmtpAuthorization(true)
-                    .setSmtpTimeout(1000)
-                    .setSubject(subject)
-                    .addRecipient(recipient)
-                    .setText(body)
-                    .sendMail();
+            if (recipientNonEmptyList.length() == 1) {
+                log.info(format("From: %s%nTo: %s%nSubject: %s%n%n%s", mail.getAuthor(), recipientNonEmptyList.head(), subject, body));
+
+                trustmarkMailClientImpl
+                        .addRecipient(recipientNonEmptyList.head())
+                        .setPswd(mail.getPassword())
+                        .setSmtpHost(mail.getHost())
+                        .setSmtpAuthorization(true)
+                        .sendMail();
+
+            } else {
+                log.info(format("From: %s%nBcc: %s%nSubject: %s%n%n%s", mail.getAuthor(), String.join("; ", recipientNonEmptyList.toList().toJavaList()), subject, body));
+
+                recipientNonEmptyList.toList()
+                        .foldLeft((trustmarkMailClientImplInner, recipient) -> (TrustmarkMailClientImpl) trustmarkMailClientImpl.addBCCRecipient(recipient), trustmarkMailClientImpl)
+                        .setPswd(mail.getPassword())
+                        .setSmtpHost(mail.getHost())
+                        .setSmtpAuthorization(true)
+                        .sendMail();
+            }
         }
+
     }
 }

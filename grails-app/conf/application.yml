@@ -34,7 +34,9 @@ spring:
 management:
     endpoints:
         enabled-by-default: false
-
+    endpoint:
+        health:
+            enabled: true
 ---
 grails:
     mime:

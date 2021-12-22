@@ -11,7 +11,7 @@ public final class ProtectedSystemResponse {
     private final ProtectedSystemTypeResponse type;
     private final String name;
     private final List<ProtectedSystemTrustInteroperabilityProfileResponse> protectedSystemTrustInteroperabilityProfileList;
-    private final List<ProtectedSystemPartnerSystemCandidateSummaryResponse> protectedSystemPartnerSystemCandidateList;
+    private final List<ProtectedSystemPartnerSystemCandidateResponse> protectedSystemPartnerSystemCandidateList;
 
     public ProtectedSystemResponse(
             final OrganizationResponse organization,
@@ -19,7 +19,7 @@ public final class ProtectedSystemResponse {
             final ProtectedSystemTypeResponse type,
             final String name,
             final List<ProtectedSystemTrustInteroperabilityProfileResponse> protectedSystemTrustInteroperabilityProfileList,
-            final List<ProtectedSystemPartnerSystemCandidateSummaryResponse> protectedSystemPartnerSystemCandidateList) {
+            final List<ProtectedSystemPartnerSystemCandidateResponse> protectedSystemPartnerSystemCandidateList) {
         this.organization = organization;
         this.id = id;
         this.type = type;
@@ -48,7 +48,7 @@ public final class ProtectedSystemResponse {
         return protectedSystemTrustInteroperabilityProfileList;
     }
 
-    public List<ProtectedSystemPartnerSystemCandidateSummaryResponse> getProtectedSystemPartnerSystemCandidateList() {
+    public List<ProtectedSystemPartnerSystemCandidateResponse> getProtectedSystemPartnerSystemCandidateList() {
         return protectedSystemPartnerSystemCandidateList;
     }
 }

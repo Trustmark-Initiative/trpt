@@ -14,6 +14,7 @@ import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtilit
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndUniqueAndLength;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNullOr;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeReference;
+import static org.gtri.fj.Equal.equal;
 import static org.gtri.fj.data.Validation.accumulate;
 import static org.gtri.fj.lang.LongUtility.longOrd;
 
@@ -55,14 +56,14 @@ public final class OrganizationUtility {
         return mustBeNullOr(OrganizationField.description, description, (field, value) -> mustBeNonNullAndLength(field, 1, 1000, value));
     }
 
-    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, Organization> validationId(final long id) {
+    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, Organization> validationId(final long id, final List<Organization> organizationList) {
 
-        return mustBeReference(OrganizationField.id, Organization::findByIdHelper, id);
+        return mustBeReference(OrganizationField.id, Organization::findByIdHelper, id, organizationList, equal((o1, o2) -> o1.idHelper() == o2.idHelper()));
     }
 
-    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, List<Organization>> validationIdList(final List<Long> idList) {
+    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, List<Organization>> validationIdList(final List<Long> idList, final List<Organization> organizationList) {
 
-        return mustBeNonNullAndDistinctAndValid(OrganizationField.idList, idList, longOrd, id -> validationId(id)
+        return mustBeNonNullAndDistinctAndValid(OrganizationField.idList, idList, longOrd, id -> validationId(id, organizationList)
                 .bind(organization -> accumulate(
                         mustBeEmpty(OrganizationField.userSet, organization.userSetHelper()),
                         mustBeEmpty(OrganizationField.protectedSystemSet, organization.protectedSystemSetHelper()),

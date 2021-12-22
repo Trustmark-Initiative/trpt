@@ -5,6 +5,7 @@ import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemType;
 import java.util.List;
 
 public final class ProtectedSystemUpdateRequest {
+
     private long id;
     private long organization;
     private String name;

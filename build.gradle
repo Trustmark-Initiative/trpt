@@ -8,10 +8,10 @@ buildscript {
         maven { url 'https://repo.grails.org/grails/core' }
     }
     dependencies {
-        classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:3.2.4'
-        classpath 'gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.0'
-        classpath 'org.grails.plugins:hibernate5:7.0.4'
-        classpath 'org.grails:grails-gradle-plugin:4.0.10'
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.3.4"
+        classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.6"
+        classpath "org.grails.plugins:hibernate5:7.1.0"
+        classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
     }
 }
 
@@ -32,10 +32,10 @@ plugins {
 //
 // https://docs.gradle.org/current/userguide/plugins.html
 
-apply plugin: 'com.bertramlabs.asset-pipeline'
-apply plugin: 'com.github.erdi.webdriver-binaries'
 apply plugin: 'org.grails.grails-web' // web must appear before gsp; otherwise, controllers fail to redirect to views.
 apply plugin: 'org.grails.grails-gsp'
+apply plugin: 'com.github.erdi.webdriver-binaries'
+apply plugin: 'com.bertramlabs.asset-pipeline' // asset-pipeline must appear after web; otherwise, the system fails to find a property.
 
 // Maven coordinates.
 
@@ -63,70 +63,70 @@ configurations {
 }
 
 dependencies {
-    compile 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.17'
-    compile 'edu.gatech.gtri.trustmark:tf-api:1.4.10'
-    compile 'log4j:log4j:1.2.16' // required by tf-api-impl
+    implementation 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.30'
+    implementation 'edu.gatech.gtri.trustmark:tf-api:1.4.21'
 
-    compile 'org.grails.plugins:async'
-    compile 'org.grails.plugins:cache'
-    compile 'org.grails.plugins:events'
-    compile 'org.grails.plugins:gsp'
-    compile 'org.grails.plugins:hibernate5'
-    compile 'org.grails.plugins:quartz:2.0.13' // required for quartz scheduler
-    compile 'org.grails.plugins:scaffolding'
-    compile 'org.grails.plugins:spring-security-core:4.0.3'
-    compile 'org.grails:grails-core'
-    compile 'org.grails:grails-logging'
-    compile 'org.grails:grails-plugin-databinding'
-    compile 'org.grails:grails-plugin-i18n'
-    compile 'org.grails:grails-plugin-interceptors'
-    compile 'org.grails:grails-plugin-rest'
-    compile 'org.grails:grails-plugin-services'
-    compile 'org.grails:grails-plugin-url-mappings'
-    compile 'org.grails:grails-web-boot'
+    implementation 'org.grails.plugins:async'
+    implementation 'org.grails.plugins:cache'
+    implementation 'org.grails.plugins:events'
+    implementation 'org.grails.plugins:gsp'
+    implementation 'org.grails.plugins:hibernate5'
+    implementation 'org.grails.plugins:quartz:2.0.13' // required for quartz scheduler
+    implementation 'org.grails.plugins:scaffolding'
+    implementation 'org.grails.plugins:spring-security-core:4.0.3'
+    implementation 'org.grails:grails-core'
+    implementation 'org.grails:grails-logging'
+    implementation 'org.grails:grails-plugin-databinding'
+    implementation 'org.grails:grails-plugin-i18n'
+    implementation 'org.grails:grails-plugin-interceptors'
+    implementation 'org.grails:grails-plugin-rest'
+    implementation 'org.grails:grails-plugin-services'
+    implementation 'org.grails:grails-plugin-url-mappings'
+    implementation 'org.grails:grails-web-boot'
 
-    compile 'org.hibernate:hibernate-core:5.4.18.Final'
-    compile 'org.hibernate:hibernate-ehcache:5.4.18.Final'
+    implementation 'org.hibernate:hibernate-core:5.5.7.Final'
+    implementation 'org.hibernate:hibernate-ehcache:5.5.7.Final'
 
-    compile 'org.quartz-scheduler:quartz:2.2.1' // required for quartz scheduler
+    implementation 'org.quartz-scheduler:quartz:2.2.1' // required for quartz scheduler
 
-    compile 'org.springframework.boot:spring-boot-autoconfigure'
-    compile 'org.springframework.boot:spring-boot-starter-actuator'
-    compile 'org.springframework.boot:spring-boot-starter-logging'
-    compile 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation 'org.springframework.boot:spring-boot-autoconfigure'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    implementation 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    compile 'org.gtri.functionaljava:functionaljava:4.10.0-GTRI'
+    implementation 'org.gtri.functionaljava:functionaljava:4.10.1-GTRI'
 
-    compile 'javax.el:javax.el-api:2.2.4'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.12.4'
+    implementation 'javax.el:javax.el-api:2.2.4'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.12.4'
 
     compileOnly 'io.micronaut:micronaut-inject-groovy'
 
     console 'org.grails:grails-console'
 
-    developmentOnly('org.springframework.boot:spring-boot-devtools')
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     profile 'org.grails.profiles:web'
 
-    runtime 'com.bertramlabs.plugins:asset-pipeline-grails:3.2.4'
-    runtime 'com.h2database:h2'
-    runtime 'javax.xml.bind:jaxb-api:2.3.1'
-    runtime 'org.apache.tomcat:tomcat-jdbc'
-    runtime 'org.glassfish.web:el-impl:2.1.2-b03'
+    runtimeOnly 'com.bertramlabs.plugins:asset-pipeline-grails:3.3.4'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'javax.xml.bind:jaxb-api:2.3.1'
+    runtimeOnly 'org.apache.tomcat:tomcat-jdbc'
+    runtimeOnly 'org.glassfish.web:el-impl:2.2.1-b05'
 
     runtimeOnly 'mysql:mysql-connector-java:8.0.24'
 
-    testCompile 'io.micronaut:micronaut-inject-groovy'
-    testCompile 'org.grails.plugins:geb'
-    testCompile 'org.grails:grails-gorm-testing-support'
-    testCompile 'org.grails:grails-web-testing-support'
-    testCompile 'org.mockito:mockito-core'
-    testCompile 'org.seleniumhq.selenium:selenium-api:3.14.0'
-    testCompile 'org.seleniumhq.selenium:selenium-remote-driver:3.14.0'
-    testCompile 'org.seleniumhq.selenium:selenium-support:3.14.0'
-    testRuntime 'org.seleniumhq.selenium:selenium-chrome-driver:3.14.0'
-    testRuntime 'org.seleniumhq.selenium:selenium-firefox-driver:3.14.0'
+    testImplementation 'io.micronaut:micronaut-inject-groovy'
+    testImplementation 'org.grails.plugins:geb'
+    testImplementation 'org.grails:grails-gorm-testing-support'
+    testImplementation 'org.grails:grails-web-testing-support'
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.seleniumhq.selenium:selenium-api:3.141.59'
+    testImplementation 'org.seleniumhq.selenium:selenium-remote-driver:3.141.59'
+    testImplementation 'org.seleniumhq.selenium:selenium-support:3.141.59'
 
+    testRuntimeOnly 'org.seleniumhq.selenium:selenium-chrome-driver:3.141.59'
+    testRuntimeOnly 'org.seleniumhq.selenium:selenium-firefox-driver:3.141.59'
 }
 
 bootRun {
@@ -177,17 +177,17 @@ tasks.withType(GroovyCompile) {
 }
 
 tasks.withType(Test) {
-    systemProperty 'geb.env', System.getProperty('geb.env')
-    systemProperty 'geb.build.reportsDir', reporting.file('geb/integrationTest')
-    systemProperty 'webdriver.chrome.driver', System.getProperty('webdriver.chrome.driver')
-    systemProperty 'webdriver.gecko.driver', System.getProperty('webdriver.gecko.driver')
-}
-
-test {
     useJUnitPlatform()
 }
 
 webdriverBinaries {
     chromedriver '2.45.0'
     geckodriver '0.24.0'
+}
+
+tasks.withType(Test) {
+    systemProperty "geb.env", System.getProperty('geb.env')
+    systemProperty "geb.build.reportsDir", reporting.file("geb/integrationTest")
+    systemProperty "webdriver.chrome.driver", System.getProperty('webdriver.chrome.driver')
+    systemProperty "webdriver.gecko.driver", System.getProperty('webdriver.gecko.driver')
 }

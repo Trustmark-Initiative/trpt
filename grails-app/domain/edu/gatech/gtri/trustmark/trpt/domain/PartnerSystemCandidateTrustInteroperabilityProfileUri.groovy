@@ -6,6 +6,7 @@ import org.gtri.fj.function.F0
 
 import java.time.LocalDateTime
 
+import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
 class PartnerSystemCandidateTrustInteroperabilityProfileUri {
@@ -14,16 +15,11 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
     LocalDateTime evaluationLocalDateTime
 
     Boolean evaluationTrustExpressionSatisfied
-    String evaluationTrustExpression
+    byte[] evaluationTrustExpression
 
     Integer evaluationTrustmarkDefinitionRequirementSatisfied
     Integer evaluationTrustmarkDefinitionRequirementUnsatisfied
-    String evaluationTrustmarkDefinitionRequirement
-
-    static belongsTo = [
-            partnerSystemCandidate         : PartnerSystemCandidate,
-            trustInteroperabilityProfileUri: TrustInteroperabilityProfileUri
-    ]
+    byte[] evaluationTrustmarkDefinitionRequirement
 
     static constraints = {
         evaluationAttemptLocalDateTime nullable: true
@@ -37,11 +33,17 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
 
     static mapping = {
         table 'partner_system_candidate_trust_interoperability_profile_uri'
-        evaluationTrustExpression type: 'text'
-        evaluationTrustmarkDefinitionRequirement type: 'text'
+        evaluationTrustExpression sqlType: 'mediumblob'
+        evaluationTrustmarkDefinitionRequirement sqlType: 'mediumblob'
     }
 
-    long idHelper() { getId() }
+    static belongsTo = [
+            partnerSystemCandidate         : PartnerSystemCandidate,
+            trustInteroperabilityProfileUri: TrustInteroperabilityProfileUri
+    ]
+    static hasMany = [
+            mailEvaluationUpdateSet: MailEvaluationUpdate
+    ]
 
     PartnerSystemCandidate partnerSystemCandidateHelper() { getPartnerSystemCandidate() }
 
@@ -51,17 +53,33 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
 
     void trustInteroperabilityProfileUriHelper(final TrustInteroperabilityProfileUri trustInteroperabilityProfileUri) { setTrustInteroperabilityProfileUri(trustInteroperabilityProfileUri) }
 
-    void deleteHelper() { delete(failOnError: true) }
+    org.gtri.fj.data.List<MailEvaluationUpdate> mailEvaluationUpdateSetHelper() { fromNull(mailEvaluationUpdateSet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<MailEvaluationUpdate> nil()) }
 
-    void deleteAndFlushHelper() { delete(flush: true, failOnError: true) }
-
-    PartnerSystemCandidateTrustInteroperabilityProfileUri saveHelper() { save(failOnError: true) }
-
-    PartnerSystemCandidateTrustInteroperabilityProfileUri saveAndFlushHelper() { save(flush: true, failOnError: true) }
+    void mailEvaluationUpdateSetHelper(final org.gtri.fj.data.List<MailEvaluationUpdate> mailEvaluationUpdateSet) { setMailEvaluationUpdateSet(new HashSet<>(mailEvaluationUpdateSet.toJavaList())) }
 
     static Option<PartnerSystemCandidateTrustInteroperabilityProfileUri> findByPartnerSystemCandidateAndTrustInteroperabilityProfileUriHelper(final PartnerSystemCandidate partnerSystemCandidate, final TrustInteroperabilityProfileUri trustInteroperabilityProfileUri) {
 
         fromNull(findByPartnerSystemCandidateAndTrustInteroperabilityProfileUri(partnerSystemCandidate, trustInteroperabilityProfileUri))
+    }
+
+    long idHelper() {
+        id
+    }
+
+    void deleteHelper() {
+        delete(failOnError: true);
+    }
+
+    void deleteAndFlushHelper() {
+        delete(flush: true, failOnError: true)
+    }
+
+    PartnerSystemCandidateTrustInteroperabilityProfileUri saveHelper() {
+        save(failOnError: true)
+    }
+
+    PartnerSystemCandidateTrustInteroperabilityProfileUri saveAndFlushHelper() {
+        save(flush: true, failOnError: true)
     }
 
     static final <T> T withTransactionHelper(final F0<T> f0) {
@@ -70,5 +88,15 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
 
     static final void withTransactionHelper(final Effect0 effect0) {
         withTransaction({ return effect0.f() })
+    }
+
+    static Option<PartnerSystemCandidateTrustInteroperabilityProfileUri> findByIdHelper(final long id) {
+        fromNull(findById(id))
+    }
+
+    static org.gtri.fj.data.List<PartnerSystemCandidateTrustInteroperabilityProfileUri> findAllHelper() {
+        fromNull(findAll())
+                .map({ collection -> iterableList(collection) })
+                .orSome(org.gtri.fj.data.List.<PartnerSystemCandidateTrustInteroperabilityProfileUri> nil());
     }
 }

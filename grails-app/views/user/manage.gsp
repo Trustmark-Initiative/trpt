@@ -1,6 +1,6 @@
 <html>
     <head>
-        <asset:javascript src="manage_user.js"/>
+        <asset:javascript src="user_manage.js"/>
 
         <meta name="layout" content="main"/>
 

@@ -11,8 +11,8 @@ public final class RoleUtility {
     public static RoleResponse roleResponse(final Role role) {
 
         return new RoleResponse(
-                role.getIdHelper(),
-                RoleName.valueOf(role.getNameHelper()).name(),
-                RoleName.valueOf(role.getNameHelper()).getName());
+                role.idHelper(),
+                RoleName.valueOf(role.getName()).name(),
+                RoleName.valueOf(role.getName()).getName());
     }
 }

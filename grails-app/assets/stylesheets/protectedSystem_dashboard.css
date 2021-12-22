@@ -147,17 +147,25 @@
     display: inline-block;
 }
 
-.SUCCESS {
+.TRUE {
     background: white;
     color: black;
 }
 
 .FAILURE {
+    font-style: italic;
+    background: rgb(249, 249, 249);
+    color: maroon;
+}
+
+.FALSE {
     background: rgb(249, 249, 249);
     color: maroon;
 }
 
 .UNKNOWN {
+    background: white;
+    font-style: normal;
     color: #b36200;
 }
 
@@ -215,7 +223,7 @@
 
 .code {
     font-family: monospace;
-    font-size: 10px;
+    font-size: 12px;
     margin: 0 auto;
     padding: 7px 0px 7px 0px;
     display: inline;
@@ -355,7 +363,7 @@
 }
 
 .TrustExpressionEvaluatorFailure > div.code {
-    padding: 4px 11px 4px 11px;
+    padding: 10px 11px 4px 11px;
 }
 
 .TrustExpressionEvaluatorFailure > div:nth-child(n + 1) {
@@ -424,3 +432,13 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.EvaluationLocalDateTime {
+    display: none;
+    float: right;
+}
+
+.TrustExpressionTop > .TrustInteroperabilityProfileInner > .EvaluationLocalDateTime {
+    display: inline;
+}
+

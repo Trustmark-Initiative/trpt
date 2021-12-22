@@ -17,10 +17,6 @@ class MailPasswordReset {
     LocalDateTime resetDateTime
     LocalDateTime expireDateTime
 
-    static belongsTo = [
-            user: User
-    ]
-
     static constraints = {
         external nullable: true, length: 36
         requestDateTime nullable: true
@@ -29,32 +25,26 @@ class MailPasswordReset {
         expireDateTime nullable: true
     }
 
-    long idHelper() { getId() }
+    static belongsTo = [
+            user: User
+    ]
 
     User userHelper() { getUser() }
 
     void userHelper(final User user) { setUser(user) }
 
-    void deleteHelper() { delete(failOnError: true) }
-
-    void deleteAndFlushHelper() { delete(flush: true, failOnError: true) }
-
-    MailPasswordReset saveHelper() { save(failOnError: true) }
-
-    MailPasswordReset saveAndFlushHelper() { save(flush: true, failOnError: true) }
-
     static final org.gtri.fj.data.List<MailPasswordReset> findAllByUserHelper(
             final User user) {
 
         fromNull(findAllByUser(user))
-                .map({ list -> iterableList(list) })
+                .map({ collection -> iterableList(collection) })
                 .orSome(org.gtri.fj.data.List.<MailPasswordReset> nil())
     }
 
     static final org.gtri.fj.data.List<MailPasswordReset> findAllByMailDateTimeIsNullHelper() {
 
         fromNull(findAllByMailDateTimeIsNull())
-                .map({ list -> iterableList(list) })
+                .map({ collection -> iterableList(collection) })
                 .orSome(org.gtri.fj.data.List.<MailPasswordReset> nil())
     }
 
@@ -64,11 +54,41 @@ class MailPasswordReset {
         fromNull(findByExternal(external))
     }
 
+    long idHelper() {
+        id
+    }
+
+    void deleteHelper() {
+        delete(failOnError: true)
+    }
+
+    void deleteAndFlushHelper() {
+        delete(flush: true, failOnError: true)
+    }
+
+    MailPasswordReset saveHelper() {
+        save(failOnError: true)
+    }
+
+    MailPasswordReset saveAndFlushHelper() {
+        save(flush: true, failOnError: true)
+    }
+
     static final <T> T withTransactionHelper(final F0<T> f0) {
         return withTransaction({ return f0.f() })
     }
 
     static final void withTransactionHelper(final Effect0 effect0) {
         withTransaction({ return effect0.f() })
+    }
+
+    static Option<MailPasswordReset> findByIdHelper(final long id) {
+        fromNull(findById(id))
+    }
+
+    static org.gtri.fj.data.List<MailPasswordReset> findAllHelper() {
+        fromNull(findAll())
+                .map({ collection -> iterableList(collection) })
+                .orSome(org.gtri.fj.data.List.<MailPasswordReset> nil());
     }
 }

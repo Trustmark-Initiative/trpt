@@ -14,7 +14,7 @@ import static edu.gatech.gtri.trustmark.trpt.controller.ResponseUtility.toRespon
 
 @CompileStatic
 @Transactional
-@Secured('hasAnyRole("ROLE_ADMINISTRATOR", "ROLE_ADMINISTRATOR_ORGANIZATION")')
+@Secured('hasAnyRole("ROLE_ADMINISTRATOR")')
 class MailController {
 
     MailService mailService
@@ -27,7 +27,9 @@ class MailController {
 
     Object find(final MailFindRequest mailFindRequest) {
 
-        respond mailService.find(((GrailsUser) getPrincipal()).username, mailFindRequest)
+        P2<Object, Integer> response = toResponse(mailService.find(((GrailsUser) getPrincipal()).username, mailFindRequest))
+
+        respond response._1(), status: response._2()
     }
 
     Object update(final MailUpdateRequest mailUpdateRequest) {

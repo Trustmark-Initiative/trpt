@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
-class TrustInteroperabilityProfileUriHistory {
+class TrustInteroperabilityProfileUriHistory implements Uri {
 
     String uri
     String name
@@ -18,12 +18,17 @@ class TrustInteroperabilityProfileUriHistory {
     String issuerName
     String issuerIdentifier
     String hash
-    String json
-    LocalDateTime requestLocalDateTime
-    LocalDateTime successLocalDateTime
-    LocalDateTime failureLocalDateTime
-    LocalDateTime changeLocalDateTime
-    String failureMessage
+    String document
+    LocalDateTime documentRequestLocalDateTime
+    LocalDateTime documentSuccessLocalDateTime
+    LocalDateTime documentFailureLocalDateTime
+    LocalDateTime documentChangeLocalDateTime
+    String documentFailureMessage
+    LocalDateTime serverRequestLocalDateTime
+    LocalDateTime serverSuccessLocalDateTime
+    LocalDateTime serverFailureLocalDateTime
+    LocalDateTime serverChangeLocalDateTime
+    String serverFailureMessage
 
     static constraints = {
         uri nullable: true
@@ -33,12 +38,17 @@ class TrustInteroperabilityProfileUriHistory {
         issuerName nullable: true
         issuerIdentifier nullable: true
         hash nullable: true
-        json nullable: true
-        requestLocalDateTime nullable: true
-        successLocalDateTime nullable: true
-        failureLocalDateTime nullable: true
-        changeLocalDateTime nullable: true
-        failureMessage nullable: true
+        document nullable: true
+        documentRequestLocalDateTime nullable: true
+        documentSuccessLocalDateTime nullable: true
+        documentFailureLocalDateTime nullable: true
+        documentChangeLocalDateTime nullable: true
+        documentFailureMessage nullable: true
+        serverRequestLocalDateTime nullable: true
+        serverSuccessLocalDateTime nullable: true
+        serverFailureLocalDateTime nullable: true
+        serverChangeLocalDateTime nullable: true
+        serverFailureMessage nullable: true
     }
 
     static mapping = {
@@ -49,23 +59,30 @@ class TrustInteroperabilityProfileUriHistory {
         issuerName length: 1000
         issuerIdentifier length: 1000
         hash length: 1000
-        json type: 'text'
-        failureMessage length: 1000
+        document type: 'text'
+        documentFailureMessage length: 1000
+        serverFailureMessage length: 1000
     }
 
-    long idHelper() { id }
+    long idHelper() {
+        id
+    }
 
-    void deleteHelper() { delete(failOnError: true) }
+    void deleteHelper() {
+        delete(failOnError: true);
+    }
 
-    void deleteAndFlushHelper() { delete(flush: true, failOnError: true) }
+    void deleteAndFlushHelper() {
+        delete(flush: true, failOnError: true)
+    }
 
-    TrustInteroperabilityProfileUriHistory saveHelper() { save(failOnError: true) }
+    TrustInteroperabilityProfileUriHistory saveHelper() {
+        save(failOnError: true)
+    }
 
-    TrustInteroperabilityProfileUriHistory saveAndFlushHelper() { save(flush: true, failOnError: true) }
-
-    static final org.gtri.fj.data.List<TrustInteroperabilityProfileUriHistory> findAllHelper() { fromNull(findAll()).map({ List<TrustInteroperabilityProfileUriHistory> list -> iterableList(list) }) orSome(org.gtri.fj.data.List.<TrustInteroperabilityProfileUriHistory> nil()) }
-
-    static final Option<TrustInteroperabilityProfileUriHistory> findByIdHelper(long id) { fromNull(findById(id)) }
+    TrustInteroperabilityProfileUriHistory saveAndFlushHelper() {
+        save(flush: true, failOnError: true)
+    }
 
     static final <T> T withTransactionHelper(final F0<T> f0) {
         return withTransaction({ return f0.f() })
@@ -73,5 +90,15 @@ class TrustInteroperabilityProfileUriHistory {
 
     static final void withTransactionHelper(final Effect0 effect0) {
         withTransaction({ return effect0.f() })
+    }
+
+    static Option<TrustInteroperabilityProfileUriHistory> findByIdHelper(final long id) {
+        fromNull(findById(id))
+    }
+
+    static org.gtri.fj.data.List<TrustInteroperabilityProfileUriHistory> findAllHelper() {
+        fromNull(findAll())
+                .map({ collection -> iterableList(collection) })
+                .orSome(org.gtri.fj.data.List.<TrustInteroperabilityProfileUriHistory> nil());
     }
 }

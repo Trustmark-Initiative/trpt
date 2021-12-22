@@ -4,6 +4,7 @@ import edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationResponse;
 import edu.gatech.gtri.trustmark.trpt.service.role.RoleResponse;
 
 public class UserResponse {
+
     private final long id;
     private final String username;
     private final String nameFamily;
@@ -15,6 +16,7 @@ public class UserResponse {
     private final boolean passwordExpired;
     private final OrganizationResponse organization;
     private final RoleResponse role;
+    private final boolean editable;
 
     public UserResponse(
             final long id,
@@ -27,7 +29,8 @@ public class UserResponse {
             final boolean userExpired,
             final boolean passwordExpired,
             final OrganizationResponse organization,
-            final RoleResponse role) {
+            final RoleResponse role,
+            final boolean editable) {
         this.id = id;
         this.username = username;
         this.nameFamily = nameFamily;
@@ -39,6 +42,7 @@ public class UserResponse {
         this.passwordExpired = passwordExpired;
         this.organization = organization;
         this.role = role;
+        this.editable = editable;
     }
 
     public long getId() {
@@ -83,5 +87,9 @@ public class UserResponse {
 
     public RoleResponse getRole() {
         return role;
+    }
+
+    public boolean isEditable() {
+        return editable;
     }
 }
