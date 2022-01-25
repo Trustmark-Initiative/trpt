@@ -9,6 +9,10 @@ import static org.gtri.fj.data.Option.fromNull
 
 class UserRole {
 
+    static mapping = {
+        table 'user_role'
+    }
+
     static belongsTo = [
             user: User,
             role: Role

@@ -18,13 +18,9 @@ public class UriSynchronizerForTrustmarkStatusReport extends UriSynchronizer<Tru
                 "Trustmark Status Report",
                 FactoryLoader.getInstance(TrustmarkStatusReportResolver.class)::resolve,
                 FactoryLoader.getInstance(HashFactory.class)::hash,
-                TrustmarkStatusReportUri::withTransactionHelper,
                 () -> TrustmarkStatusReportUri.withTransactionHelper(() -> TrustmarkStatusReportUri.findAllHelper()),
-                TrustmarkStatusReportUri::findByUriHelper,
+                (uriString, f) -> TrustmarkStatusReportUri.withTransactionHelper(() -> f.f(TrustmarkStatusReportUri.findByUriHelper(uriString))),
                 () -> new TrustmarkStatusReportUri(),
-                TrustmarkStatusReportUri::saveHelper,
-                () -> new TrustmarkStatusReportUriHistory(),
-                TrustmarkStatusReportUriHistory::saveHelper,
-                false);
+                TrustmarkStatusReportUri::saveHelper);
     }
 }

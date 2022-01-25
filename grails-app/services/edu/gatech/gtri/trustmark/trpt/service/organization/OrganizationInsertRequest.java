@@ -1,40 +1,47 @@
 package edu.gatech.gtri.trustmark.trpt.service.organization;
 
+import java.util.List;
+
 public final class OrganizationInsertRequest {
     private String name;
     private String uri;
     private String description;
+    private List<OrganizationTrustInteroperabilityProfileUpsertRequest> organizationTrustInteroperabilityProfileList;
+    private List<Long> partnerOrganizationCandidateList;
 
     OrganizationInsertRequest() {
     }
 
-    OrganizationInsertRequest(final String name, final String uri, final String description) {
+    public OrganizationInsertRequest(
+            final String name,
+            final String uri,
+            final String description,
+            final List<OrganizationTrustInteroperabilityProfileUpsertRequest> organizationTrustInteroperabilityProfileList,
+            final List<Long> partnerOrganizationCandidateList) {
         this.name = name;
         this.uri = uri;
         this.description = description;
+        this.organizationTrustInteroperabilityProfileList = organizationTrustInteroperabilityProfileList;
+        this.partnerOrganizationCandidateList = partnerOrganizationCandidateList;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getUri() {
         return uri;
-    }
-
-    public void setUri(String uri) {
-        this.uri = uri;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public List<OrganizationTrustInteroperabilityProfileUpsertRequest> getOrganizationTrustInteroperabilityProfileList() {
+        return organizationTrustInteroperabilityProfileList;
+    }
+
+    public List<Long> getPartnerOrganizationCandidateList() {
+        return partnerOrganizationCandidateList;
     }
 }

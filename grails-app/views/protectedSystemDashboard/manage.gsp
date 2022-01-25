@@ -188,7 +188,7 @@
                     </div>
 
                     <div class="row pb-2">
-                        <label id="trust-interoperability-profile-label-document-failure-message" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-failure-message">Last Failure Message</label>
+                        <label id="trust-interoperability-profile-label-document-failure-message" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-document-failure-message">Last Failure Message</label>
 
                         <div class="col-9">
                             <input type="text" id="trust-interoperability-profile-input-document-failure-message" name="failure-message" class="form-control" readonly>
@@ -231,7 +231,7 @@
                     </div>
 
                     <div class="row pb-2">
-                        <label id="trust-interoperability-profile-label-server-failure-message" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-failure-message">Last Failure Message</label>
+                        <label id="trust-interoperability-profile-label-server-failure-message" class="col-3 col-form-label text-end" for="trust-interoperability-profile-input-server-failure-message">Last Failure Message</label>
 
                         <div class="col-9">
                             <input type="text" id="trust-interoperability-profile-input-server-failure-message" name="failure-message" class="form-control" readonly>

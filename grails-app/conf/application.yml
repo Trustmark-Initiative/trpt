@@ -55,22 +55,22 @@ grails:
             csv: text/csv
             form: application/x-www-form-urlencoded
             html:
-              - text/html
-              - application/xhtml+xml
+                - text/html
+                - application/xhtml+xml
             js: text/javascript
             json:
-              - application/json
-              - text/json
+                - application/json
+                - text/json
             multipartForm: multipart/form-data
             pdf: application/pdf
             rss: application/rss+xml
             text: text/plain
             hal:
-              - application/hal+json
-              - application/hal+xml
+                - application/hal+json
+                - application/hal+xml
             xml:
-              - text/xml
-              - application/xml
+                - text/xml
+                - application/xml
     urlmapping:
         cache:
             maxsize: 1000
@@ -113,9 +113,9 @@ dataSource:
     driverClassName: com.mysql.cj.jdbc.Driver
     dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     dbCreate: update
-    url: jdbc:mysql://trptDatabase:3306/trpt_db?verifyServerCertificate=false&useSSL=false&allowPublicKeyRetrieval=true
-    username: trpt_user
-    password: trpt_pw_11
+    url: jdbc:mysql://localhost:3306/trpt?verifyServerCertificate=false&useSSL=false&allowPublicKeyRetrieval=true
+    username: admin
+    password: admin11!
 #    logSql: true
 
 ---

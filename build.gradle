@@ -63,8 +63,8 @@ configurations {
 }
 
 dependencies {
-    implementation 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.30'
-    implementation 'edu.gatech.gtri.trustmark:tf-api:1.4.21'
+    implementation 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.35'
+    implementation 'edu.gatech.gtri.trustmark:tf-api:1.4.23'
 
     implementation 'org.grails.plugins:async'
     implementation 'org.grails.plugins:cache'
@@ -95,6 +95,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-tomcat'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    implementation 'org.springframework.retry:spring-retry' // required for spring retry
+
     implementation 'org.gtri.functionaljava:functionaljava:4.10.1-GTRI'
 
     implementation 'javax.el:javax.el-api:2.2.4'
@@ -115,6 +117,8 @@ dependencies {
     runtimeOnly 'org.glassfish.web:el-impl:2.2.1-b05'
 
     runtimeOnly 'mysql:mysql-connector-java:8.0.24'
+
+    runtimeOnly 'org.springframework.boot:spring-boot-starter-aop' // required for spring retry
 
     testImplementation 'io.micronaut:micronaut-inject-groovy'
     testImplementation 'org.grails.plugins:geb'

@@ -27,6 +27,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="card-body">
                     <div class="row pb-2">
                         <label id="mail-setting-label-host" class="col-2 col-form-label text-end label-required" for="mail-setting-input-host">Mail Relay Host</label>
@@ -106,6 +107,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="card-body">
                     <div class="row pb-2">
                         <label id="mail-test-label-recipient" class="col-2 col-form-label text-end label-required" for="mail-test-input-recipient">Recipient Address</label>

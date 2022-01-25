@@ -24,6 +24,7 @@ class Mail {
     }
 
     static mapping = {
+        table 'mail'
         host length: 1000
         username length: 1000
         password length: 1000

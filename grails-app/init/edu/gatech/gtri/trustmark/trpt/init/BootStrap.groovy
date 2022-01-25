@@ -17,10 +17,9 @@ import edu.gatech.gtri.trustmark.trpt.job.JobForTrustmarkBindingRegistryUri
 import edu.gatech.gtri.trustmark.trpt.job.JobForTrustmarkDefinitionUri
 import edu.gatech.gtri.trustmark.trpt.job.JobForTrustmarkStatusReportUri
 import edu.gatech.gtri.trustmark.trpt.job.JobForTrustmarkUri
-import edu.gatech.gtri.trustmark.trpt.service.job.urisynchronizer.UriSynchronizerForTrustInteroperabilityProfile
+import edu.gatech.gtri.trustmark.trpt.service.ApplicationProperties
 import edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForTrustmarkBindingRegistry
 import edu.gatech.gtri.trustmark.trpt.service.job.urisynchronizer.UriSynchronizerForTrustInteroperabilityProfile
-import edu.gatech.gtri.trustmark.trpt.service.job.urisynchronizer.UriSynchronizerForTrustmarkBindingRegistry
 import grails.converters.JSON
 import grails.core.GrailsApplication
 import groovy.transform.CompileStatic
@@ -38,6 +37,7 @@ import org.quartz.Trigger
 import org.quartz.TriggerBuilder
 import org.quartz.impl.StdSchedulerFactory
 
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -72,8 +72,6 @@ class BootStrap {
         initializeTrustInteroperabilityProfileUri()
     }
 
-    private static final String propertyNameServerUrl = 'server.url'
-
     private Server initializeServer() {
         Server.withTransaction {
 
@@ -82,7 +80,7 @@ class BootStrap {
             if (serverList.isEmpty()) {
 
                 final Server server = new Server(
-                        url: grailsApplication.config[propertyNameServerUrl])
+                        url: grailsApplication.config[ApplicationProperties.propertyNameServerUrl])
 
                 log.info("Inserting server ('${server.url}') ...")
 
@@ -99,12 +97,6 @@ class BootStrap {
         }
     }
 
-    private static final String propertyNameJavaMailSenderHost = 'javaMailSender.host'
-    private static final String propertyNameJavaMailSenderPort = 'javaMailSender.port'
-    private static final String propertyNameJavaMailSenderUsername = 'javaMailSender.username'
-    private static final String propertyNameJavaMailSenderPassword = 'javaMailSender.password'
-    private static final String propertyNameJavaMailSenderAuthor = 'javaMailSender.author'
-
     private Mail initializeMail() {
         Mail.withTransaction {
 
@@ -113,11 +105,11 @@ class BootStrap {
             if (mailList.isEmpty()) {
 
                 final Mail mail = new Mail(
-                        host: grailsApplication.config[propertyNameJavaMailSenderHost],
-                        port: Long.parseLong(grailsApplication.config[propertyNameJavaMailSenderPort].toString()),
-                        username: grailsApplication.config[propertyNameJavaMailSenderUsername],
-                        password: grailsApplication.config[propertyNameJavaMailSenderPassword],
-                        author: grailsApplication.config[propertyNameJavaMailSenderAuthor])
+                        host: grailsApplication.config[ApplicationProperties.propertyNameJavaMailSenderHost],
+                        port: Long.parseLong(grailsApplication.config[ApplicationProperties.propertyNameJavaMailSenderPort].toString()),
+                        username: grailsApplication.config[ApplicationProperties.propertyNameJavaMailSenderUsername],
+                        password: grailsApplication.config[ApplicationProperties.propertyNameJavaMailSenderPassword],
+                        author: grailsApplication.config[ApplicationProperties.propertyNameJavaMailSenderAuthor])
 
                 log.info("Inserting mail ('${mail.host}', '${mail.port}', '${mail.username}', '${mail.author}') ...")
 
@@ -160,20 +152,16 @@ class BootStrap {
         }
     }
 
-    private static final String propertyNameOrganizationName = 'organization.name'
-    private static final String propertyNameOrganizationUrl = 'organization.uri'
-    private static final String propertyNameOrganizationDescription = 'organization.description'
-
     private Organization initializeOrganization() {
         Organization.withTransaction {
-            final Option<Organization> organizationOption = Organization.findByUriHelper(grailsApplication.config[propertyNameOrganizationUrl].toString())
+            final Option<Organization> organizationOption = Organization.findByUriHelper(grailsApplication.config[ApplicationProperties.propertyNameOrganizationUrl].toString())
 
             if (organizationOption.isNone()) {
 
                 final Organization organization = new Organization(
-                        name: grailsApplication.config[propertyNameOrganizationName],
-                        uri: grailsApplication.config[propertyNameOrganizationUrl],
-                        description: grailsApplication.config[propertyNameOrganizationDescription])
+                        name: grailsApplication.config[ApplicationProperties.propertyNameOrganizationName],
+                        uri: grailsApplication.config[ApplicationProperties.propertyNameOrganizationUrl],
+                        description: grailsApplication.config[ApplicationProperties.propertyNameOrganizationDescription])
 
                 log.info("Inserting organization '${organization.name}' (${organization.uri}) ...")
                 final Organization organizationSave = organization.saveAndFlushHelper()
@@ -182,43 +170,32 @@ class BootStrap {
 
             } else {
 
-                log.info("Organization '${grailsApplication.config[propertyNameOrganizationName]}' '(${grailsApplication.config[propertyNameOrganizationUrl]})' exists.");
+                log.info("Organization '${grailsApplication.config[ApplicationProperties.propertyNameOrganizationName]}' '(${grailsApplication.config[ApplicationProperties.propertyNameOrganizationUrl]})' exists.");
 
                 organizationOption.some()
             }
         }
     }
 
-    private static final String propertyNameUserUsername = 'user.username'
-    private static final String propertyNameUserPassword = 'user.password'
-    private static final String propertyNameUserNameGiven = 'user.nameGiven'
-    private static final String propertyNameUserNameFamily = 'user.nameFamily'
-    private static final String propertyNameUserTelephone = 'user.telephone'
-    private static final String propertyNameUserUserEnabled = 'user.userEnabled'
-    private static final String propertyNameUserUserLocked = 'user.userLocked'
-    private static final String propertyNameUserUserExpired = 'user.userExpired'
-    private static final String propertyNameUserPasswordExpired = 'user.passwordExpired'
-    private static final String propertyNameRoleName = 'role.name'
-
     private void initializeUser(final Organization organization) {
         User.withTransaction {
             if (User.count() == 0) {
                 final User user = new User(
-                        username: grailsApplication.config[propertyNameUserUsername],
-                        password: grailsApplication.config[propertyNameUserPassword],
-                        nameGiven: grailsApplication.config[propertyNameUserNameFamily],
-                        nameFamily: grailsApplication.config[propertyNameUserNameGiven],
-                        telephone: grailsApplication.config[propertyNameUserTelephone],
-                        userEnabled: grailsApplication.config[propertyNameUserUserEnabled],
-                        userLocked: grailsApplication.config[propertyNameUserUserLocked],
-                        userExpired: grailsApplication.config[propertyNameUserUserExpired],
-                        passwordExpired: grailsApplication.config[propertyNameUserPasswordExpired],
+                        username: grailsApplication.config[ApplicationProperties.propertyNameUserUsername],
+                        password: grailsApplication.config[ApplicationProperties.propertyNameUserPassword],
+                        nameGiven: grailsApplication.config[ApplicationProperties.propertyNameUserNameFamily],
+                        nameFamily: grailsApplication.config[ApplicationProperties.propertyNameUserNameGiven],
+                        telephone: grailsApplication.config[ApplicationProperties.propertyNameUserTelephone],
+                        userEnabled: grailsApplication.config[ApplicationProperties.propertyNameUserUserEnabled],
+                        userLocked: grailsApplication.config[ApplicationProperties.propertyNameUserUserLocked],
+                        userExpired: grailsApplication.config[ApplicationProperties.propertyNameUserUserExpired],
+                        passwordExpired: grailsApplication.config[ApplicationProperties.propertyNameUserPasswordExpired],
                         organization: organization)
 
                 log.info("Inserting user '${user.username}' ...")
                 user.saveAndFlushHelper()
 
-                Role.findByNameHelper(grailsApplication.config[propertyNameRoleName].toString())
+                Role.findByNameHelper(grailsApplication.config[ApplicationProperties.propertyNameRoleName].toString())
                         .map({ Role role ->
 
                             final UserRole userRole = new UserRole(user: user, role: role);
@@ -233,17 +210,14 @@ class BootStrap {
         }
     }
 
-    private static final String propertyNameTrustmarkBindingRegistryName = 'trustmarkBindingRegistry.name'
-    private static final String propertyNameTrustmarkBindingRegistryUri = 'trustmarkBindingRegistry.uri'
-    private static final String propertyNameTrustmarkBindingRegistryDescription = 'trustmarkBindingRegistry.description'
-
     private void initializeTrustmarkBindingRegistry(final Organization organization, final LocalDateTime now) {
 
         TrustmarkBindingRegistry.withTransaction {
 
-            final String name = grailsApplication.config[propertyNameTrustmarkBindingRegistryName]
-            final String uri = grailsApplication.config[propertyNameTrustmarkBindingRegistryUri]
-            final String description = grailsApplication.config[propertyNameTrustmarkBindingRegistryDescription]
+            final String name = grailsApplication.config[ApplicationProperties.propertyNameTrustmarkBindingRegistryName]
+            final String uri = grailsApplication.config[ApplicationProperties.propertyNameTrustmarkBindingRegistryUri]
+            final String description = grailsApplication.config[ApplicationProperties.propertyNameTrustmarkBindingRegistryDescription]
+            final Duration duration = Duration.parse(grailsApplication.config[ApplicationProperties.propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriEvaluationPeriodMaximum].toString())
 
             final TrustmarkBindingRegistryUri trustmarkBindingRegistryUri = TrustmarkBindingRegistryUri.findByUriHelper(uri)
                     .map({ trustmarkBindingRegistryUri ->
@@ -257,11 +231,11 @@ class BootStrap {
                         log.info("Inserting Trustmark Binding Registry URI '${uri}' ...")
 
                         final TrustmarkBindingRegistryUri trustmarkBindingRegistryUri = new TrustmarkBindingRegistryUri();
-                        trustmarkBindingRegistryUri.setUri(grailsApplication.config[propertyNameTrustmarkBindingRegistryUri].toString())
+                        trustmarkBindingRegistryUri.setUri(grailsApplication.config[ApplicationProperties.propertyNameTrustmarkBindingRegistryUri].toString())
                         trustmarkBindingRegistryUri.saveAndFlushHelper()
                     })
 
-            JobUtilityForTrustmarkBindingRegistry.synchronizeTrustmarkBindingRegistryUriAndDependencies(now, uri);
+            JobUtilityForTrustmarkBindingRegistry.synchronizeTrustmarkBindingRegistryUriAndDependencies(duration, now, uri);
 
             final TrustmarkBindingRegistry trustmarkBindingRegistry = TrustmarkBindingRegistry.findByOrganizationAndTrustmarkBindingRegistryUriHelper(organization, trustmarkBindingRegistryUri)
                     .map({ trustmarkBindingRegistry ->
@@ -291,31 +265,25 @@ class BootStrap {
         UriSynchronizerForTrustInteroperabilityProfile.INSTANCE.synchronizeUri(LocalDateTime.now(ZoneOffset.UTC), "https://trustmark.nief.org/tpat/tips/nief-recommended-attributes/2.0/")
     }
 
-    private static final String propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriCronExpression = 'jobForPartnerSystemCandidateTrustInteroperabilityProfileUri.cronExpression'
-    private static final String propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriEvaluationPeriodMaximum = 'jobForPartnerSystemCandidateTrustInteroperabilityProfileUri.evaluationPeriodMaximum'
-    private static final String propertyNameJobForTrustmarkUriCronExpression = 'jobForTrustmarkUri.cronExpression'
-    private static final String propertyNameJobForTrustmarkStatusReportUriCronExpression = 'jobForTrustmarkStatusReportUri.cronExpression'
-    private static final String propertyNameJobForTrustmarkBindingRegistryUriCronExpression = 'jobForTrustmarkBindingRegistryUri.cronExpression'
-    private static final String propertyNameJobForTrustInteroperabilityProfileUriCronExpression = 'jobForTrustInteroperabilityProfileUri.cronExpression'
-    private static final String propertyNameJobForTrustmarkDefinitionUriCronExpression = 'jobForTrustmarkDefinitionUri.cronExpression'
-    private static final String propertyNameJobForMailPasswordResetCronExpression = 'jobForMailPasswordReset.cronExpression'
-    private static final String propertyNameJobForMailEvaluationUpdateCronExpression = 'jobForMailEvaluationUpdate.cronExpression'
-
     private void initializeJob() {
 
         final SchedulerFactory schedulerFactory = new StdSchedulerFactory()
         final Scheduler scheduler = schedulerFactory.getScheduler()
 
-        initializeJobHelper(scheduler, JobForTrustmarkUri.class, propertyNameJobForTrustmarkUriCronExpression, new HashMap<String, Object>())
-        initializeJobHelper(scheduler, JobForTrustmarkStatusReportUri.class, propertyNameJobForTrustmarkStatusReportUriCronExpression, new HashMap<String, Object>())
-        initializeJobHelper(scheduler, JobForTrustmarkDefinitionUri.class, propertyNameJobForTrustmarkDefinitionUriCronExpression, new HashMap<String, Object>())
-        initializeJobHelper(scheduler, JobForTrustmarkBindingRegistryUri.class, propertyNameJobForTrustmarkBindingRegistryUriCronExpression, new HashMap<String, Object>())
-        initializeJobHelper(scheduler, JobForTrustInteroperabilityProfileUri.class, propertyNameJobForTrustInteroperabilityProfileUriCronExpression, new HashMap<String, Object>())
-        initializeJobHelper(scheduler, JobForMailPasswordReset.class, propertyNameJobForMailPasswordResetCronExpression, new HashMap<String, Object>())
-        initializeJobHelper(scheduler, JobForMailEvaluationUpdate.class, propertyNameJobForMailEvaluationUpdateCronExpression, new HashMap<String, Object>())
-        initializeJobHelper(scheduler, JobForPartnerSystemCandidateTrustInteroperabilityProfileUri.class, propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriCronExpression, new HashMap<String, Object>() {
+        initializeJobHelper(scheduler, JobForTrustmarkUri.class, ApplicationProperties.propertyNameJobForTrustmarkUriCronExpression, new HashMap<String, Object>())
+        initializeJobHelper(scheduler, JobForTrustmarkStatusReportUri.class, ApplicationProperties.propertyNameJobForTrustmarkStatusReportUriCronExpression, new HashMap<String, Object>())
+        initializeJobHelper(scheduler, JobForTrustmarkDefinitionUri.class, ApplicationProperties.propertyNameJobForTrustmarkDefinitionUriCronExpression, new HashMap<String, Object>())
+        initializeJobHelper(scheduler, JobForTrustmarkBindingRegistryUri.class, ApplicationProperties.propertyNameJobForTrustmarkBindingRegistryUriCronExpression, new HashMap<String, Object>() {
             {
-                put(propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriEvaluationPeriodMaximum, grailsApplication.config[propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriEvaluationPeriodMaximum]);
+                put(ApplicationProperties.propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriEvaluationPeriodMaximum, grailsApplication.config[ApplicationProperties.propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriEvaluationPeriodMaximum]);
+            }
+        })
+        initializeJobHelper(scheduler, JobForTrustInteroperabilityProfileUri.class, ApplicationProperties.propertyNameJobForTrustInteroperabilityProfileUriCronExpression, new HashMap<String, Object>())
+        initializeJobHelper(scheduler, JobForMailPasswordReset.class, ApplicationProperties.propertyNameJobForMailPasswordResetCronExpression, new HashMap<String, Object>())
+        initializeJobHelper(scheduler, JobForMailEvaluationUpdate.class, ApplicationProperties.propertyNameJobForMailEvaluationUpdateCronExpression, new HashMap<String, Object>())
+        initializeJobHelper(scheduler, JobForPartnerSystemCandidateTrustInteroperabilityProfileUri.class, ApplicationProperties.propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriCronExpression, new HashMap<String, Object>() {
+            {
+                put(ApplicationProperties.propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriEvaluationPeriodMaximum, grailsApplication.config[ApplicationProperties.propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriEvaluationPeriodMaximum]);
             }
         })
 

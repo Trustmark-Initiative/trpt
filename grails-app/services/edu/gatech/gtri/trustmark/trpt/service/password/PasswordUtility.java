@@ -19,7 +19,6 @@ import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtilit
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeReference;
 import static org.gtri.fj.Equal.equal;
 import static org.gtri.fj.data.Validation.accumulate;
-import static org.gtri.fj.data.Validation.success;
 import static org.gtri.fj.lang.StringUtility.stringEqual;
 import static org.gtri.fj.product.P.p;
 

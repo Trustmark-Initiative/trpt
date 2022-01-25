@@ -18,13 +18,11 @@ public class UriSynchronizerForTrustmark extends UriSynchronizer<Trustmark, Trus
                 "Trustmark",
                 FactoryLoader.getInstance(TrustmarkResolver.class)::resolve,
                 FactoryLoader.getInstance(HashFactory.class)::hash,
-                TrustmarkUri::withTransactionHelper,
                 () -> TrustmarkUri.withTransactionHelper(() -> TrustmarkUri.findAllHelper()),
-                TrustmarkUri::findByUriHelper,
+                (uriString, f) -> TrustmarkUri.withTransactionHelper(() -> f.f(TrustmarkUri.findByUriHelper(uriString))),
                 () -> new TrustmarkUri(),
                 TrustmarkUri::saveHelper,
                 () -> new TrustmarkUriHistory(),
-                TrustmarkUriHistory::saveHelper,
-                true);
+                TrustmarkUriHistory::saveHelper);
     }
 }

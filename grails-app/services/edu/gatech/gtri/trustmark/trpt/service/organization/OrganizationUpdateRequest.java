@@ -1,50 +1,54 @@
 package edu.gatech.gtri.trustmark.trpt.service.organization;
 
+import java.util.List;
+
 public final class OrganizationUpdateRequest {
     private long id;
     private String name;
     private String uri;
     private String description;
+    private List<OrganizationTrustInteroperabilityProfileUpsertRequest> organizationTrustInteroperabilityProfileList;
+    private List<Long> partnerOrganizationCandidateList;
 
     OrganizationUpdateRequest() {
     }
 
-    OrganizationUpdateRequest(final long id, final String name, final String uri, final String description) {
+    public OrganizationUpdateRequest(
+            final long id,
+            final String name,
+            final String uri,
+            final String description,
+            final List<OrganizationTrustInteroperabilityProfileUpsertRequest> organizationTrustInteroperabilityProfileList,
+            final List<Long> partnerOrganizationCandidateList) {
         this.id = id;
         this.name = name;
         this.uri = uri;
         this.description = description;
+        this.organizationTrustInteroperabilityProfileList = organizationTrustInteroperabilityProfileList;
+        this.partnerOrganizationCandidateList = partnerOrganizationCandidateList;
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUri() {
         return uri;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
-
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public List<OrganizationTrustInteroperabilityProfileUpsertRequest> getOrganizationTrustInteroperabilityProfileList() {
+        return organizationTrustInteroperabilityProfileList;
+    }
+
+    public List<Long> getPartnerOrganizationCandidateList() {
+        return partnerOrganizationCandidateList;
     }
 }

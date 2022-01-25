@@ -1,5 +1,7 @@
 package edu.gatech.gtri.trustmark.trpt.service.protectedSystem;
 
+import edu.gatech.gtri.trustmark.trpt.service.trustInteroperabilityProfile.TrustInteroperabilityProfileResponse;
+
 public final class ProtectedSystemTrustInteroperabilityProfileResponse {
 
     private final TrustInteroperabilityProfileResponse trustInteroperabilityProfile;

@@ -18,13 +18,11 @@ public class UriSynchronizerForTrustmarkDefinition extends UriSynchronizer<Trust
                 "Trustmark Definition",
                 FactoryLoader.getInstance(TrustmarkDefinitionResolver.class)::resolve,
                 FactoryLoader.getInstance(HashFactory.class)::hash,
-                TrustmarkDefinitionUri::withTransactionHelper,
                 () -> TrustmarkDefinitionUri.withTransactionHelper(() -> TrustmarkDefinitionUri.findAllHelper()),
-                TrustmarkDefinitionUri::findByUriHelper,
+                (uriString, f) -> TrustmarkDefinitionUri.withTransactionHelper(() -> f.f(TrustmarkDefinitionUri.findByUriHelper(uriString))),
                 () -> new TrustmarkDefinitionUri(),
                 TrustmarkDefinitionUri::saveHelper,
                 () -> new TrustmarkDefinitionUriHistory(),
-                TrustmarkDefinitionUriHistory::saveHelper,
-                true);
+                TrustmarkDefinitionUriHistory::saveHelper);
     }
 }

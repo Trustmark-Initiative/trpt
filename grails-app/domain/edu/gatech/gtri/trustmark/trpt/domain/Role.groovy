@@ -12,6 +12,10 @@ class Role {
 
     String name
 
+    static mapping = {
+        table 'role'
+    }
+
     static hasMany = [
             userRoleSet: UserRole
     ]

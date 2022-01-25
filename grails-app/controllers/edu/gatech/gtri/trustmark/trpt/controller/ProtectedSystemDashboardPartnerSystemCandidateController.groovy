@@ -1,8 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.controller
 
-
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemPartnerSystemCandidateFindOneRequest
-import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemResponseWithTrustExpressionEvaluation
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemService
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured

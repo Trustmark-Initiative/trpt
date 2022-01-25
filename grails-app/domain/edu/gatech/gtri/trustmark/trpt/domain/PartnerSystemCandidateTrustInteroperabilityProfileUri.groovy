@@ -1,8 +1,12 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
+import org.gtri.fj.lang.StringUtility
+import org.gtri.fj.product.P
+import org.gtri.fj.product.P3
 
 import java.time.LocalDateTime
 
@@ -41,8 +45,9 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
             partnerSystemCandidate         : PartnerSystemCandidate,
             trustInteroperabilityProfileUri: TrustInteroperabilityProfileUri
     ]
+
     static hasMany = [
-            mailEvaluationUpdateSet: MailEvaluationUpdate
+            partnerSystemCandidateMailEvaluationUpdateSet: PartnerSystemCandidateMailEvaluationUpdate
     ]
 
     PartnerSystemCandidate partnerSystemCandidateHelper() { getPartnerSystemCandidate() }
@@ -53,13 +58,43 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
 
     void trustInteroperabilityProfileUriHelper(final TrustInteroperabilityProfileUri trustInteroperabilityProfileUri) { setTrustInteroperabilityProfileUri(trustInteroperabilityProfileUri) }
 
-    org.gtri.fj.data.List<MailEvaluationUpdate> mailEvaluationUpdateSetHelper() { fromNull(mailEvaluationUpdateSet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<MailEvaluationUpdate> nil()) }
+    org.gtri.fj.data.List<PartnerSystemCandidateMailEvaluationUpdate> partnerSystemCandidateMailEvaluationUpdateSetHelper() { fromNull(partnerSystemCandidateMailEvaluationUpdateSet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<PartnerSystemCandidateMailEvaluationUpdate> nil()) }
 
-    void mailEvaluationUpdateSetHelper(final org.gtri.fj.data.List<MailEvaluationUpdate> mailEvaluationUpdateSet) { setMailEvaluationUpdateSet(new HashSet<>(mailEvaluationUpdateSet.toJavaList())) }
+    void partnerSystemCandidateMailEvaluationUpdateSetHelper(final org.gtri.fj.data.List<PartnerSystemCandidateMailEvaluationUpdate> partnerSystemCandidateMailEvaluationUpdateSet) { setPartnerSystemCandidateMailEvaluationUpdateSet(new HashSet<>(partnerSystemCandidateMailEvaluationUpdateSet.toJavaList())) }
 
     static Option<PartnerSystemCandidateTrustInteroperabilityProfileUri> findByPartnerSystemCandidateAndTrustInteroperabilityProfileUriHelper(final PartnerSystemCandidate partnerSystemCandidate, final TrustInteroperabilityProfileUri trustInteroperabilityProfileUri) {
 
         fromNull(findByPartnerSystemCandidateAndTrustInteroperabilityProfileUri(partnerSystemCandidate, trustInteroperabilityProfileUri))
+    }
+
+    static org.gtri.fj.data.List<P3<PartnerSystemCandidate, TrustInteroperabilityProfileUri, Option<PartnerSystemCandidateTrustInteroperabilityProfileUri>>> findByPartnerSystemCandidateAndTrustInteroperabilityProfileUriAndProtectedSystemHelper(
+            final org.gtri.fj.data.List<PartnerSystemCandidate> partnerSystemCandidateList,
+            final org.gtri.fj.data.List<TrustInteroperabilityProfileUri> trustInteroperabilityProfileUriList,
+            final org.gtri.fj.data.List<ProtectedSystem> protectedSystemList) {
+
+        return fromNull(PartnerSystemCandidateTrustInteroperabilityProfileUri.executeQuery("SELECT DISTINCT partnerSystemCandidate, trustInteroperabilityProfileUri, partnerSystemCandidateTrustInteroperabilityProfileUri " +
+                "FROM PartnerSystemCandidate partnerSystemCandidate, TrustInteroperabilityProfileUri trustInteroperabilityProfileUri " +
+                "JOIN partnerSystemCandidate.trustmarkBindingRegistrySystemMapUriType trustmarkBindingRegistrySystemMapUriType " +
+                "JOIN trustmarkBindingRegistrySystemMapUriType.trustmarkBindingRegistryUri trustmarkBindingRegistryUri " +
+                "JOIN trustmarkBindingRegistryUri.trustmarkBindingRegistrySet trustmarkBindingRegistry " +
+                "JOIN trustmarkBindingRegistry.organization organization " +
+                "JOIN organization.protectedSystemSet organizationProtectedSystem " +
+                "JOIN trustInteroperabilityProfileUri.protectedSystemTrustInteroperabilityProfileUriSet protectedSystemTrustInteroperabilityProfileUri " +
+                "JOIN protectedSystemTrustInteroperabilityProfileUri.protectedSystem protectedSystemTrustInteroperabilityProfileUriProtectedSystem " +
+                "LEFT JOIN PartnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUri " +
+                "ON partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidate = partnerSystemCandidate " +
+                "AND partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUri = trustInteroperabilityProfileUri " +
+                "WHERE organizationProtectedSystem = protectedSystemTrustInteroperabilityProfileUriProtectedSystem " +
+                (partnerSystemCandidateList.isNotEmpty() ? "AND (partnerSystemCandidate IN (:partnerSystemCandidateList)) " : "") +
+                (trustInteroperabilityProfileUriList.isNotEmpty() ? "AND (trustInteroperabilityProfileUri IN (:trustInteroperabilityProfileUriList)) " : "") +
+                (protectedSystemList.isNotEmpty() ? "AND (organizationProtectedSystem IN (:protectedSystemList)) " : "") +
+                "ORDER BY partnerSystemCandidateTrustInteroperabilityProfileUri.evaluationAttemptLocalDateTime ",
+                org.gtri.fj.data.TreeMap.iterableTreeMap(StringUtility.stringOrd, org.gtri.fj.data.Option.somes(org.gtri.fj.data.List.arrayList(
+                        Option.iif(partnerSystemCandidateList.isNotEmpty(), P.p("partnerSystemCandidateList", partnerSystemCandidateList.toJavaList())),
+                        Option.iif(trustInteroperabilityProfileUriList.isNotEmpty(), P.p("trustInteroperabilityProfileUriList", trustInteroperabilityProfileUriList.toJavaList())),
+                        Option.iif(protectedSystemList.isNotEmpty(), P.p("protectedSystemList", protectedSystemList.toJavaList()))))).toMutableMap()))
+                .map({ list -> iterableList(list).map({ Object[] array -> P.p(array[0], array[1], fromNull(array[2])) }) })
+                .orSome(org.gtri.fj.data.List.nil())
     }
 
     long idHelper() {

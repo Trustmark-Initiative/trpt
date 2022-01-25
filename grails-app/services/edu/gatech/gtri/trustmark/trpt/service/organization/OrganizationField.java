@@ -8,5 +8,8 @@ public enum OrganizationField {
     description,
     userSet,
     protectedSystemSet,
-    trustmarkBindingRegistrySet
+    trustmarkBindingRegistrySet,
+    organizationTrustInteroperabilityProfileList,
+    partnerOrganizationCandidateList,
+    partnerOrganizationCandidate
 }

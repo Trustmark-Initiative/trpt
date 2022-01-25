@@ -25,6 +25,10 @@ class MailPasswordReset {
         expireDateTime nullable: true
     }
 
+    static mapping = {
+        table 'mail_password_reset'
+    }
+
     static belongsTo = [
             user: User
     ]

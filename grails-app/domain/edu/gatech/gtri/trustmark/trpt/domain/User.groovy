@@ -31,6 +31,10 @@ class User {
         passwordExpired nullable: true
     }
 
+    static mapping = {
+        table 'user'
+    }
+
     static hasMany = [
             userRoleSet         : UserRole,
             mailPasswordResetSet: MailPasswordReset

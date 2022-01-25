@@ -22,9 +22,8 @@ public class UriSynchronizerForTrustInteroperabilityProfile extends UriSynchroni
                 "Trust Interoperability Profile",
                 FactoryLoader.getInstance(TrustInteroperabilityProfileResolver.class)::resolve,
                 FactoryLoader.getInstance(HashFactory.class)::hash,
-                TrustInteroperabilityProfileUri::withTransactionHelper,
                 () -> TrustInteroperabilityProfileUri.withTransactionHelper(() -> TrustInteroperabilityProfileUri.findAllHelper()),
-                TrustInteroperabilityProfileUri::findByUriHelper,
+                (uriString, f) -> TrustInteroperabilityProfileUri.withTransactionHelper(() -> f.f(TrustInteroperabilityProfileUri.findByUriHelper(uriString))),
                 () -> new TrustInteroperabilityProfileUri(),
                 (hasSource, uri) -> {
                     uri.setName(truncate(hasSource.getName(), 1000));
@@ -42,7 +41,6 @@ public class UriSynchronizerForTrustInteroperabilityProfile extends UriSynchroni
                     uriHistory.setIssuerName(truncate(uri.getIssuerName(), 1000));
                     uriHistory.setIssuerIdentifier(truncate(uri.getIssuerIdentifier(), 1000));
                 },
-                TrustInteroperabilityProfileUriHistory::saveHelper,
-                true);
+                TrustInteroperabilityProfileUriHistory::saveHelper);
     }
 }

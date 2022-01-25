@@ -1,6 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain;
 
-import edu.gatech.gtri.trustmark.v1_0.model.TrustmarkBindingRegistrySystemType;
+import edu.gatech.gtri.trustmark.v1_0.model.trustmarkBindingRegistry.TrustmarkBindingRegistrySystemType;
 import org.gtri.fj.data.HashMap;
 import org.gtri.fj.data.List;
 

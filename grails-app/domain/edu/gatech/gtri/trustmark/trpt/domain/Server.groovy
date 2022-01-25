@@ -11,6 +11,10 @@ class Server {
 
     String url
 
+    static mapping = {
+        table 'server'
+    }
+
     long idHelper() {
         id
     }

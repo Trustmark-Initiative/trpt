@@ -9,18 +9,24 @@ public class UriSetResponse {
     private final List<UriResponse> trustmarkDefinitionUriList;
     private final List<UriResponse> trustmarkStatusReportUriList;
     private final List<UriResponse> trustmarkUriList;
+    private final List<UriResponse> trustmarkBindingRegistryOrganizationMapUriList;
+    private final List<UriResponse> trustmarkBindingRegistryOrganizationTrustmarkMapUriList;
 
     public UriSetResponse(
             final List<UriResponse> trustInteroperabilityProfileUriList,
             final List<UriResponse> trustmarkBindingRegistryUriTypeList,
             final List<UriResponse> trustmarkDefinitionUriList,
             final List<UriResponse> trustmarkStatusReportUriList,
-            final List<UriResponse> trustmarkUriList) {
+            final List<UriResponse> trustmarkUriList,
+            final List<UriResponse> trustmarkBindingRegistryOrganizationMapUriList,
+            final List<UriResponse> trustmarkBindingRegistryOrganizationTrustmarkMapUriList) {
         this.trustInteroperabilityProfileUriList = trustInteroperabilityProfileUriList;
         this.trustmarkBindingRegistryUriTypeList = trustmarkBindingRegistryUriTypeList;
         this.trustmarkDefinitionUriList = trustmarkDefinitionUriList;
         this.trustmarkStatusReportUriList = trustmarkStatusReportUriList;
         this.trustmarkUriList = trustmarkUriList;
+        this.trustmarkBindingRegistryOrganizationMapUriList = trustmarkBindingRegistryOrganizationMapUriList;
+        this.trustmarkBindingRegistryOrganizationTrustmarkMapUriList = trustmarkBindingRegistryOrganizationTrustmarkMapUriList;
     }
 
     public List<UriResponse> getTrustInteroperabilityProfileUriList() {
@@ -41,5 +47,13 @@ public class UriSetResponse {
 
     public List<UriResponse> getTrustmarkUriList() {
         return trustmarkUriList;
+    }
+
+    public List<UriResponse> getTrustmarkBindingRegistryOrganizationMapUriList() {
+        return trustmarkBindingRegistryOrganizationMapUriList;
+    }
+
+    public List<UriResponse> getTrustmarkBindingRegistryOrganizationTrustmarkMapUriList() {
+        return trustmarkBindingRegistryOrganizationTrustmarkMapUriList;
     }
 }

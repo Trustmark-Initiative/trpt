@@ -13,7 +13,6 @@ class PartnerSystemCandidateTrustmarkUri {
         table 'partner_system_candidate_trustmark_uri'
     }
 
-
     static belongsTo = [
             trustmarkUri          : TrustmarkUri,
             partnerSystemCandidate: PartnerSystemCandidate

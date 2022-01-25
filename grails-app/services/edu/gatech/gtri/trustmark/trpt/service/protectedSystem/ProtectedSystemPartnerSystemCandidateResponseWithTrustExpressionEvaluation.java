@@ -1,6 +1,7 @@
 package edu.gatech.gtri.trustmark.trpt.service.protectedSystem;
 
 import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateResponse;
+import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation;
 
 import java.util.List;
 

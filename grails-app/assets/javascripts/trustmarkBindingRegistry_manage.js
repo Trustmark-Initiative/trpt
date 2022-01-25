@@ -87,8 +87,7 @@ function initialize(
                     trustmarkBindingRegistryElementStatus.classList.add("bi-emoji-frown")
                     trustmarkBindingRegistryElementStatus.classList.add("text-danger")
                     trustmarkBindingRegistryElementStatus.title = trustmarkBindingRegistry.documentFailureMessage
-                }
-                else  {
+                } else {
 
                     trustmarkBindingRegistryElementStatus.classList.add("bi-emoji-smile")
                     trustmarkBindingRegistryElementStatus.classList.add("text-success")

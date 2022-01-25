@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
-class TrustmarkStatusReportUriHistory implements Uri  {
+class TrustmarkStatusReportUriHistory implements Uri {
 
     String uri
     String hash

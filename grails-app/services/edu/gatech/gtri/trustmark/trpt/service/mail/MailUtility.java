@@ -8,11 +8,13 @@ import org.apache.commons.logging.LogFactory;
 import org.gtri.fj.data.NonEmptyList;
 import org.gtri.fj.data.Validation;
 
+import static edu.gatech.gtri.trustmark.trpt.service.job.RetryTemplateUtility.retry;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeLength;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndLength;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndNumeric;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNullOr;
 import static java.lang.String.format;
+import static org.gtri.fj.data.NonEmptyList.nel;
 
 public class MailUtility {
 
@@ -63,9 +65,14 @@ public class MailUtility {
 
     private static final Log log = LogFactory.getLog(MailUtility.class);
 
+    public static void send(final String recipient, final String subject, final String body) {
+
+        send(nel(recipient), subject, body);
+    }
+
     public static void send(final NonEmptyList<String> recipientNonEmptyList, final String subject, final String body) {
 
-        final Mail mail = Mail.findAllHelper().head();
+        final Mail mail = retry(() -> Mail.withTransactionHelper(() -> Mail.findAllHelper().head()), log);
 
         final TrustmarkMailClientImpl trustmarkMailClientImpl = (TrustmarkMailClientImpl) new TrustmarkMailClientImpl()
                 .setSmtpHost(mail.getHost())

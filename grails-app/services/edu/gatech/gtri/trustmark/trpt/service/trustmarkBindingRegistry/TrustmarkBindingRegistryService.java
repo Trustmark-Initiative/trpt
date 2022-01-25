@@ -5,13 +5,16 @@ import edu.gatech.gtri.trustmark.trpt.domain.Role;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistry;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistryUri;
 import edu.gatech.gtri.trustmark.trpt.domain.User;
+import edu.gatech.gtri.trustmark.trpt.service.ApplicationProperties;
 import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
 import grails.gorm.transactions.Transactional;
 import org.gtri.fj.data.List;
 import org.gtri.fj.data.NonEmptyList;
 import org.gtri.fj.data.Validation;
 import org.gtri.fj.product.Unit;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -36,39 +39,42 @@ import static org.gtri.fj.product.Unit.unit;
 @Transactional
 public class TrustmarkBindingRegistryService {
 
+    @Autowired
+    private ApplicationProperties applicationProperties;
+
     public Validation<NonEmptyList<ValidationMessage<TrustmarkBindingRegistryField>>, List<TrustmarkBindingRegistryResponse>> findAll(
             final String requesterUsername,
             final TrustmarkBindingRegistryFindAllRequest trustmarkBindingRegistryFindAllRequest) {
 
-        return userMay(requesterUsername, TRUSTMARK_BINDING_REGISTRY_SELECT, (requesterUser, requesterTrustmarkBindingRegistryList, requesterRoleList) -> findAllHelper(requesterUser, requesterTrustmarkBindingRegistryList, requesterRoleList, trustmarkBindingRegistryFindAllRequest));
+        return userMay(requesterUsername, TRUSTMARK_BINDING_REGISTRY_SELECT, (requesterUser, requesterOrganizationList, requesterRoleList) -> findAllHelper(requesterUser, requesterOrganizationList, requesterRoleList, trustmarkBindingRegistryFindAllRequest));
     }
 
     public Validation<NonEmptyList<ValidationMessage<TrustmarkBindingRegistryField>>, TrustmarkBindingRegistryResponse> findOne(
             final String requesterUsername,
             final TrustmarkBindingRegistryFindOneRequest trustmarkBindingRegistryFindOneRequest) {
 
-        return userMay(requesterUsername, TRUSTMARK_BINDING_REGISTRY_SELECT, (requesterUser, requesterTrustmarkBindingRegistryList, requesterRoleList) -> findOneHelper(requesterUser, requesterTrustmarkBindingRegistryList, requesterRoleList, trustmarkBindingRegistryFindOneRequest));
+        return userMay(requesterUsername, TRUSTMARK_BINDING_REGISTRY_SELECT, (requesterUser, requesterOrganizationList, requesterRoleList) -> findOneHelper(requesterUser, requesterOrganizationList, requesterRoleList, trustmarkBindingRegistryFindOneRequest));
     }
 
     public Validation<NonEmptyList<ValidationMessage<TrustmarkBindingRegistryField>>, TrustmarkBindingRegistryResponse> insert(
             final String requesterUsername,
             final TrustmarkBindingRegistryInsertRequest trustmarkBindingRegistryInsertRequest) {
 
-        return userMay(requesterUsername, TRUSTMARK_BINDING_REGISTRY_INSERT, (requesterUser, requesterTrustmarkBindingRegistryList, requesterRoleList) -> insertHelper(requesterUser, requesterTrustmarkBindingRegistryList, requesterRoleList, trustmarkBindingRegistryInsertRequest));
+        return userMay(requesterUsername, TRUSTMARK_BINDING_REGISTRY_INSERT, (requesterUser, requesterOrganizationList, requesterRoleList) -> insertHelper(requesterUser, requesterOrganizationList, requesterRoleList, trustmarkBindingRegistryInsertRequest));
     }
 
     public Validation<NonEmptyList<ValidationMessage<TrustmarkBindingRegistryField>>, TrustmarkBindingRegistryResponse> update(
             final String requesterUsername,
             final TrustmarkBindingRegistryUpdateRequest trustmarkBindingRegistryUpdateRequest) {
 
-        return userMay(requesterUsername, TRUSTMARK_BINDING_REGISTRY_UPDATE, (requesterUser, requesterTrustmarkBindingRegistryList, requesterRoleList) -> updateHelper(requesterUser, requesterTrustmarkBindingRegistryList, requesterRoleList, trustmarkBindingRegistryUpdateRequest));
+        return userMay(requesterUsername, TRUSTMARK_BINDING_REGISTRY_UPDATE, (requesterUser, requesterOrganizationList, requesterRoleList) -> updateHelper(requesterUser, requesterOrganizationList, requesterRoleList, trustmarkBindingRegistryUpdateRequest));
     }
 
     public Validation<NonEmptyList<ValidationMessage<TrustmarkBindingRegistryField>>, Unit> delete(
             final String requesterUsername,
             final TrustmarkBindingRegistryDeleteAllRequest trustmarkBindingRegistryDeleteAllRequest) {
 
-        return userMay(requesterUsername, TRUSTMARK_BINDING_REGISTRY_DELETE, (requesterUser, requesterTrustmarkBindingRegistryList, requesterRoleList) -> deleteHelper(requesterUser, requesterTrustmarkBindingRegistryList, requesterRoleList, trustmarkBindingRegistryDeleteAllRequest));
+        return userMay(requesterUsername, TRUSTMARK_BINDING_REGISTRY_DELETE, (requesterUser, requesterOrganizationList, requesterRoleList) -> deleteHelper(requesterUser, requesterOrganizationList, requesterRoleList, trustmarkBindingRegistryDeleteAllRequest));
     }
 
     private Validation<NonEmptyList<ValidationMessage<TrustmarkBindingRegistryField>>, List<TrustmarkBindingRegistryResponse>> findAllHelper(
@@ -137,7 +143,10 @@ public class TrustmarkBindingRegistryService {
         trustmarkBindingRegistry.organizationHelper(organization);
         trustmarkBindingRegistry.saveAndFlushHelper();
 
-        (new Thread(() -> synchronizeTrustmarkBindingRegistryUriAndDependencies(LocalDateTime.now(ZoneOffset.UTC), uri))).start();
+        (new Thread(() -> synchronizeTrustmarkBindingRegistryUriAndDependencies(
+                Duration.parse(applicationProperties.getProperty(ApplicationProperties.propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriEvaluationPeriodMaximum)),
+                LocalDateTime.now(ZoneOffset.UTC),
+                uri))).start();
 
         return trustmarkBindingRegistry;
     }
@@ -167,8 +176,8 @@ public class TrustmarkBindingRegistryService {
 
                         // if the trustmark binding registry is the last trustmark binding registry associated with the uri, delete the dependent entities
 
-                        trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistryUriTypeSetHelper().forEach(trustmarkBindingRegistryUriType -> {
-                            trustmarkBindingRegistryUriType.partnerSystemCandidateSetHelper().forEach(partnerSystemCandidate -> {
+                        trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySystemMapUriTypeSetHelper().forEach(trustmarkBindingRegistrySystemMapUriType -> {
+                            trustmarkBindingRegistrySystemMapUriType.partnerSystemCandidateSetHelper().forEach(partnerSystemCandidate -> {
 
                                 partnerSystemCandidate.partnerSystemCandidateTrustmarkUriSetHelper().forEach(partnerSystemCandidateTrustmarkUri -> {
                                     partnerSystemCandidateTrustmarkUri.partnerSystemCandidateHelper(null);
@@ -194,11 +203,11 @@ public class TrustmarkBindingRegistryService {
                                 partnerSystemCandidate.deleteHelper();
                             });
 
-                            trustmarkBindingRegistryUriType.partnerSystemCandidateSetHelper(nil());
-                            trustmarkBindingRegistryUriType.deleteHelper();
+                            trustmarkBindingRegistrySystemMapUriType.partnerSystemCandidateSetHelper(nil());
+                            trustmarkBindingRegistrySystemMapUriType.deleteHelper();
                         });
 
-                        trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistryUriTypeSetHelper(nil());
+                        trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySystemMapUriTypeSetHelper(nil());
                         trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySetHelper(nil());
                         trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().deleteAndFlushHelper();
 
@@ -206,8 +215,8 @@ public class TrustmarkBindingRegistryService {
 
                         // if the trustmark binding registry is not the last trustmark binding registry associated with the uri, only delete the associations between the trustmark binding registry and the protected systems
 
-                        trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistryUriTypeSetHelper().forEach(trustmarkBindingRegistryUriType -> {
-                            trustmarkBindingRegistryUriType.partnerSystemCandidateSetHelper().forEach(partnerSystemCandidate -> {
+                        trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySystemMapUriTypeSetHelper().forEach(trustmarkBindingRegistrySystemMapUriType -> {
+                            trustmarkBindingRegistrySystemMapUriType.partnerSystemCandidateSetHelper().forEach(partnerSystemCandidate -> {
 
                                 partnerSystemCandidate.protectedSystemPartnerSystemCandidateSetHelper()
                                         .filter(protectedSystemPartnerSystemCandidate -> protectedSystemPartnerSystemCandidate.protectedSystemHelper().organizationHelper().equals(trustmarkBindingRegistry.organizationHelper()))

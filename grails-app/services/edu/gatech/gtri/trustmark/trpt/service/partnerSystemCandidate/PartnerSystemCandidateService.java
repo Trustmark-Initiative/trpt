@@ -21,7 +21,7 @@ public class PartnerSystemCandidateService {
             final String requesterUsername,
             final PartnerSystemCandidateFindAllRequest partnerSystemCandidateFindAllRequest) {
 
-        return userMay(requesterUsername, PARTNER_SYSTEM_CANDIDATE_SELECT, (requesterUser, requesterProtectedSystemList, requesterRoleList) -> findAllHelper(requesterUser, requesterProtectedSystemList, requesterRoleList, partnerSystemCandidateFindAllRequest));
+        return userMay(requesterUsername, PARTNER_SYSTEM_CANDIDATE_SELECT, (requesterUser, requesterOrganizationList, requesterRoleList) -> findAllHelper(requesterUser, requesterOrganizationList, requesterRoleList, partnerSystemCandidateFindAllRequest));
     }
 
     private Validation<NonEmptyList<ValidationMessage<PartnerSystemCandidateField>>, List<PartnerSystemCandidateResponse>> findAllHelper(
@@ -31,7 +31,7 @@ public class PartnerSystemCandidateService {
             final PartnerSystemCandidateFindAllRequest partnerSystemCandidateFindAllRequest) {
 
         return success(PartnerSystemCandidate
-                .findAllByTypeInHelper(requesterOrganizationList, partnerSystemCandidateFindAllRequest.getProtectedSystemType().getPartnerSystemCandidateTypeList())
+                .findAllByOrganizationInAndTypeInHelper(requesterOrganizationList, partnerSystemCandidateFindAllRequest.getProtectedSystemType().getPartnerSystemCandidateTypeList())
                 .map(PartnerSystemCandidateUtility::partnerSystemCandidateResponse));
     }
 }

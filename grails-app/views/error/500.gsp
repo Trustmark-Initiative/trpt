@@ -7,7 +7,6 @@
 
     <body>
         <div class="container pt-4">
-            <h2>Error</h2>
             <g:if env="development">
                 <g:if test="${Throwable.isInstance(exception)}">
                     <g:renderException exception="${exception}"/>
@@ -16,6 +15,8 @@
                     <g:renderException exception="${request.getAttribute('javax.servlet.error.exception')}"/>
                 </g:elseif>
                 <g:else>
+                    <h2>Error</h2>
+
                     <div class="pt-2">
                         An error has occurred.
                     </div>
@@ -36,6 +37,8 @@
                 </g:else>
             </g:if>
             <g:else>
+                <h2>Error</h2>
+
                 <div class="pt-2">
                     An error has occurred.
                 </div>

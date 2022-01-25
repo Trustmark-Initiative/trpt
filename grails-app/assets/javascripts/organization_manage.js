@@ -3,7 +3,8 @@ function initialize(
     organizationFindOne,
     organizationInsert,
     organizationUpdate,
-    organizationDelete) {
+    organizationDelete,
+    organizationDashboard) {
 
     document.onreadystatechange = function () {
 
@@ -28,7 +29,7 @@ function initialize(
 
         stateReset()
 
-        if(document.getElementById("organization-action-insert") != null) {
+        if (document.getElementById("organization-action-insert") != null) {
             document.getElementById("organization-action-insert").outerHTML = document.getElementById("organization-action-insert").outerHTML
             document.getElementById("organization-action-insert").addEventListener("click", onInsertOpen)
         }
@@ -62,6 +63,7 @@ function initialize(
                 organizationElementActionDeleteQueue.dataset.id = organization.id
                 organizationElementName.innerHTML = organization.name
                 organizationElementName.title = organization.name
+                organizationElementName.href = organizationDashboard + "?" + new URLSearchParams({"id": organization.id})
                 organizationElementUri.innerHTML = organization.uri
                 organizationElementUri.href = organization.uri
                 organizationElementUri.title = organization.uri
@@ -126,6 +128,8 @@ function initialize(
             name: document.getElementById("organization-input-name").value,
             uri: document.getElementById("organization-input-uri").value,
             description: document.getElementById("organization-input-description").value,
+            organizationTrustInteroperabilityProfileList: [],
+            partnerOrganizationCandidateList: [],
         })
             .then(response => response.status !== 200 ?
                 onFailure(response.json()) :
@@ -139,6 +143,8 @@ function initialize(
             name: document.getElementById("organization-input-name").value,
             uri: document.getElementById("organization-input-uri").value,
             description: document.getElementById("organization-input-description").value,
+            organizationTrustInteroperabilityProfileList: [],
+            partnerOrganizationCandidateList: [],
         })
             .then(response => response.status !== 200 ?
                 onFailure(response.json()) :

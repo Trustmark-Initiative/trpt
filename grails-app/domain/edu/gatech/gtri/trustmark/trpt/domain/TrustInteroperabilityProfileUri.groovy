@@ -65,17 +65,27 @@ class TrustInteroperabilityProfileUri implements Uri {
     }
 
     static hasMany = [
-            partnerSystemCandidateTrustInteroperabilityProfileUriSet: PartnerSystemCandidateTrustInteroperabilityProfileUri,
-            protectedSystemTrustInteroperabilityProfileUriSet       : ProtectedSystemTrustInteroperabilityProfileUri
+            partnerSystemCandidateTrustInteroperabilityProfileUriSet      : PartnerSystemCandidateTrustInteroperabilityProfileUri,
+            partnerOrganizationCandidateTrustInteroperabilityProfileUriSet: PartnerOrganizationCandidateTrustInteroperabilityProfileUri,
+            protectedSystemTrustInteroperabilityProfileUriSet             : ProtectedSystemTrustInteroperabilityProfileUri,
+            organizationTrustInteroperabilityProfileUriSet                : OrganizationTrustInteroperabilityProfileUri
     ]
 
     org.gtri.fj.data.List<PartnerSystemCandidateTrustInteroperabilityProfileUri> partnerSystemCandidateTrustInteroperabilityProfileUriSetHelper() { fromNull(getPartnerSystemCandidateTrustInteroperabilityProfileUriSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<PartnerSystemCandidateTrustInteroperabilityProfileUri> nil()) }
 
     void partnerSystemCandidateTrustInteroperabilityProfileUriSetHelper(final org.gtri.fj.data.List<PartnerSystemCandidateTrustInteroperabilityProfileUri> partnerSystemCandidateTrustInteroperabilityProfileUriSet) { setPartnerSystemCandidateTrustInteroperabilityProfileUriSet(new HashSet<>(partnerSystemCandidateTrustInteroperabilityProfileUriSet.toJavaList())) }
 
+    org.gtri.fj.data.List<PartnerOrganizationCandidateTrustInteroperabilityProfileUri> partnerOrganizationCandidateTrustInteroperabilityProfileUriSetHelper() { fromNull(getPartnerOrganizationCandidateTrustInteroperabilityProfileUriSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<PartnerOrganizationCandidateTrustInteroperabilityProfileUri> nil()) }
+
+    void partnerOrganizationCandidateTrustInteroperabilityProfileUriSetHelper(final org.gtri.fj.data.List<PartnerOrganizationCandidateTrustInteroperabilityProfileUri> partnerOrganizationCandidateTrustInteroperabilityProfileUriSet) { setPartnerOrganizationCandidateTrustInteroperabilityProfileUriSet(new HashSet<>(partnerOrganizationCandidateTrustInteroperabilityProfileUriSet.toJavaList())) }
+
     org.gtri.fj.data.List<ProtectedSystemTrustInteroperabilityProfileUri> protectedSystemTrustInteroperabilityProfileUriSetHelper() { fromNull(getProtectedSystemTrustInteroperabilityProfileUriSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<ProtectedSystemTrustInteroperabilityProfileUri> nil()) }
 
     void protectedSystemTrustInteroperabilityProfileUriSetHelper(final org.gtri.fj.data.List<ProtectedSystemTrustInteroperabilityProfileUri> protectedSystemTrustInteroperabilityProfileUriSet) { setProtectedSystemTrustInteroperabilityProfileUriSet(new HashSet<>(protectedSystemTrustInteroperabilityProfileUriSet.toJavaList())) }
+
+    org.gtri.fj.data.List<OrganizationTrustInteroperabilityProfileUri> organizationTrustInteroperabilityProfileUriSetHelper() { fromNull(getOrganizationTrustInteroperabilityProfileUriSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<OrganizationTrustInteroperabilityProfileUri> nil()) }
+
+    void organizationTrustInteroperabilityProfileUriSetHelper(final org.gtri.fj.data.List<OrganizationTrustInteroperabilityProfileUri> organizationTrustInteroperabilityProfileUriSet) { setOrganizationTrustInteroperabilityProfileUriSet(new HashSet<>(organizationTrustInteroperabilityProfileUriSet.toJavaList())) }
 
     static final Option<TrustInteroperabilityProfileUri> findByUriHelper(final String uri) { fromNull(findByUri(uri)) }
 

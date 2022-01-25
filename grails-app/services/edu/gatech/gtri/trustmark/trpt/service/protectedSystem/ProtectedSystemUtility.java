@@ -8,6 +8,9 @@ import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemPartnerSystemCandida
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemTrustInteroperabilityProfileUri;
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemType;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustInteroperabilityProfileUri;
+import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateTrustInteroperabilityProfileResponse;
+import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation;
+import edu.gatech.gtri.trustmark.trpt.service.trustInteroperabilityProfile.TrustInteroperabilityProfileUtility;
 import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
 import org.gtri.fj.Ordering;
 import org.gtri.fj.data.Either;
@@ -67,7 +70,7 @@ public final class ProtectedSystemUtility {
                                                 stringOrd.compare(o1.getTrustInteroperabilityProfile().getUri(), o2.getTrustInteroperabilityProfile().getUri())))
                         .toJavaList(),
                 PartnerSystemCandidate
-                        .findAllByTypeInHelper(arrayList(protectedSystem.organizationHelper()), protectedSystem.getType().getPartnerSystemCandidateTypeList())
+                        .findAllByOrganizationInAndTypeInHelper(arrayList(protectedSystem.organizationHelper()), protectedSystem.getType().getPartnerSystemCandidateTypeList())
                         .map(partnerSystemCandidate -> protectedSystemPartnerSystemCandidateResponse(protectedSystem, partnerSystemCandidate))
                         .sort(ord((o1, o2) -> stringOrd.compare(o1.getPartnerSystemCandidate().getName(), o2.getPartnerSystemCandidate().getName())))
                         .toJavaList());
@@ -176,7 +179,7 @@ public final class ProtectedSystemUtility {
             final PartnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUri) {
 
         return new PartnerSystemCandidateTrustInteroperabilityProfileResponse(
-                trustInteroperabilityProfileResponse(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
+                TrustInteroperabilityProfileUtility.trustInteroperabilityProfileResponse(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
                 partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationAttemptLocalDateTime(),
                 partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime(),
                 partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied(),
@@ -188,7 +191,7 @@ public final class ProtectedSystemUtility {
             final PartnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUri) {
 
         return new PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation(
-                trustInteroperabilityProfileResponse(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
+                TrustInteroperabilityProfileUtility.trustInteroperabilityProfileResponse(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
                 partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationAttemptLocalDateTime(),
                 partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime(),
                 partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied(),
@@ -201,29 +204,8 @@ public final class ProtectedSystemUtility {
             final ProtectedSystemTrustInteroperabilityProfileUri protectedSystemTrustInteroperabilityProfileUri) {
 
         return new ProtectedSystemTrustInteroperabilityProfileResponse(
-                trustInteroperabilityProfileResponse(protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
+                TrustInteroperabilityProfileUtility.trustInteroperabilityProfileResponse(protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
                 protectedSystemTrustInteroperabilityProfileUri.isMandatory());
-    }
-
-    private static TrustInteroperabilityProfileResponse trustInteroperabilityProfileResponse(
-            final TrustInteroperabilityProfileUri trustInteroperabilityProfileUri) {
-
-        return new TrustInteroperabilityProfileResponse(
-                trustInteroperabilityProfileUri.idHelper(),
-                trustInteroperabilityProfileUri.getUri(),
-                trustInteroperabilityProfileUri.getName(),
-                trustInteroperabilityProfileUri.getDescription(),
-                trustInteroperabilityProfileUri.getPublicationLocalDateTime(),
-                trustInteroperabilityProfileUri.getIssuerName(),
-                trustInteroperabilityProfileUri.getIssuerIdentifier(),
-                trustInteroperabilityProfileUri.getDocumentRequestLocalDateTime(),
-                trustInteroperabilityProfileUri.getDocumentSuccessLocalDateTime(),
-                trustInteroperabilityProfileUri.getDocumentFailureLocalDateTime(),
-                trustInteroperabilityProfileUri.getDocumentFailureMessage(),
-                trustInteroperabilityProfileUri.getServerRequestLocalDateTime(),
-                trustInteroperabilityProfileUri.getServerSuccessLocalDateTime(),
-                trustInteroperabilityProfileUri.getServerFailureLocalDateTime(),
-                trustInteroperabilityProfileUri.getServerFailureMessage());
     }
 
     public static Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, Organization> validationOrganization(final long organizationId, final List<Organization> organizationList) {
