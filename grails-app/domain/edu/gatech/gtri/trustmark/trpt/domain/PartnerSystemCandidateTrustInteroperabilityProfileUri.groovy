@@ -1,6 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
-
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -13,17 +13,18 @@ import java.time.LocalDateTime
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class PartnerSystemCandidateTrustInteroperabilityProfileUri {
 
     LocalDateTime evaluationAttemptLocalDateTime
     LocalDateTime evaluationLocalDateTime
 
     Boolean evaluationTrustExpressionSatisfied
-    byte[] evaluationTrustExpression
+    File evaluationTrustExpression
 
     Integer evaluationTrustmarkDefinitionRequirementSatisfied
     Integer evaluationTrustmarkDefinitionRequirementUnsatisfied
-    byte[] evaluationTrustmarkDefinitionRequirement
+    File evaluationTrustmarkDefinitionRequirement
 
     static constraints = {
         evaluationAttemptLocalDateTime nullable: true
@@ -37,8 +38,6 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
 
     static mapping = {
         table 'partner_system_candidate_trust_interoperability_profile_uri'
-        evaluationTrustExpression sqlType: 'mediumblob'
-        evaluationTrustmarkDefinitionRequirement sqlType: 'mediumblob'
     }
 
     static belongsTo = [
@@ -93,11 +92,11 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
                         Option.iif(partnerSystemCandidateList.isNotEmpty(), P.p("partnerSystemCandidateList", partnerSystemCandidateList.toJavaList())),
                         Option.iif(trustInteroperabilityProfileUriList.isNotEmpty(), P.p("trustInteroperabilityProfileUriList", trustInteroperabilityProfileUriList.toJavaList())),
                         Option.iif(protectedSystemList.isNotEmpty(), P.p("protectedSystemList", protectedSystemList.toJavaList()))))).toMutableMap()))
-                .map({ list -> iterableList(list).map({ Object[] array -> P.p(array[0], array[1], fromNull(array[2])) }) })
-                .orSome(org.gtri.fj.data.List.nil())
+                .map({ list -> iterableList(list).map({ Object[] array -> P.p((PartnerSystemCandidate) array[0], (TrustInteroperabilityProfileUri) array[1], fromNull((PartnerSystemCandidateTrustInteroperabilityProfileUri) array[2])) }) })
+                .orSome(org.gtri.fj.data.List.<P3<PartnerSystemCandidate, TrustInteroperabilityProfileUri, Option<PartnerSystemCandidateTrustInteroperabilityProfileUri>>> nil())
     }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

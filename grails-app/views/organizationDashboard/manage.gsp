@@ -23,7 +23,7 @@
             <div class="fw-bold mt-2">Trust Policy for <span class="organization-element-name"></span></div>
 
             <div class="mt-2">
-                Add trust interoperability profiles (TIPs) to this table to define the trust policy for <span class="organization-element-name"></span></span>.
+                Add trust interoperability profiles (TIPs${raw(grailsApplication.config.getProperty('server.artifact'))}) to this table to define the trust policy for <span class="organization-element-name"></span></span>.
             </div>
             <table class="mt-2 table table-bordered table-striped-hack mb-0">
                 <thead>

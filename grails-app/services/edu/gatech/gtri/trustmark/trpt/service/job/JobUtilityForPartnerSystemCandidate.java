@@ -7,6 +7,7 @@ import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistryUri;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkUri;
 import edu.gatech.gtri.trustmark.v1_0.FactoryLoader;
 import edu.gatech.gtri.trustmark.v1_0.impl.io.json.TrustmarkBindingRegistrySystemMapJsonDeserializer;
+import edu.gatech.gtri.trustmark.v1_0.impl.io.json.producers.TrustmarkBindingRegistrySystemJsonProducer;
 import edu.gatech.gtri.trustmark.v1_0.io.hash.HashFactory;
 import edu.gatech.gtri.trustmark.v1_0.model.trustmarkBindingRegistry.TrustmarkBindingRegistrySystem;
 import edu.gatech.gtri.trustmark.v1_0.model.trustmarkBindingRegistry.TrustmarkBindingRegistrySystemMap;
@@ -25,6 +26,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.fileFor;
+import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.stringFor;
 import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri.synchronizePartnerSystemCandidateTrustInteroperabilityProfileUri;
 import static edu.gatech.gtri.trustmark.trpt.service.job.RetryTemplateUtility.retry;
 import static java.lang.String.format;
@@ -41,6 +44,7 @@ public class JobUtilityForPartnerSystemCandidate {
     private static final Log log = LogFactory.getLog(JobUtilityForPartnerSystemCandidate.class);
     private static final HashFactory hashFactory = FactoryLoader.getInstance(HashFactory.class);
     private static final TrustmarkBindingRegistrySystemMapJsonDeserializer trustmarkBindingRegistrySystemMapJsonDeserializer = new TrustmarkBindingRegistrySystemMapJsonDeserializer();
+    private static final TrustmarkBindingRegistrySystemJsonProducer trustmarkBindingRegistrySystemJsonProducer = new TrustmarkBindingRegistrySystemJsonProducer();
 
     /**
      * Synchronize all partner system candidates; use now as the timestamp.
@@ -87,7 +91,7 @@ public class JobUtilityForPartnerSystemCandidate {
 
         retry(() -> TrustmarkBindingRegistryUri
                 .withTransactionHelper(() -> find.f()
-                        .forEach(trustmarkBindingRegistrySystemMapUriType -> fromNull(trustmarkBindingRegistrySystemMapUriType.getDocument())
+                        .forEach(trustmarkBindingRegistrySystemMapUriType -> fromNull(stringFor(trustmarkBindingRegistrySystemMapUriType.fileHelper()))
                                 .forEach(document -> Try.f(() -> trustmarkBindingRegistrySystemMapJsonDeserializer.deserialize(document))._1().toEither().foreachDoEffect(
                                         parseException -> log.info(format("Trustmark binding registry system map uri '%s' document read failure: '%s'.", trustmarkBindingRegistrySystemMapUriType.getUri(), parseException.getMessage())),
                                         trustmarkBindingRegistrySystemMap -> synchronizePartnerSystemCandidate(duration, now, trustmarkBindingRegistrySystemMapUriType, trustmarkBindingRegistrySystemMap))))), log);
@@ -139,7 +143,7 @@ public class JobUtilityForPartnerSystemCandidate {
                                                             return partnerSystemCandidateTrustmarkUri;
                                                         }));
 
-                                        partnerSystemCandidateOld.setJson(trustmarkBindingRegistrySystem.getOriginalSource());
+                                        partnerSystemCandidateOld.setDocument(fileFor(trustmarkBindingRegistrySystemJsonProducer.serialize(trustmarkBindingRegistrySystem).toString()));
                                         partnerSystemCandidateOld.setHash(partnerSystemCandidateOldHash);
                                         partnerSystemCandidateOld.setChangeLocalDateTime(now);
 
@@ -186,7 +190,7 @@ public class JobUtilityForPartnerSystemCandidate {
                     partnerSystemCandidate.setRequestLocalDateTime(now);
                     partnerSystemCandidate.setSuccessLocalDateTime(now);
 
-                    partnerSystemCandidate.setJson(trustmarkBindingRegistrySystem.getOriginalSource());
+                    partnerSystemCandidate.setDocument(fileFor(trustmarkBindingRegistrySystemJsonProducer.serialize(trustmarkBindingRegistrySystem).toString()));
                     partnerSystemCandidate.setHash(reduce(Try.f(() -> new String(Hex.encode(hashFactory.hash(trustmarkBindingRegistrySystem))))._1().toEither().leftMap(ioException -> {
                         log.info(format("Trustmark binding registry system map uri '%s'; partner system candidate '%' hash failure: '%s'.", trustmarkBindingRegistrySystemMapUriType.getUri(), trustmarkBindingRegistrySystem.getIdentifier(), ioException.getMessage()));
                         return null;

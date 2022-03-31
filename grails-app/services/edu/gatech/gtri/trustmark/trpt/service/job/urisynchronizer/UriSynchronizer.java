@@ -2,7 +2,8 @@ package edu.gatech.gtri.trustmark.trpt.service.job.urisynchronizer;
 
 import edu.gatech.gtri.trustmark.trpt.domain.Uri;
 import edu.gatech.gtri.trustmark.trpt.service.job.RetryTemplateUtility;
-import edu.gatech.gtri.trustmark.v1_0.model.HasSource;
+import edu.gatech.gtri.trustmark.v1_0.io.ArtifactResolver;
+import edu.gatech.gtri.trustmark.v1_0.model.HasIdentifier;
 import org.apache.commons.logging.Log;
 import org.gtri.fj.data.List;
 import org.gtri.fj.data.NonEmptyList;
@@ -14,33 +15,37 @@ import org.gtri.fj.function.F1;
 import org.gtri.fj.function.F2;
 import org.gtri.fj.function.Try;
 import org.gtri.fj.function.Try1;
-import org.gtri.fj.product.P2;
-import org.gtri.fj.product.P3;
 import org.springframework.security.crypto.codec.Hex;
 
-import java.net.HttpURLConnection;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.byteArrayFor;
+import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.fileFor;
 import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtility.truncate;
 import static java.lang.String.format;
 import static org.gtri.fj.data.NonEmptyList.nel;
+import static org.gtri.fj.data.Option.fromNull;
 import static org.gtri.fj.data.Option.none;
 import static org.gtri.fj.data.Option.some;
-import static org.gtri.fj.product.P.p;
+import static org.gtri.fj.data.Validation.fail;
+import static org.gtri.fj.data.Validation.success;
 
-public class UriSynchronizer<T1 extends HasSource, T2 extends Uri, T3 extends Uri> {
+public class UriSynchronizer<T1 extends HasIdentifier, T2 extends Uri, T3 extends Uri> {
 
     private final Log log;
     private final String nameForHasSource;
-    private final Try1<URI, T1, Exception> resolver;
+    final ArtifactResolver<T1> resolver;
     private final Try1<T1, byte[], Exception> hasher;
+    private final F1<T1, byte[]> serializer;
     private final F0<List<T2>> withTransactionUriFindAll;
     private final F2<String, F1<Option<T2>, T2>, T2> withTransactionUriFind;
     private final F0<T2> uriSupplier;
     private final Effect2<T1, T2> uriSetter;
     private final F1<T2, T2> uriSave;
+    private final F2<T2, T2, T2> uriCoalesce;
     private final Option<F0<T3>> uriHistorySupplier;
     private final Option<Effect2<T2, T3>> uriHistorySetter;
     private final Option<F1<T3, T3>> uriHistorySave;
@@ -48,8 +53,9 @@ public class UriSynchronizer<T1 extends HasSource, T2 extends Uri, T3 extends Ur
     public UriSynchronizer(
             final Log log,
             final String nameForHasSource,
-            final Try1<URI, T1, Exception> resolver,
+            final ArtifactResolver<T1> resolver,
             final Try1<T1, byte[], Exception> hasher,
+            final F1<T1, byte[]> serializer,
             final F0<List<T2>> withTransactionUriFindAll,
             final F2<String, F1<Option<T2>, T2>, T2> withTransactionUriFind,
             final F0<T2> uriSupplier,
@@ -60,12 +66,14 @@ public class UriSynchronizer<T1 extends HasSource, T2 extends Uri, T3 extends Ur
                 nameForHasSource,
                 resolver,
                 hasher,
+                serializer,
                 withTransactionUriFindAll,
                 withTransactionUriFind,
                 uriSupplier,
                 (hasSource, uri) -> {
                 },
                 uriSave,
+                (uriRequest, uriResolve) -> uriRequest,
                 none(),
                 none(),
                 none());
@@ -74,8 +82,39 @@ public class UriSynchronizer<T1 extends HasSource, T2 extends Uri, T3 extends Ur
     public UriSynchronizer(
             final Log log,
             final String nameForHasSource,
-            final Try1<URI, T1, Exception> resolver,
+            final ArtifactResolver<T1> resolver,
             final Try1<T1, byte[], Exception> hasher,
+            final F1<T1, byte[]> serializer,
+            final F0<List<T2>> withTransactionUriFindAll,
+            final F2<String, F1<Option<T2>, T2>, T2> withTransactionUriFind,
+            final F0<T2> uriSupplier,
+            final F1<T2, T2> uriSave,
+            final F2<T2, T2, T2> uriCoalesce) {
+
+        this(
+                log,
+                nameForHasSource,
+                resolver,
+                hasher,
+                serializer,
+                withTransactionUriFindAll,
+                withTransactionUriFind,
+                uriSupplier,
+                (hasSource, uri) -> {
+                },
+                uriSave,
+                uriCoalesce,
+                none(),
+                none(),
+                none());
+    }
+
+    public UriSynchronizer(
+            final Log log,
+            final String nameForHasSource,
+            final ArtifactResolver<T1> resolver,
+            final Try1<T1, byte[], Exception> hasher,
+            final F1<T1, byte[]> serializer,
             final F0<List<T2>> withTransactionUriFindAll,
             final F2<String, F1<Option<T2>, T2>, T2> withTransactionUriFind,
             final F0<T2> uriSupplier,
@@ -88,12 +127,14 @@ public class UriSynchronizer<T1 extends HasSource, T2 extends Uri, T3 extends Ur
                 nameForHasSource,
                 resolver,
                 hasher,
+                serializer,
                 withTransactionUriFindAll,
                 withTransactionUriFind,
                 uriSupplier,
                 (hasSource, uri) -> {
                 },
                 uriSave,
+                (uriRequest, uriResolve) -> uriRequest,
                 uriHistorySupplier,
                 (uri, uriHistory) -> {
                 },
@@ -103,8 +144,71 @@ public class UriSynchronizer<T1 extends HasSource, T2 extends Uri, T3 extends Ur
     public UriSynchronizer(
             final Log log,
             final String nameForHasSource,
-            final Try1<URI, T1, Exception> resolver,
+            final ArtifactResolver<T1> resolver,
             final Try1<T1, byte[], Exception> hasher,
+            final F1<T1, byte[]> serializer,
+            final F0<List<T2>> withTransactionUriFindAll,
+            final F2<String, F1<Option<T2>, T2>, T2> withTransactionUriFind,
+            final F0<T2> uriSupplier,
+            final F1<T2, T2> uriSave,
+            final F2<T2, T2, T2> uriCoalesce,
+            final F0<T3> uriHistorySupplier,
+            final F1<T3, T3> uriHistorySave) {
+
+        this(
+                log,
+                nameForHasSource,
+                resolver,
+                hasher,
+                serializer,
+                withTransactionUriFindAll,
+                withTransactionUriFind,
+                uriSupplier,
+                (hasSource, uri) -> {
+                },
+                uriSave,
+                uriCoalesce,
+                uriHistorySupplier,
+                (uri, uriHistory) -> {
+                },
+                uriHistorySave);
+    }
+
+    public UriSynchronizer(
+            final Log log,
+            final String nameForHasSource,
+            final ArtifactResolver<T1> resolver,
+            final Try1<T1, byte[], Exception> hasher,
+            final F1<T1, byte[]> serializer,
+            final F0<List<T2>> withTransactionUriFindAll,
+            final F2<String, F1<Option<T2>, T2>, T2> withTransactionUriFind,
+            final F0<T2> uriSupplier,
+            final Effect2<T1, T2> uriSetter,
+            final F1<T2, T2> uriSave) {
+
+        this(
+                log,
+                nameForHasSource,
+                resolver,
+                hasher,
+                serializer,
+                withTransactionUriFindAll,
+                withTransactionUriFind,
+                uriSupplier,
+                uriSetter,
+                uriSave,
+                (uriRequest, uriResolve) -> uriRequest,
+                none(),
+                none(),
+                none());
+    }
+
+    public UriSynchronizer(
+            final Log log,
+            final String nameForHasSource,
+            final ArtifactResolver<T1> resolver,
+            final Try1<T1, byte[], Exception> hasher,
+            final F1<T1, byte[]> serializer,
             final F0<List<T2>> withTransactionUriFindAll,
             final F2<String, F1<Option<T2>, T2>, T2> withTransactionUriFind,
             final F0<T2> uriSupplier,
@@ -119,11 +223,76 @@ public class UriSynchronizer<T1 extends HasSource, T2 extends Uri, T3 extends Ur
                 nameForHasSource,
                 resolver,
                 hasher,
+                serializer,
                 withTransactionUriFindAll,
                 withTransactionUriFind,
                 uriSupplier,
                 uriSetter,
                 uriSave,
+                (uriRequest, uriResolve) -> uriRequest,
+                some(uriHistorySupplier),
+                some(uriHistorySetter),
+                some(uriHistorySave));
+    }
+
+    public UriSynchronizer(
+            final Log log,
+            final String nameForHasSource,
+            final ArtifactResolver<T1> resolver,
+            final Try1<T1, byte[], Exception> hasher,
+            final F1<T1, byte[]> serializer,
+            final F0<List<T2>> withTransactionUriFindAll,
+            final F2<String, F1<Option<T2>, T2>, T2> withTransactionUriFind,
+            final F0<T2> uriSupplier,
+            final Effect2<T1, T2> uriSetter,
+            final F1<T2, T2> uriSave,
+            final F2<T2, T2, T2> uriCoalesce) {
+
+        this(
+                log,
+                nameForHasSource,
+                resolver,
+                hasher,
+                serializer,
+                withTransactionUriFindAll,
+                withTransactionUriFind,
+                uriSupplier,
+                uriSetter,
+                uriSave,
+                uriCoalesce,
+                none(),
+                none(),
+                none());
+    }
+
+    public UriSynchronizer(
+            final Log log,
+            final String nameForHasSource,
+            final ArtifactResolver<T1> resolver,
+            final Try1<T1, byte[], Exception> hasher,
+            final F1<T1, byte[]> serializer,
+            final F0<List<T2>> withTransactionUriFindAll,
+            final F2<String, F1<Option<T2>, T2>, T2> withTransactionUriFind,
+            final F0<T2> uriSupplier,
+            final Effect2<T1, T2> uriSetter,
+            final F1<T2, T2> uriSave,
+            final F2<T2, T2, T2> uriCoalesce,
+            final F0<T3> uriHistorySupplier,
+            final Effect2<T2, T3> uriHistorySetter,
+            final F1<T3, T3> uriHistorySave) {
+
+        this(
+                log,
+                nameForHasSource,
+                resolver,
+                hasher,
+                serializer,
+                withTransactionUriFindAll,
+                withTransactionUriFind,
+                uriSupplier,
+                uriSetter,
+                uriSave,
+                uriCoalesce,
                 some(uriHistorySupplier),
                 some(uriHistorySetter),
                 some(uriHistorySave));
@@ -132,13 +301,15 @@ public class UriSynchronizer<T1 extends HasSource, T2 extends Uri, T3 extends Ur
     private UriSynchronizer(
             final Log log,
             final String nameForHasSource,
-            final Try1<URI, T1, Exception> resolver,
+            final ArtifactResolver<T1> resolver,
             final Try1<T1, byte[], Exception> hasher,
+            final F1<T1, byte[]> serializer,
             final F0<List<T2>> withTransactionUriFindAll,
             final F2<String, F1<Option<T2>, T2>, T2> withTransactionUriFind,
             final F0<T2> uriSupplier,
             final Effect2<T1, T2> uriSetter,
             final F1<T2, T2> uriSave,
+            final F2<T2, T2, T2> uriCoalesce,
             final Option<F0<T3>> uriHistorySupplier,
             final Option<Effect2<T2, T3>> uriHistorySetter,
             final Option<F1<T3, T3>> uriHistorySave) {
@@ -147,11 +318,13 @@ public class UriSynchronizer<T1 extends HasSource, T2 extends Uri, T3 extends Ur
         this.nameForHasSource = nameForHasSource;
         this.resolver = resolver;
         this.hasher = hasher;
+        this.serializer = serializer;
         this.withTransactionUriFindAll = withTransactionUriFindAll;
         this.withTransactionUriFind = withTransactionUriFind;
         this.uriSupplier = uriSupplier;
         this.uriSetter = uriSetter;
         this.uriSave = uriSave;
+        this.uriCoalesce = uriCoalesce;
         this.uriHistorySupplier = uriHistorySupplier;
         this.uriHistorySetter = uriHistorySetter;
         this.uriHistorySave = uriHistorySave;
@@ -167,95 +340,121 @@ public class UriSynchronizer<T1 extends HasSource, T2 extends Uri, T3 extends Ur
     }
 
     public Validation<NonEmptyList<Exception>, T1> synchronizeUri(final LocalDateTime now, final String uriString) {
-
-        return this.<T1>synchronizeDocument(uriString)
-                .f().map(exceptionForDocument -> org.gtri.fj.data.Either.reduce(synchronizeServer(uriString).toEither().bimap(
-                        exceptionForServer -> {
-                            updateUri(uriString, uri -> onServerFailure(now, uri, exceptionForDocument, exceptionForServer));
-                            return nel(exceptionForDocument, exceptionForServer);
+        return Try.<URI, Exception>f(() -> new URI(uriString))._1()
+                .f().map(NonEmptyList::nel)
+                .bind(uri -> this.resolver.resolve(
+                        uri,
+                        (artifactUri, artifact) -> {
+                            updateUri(uriString, fromNull(artifact.getIdentifier()), artifactUrInner -> onDocumentSuccess(now, artifactUrInner, artifact));
+                            return success(artifact);
                         },
-                        server -> {
-                            updateUri(uriString, uri -> onServerSuccess(now, uri, exceptionForDocument));
-                            return nel(exceptionForDocument);
-                        })))
-                .map(document -> {
-                    updateUri(uriString, uri -> onDocumentSuccess(now, uri, document._2(), document._3()));
-                    return document._2();
-                });
+                        (artifactUri, artifactException, serverUri) -> {
+                            updateUri(uriString, none(), artifactUriInner -> onServerSuccess(now, artifactUriInner, artifactException));
+                            return fail(nel(artifactException));
+                        },
+                        (artifactUri, artifactException, serverUri, serverException) -> {
+                            updateUri(uriString, none(), artifactUriInner -> onServerFailure(now, artifactUriInner, artifactException, serverException));
+                            return fail(nel(artifactException, serverException));
+                        }));
     }
 
-    private T2 updateUri(final String uriString, final F1<T2, T2> uriUpdate) {
+    private T2 updateUri(final String uriRequestString, final Option<URI> uriResolveObjectOption, final F1<T2, T2> uriUpdate) {
 
-        return RetryTemplateUtility.retry(() -> withTransactionUriFind.f(uriString, uriOption -> {
-            final T2 uri = uriOption.orSome(() -> {
-                final T2 uriInner = uriSupplier.f();
-                uriInner.setUri(uriString);
-                return uriInner;
-            });
+        // if the requested URI exists in the database
+        // * if the resolved URI exists
+        // * * if the requested URI and the resolved URI are the same
+        // * * * update the requested URI in the database
+        // * * otherwise the requested URI and the resolved URI are different
+        // * * * if the resolved URI exists in the database
+        // * * * * coalesce the requested URI and the resolved URI
+        // * * * otherwise the resolved URI does not exist in the database
+        // * * * * update the requested URI in the database; use the resolved URI
+        // * otherwise the resolved URI does not exist
+        // * * update the requested URI in the database
+        // otherwise the requested URI does not exist in the database
+        // * if the resolved URI exists
+        // * * if the requested URI and the resolved URI are the same
+        // * * * insert the requested URI into the database
+        // * * otherwise the requested URI and the resolved URI are different
+        // * * * if the resolved URI exists in the database
+        // * * * * update the resolved URI
+        // * * * otherwise the resolved URI does not exist in the database
+        // * * * * insert the resolved URI into the database
+        // * otherwise the resolved URI does not exist
+        // * * insert the requested URI into the database
 
-            return uriSave.f(uriUpdate.f(uri));
-        }), log);
+        return withTransactionUriFind.f(uriRequestString, uriRequestOption -> uriRequestOption
+                .map(uriRequest -> uriResolveObjectOption
+                        .map(uriResolveObject -> uriRequestString.equals(uriResolveObject.toString()) ?
+                                updateUri(uriRequest, uriUpdate) :
+                                withTransactionUriFind.f(uriResolveObject.toString(), uriResolveOption -> uriResolveOption
+                                        .map(uriResolve -> updateUri(uriRequest, uriResolve, uriUpdate))
+                                        .orSome(() -> updateUri(uriRequest, uriResolveObject.toString(), uriUpdate))))
+                        .orSome(() -> updateUri(uriRequest, uriUpdate)))
+                .orSome(() -> uriResolveObjectOption
+                        .map(uriResolveObject -> uriRequestString.equals(uriResolveObject.toString()) ?
+                                insertUri(uriRequestString, uriUpdate) :
+                                withTransactionUriFind.f(uriResolveObject.toString(), uriResolveOption -> uriResolveOption
+                                        .map(uriResolve -> updateUri(uriResolve, uriUpdate))
+                                        .orSome(() -> insertUri(uriRequestString, uriUpdate))))
+                        .orSome(() -> insertUri(uriRequestString, uriUpdate))));
     }
 
     /**
-     * Request the URI, return the URI, the resolved entity, and the hash for the resolved entity; return the exception if the system cannot convert the string to a URI, if the system cannot resolve the URI, or if the system cannot hash the resolved entity.
+     * Insert the given URI into the database. The database does not contain the URI string.
      *
-     * @param uriString the uri
-     * @param <T1>      the type of the resolved entty
-     * @return the URI, the resolved entity, and the hash for the resolved entity
+     * @param uriString the URI string
+     * @param uriUpdate the update function
+     * @return the URI
      */
-    private <T1> Validation<Exception, P3<URI, T1, String>> synchronizeDocument(
-            final String uriString) {
-
-        log.info(format("%s uri '%s' document request ...", nameForHasSource, uriString));
-
-        final Validation<Exception, P3<URI, T1, String>> validation = Try.<URI, Exception>f(() -> URI.create(uriString))._1()
-                .bind(uri -> Try.<T1, Exception>f(() -> ((Try1<URI, T1, Exception>) this.resolver).f(uri))._1().map(entity -> p(uri, entity)))
-                .bind(p -> Try.<String, Exception>f(() -> new String(Hex.encode(((Try1<T1, byte[], Exception>) this.hasher).f(p._2()))))._1().map(hash -> p(p._1(), p._2(), hash)));
-
-        validation.toEither().foreachDoEffect(
-                exception -> log.info(format("%s uri '%s' document request failure: '%s'", nameForHasSource, uriString, exception.getMessage())),
-                p -> log.info(format("%s uri '%s' document request success.", nameForHasSource, uriString)));
-
-        return validation;
+    private T2 insertUri(final String uriString, final F1<T2, T2> uriUpdate) {
+        final T2 uri = uriSupplier.f();
+        uri.setUri(uriString);
+        return uriSave.f(uriUpdate.f(uri));
     }
 
     /**
-     * Request the URI's server, return the status code and the status line; return the exception if the system cannot convert the string to a URI, if the system cannot resolve the URI, or if the status code is not 200.
+     * Update the given URI in the database. The database contains the URI string, and it has not changed.
      *
-     * @param uriString the uri
-     * @return the status code and the status line
+     * @param uri       the URI
+     * @param uriUpdate the update function
+     * @return the URI
      */
-    private Validation<Exception, P2<Integer, String>> synchronizeServer(
-            final String uriString) {
+    private T2 updateUri(final T2 uri, final F1<T2, T2> uriUpdate) {
+        return uriSave.f(uriUpdate.f(uri));
+    }
 
-        log.info(format("%s uri '%s' server request ...", nameForHasSource, uriString));
+    /**
+     * Update the given URI in the database. The database contains the requested URI string, but not the resolved URI string; update the requested URI string to the resolved URI string.
+     *
+     * @param uri       the URI
+     * @param uriString the URI string
+     * @param uriUpdate the update function
+     * @return the URI
+     */
+    private T2 updateUri(final T2 uri, final String uriString, final F1<T2, T2> uriUpdate) {
+        uri.setUri(uriString);
+        return uriSave.f(uriUpdate.f(uri));
+    }
 
-        final Validation<Exception, P2<Integer, String>> validation = Try.<URI, Exception>f(() -> URI.create(uriString))._1()
-                .bind(uriInner -> Validation.condition(uriInner.getScheme() == null || uriInner.getScheme().equals("http") || uriInner.getScheme().equals("https"),
-                        new Exception("The scheme is neither 'http' nor 'https'."),
-                        uriInner))
-                .bind(uriInner -> Try.<URI, Exception>f(() -> new URI(uriInner.getScheme(), uriInner.getAuthority(), null, null, null))._1())
-                .bind(uriInner -> Try.<P2<Integer, String>, Exception>f(() -> {
-                    final HttpURLConnection httpURLConnection = (HttpURLConnection) uriInner.toURL().openConnection();
-                    return p(httpURLConnection.getResponseCode(), httpURLConnection.getResponseMessage());
-                })._1())
-                .bind(response -> Validation.condition(response._1() == 200,
-                        new Exception(format("%s: %s", response._1(), response._2())),
-                        response));
-
-        validation.toEither().foreachDoEffect(
-                exception -> log.info(format("%s uri '%s' server request failure: '%s'", nameForHasSource, uriString, exception.getMessage())),
-                p -> log.info(format("%s uri '%s' server request success.", nameForHasSource, uriString)));
-
-        return validation;
+    /**
+     * Update the given URI in the database. The database contains the requested URI string and the resolved URI string; coalesce the requested URI and the resolved URI into the resolved URI.
+     *
+     * @param uriRequest the URI
+     * @param uriResolve the URI string
+     * @param uriUpdate  the update function
+     * @return the URI
+     */
+    private T2 updateUri(final T2 uriRequest, final T2 uriResolve, final F1<T2, T2> uriUpdate) {
+        return uriSave.f(uriUpdate.f(uriCoalesce.f(uriResolve, uriRequest)));
     }
 
     private T2 onDocumentSuccess(
             final LocalDateTime now,
             final T2 uri,
-            final T1 hasSource,
-            final String hash) {
+            final T1 hasSource) {
+
+        final String hash = new String(Hex.encode(Try.f(() -> this.hasher.f(hasSource))._1().orSuccess(new byte[]{})));
 
         uri.setDocumentRequestLocalDateTime(now);
         uri.setDocumentSuccessLocalDateTime(now);
@@ -267,7 +466,7 @@ public class UriSynchronizer<T1 extends HasSource, T2 extends Uri, T3 extends Ur
             log.info(format("%s uri '%s' document changed.", nameForHasSource, uri.getUri()));
 
             uri.setHash(hash);
-            uri.setDocument(hasSource.getOriginalSource());
+            uri.fileHelper(fileFor(serializer.f(hasSource)));
             uri.setDocumentChangeLocalDateTime(now);
             uri.setServerChangeLocalDateTime(now);
             uriSetter.f(hasSource, uri);
@@ -323,7 +522,7 @@ public class UriSynchronizer<T1 extends HasSource, T2 extends Uri, T3 extends Ur
             final T3 uriHistory = uriHistorySupplierInner.f();
             uriHistory.setUri(uri.getUri());
             uriHistory.setHash(uri.getHash());
-            uriHistory.setDocument(uri.getDocument());
+            uriHistory.fileHelper(fileFor(byteArrayFor(uri.fileHelper())));
             uriHistory.setDocumentRequestLocalDateTime(uri.getDocumentRequestLocalDateTime());
             uriHistory.setDocumentSuccessLocalDateTime(uri.getDocumentSuccessLocalDateTime());
             uriHistory.setDocumentFailureLocalDateTime(uri.getDocumentFailureLocalDateTime());

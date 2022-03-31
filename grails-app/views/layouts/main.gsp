@@ -8,7 +8,7 @@
         <asset:stylesheet src="application.css"/>
         <asset:javascript src="application.js"/>
 
-        <title>Trustmark Relying Party Tool</title>
+        <title>${grailsApplication.config.getProperty('server.title')}</title>
 
         <g:layoutHead/>
     </head>
@@ -40,11 +40,11 @@
                     <ul class="navbar-nav">
                         <sec:ifLoggedIn>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <sec:username/>
                                 </a>
 
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="${createLink(controller: "password", action: "changeWithAuthentication")}">Change Password</a></li>
                                     <li><a class="dropdown-item" href="${createLink(controller: "logout", action: "index")}">Logout</a></li>
                                 </ul>

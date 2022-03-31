@@ -1,6 +1,7 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
 import edu.gatech.gtri.trustmark.v1_0.model.trustmarkBindingRegistry.TrustmarkBindingRegistrySystemType
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -8,15 +9,15 @@ import org.gtri.fj.function.F0
 import java.time.LocalDateTime
 
 import static org.gtri.fj.data.List.iterableList
-import static org.gtri.fj.data.List.nil
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class TrustmarkBindingRegistrySystemMapUriType implements Uri {
 
     String uri
     TrustmarkBindingRegistrySystemType type
     String hash
-    String document
+    File document
     LocalDateTime documentRequestLocalDateTime
     LocalDateTime documentSuccessLocalDateTime
     LocalDateTime documentFailureLocalDateTime
@@ -49,7 +50,6 @@ class TrustmarkBindingRegistrySystemMapUriType implements Uri {
         table 'trustmark_binding_registry_system_map_uri_type'
         uri length: 1000
         hash length: 1000
-        document type: 'text'
         documentFailureMessage length: 1000
         serverFailureMessage length: 1000
     }
@@ -62,7 +62,11 @@ class TrustmarkBindingRegistrySystemMapUriType implements Uri {
             trustmarkBindingRegistryUri: TrustmarkBindingRegistryUri
     ]
 
-    org.gtri.fj.data.List<PartnerSystemCandidate> partnerSystemCandidateSetHelper() { fromNull(getPartnerSystemCandidateSet()).map({ collection -> iterableList(collection) }).orSome(nil()) }
+    File fileHelper() { getDocument() }
+
+    void fileHelper(final File file) { setDocument(file) }
+
+    org.gtri.fj.data.List<PartnerSystemCandidate> partnerSystemCandidateSetHelper() { fromNull(getPartnerSystemCandidateSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<PartnerSystemCandidate> nil()) }
 
     void partnerSystemCandidateSetHelper(final org.gtri.fj.data.List<PartnerSystemCandidate> partnerSystemCandidateSet) { setPartnerSystemCandidateSet(new HashSet<>(partnerSystemCandidateSet.toJavaList())) }
 
@@ -73,13 +77,13 @@ class TrustmarkBindingRegistrySystemMapUriType implements Uri {
     static final org.gtri.fj.data.List<TrustmarkBindingRegistrySystemMapUriType> findAllByOrderByUriAscHelper() {
 
         fromNull(findAll(sort: 'uri', order: 'asc'))
-                .map({ collection -> iterableList(collection) })
+                .map({ collection -> iterableList((Iterable<TrustmarkBindingRegistrySystemMapUriType>) collection) })
                 .orSome(org.gtri.fj.data.List.<TrustmarkBindingRegistrySystemMapUriType> nil());
     }
 
     static final Option<TrustmarkBindingRegistrySystemMapUriType> findByUriHelper(final String uri) { fromNull(findByUri(uri)) }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

@@ -1,6 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
-
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -10,6 +10,7 @@ import java.time.LocalDateTime
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class PartnerOrganizationCandidate {
 
     String identifier
@@ -71,9 +72,9 @@ class PartnerOrganizationCandidate {
 
     void partnerOrganizationCandidateTrustmarkUriSetHelper(final org.gtri.fj.data.List<PartnerOrganizationCandidateTrustmarkUri> partnerOrganizationCandidateTrustmarkUriSet) { setPartnerOrganizationCandidateTrustmarkUriSet(new HashSet<>(partnerOrganizationCandidateTrustmarkUriSet.toJavaList())) }
 
-    org.gtri.fj.data.List<OrganizationPartnerOrganizationCandidate> protectedSystemPartnerOrganizationCandidateSetHelper() { fromNull(getProtectedSystemPartnerOrganizationCandidateSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<OrganizationPartnerOrganizationCandidate> nil()) }
+    org.gtri.fj.data.List<OrganizationPartnerOrganizationCandidate> organizationPartnerOrganizationCandidateSetHelper() { fromNull(getOrganizationPartnerOrganizationCandidateSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<OrganizationPartnerOrganizationCandidate> nil()) }
 
-    void protectedSystemPartnerOrganizationCandidateSetHelper(final org.gtri.fj.data.List<OrganizationPartnerOrganizationCandidate> protectedSystemPartnerOrganizationCandidateSet) { this.setOrganizationPartnerOrganizationCandidateSet(new HashSet<>(protectedSystemPartnerOrganizationCandidateSet.toJavaList())) }
+    void organizationPartnerOrganizationCandidateSetHelper(final org.gtri.fj.data.List<OrganizationPartnerOrganizationCandidate> protectedSystemPartnerOrganizationCandidateSet) { this.setOrganizationPartnerOrganizationCandidateSet(new HashSet<>(protectedSystemPartnerOrganizationCandidateSet.toJavaList())) }
 
     TrustmarkBindingRegistryOrganizationMapUri trustmarkBindingRegistryOrganizationMapUriHelper() { this.getTrustmarkBindingRegistryOrganizationMapUri() }
 
@@ -90,11 +91,11 @@ class PartnerOrganizationCandidate {
                 "JOIN trustmarkBindingRegistryUri.trustmarkBindingRegistrySet trustmarkBindingRegistry " +
                 "WHERE trustmarkBindingRegistry.organization IN (:organizationList) ",
                 [organizationList: organizationList.toJavaList()]))
-                .map({ list -> iterableList(list).map({ Object[] array -> array[0] }) })
-                .orSome(org.gtri.fj.data.List.nil())
+                .map({ list -> iterableList(list).map({ Object[] array -> (PartnerOrganizationCandidate) array[0] }) })
+                .orSome(org.gtri.fj.data.List.<PartnerOrganizationCandidate> nil())
     }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

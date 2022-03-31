@@ -1,5 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -9,6 +10,7 @@ import org.gtri.fj.product.P2
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class ProtectedSystem {
 
     String name
@@ -52,7 +54,7 @@ class ProtectedSystem {
             'in'("organization", organizationList.toJavaList())
             order('name', 'asc')
         })
-                .map({ collection -> iterableList(collection) })
+                .map({ collection -> iterableList((Iterable<ProtectedSystem>) collection) })
                 .orSome(org.gtri.fj.data.List.<ProtectedSystem> nil());
     }
 
@@ -68,13 +70,13 @@ class ProtectedSystem {
                 "JOIN protectedSystemTrustInteroperabilityProfileUri.protectedSystem protectedSystem2 " +
                 "WHERE protectedSystem1 = protectedSystem2 " +
                 "AND partnerSystemCandidateMailEvaluationUpdate.mailDateTime IS NULL"))
-                .map({ list -> iterableList(list).map({ Object[] array -> P.p(array[0], array[1]) }) })
-                .orSome(org.gtri.fj.data.List.nil())
+                .map({ list -> iterableList(list).map({ Object[] array -> P.p((ProtectedSystem) array[0], (PartnerSystemCandidateMailEvaluationUpdate) array[1]) }) })
+                .orSome(org.gtri.fj.data.List.<P2<ProtectedSystem, PartnerSystemCandidateMailEvaluationUpdate>> nil())
     }
 
     static final Option<ProtectedSystem> findByOrganizationAndNameHelper(final Organization organization, final String name) { fromNull(findByOrganizationAndName(organization, name)) }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

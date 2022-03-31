@@ -1,7 +1,8 @@
 <!doctype html>
 <html>
     <head>
-        <title>Error</title>
+
+        <title>${grailsApplication.config.getProperty('server.title')}: Error</title>
         <meta name="layout" content="main">
     </head>
 

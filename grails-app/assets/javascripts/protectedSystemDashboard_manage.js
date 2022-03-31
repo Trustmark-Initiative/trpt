@@ -39,6 +39,12 @@ function initialize(
         Array.from(document.querySelectorAll(".protected-system-element-type"))
             .map(element => element.innerHTML = protectedSystem.type.label)
 
+        if (protectedSystem.type.value == "CERTIFICATE_RELYING_PARTY") {
+            Array.from(document.querySelectorAll(".protected-system-element-type-certificate-relying-party")).map(element => element.classList.remove("d-none"))
+        } else {
+            Array.from(document.querySelectorAll(".protected-system-element-type-other")).map(element => element.classList.remove("d-none"))
+        }
+
         const trustInteroperabilityProfileTBody = document.getElementById("trust-interoperability-profile-tbody")
         trustInteroperabilityProfileTBody.innerHTML = ""
 

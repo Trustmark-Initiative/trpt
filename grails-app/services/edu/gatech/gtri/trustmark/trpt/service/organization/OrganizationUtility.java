@@ -21,7 +21,7 @@ import org.json.JSONObject;
 
 import static edu.gatech.gtri.trustmark.trpt.domain.Organization.findByNameHelper;
 import static edu.gatech.gtri.trustmark.trpt.domain.Organization.findByUriHelper;
-import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri.gunzip;
+import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.stringFor;
 import static edu.gatech.gtri.trustmark.trpt.service.partnerOrganizationCandidate.PartnerOrganizationCandidateUtility.partnerOrganizationCandidateResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.trustInteroperabilityProfile.TrustInteroperabilityProfileUtility.trustInteroperabilityProfileResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeEmpty;
@@ -283,7 +283,7 @@ public final class OrganizationUtility {
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied(),
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
-                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : gunzip(partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression()).toOption().map(JSONObject::new).toNull());
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : new JSONObject(stringFor(partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression())));
     }
 
 }

@@ -1,13 +1,14 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
 
 import static org.gtri.fj.data.List.iterableList
-import static org.gtri.fj.data.List.nil
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class Role {
 
     String name
@@ -20,7 +21,7 @@ class Role {
             userRoleSet: UserRole
     ]
 
-    org.gtri.fj.data.List<UserRole> userRoleSetHelper() { fromNull(userRoleSet).map({ collection -> iterableList(collection) }).orSome(nil()) }
+    org.gtri.fj.data.List<UserRole> userRoleSetHelper() { fromNull(userRoleSet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<UserRole> nil()) }
 
     void userRoleSetHelper(final org.gtri.fj.data.List<UserRole> userRoleSet) { setUserRoleSet(new HashSet<>(userRoleSet.toJavaList())) }
 
@@ -36,7 +37,7 @@ class Role {
         fromNull(findByName(name))
     }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

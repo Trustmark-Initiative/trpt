@@ -12,9 +12,9 @@ public interface Uri {
 
     void setHash(String hash);
 
-    String getDocument();
+    File fileHelper();
 
-    void setDocument(String document);
+    void fileHelper(File file);
 
     LocalDateTime getDocumentRequestLocalDateTime();
 

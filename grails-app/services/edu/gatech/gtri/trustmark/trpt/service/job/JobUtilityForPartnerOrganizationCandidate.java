@@ -7,6 +7,7 @@ import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistryUri;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkUri;
 import edu.gatech.gtri.trustmark.v1_0.FactoryLoader;
 import edu.gatech.gtri.trustmark.v1_0.impl.io.json.TrustmarkBindingRegistryOrganizationMapJsonDeserializer;
+import edu.gatech.gtri.trustmark.v1_0.impl.io.json.producers.TrustmarkBindingRegistryOrganizationJsonProducer;
 import edu.gatech.gtri.trustmark.v1_0.io.hash.HashFactory;
 import edu.gatech.gtri.trustmark.v1_0.model.trustmarkBindingRegistry.TrustmarkBindingRegistryOrganization;
 import edu.gatech.gtri.trustmark.v1_0.model.trustmarkBindingRegistry.TrustmarkBindingRegistryOrganizationMap;
@@ -22,10 +23,12 @@ import org.json.JSONArray;
 import org.springframework.security.crypto.codec.Hex;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.stringFor;
 import static edu.gatech.gtri.trustmark.trpt.service.job.RetryTemplateUtility.retry;
 import static java.lang.String.format;
 import static org.gtri.fj.data.Either.reduce;
@@ -40,6 +43,7 @@ public class JobUtilityForPartnerOrganizationCandidate {
     private static final Log log = LogFactory.getLog(JobUtilityForPartnerOrganizationCandidate.class);
     private static final HashFactory hashFactory = FactoryLoader.getInstance(HashFactory.class);
     private static final TrustmarkBindingRegistryOrganizationMapJsonDeserializer trustmarkBindingRegistryOrganizationMapJsonDeserializer = new TrustmarkBindingRegistryOrganizationMapJsonDeserializer();
+    private static final TrustmarkBindingRegistryOrganizationJsonProducer trustmarkBindingRegistryOrganizationJsonProducer = new TrustmarkBindingRegistryOrganizationJsonProducer();
 
     /**
      * Synchronize all partner organization candidates; use now as the timestamp.
@@ -86,7 +90,7 @@ public class JobUtilityForPartnerOrganizationCandidate {
 
         retry(() -> TrustmarkBindingRegistryUri
                 .withTransactionHelper(() -> find.f()
-                        .forEach(trustmarkBindingRegistryOrganizationMapUri -> fromNull(trustmarkBindingRegistryOrganizationMapUri.getDocument())
+                        .forEach(trustmarkBindingRegistryOrganizationMapUri -> fromNull(stringFor(trustmarkBindingRegistryOrganizationMapUri.fileHelper()))
                                 .forEach(document -> Try.f(() -> trustmarkBindingRegistryOrganizationMapJsonDeserializer.deserialize(document))._1().toEither().foreachDoEffect(
                                         parseException -> log.info(format("Trustmark binding registry organization map uri '%s' document read failure: '%s'.", trustmarkBindingRegistryOrganizationMapUri.getUri(), parseException.getMessage())),
                                         trustmarkBindingRegistryOrganizationMap -> synchronizePartnerOrganizationCandidate(duration, now, trustmarkBindingRegistryOrganizationMapUri, trustmarkBindingRegistryOrganizationMap))))), log);
@@ -99,7 +103,7 @@ public class JobUtilityForPartnerOrganizationCandidate {
                                 .get(partnerOrganizationCandidateOld.getIdentifier())
                                 .map(trustmarkBindingRegistryOrganization -> {
 
-                                    partnerOrganizationCandidateOld.setIdentifier(trustmarkBindingRegistryOrganization.getIdentifier());
+                                    partnerOrganizationCandidateOld.setIdentifier(trustmarkBindingRegistryOrganization.getIdentifier().toString());
                                     partnerOrganizationCandidateOld.setName(trustmarkBindingRegistryOrganization.getName());
                                     partnerOrganizationCandidateOld.setNameLong(trustmarkBindingRegistryOrganization.getDisplayName());
                                     partnerOrganizationCandidateOld.setDescription(trustmarkBindingRegistryOrganization.getDescription());
@@ -138,7 +142,7 @@ public class JobUtilityForPartnerOrganizationCandidate {
                                                             return partnerOrganizationCandidateTrustmarkUri;
                                                         }));
 
-                                        partnerOrganizationCandidateOld.setJson(trustmarkBindingRegistryOrganization.getOriginalSource());
+                                        partnerOrganizationCandidateOld.setJson(trustmarkBindingRegistryOrganizationJsonProducer.serialize(trustmarkBindingRegistryOrganization).toString());
                                         partnerOrganizationCandidateOld.setHash(partnerOrganizationCandidateOldHash);
                                         partnerOrganizationCandidateOld.setChangeLocalDateTime(now);
 
@@ -148,7 +152,7 @@ public class JobUtilityForPartnerOrganizationCandidate {
                                     }
 
                                     return p(
-                                            pUpdateInner._1().delete(trustmarkBindingRegistryOrganization.getIdentifier()),
+                                            pUpdateInner._1().delete(trustmarkBindingRegistryOrganization.getIdentifier().toString()),
                                             pUpdateInner._2().snoc(partnerOrganizationCandidateOld),
                                             pUpdateInner._3());
                                 })
@@ -176,17 +180,17 @@ public class JobUtilityForPartnerOrganizationCandidate {
 
                     partnerOrganizationCandidate.trustmarkBindingRegistryOrganizationMapUriHelper(trustmarkBindingRegistryOrganizationMapUri);
 
-                    partnerOrganizationCandidate.setIdentifier(trustmarkBindingRegistryOrganization.getIdentifier());
+                    partnerOrganizationCandidate.setIdentifier(trustmarkBindingRegistryOrganization.getIdentifier().toString());
                     partnerOrganizationCandidate.setName(trustmarkBindingRegistryOrganization.getName());
                     partnerOrganizationCandidate.setNameLong(trustmarkBindingRegistryOrganization.getDisplayName());
                     partnerOrganizationCandidate.setDescription(trustmarkBindingRegistryOrganization.getDescription());
 
-                    partnerOrganizationCandidate.setTrustmarkRecipientIdentifierArrayJson(new JSONArray(trustmarkBindingRegistryOrganization.getOrganizationTrustmarkMap().values().map(TrustmarkBindingRegistryOrganizationTrustmark::getTrustmarkIdentifier).map(URI::toString).toCollection()).toString());
+                    partnerOrganizationCandidate.setTrustmarkRecipientIdentifierArrayJson(new JSONArray(trustmarkBindingRegistryOrganization.getTrustmarkRecipientIdentifiers().map(URI::toString).toCollection()).toString());
 
                     partnerOrganizationCandidate.setRequestLocalDateTime(now);
                     partnerOrganizationCandidate.setSuccessLocalDateTime(now);
 
-                    partnerOrganizationCandidate.setJson(trustmarkBindingRegistryOrganization.getOriginalSource());
+                    partnerOrganizationCandidate.setJson(trustmarkBindingRegistryOrganizationJsonProducer.serialize(trustmarkBindingRegistryOrganization).toString());
                     partnerOrganizationCandidate.setHash(reduce(Try.f(() -> new String(Hex.encode(hashFactory.hash(trustmarkBindingRegistryOrganization))))._1().toEither().leftMap(ioException -> {
                         log.info(format("Trustmark binding registry organization map uri '%s'; partner organization candidate '%' hash failure: '%s'.", trustmarkBindingRegistryOrganizationMapUri.getUri(), trustmarkBindingRegistryOrganization.getIdentifier(), ioException.getMessage()));
                         return null;

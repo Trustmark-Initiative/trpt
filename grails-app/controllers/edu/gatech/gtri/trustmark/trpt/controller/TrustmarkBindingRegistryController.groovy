@@ -1,12 +1,12 @@
 package edu.gatech.gtri.trustmark.trpt.controller
 
-
 import edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryDeleteAllRequest
 import edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryFindAllRequest
 import edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryFindOneRequest
 import edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryInsertRequest
 import edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryService
 import edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUpdateRequest
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
 import grails.plugin.springsecurity.userdetails.GrailsUser
@@ -18,6 +18,7 @@ import static edu.gatech.gtri.trustmark.trpt.controller.ResponseUtility.toRespon
 @CompileStatic
 @Transactional
 @Secured('hasAnyRole("ROLE_ADMINISTRATOR", "ROLE_ADMINISTRATOR_ORGANIZATION")')
+@GrailsCompileStatic
 class TrustmarkBindingRegistryController {
 
     TrustmarkBindingRegistryService trustmarkBindingRegistryService

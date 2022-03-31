@@ -25,6 +25,12 @@ function initialize(
 
         stateReset()
 
+        if (protectedSystem.type.value == "CERTIFICATE_RELYING_PARTY") {
+            Array.from(document.querySelectorAll(".protected-system-element-type-certificate-relying-party")).map(element => element.classList.remove("d-none"))
+        } else {
+            Array.from(document.querySelectorAll(".protected-system-element-type-other")).map(element => element.classList.remove("d-none"))
+        }
+
         if (protectedSystem.protectedSystemPartnerSystemCandidateList.length === 0) {
 
         } else {

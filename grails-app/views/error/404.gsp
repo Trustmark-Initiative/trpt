@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>Not Found</title>
+        <title>${grailsApplication.config.getProperty('server.title')}: Not Found</title>
         <meta name="layout" content="main">
     </head>
 

@@ -1,6 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
-
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -8,9 +8,9 @@ import org.gtri.fj.product.P
 import org.gtri.fj.product.P2
 
 import static org.gtri.fj.data.List.iterableList
-import static org.gtri.fj.data.List.nil
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class Organization {
 
     String uri
@@ -36,15 +36,15 @@ class Organization {
                       organizationPartnerOrganizationCandidateSet   : OrganizationPartnerOrganizationCandidate,
                       organizationTrustInteroperabilityProfileUriSet: OrganizationTrustInteroperabilityProfileUri,]
 
-    org.gtri.fj.data.List<ProtectedSystem> protectedSystemSetHelper() { fromNull(protectedSystemSet).map({ collection -> iterableList(collection) }).orSome(nil()) }
+    org.gtri.fj.data.List<ProtectedSystem> protectedSystemSetHelper() { fromNull(protectedSystemSet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<ProtectedSystem> nil()) }
 
     void protectedSystemSetHelper(final org.gtri.fj.data.List<ProtectedSystem> protectedSystemSet) { setProtectedSystemSet(new HashSet<ProtectedSystem>(protectedSystemSet.toJavaList())) }
 
-    org.gtri.fj.data.List<TrustmarkBindingRegistry> trustmarkBindingRegistrySetHelper() { fromNull(trustmarkBindingRegistrySet).map({ collection -> iterableList(collection) }).orSome(nil()) }
+    org.gtri.fj.data.List<TrustmarkBindingRegistry> trustmarkBindingRegistrySetHelper() { fromNull(trustmarkBindingRegistrySet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<TrustmarkBindingRegistry> nil()) }
 
     void trustmarkBindingRegistrySetHelper(final org.gtri.fj.data.List<TrustmarkBindingRegistry> trustmarkBindingRegistrySet) { setTrustmarkBindingRegistrySet(new HashSet<TrustmarkBindingRegistry>(trustmarkBindingRegistrySet.toJavaList())) }
 
-    org.gtri.fj.data.List<User> userSetHelper() { fromNull(userSet).map({ collection -> iterableList(collection) }).orSome(nil()) }
+    org.gtri.fj.data.List<User> userSetHelper() { fromNull(userSet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<User> nil()) }
 
     void userSetHelper(final org.gtri.fj.data.List<User> userSet) { setUserSet(new HashSet<User>(userSet.toJavaList())) }
 
@@ -68,8 +68,8 @@ class Organization {
                 "JOIN organizationTrustInteroperabilityProfileUri.organization organization2 " +
                 "WHERE organization1 = organization2 " +
                 "AND partnerOrganizationCandidateMailEvaluationUpdate.mailDateTime IS NULL"))
-                .map({ list -> iterableList(list).map({ Object[] array -> P.p(array[0], array[1]) }) })
-                .orSome(org.gtri.fj.data.List.nil())
+                .map({ list -> iterableList(list).map({ Object[] array -> P.p((Organization) array[0], (PartnerOrganizationCandidateMailEvaluationUpdate) [1]) }) })
+                .orSome(org.gtri.fj.data.List.<P2<Organization, PartnerOrganizationCandidateMailEvaluationUpdate>> nil())
     }
 
     static final org.gtri.fj.data.List<Organization> findAllByOrderByNameAscHelper() {
@@ -89,7 +89,7 @@ class Organization {
         fromNull(findByName(name))
     }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

@@ -1,6 +1,5 @@
 package edu.gatech.gtri.trustmark.trpt.controller
 
-
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemDeleteAllRequest
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemFindAllRequest
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemFindOneRequest
@@ -9,6 +8,7 @@ import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemSer
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUpdateRequest
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystemType.ProtectedSystemTypeFindAllRequest
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystemType.ProtectedSystemTypeService
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
 import grails.plugin.springsecurity.userdetails.GrailsUser
@@ -20,6 +20,7 @@ import static edu.gatech.gtri.trustmark.trpt.controller.ResponseUtility.toRespon
 @CompileStatic
 @Transactional
 @Secured('hasAnyRole("ROLE_ADMINISTRATOR", "ROLE_ADMINISTRATOR_ORGANIZATION")')
+@GrailsCompileStatic
 class ProtectedSystemController {
 
     ProtectedSystemService protectedSystemService

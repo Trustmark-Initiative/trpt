@@ -207,7 +207,39 @@ public class TrustmarkBindingRegistryService {
                             trustmarkBindingRegistrySystemMapUriType.deleteHelper();
                         });
 
+                        trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistryOrganizationMapUriSetHelper().forEach(trustmarkBindingRegistryOrganizationMapUri -> {
+                            trustmarkBindingRegistryOrganizationMapUri.partnerOrganizationCandidateSetHelper().forEach(partnerOrganizationCandidate -> {
+
+                                partnerOrganizationCandidate.partnerOrganizationCandidateTrustmarkUriSetHelper().forEach(partnerOrganizationCandidateTrustmarkUri -> {
+                                    partnerOrganizationCandidateTrustmarkUri.partnerOrganizationCandidateHelper(null);
+                                    partnerOrganizationCandidateTrustmarkUri.trustmarkUriHelper(null);
+                                    partnerOrganizationCandidateTrustmarkUri.deleteHelper();
+                                });
+
+                                partnerOrganizationCandidate.partnerOrganizationCandidateTrustInteroperabilityProfileUriSetHelper().forEach(partnerOrganizationCandidateTrustInteroperabilityProfileUri -> {
+                                    partnerOrganizationCandidateTrustInteroperabilityProfileUri.partnerOrganizationCandidateHelper(null);
+                                    partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper(null);
+                                    partnerOrganizationCandidateTrustInteroperabilityProfileUri.deleteHelper();
+                                });
+
+                                partnerOrganizationCandidate.organizationPartnerOrganizationCandidateSetHelper().forEach(organizationPartnerOrganizationCandidate -> {
+                                    organizationPartnerOrganizationCandidate.organizationHelper(null);
+                                    organizationPartnerOrganizationCandidate.partnerOrganizationCandidateHelper(null);
+                                    organizationPartnerOrganizationCandidate.deleteHelper();
+                                });
+
+                                partnerOrganizationCandidate.partnerOrganizationCandidateTrustmarkUriSetHelper(nil());
+                                partnerOrganizationCandidate.partnerOrganizationCandidateTrustInteroperabilityProfileUriSetHelper(nil());
+                                partnerOrganizationCandidate.organizationPartnerOrganizationCandidateSetHelper(nil());
+                                partnerOrganizationCandidate.deleteHelper();
+                            });
+
+                            trustmarkBindingRegistryOrganizationMapUri.partnerOrganizationCandidateSetHelper(nil());
+                            trustmarkBindingRegistryOrganizationMapUri.deleteHelper();
+                        });
+
                         trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySystemMapUriTypeSetHelper(nil());
+                        trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistryOrganizationMapUriSetHelper(nil());
                         trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySetHelper(nil());
                         trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().deleteAndFlushHelper();
 
@@ -231,6 +263,25 @@ public class TrustmarkBindingRegistryService {
                                                 .filter(protectedSystemPartnerSystemCandidate -> protectedSystemPartnerSystemCandidate.protectedSystemHelper() != null));
 
                                 partnerSystemCandidate.saveHelper();
+                            });
+                        });
+
+                        trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistryOrganizationMapUriSetHelper().forEach(trustmarkBindingRegistryOrganizationMapUri -> {
+                            trustmarkBindingRegistryOrganizationMapUri.partnerOrganizationCandidateSetHelper().forEach(partnerOrganizationCandidate -> {
+
+                                partnerOrganizationCandidate.organizationPartnerOrganizationCandidateSetHelper()
+                                        .filter(organizationPartnerOrganizationCandidate -> organizationPartnerOrganizationCandidate.organizationHelper().equals(trustmarkBindingRegistry.organizationHelper()))
+                                        .forEach(organizationPartnerOrganizationCandidate -> {
+                                            organizationPartnerOrganizationCandidate.organizationHelper(null);
+                                            organizationPartnerOrganizationCandidate.partnerOrganizationCandidateHelper(null);
+                                            organizationPartnerOrganizationCandidate.deleteHelper();
+                                        });
+
+                                partnerOrganizationCandidate.organizationPartnerOrganizationCandidateSetHelper(
+                                        partnerOrganizationCandidate.organizationPartnerOrganizationCandidateSetHelper()
+                                                .filter(organizationPartnerOrganizationCandidate -> organizationPartnerOrganizationCandidate.organizationHelper() != null));
+
+                                partnerOrganizationCandidate.saveHelper();
                             });
                         });
 

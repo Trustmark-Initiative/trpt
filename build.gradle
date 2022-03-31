@@ -8,9 +8,9 @@ buildscript {
         maven { url 'https://repo.grails.org/grails/core' }
     }
     dependencies {
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.3.4"
-        classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.6"
-        classpath "org.grails.plugins:hibernate5:7.1.0"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:$comBertramlabsPluginsAssetPipelineGradle"
+        classpath 'gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.6'
+        classpath 'org.grails.plugins:hibernate5:7.1.0'
         classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
     }
 }
@@ -22,7 +22,8 @@ buildscript {
 // https://docs.gradle.org/current/userguide/plugins.html
 
 plugins {
-    id 'com.diffplug.spotless' version '5.11.1'
+    id 'com.diffplug.spotless' version '6.4.0'
+    id 'com.github.ben-manes.versions' version '0.42.0'
     id 'war'
 }
 
@@ -39,7 +40,7 @@ apply plugin: 'com.bertramlabs.asset-pipeline' // asset-pipeline must appear aft
 
 // Maven coordinates.
 
-version '1.0'
+version '1.1'
 group 'edu.gatech.gtri.trustmark.trpt'
 
 // https://docs.gradle.org/current/userguide/declaring_repositories.html
@@ -63,9 +64,11 @@ configurations {
 }
 
 dependencies {
-    implementation 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.35'
-    implementation 'edu.gatech.gtri.trustmark:tf-api:1.4.23'
+    implementation 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.44'
+    implementation 'edu.gatech.gtri.trustmark:tf-api:1.4.30'
 
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.2'
+    implementation 'javax.el:javax.el-api:2.2.5'
     implementation 'org.grails.plugins:async'
     implementation 'org.grails.plugins:cache'
     implementation 'org.grails.plugins:events'
@@ -83,26 +86,16 @@ dependencies {
     implementation 'org.grails:grails-plugin-services'
     implementation 'org.grails:grails-plugin-url-mappings'
     implementation 'org.grails:grails-web-boot'
-
+    implementation 'org.gtri.functionaljava:functionaljava:4.10.1-GTRI'
     implementation 'org.hibernate:hibernate-core:5.5.7.Final'
     implementation 'org.hibernate:hibernate-ehcache:5.5.7.Final'
-
     implementation 'org.quartz-scheduler:quartz:2.2.1' // required for quartz scheduler
-
     implementation 'org.springframework.boot:spring-boot-autoconfigure'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-logging'
     implementation 'org.springframework.boot:spring-boot-starter-tomcat'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-
     implementation 'org.springframework.retry:spring-retry' // required for spring retry
-
-    implementation 'org.gtri.functionaljava:functionaljava:4.10.1-GTRI'
-
-    implementation 'javax.el:javax.el-api:2.2.4'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.12.4'
-
-    compileOnly 'io.micronaut:micronaut-inject-groovy'
 
     console 'org.grails:grails-console'
 
@@ -110,27 +103,12 @@ dependencies {
 
     profile 'org.grails.profiles:web'
 
-    runtimeOnly 'com.bertramlabs.plugins:asset-pipeline-grails:3.3.4'
-    runtimeOnly 'com.h2database:h2'
+    runtimeOnly "com.bertramlabs.plugins:asset-pipeline-grails:$comBertramlabsPluginsAssetPipelineGradle"
     runtimeOnly 'javax.xml.bind:jaxb-api:2.3.1'
+    runtimeOnly 'mysql:mysql-connector-java:8.0.28'
     runtimeOnly 'org.apache.tomcat:tomcat-jdbc'
     runtimeOnly 'org.glassfish.web:el-impl:2.2.1-b05'
-
-    runtimeOnly 'mysql:mysql-connector-java:8.0.24'
-
     runtimeOnly 'org.springframework.boot:spring-boot-starter-aop' // required for spring retry
-
-    testImplementation 'io.micronaut:micronaut-inject-groovy'
-    testImplementation 'org.grails.plugins:geb'
-    testImplementation 'org.grails:grails-gorm-testing-support'
-    testImplementation 'org.grails:grails-web-testing-support'
-    testImplementation 'org.mockito:mockito-core'
-    testImplementation 'org.seleniumhq.selenium:selenium-api:3.141.59'
-    testImplementation 'org.seleniumhq.selenium:selenium-remote-driver:3.141.59'
-    testImplementation 'org.seleniumhq.selenium:selenium-support:3.141.59'
-
-    testRuntimeOnly 'org.seleniumhq.selenium:selenium-chrome-driver:3.141.59'
-    testRuntimeOnly 'org.seleniumhq.selenium:selenium-firefox-driver:3.141.59'
 }
 
 bootRun {
@@ -138,8 +116,9 @@ bootRun {
     jvmArgs(
             '-Dspring.output.ansi.enabled=always',
             '-noverify',
-            '-XX:TieredStopAtLevel=1',
-            '-Xmx1024m')
+            '-XX:+HeapDumpOnOutOfMemoryError',
+            '-XX:HeapDumpPath=/Users/drewtaylor/Documents/work/TI/trpt/out.hprof',
+            '-Xmx1g')
     sourceResources sourceSets.main
     String springProfilesActive = 'spring.profiles.active'
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
@@ -174,24 +153,6 @@ spotless {
 compileGroovy.dependsOn spotlessApply
 compileJava.dependsOn spotlessApply
 
-tasks.withType(GroovyCompile) {
-    configure(groovyOptions) {
-        forkOptions.jvmArgs = ['-Xmx1024m']
-    }
-}
-
 tasks.withType(Test) {
     useJUnitPlatform()
-}
-
-webdriverBinaries {
-    chromedriver '2.45.0'
-    geckodriver '0.24.0'
-}
-
-tasks.withType(Test) {
-    systemProperty "geb.env", System.getProperty('geb.env')
-    systemProperty "geb.build.reportsDir", reporting.file("geb/integrationTest")
-    systemProperty "webdriver.chrome.driver", System.getProperty('webdriver.chrome.driver')
-    systemProperty "webdriver.gecko.driver", System.getProperty('webdriver.gecko.driver')
 }

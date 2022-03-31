@@ -32,24 +32,15 @@ import edu.gatech.gtri.trustmark.v1_0.trust.TrustmarkVerifierFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gtri.fj.data.List;
-import org.gtri.fj.data.Validation;
-import org.gtri.fj.function.Try;
-import org.gtri.fj.function.TryEffect;
-import org.gtri.fj.product.Unit;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
+import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.fileFor;
 import static edu.gatech.gtri.trustmark.trpt.service.job.RetryTemplateUtility.retry;
 import static java.lang.String.format;
 import static org.gtri.fj.data.Either.reduce;
@@ -200,7 +191,7 @@ public class JobUtilityForPartnerOrganizationCandidateTrustInteroperabilityProfi
                 new XmlSignatureValidatorImpl(),
                 trustmarkStatusReportResolver,
                 nil(),
-                nil());
+                iterableList(new JSONArray(partnerOrganizationCandidateTrustInteroperabilityProfileUri.partnerOrganizationCandidateHelper().getTrustmarkRecipientIdentifierArrayJson()).toList()).map(object -> URI.create((String) object)));
 
         final TrustExpressionEvaluator trustExpressionEvaluator = new TrustExpressionEvaluatorImpl(trustmarkResolver, trustmarkVerifier, trustExpressionParser);
 
@@ -212,11 +203,6 @@ public class JobUtilityForPartnerOrganizationCandidateTrustInteroperabilityProfi
                         .map(PartnerOrganizationCandidateTrustmarkUri::trustmarkUriHelper)
                         .map(TrustmarkUri::getUri));
 
-// For now, don't save the trust expression evaluation json.
-        final String trustExpressionEvaluationJsonString = jsonProducerForTrustExpressionEvaluation
-                .serialize(trustExpressionEvaluation)
-                .toString(4);
-
         final TrustmarkDefinitionRequirementEvaluation trustmarkDefinitionRequirementEvaluation = trustmarkDefinitionRequirementEvaluator.evaluate(
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(),
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri
@@ -225,28 +211,23 @@ public class JobUtilityForPartnerOrganizationCandidateTrustInteroperabilityProfi
                         .map(PartnerOrganizationCandidateTrustmarkUri::trustmarkUriHelper)
                         .map(TrustmarkUri::getUri));
 
-// For now, don't save the trustmark definition requirement evaluation json; it is not currently in use.
-//                                        final String trustmarkDefinitionRequirementEvaluationJsonString = jsonProducerForTrustmarkDefinitionRequirementEvaluation
-//                                                .serialize(trustmarkDefinitionRequirementEvaluation)
-//                                                .toString();
-
         retry(() -> PartnerOrganizationCandidateTrustInteroperabilityProfileUri.withTransactionHelper(() -> PartnerOrganizationCandidateTrustInteroperabilityProfileUri.findByPartnerOrganizationCandidateAndTrustInteroperabilityProfileUriHelper(
                         partnerOrganizationCandidateTrustInteroperabilityProfileUri.partnerOrganizationCandidateHelper(),
                         partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper())
                 .forEach(partnerOrganizationCandidateTrustInteroperabilityProfileUriInner -> {
 
-                    log.info(format("(trust interoperability profile '%s', partner system candidate '%s')%n%s",
-                            partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(),
-                            partnerOrganizationCandidateTrustInteroperabilityProfileUri.partnerOrganizationCandidateHelper().getName(),
-                            trustExpressionEvaluationJsonString));
-
                     final LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 
                     partnerOrganizationCandidateTrustInteroperabilityProfileUriInner.setEvaluationLocalDateTime(now);
-// For now, don't save the trust expression evaluation json.
-                    partnerOrganizationCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustExpression(gzip(trustExpressionEvaluationJsonString).toOption().orSome(new byte[]{}));
+
+                    partnerOrganizationCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustExpression(fileFor(jsonProducerForTrustExpressionEvaluation
+                            .serialize(trustExpressionEvaluation)
+                            .toString(4)));
+
 // For now, don't save the trustmark definition requirement evaluation json; it is not currently in use.
-//                                                    partnerOrganizationCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustmarkDefinitionRequirement(trustmarkDefinitionRequirementEvaluationJsonString);
+//                    partnerOrganizationCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustmarkDefinitionRequirement(fileFor(jsonProducerForTrustmarkDefinitionRequirementEvaluation
+//                            .serialize(trustmarkDefinitionRequirementEvaluation)
+//                            .toString(4)));
 
                     partnerOrganizationCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustExpressionSatisfied(
                             reduce(trustExpressionEvaluation.getTrustExpression().getData().toEither().bimap(
@@ -284,37 +265,5 @@ public class JobUtilityForPartnerOrganizationCandidateTrustInteroperabilityProfi
 
                     partnerOrganizationCandidateTrustInteroperabilityProfileUriInner.saveAndFlushHelper();
                 })), log);
-    }
-
-    public static Validation<IOException, byte[]> gzip(final String trustExpressionEvaluationJsonString) {
-
-        final ByteArrayOutputStream trustExpressionEvaluationByteArrayOutputStream = new ByteArrayOutputStream();
-
-        return Try.<GZIPOutputStream, IOException>f(() -> new GZIPOutputStream(trustExpressionEvaluationByteArrayOutputStream))._1()
-                .bind(gzipOutputStream -> TryEffect.<Unit, IOException>f(() -> gzipOutputStream.write(trustExpressionEvaluationJsonString.getBytes(StandardCharsets.UTF_8)))._1()
-                        .map(unit -> gzipOutputStream))
-                .bind(gzipOutputStream -> TryEffect.<Unit, IOException>f(() -> gzipOutputStream.flush())._1()
-                        .map(unit -> gzipOutputStream))
-                .bind(gzipOutputStream -> TryEffect.<Unit, IOException>f(() -> gzipOutputStream.close())._1()
-                        .map(unit -> gzipOutputStream))
-                .map(gzipOutputStream -> trustExpressionEvaluationByteArrayOutputStream.toByteArray());
-    }
-
-    public static Validation<IOException, String> gunzip(final byte[] trustExpressionEvaluationByteArray) {
-
-        final ByteArrayOutputStream trustExpressionEvaluationByteArrayOutputStream = new ByteArrayOutputStream();
-
-        final Validation<IOException, String> validation = Try.<GZIPInputStream, IOException>f(() -> new GZIPInputStream(new ByteArrayInputStream(trustExpressionEvaluationByteArray)))._1()
-                .bind(gzipOutputStream -> TryEffect.<Unit, IOException>f(() -> {
-                    int read;
-                    while ((read = gzipOutputStream.read()) != -1) {
-                        trustExpressionEvaluationByteArrayOutputStream.write(read);
-                    }
-                })._1().map(unit -> gzipOutputStream))
-                .bind(gzipInputStream -> TryEffect.<Unit, IOException>f(() -> gzipInputStream.close())._1()
-                        .map(unit -> gzipInputStream))
-                .map(gzipInputStream -> new String(trustExpressionEvaluationByteArrayOutputStream.toByteArray(), StandardCharsets.UTF_8));
-
-        return validation;
     }
 }

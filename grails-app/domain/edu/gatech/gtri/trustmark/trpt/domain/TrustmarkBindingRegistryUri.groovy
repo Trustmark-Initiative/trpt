@@ -1,13 +1,14 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
 
 import static org.gtri.fj.data.List.iterableList
-import static org.gtri.fj.data.List.nil
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class TrustmarkBindingRegistryUri {
 
     String uri
@@ -27,28 +28,28 @@ class TrustmarkBindingRegistryUri {
             trustmarkBindingRegistryOrganizationMapUriSet: TrustmarkBindingRegistryOrganizationMapUri
     ]
 
-    org.gtri.fj.data.List<TrustmarkBindingRegistry> trustmarkBindingRegistrySetHelper() { fromNull(getTrustmarkBindingRegistrySet()).map({ collection -> iterableList(collection) }).orSome(nil()) }
+    org.gtri.fj.data.List<TrustmarkBindingRegistry> trustmarkBindingRegistrySetHelper() { fromNull(getTrustmarkBindingRegistrySet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<TrustmarkBindingRegistry> nil()) }
 
     void trustmarkBindingRegistrySetHelper(final org.gtri.fj.data.List<TrustmarkBindingRegistry> trustmarkBindingRegistrySet) { setTrustmarkBindingRegistrySet(new HashSet<>(trustmarkBindingRegistrySet.toJavaList())) }
 
-    org.gtri.fj.data.List<TrustmarkBindingRegistrySystemMapUriType> trustmarkBindingRegistrySystemMapUriTypeSetHelper() { fromNull(getTrustmarkBindingRegistrySystemMapUriTypeSet()).map({ collection -> iterableList(collection) }).orSome(nil()) }
+    org.gtri.fj.data.List<TrustmarkBindingRegistrySystemMapUriType> trustmarkBindingRegistrySystemMapUriTypeSetHelper() { fromNull(getTrustmarkBindingRegistrySystemMapUriTypeSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<TrustmarkBindingRegistrySystemMapUriType> nil()) }
 
     void trustmarkBindingRegistrySystemMapUriTypeSetHelper(final org.gtri.fj.data.List<TrustmarkBindingRegistrySystemMapUriType> trustmarkBindingRegistrySystemMapUriTypeSet) { this.setTrustmarkBindingRegistrySystemMapUriTypeSet(new HashSet<>(trustmarkBindingRegistrySystemMapUriTypeSet.toJavaList())) }
 
-    org.gtri.fj.data.List<TrustmarkBindingRegistryOrganizationMapUri> trustmarkBindingRegistryOrganizationMapUriSetHelper() { fromNull(getTrustmarkBindingRegistryOrganizationMapUriSet()).map({ collection -> iterableList(collection) }).orSome(nil()) }
+    org.gtri.fj.data.List<TrustmarkBindingRegistryOrganizationMapUri> trustmarkBindingRegistryOrganizationMapUriSetHelper() { fromNull(getTrustmarkBindingRegistryOrganizationMapUriSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<TrustmarkBindingRegistryOrganizationMapUri> nil()) }
 
     void trustmarkBindingRegistryOrganizationMapUriSetHelper(final org.gtri.fj.data.List<TrustmarkBindingRegistryOrganizationMapUri> trustmarkBindingRegistryOrganizationMapUriSet) { this.setTrustmarkBindingRegistryOrganizationMapUriSet(new HashSet<>(trustmarkBindingRegistryOrganizationMapUriSet.toJavaList())) }
 
     static final org.gtri.fj.data.List<TrustmarkBindingRegistryUri> findAllByOrderByUriAscHelper() {
 
         fromNull(findAll(sort: 'uri', order: 'asc'))
-                .map({ collection -> iterableList(collection) })
+                .map({ collection -> iterableList((Iterable<TrustmarkBindingRegistryUri>) collection) })
                 .orSome(org.gtri.fj.data.List.<TrustmarkBindingRegistryUri> nil());
     }
 
     static final Option<TrustmarkBindingRegistryUri> findByUriHelper(final String uri) { fromNull(findByUri(uri)) }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

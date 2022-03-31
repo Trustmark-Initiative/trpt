@@ -1,5 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -7,6 +8,7 @@ import org.gtri.fj.function.F0
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class OrganizationPartnerOrganizationCandidate {
 
     boolean trust
@@ -19,8 +21,10 @@ class OrganizationPartnerOrganizationCandidate {
         table 'organization_partner_organization_candidate'
     }
 
-    static belongsTo = [partnerOrganizationCandidate: PartnerOrganizationCandidate,
-                        organization                : Organization,]
+    static belongsTo = [
+            partnerOrganizationCandidate: PartnerOrganizationCandidate,
+            organization                : Organization
+    ]
 
     PartnerOrganizationCandidate partnerOrganizationCandidateHelper() { getPartnerOrganizationCandidate() }
 
@@ -30,7 +34,7 @@ class OrganizationPartnerOrganizationCandidate {
 
     void organizationHelper(final Organization organization) { setOrganization(organization) }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

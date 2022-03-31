@@ -1,5 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -7,14 +8,14 @@ import org.gtri.fj.function.F0
 import java.time.LocalDateTime
 
 import static org.gtri.fj.data.List.iterableList
-import static org.gtri.fj.data.List.nil
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class TrustmarkBindingRegistryOrganizationMapUri implements Uri {
 
     String uri
     String hash
-    String document
+    File document
     LocalDateTime documentRequestLocalDateTime
     LocalDateTime documentSuccessLocalDateTime
     LocalDateTime documentFailureLocalDateTime
@@ -46,7 +47,6 @@ class TrustmarkBindingRegistryOrganizationMapUri implements Uri {
         table 'trustmark_binding_registry_organization_map_uri'
         uri length: 1000
         hash length: 1000
-        document type: 'text'
         documentFailureMessage length: 1000
         serverFailureMessage length: 1000
     }
@@ -59,7 +59,11 @@ class TrustmarkBindingRegistryOrganizationMapUri implements Uri {
             trustmarkBindingRegistryUri: TrustmarkBindingRegistryUri
     ]
 
-    org.gtri.fj.data.List<PartnerOrganizationCandidate> partnerOrganizationCandidateSetHelper() { fromNull(getPartnerOrganizationCandidateSet()).map({ collection -> iterableList(collection) }).orSome(nil()) }
+    File fileHelper() { getDocument() }
+
+    void fileHelper(final File file) { setDocument(file) }
+
+    org.gtri.fj.data.List<PartnerOrganizationCandidate> partnerOrganizationCandidateSetHelper() { fromNull(getPartnerOrganizationCandidateSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<PartnerOrganizationCandidate> nil()) }
 
     void partnerOrganizationCandidateSetHelper(final org.gtri.fj.data.List<PartnerOrganizationCandidate> partnerOrganizationCandidateSet) { setPartnerOrganizationCandidateSet(new HashSet<>(partnerOrganizationCandidateSet.toJavaList())) }
 
@@ -70,13 +74,13 @@ class TrustmarkBindingRegistryOrganizationMapUri implements Uri {
     static final org.gtri.fj.data.List<TrustmarkBindingRegistryOrganizationMapUri> findAllByOrderByUriAscHelper() {
 
         fromNull(findAll(sort: 'uri', order: 'asc'))
-                .map({ collection -> iterableList(collection) })
+                .map({ collection -> iterableList((Iterable<TrustmarkBindingRegistryOrganizationMapUri>) collection) })
                 .orSome(org.gtri.fj.data.List.<TrustmarkBindingRegistryOrganizationMapUri> nil());
     }
 
     static final Option<TrustmarkBindingRegistryOrganizationMapUri> findByUriHelper(final String uri) { fromNull(findByUri(uri)) }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

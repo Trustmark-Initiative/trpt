@@ -21,7 +21,7 @@ import org.gtri.fj.product.P2;
 import org.gtri.fj.product.P5;
 import org.json.JSONObject;
 
-import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri.gunzip;
+import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.stringFor;
 import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.organizationResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateUtility.partnerSystemCandidateResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNull;
@@ -197,7 +197,7 @@ public final class ProtectedSystemUtility {
                 partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied(),
                 partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
                 partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
-                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : gunzip(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression()).toOption().map(JSONObject::new).toNull());
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : new JSONObject(stringFor(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression())));
     }
 
     private static ProtectedSystemTrustInteroperabilityProfileResponse protectedSystemTrustInteroperabilityProfileResponse(

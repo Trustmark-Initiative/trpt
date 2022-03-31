@@ -1,6 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
-
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -10,11 +10,12 @@ import java.time.LocalDateTime
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class TrustmarkBindingRegistryOrganizationMapUriHistory implements Uri {
 
     String uri
     String hash
-    String document
+    File document
     LocalDateTime documentRequestLocalDateTime
     LocalDateTime documentSuccessLocalDateTime
     LocalDateTime documentFailureLocalDateTime
@@ -46,12 +47,15 @@ class TrustmarkBindingRegistryOrganizationMapUriHistory implements Uri {
         table 'trustmark_binding_registry_organization_map_uri_history'
         uri length: 1000
         hash length: 1000
-        document type: 'text'
         documentFailureMessage length: 1000
         serverFailureMessage length: 1000
     }
 
-    long idHelper() {
+    File fileHelper() { getDocument() }
+
+    void fileHelper(final File file) { setDocument(file) }
+
+    Long idHelper() {
         id
     }
 

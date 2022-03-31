@@ -14,7 +14,8 @@ public enum ProtectedSystemType {
     OPENID_CONNECT_PROVIDER("OpenID Connect Provider"),
     OPENID_CONNECT_CLIENT("OpenID Connect Client"),
     WEB_SERVICE_PROVIDER("Web Service Provider"),
-    WEB_SERVICE_CONSUMER("Web Service Consumer");
+    WEB_SERVICE_CONSUMER("Web Service Consumer"),
+    CERTIFICATE_RELYING_PARTY("Certificate Relying Party");
 
     private final String name;
 
@@ -40,5 +41,6 @@ public enum ProtectedSystemType {
             p(OPENID_CONNECT_PROVIDER, nil()),
             p(OPENID_CONNECT_CLIENT, nil()),
             p(WEB_SERVICE_PROVIDER, nil()),
-            p(WEB_SERVICE_CONSUMER, nil()));
+            p(WEB_SERVICE_CONSUMER, nil()),
+            p(CERTIFICATE_RELYING_PARTY, arrayList(TrustmarkBindingRegistrySystemType.CERTIFICATE)));
 }

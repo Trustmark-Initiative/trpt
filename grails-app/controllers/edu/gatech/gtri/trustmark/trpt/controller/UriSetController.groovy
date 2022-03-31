@@ -1,8 +1,8 @@
 package edu.gatech.gtri.trustmark.trpt.controller
 
-
 import edu.gatech.gtri.trustmark.trpt.service.uri.UriSetFindAllRequest
 import edu.gatech.gtri.trustmark.trpt.service.uri.UriSetService
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
 import grails.plugin.springsecurity.userdetails.GrailsUser
@@ -11,10 +11,10 @@ import org.gtri.fj.product.P2
 
 import static edu.gatech.gtri.trustmark.trpt.controller.ResponseUtility.toResponse
 
-
 @CompileStatic
 @Transactional
 @Secured('hasAnyRole("ROLE_ADMINISTRATOR")')
+@GrailsCompileStatic
 class UriSetController {
 
     UriSetService uriSetService

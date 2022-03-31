@@ -1,4 +1,4 @@
-<%@ page import="org.json.JSONObject" contentType="text/html;charset=UTF-8" %>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils; org.json.JSONObject" contentType="text/html;charset=UTF-8" %>
 <%@ page import="org.json.JSONArray" contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
@@ -23,7 +23,7 @@
             <div class="fw-bold mt-2">Trust Policy for <span class="protected-system-element-name"></span></div>
 
             <div class="mt-2">
-                Add trust interoperability profiles (TIPs) to this table to define the trust policy for <span class="protected-system-element-name"></span>, a <span class="protected-system-element-type"></span>.
+                Add trust interoperability profiles (TIPs${raw(grailsApplication.config.getProperty('server.artifact'))}) to this table to define the trust policy for <span class="protected-system-element-name"></span>, a <span class="protected-system-element-type"></span>.
             </div>
             <table class="mt-2 table table-bordered table-striped-hack mb-0">
                 <thead>
@@ -322,7 +322,14 @@
                         </p>
 
                         <ol>
-                            <li class="mb-3">You must download a copy of the SAML metadata for <span class="partner-system-candidate-element-name fw-bold"></span>,
+                            <li class="mb-3 d-none protected-system-element-type-certificate-relying-party">You must download a copy of the certificate for <span class="partner-system-candidate-element-name fw-bold"></span>,
+                            and configure it within <span class="protected-system-element-name fw-bold"></span>, to enable <span class="protected-system-element-name fw-bold"></span>
+                            to trust <span class="partner-system-candidate-element-name fw-bold"></span>.
+                            This process heavily depends on the implementation details of <span class="protected-system-element-name fw-bold"></span>.
+                            To download a copy of the certificate for <span class="partner-system-candidate-element-name fw-bold"></span>, click <a target="_blank" class="partner-system-candidate-element-trust-fabric-metadata fw-bold"></a>.
+                            </li>
+
+                            <li class="mb-3 d-none protected-system-element-type-other">You must download a copy of the SAML metadata for <span class="partner-system-candidate-element-name fw-bold"></span>,
                             and install it within <span class="protected-system-element-name fw-bold"></span>,
                             to enable <span class="protected-system-element-name fw-bold"></span> to trust <span class="partner-system-candidate-element-name fw-bold"></span>.
                             This is a manual reconfiguration process of <span class="protected-system-element-name fw-bold"></span>

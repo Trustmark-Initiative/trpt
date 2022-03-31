@@ -20,9 +20,9 @@ import edu.gatech.gtri.trustmark.trpt.job.JobForTrustmarkUri
 import edu.gatech.gtri.trustmark.trpt.service.ApplicationProperties
 import edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForTrustmarkBindingRegistry
 import edu.gatech.gtri.trustmark.trpt.service.job.urisynchronizer.UriSynchronizerForTrustInteroperabilityProfile
+import grails.compiler.GrailsCompileStatic
 import grails.converters.JSON
 import grails.core.GrailsApplication
-import groovy.transform.CompileStatic
 import org.gtri.fj.data.NonEmptyList
 import org.gtri.fj.data.Option
 import org.json.JSONArray
@@ -45,7 +45,7 @@ import java.time.format.DateTimeFormatter
 import static org.gtri.fj.data.List.arrayList
 import static org.quartz.CronScheduleBuilder.cronSchedule
 
-@CompileStatic
+@GrailsCompileStatic
 class BootStrap {
 
     GrailsApplication grailsApplication

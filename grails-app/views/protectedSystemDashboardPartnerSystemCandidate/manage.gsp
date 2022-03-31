@@ -178,7 +178,14 @@
                         </p>
 
                         <ol>
-                            <li class="mb-3">You must download a copy of the SAML metadata for <span class="partner-system-candidate-element-name fw-bold"></span>,
+                            <li class="mb-3 d-none protected-system-element-type-certificate-relying-party">You must download a copy of the certificate for <span class="partner-system-candidate-element-name fw-bold"></span>,
+                            and configure it within <span class="protected-system-element-name fw-bold"></span>, to enable <span class="protected-system-element-name fw-bold"></span>
+                                to trust <span class="partner-system-candidate-element-name fw-bold"></span>.
+                            This process heavily depends on the implementation details of <span class="protected-system-element-name fw-bold"></span>.
+                            To download a copy of the certificate for <span class="partner-system-candidate-element-name fw-bold"></span>, click <a target="_blank" class="partner-system-candidate-element-trust-fabric-metadata fw-bold"></a>.
+                            </li>
+
+                            <li class="mb-3 d-none protected-system-element-type-other">You must download a copy of the SAML metadata for <span class="partner-system-candidate-element-name fw-bold"></span>,
                             and install it within <span class="protected-system-element-name fw-bold"></span>,
                             to enable <span class="protected-system-element-name fw-bold"></span> to trust <span class="partner-system-candidate-element-name fw-bold"></span>.
                             This is a manual reconfiguration process of <span class="protected-system-element-name fw-bold"></span>

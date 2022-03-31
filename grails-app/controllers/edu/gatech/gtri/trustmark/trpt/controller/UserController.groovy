@@ -1,12 +1,12 @@
 package edu.gatech.gtri.trustmark.trpt.controller
 
-
 import edu.gatech.gtri.trustmark.trpt.service.user.UserDeleteAllRequest
 import edu.gatech.gtri.trustmark.trpt.service.user.UserFindAllRequest
 import edu.gatech.gtri.trustmark.trpt.service.user.UserFindOneRequest
 import edu.gatech.gtri.trustmark.trpt.service.user.UserInsertRequest
 import edu.gatech.gtri.trustmark.trpt.service.user.UserService
 import edu.gatech.gtri.trustmark.trpt.service.user.UserUpdateRequest
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
 import grails.plugin.springsecurity.userdetails.GrailsUser
@@ -18,6 +18,7 @@ import static edu.gatech.gtri.trustmark.trpt.controller.ResponseUtility.toRespon
 @CompileStatic
 @Transactional
 @Secured('hasAnyRole("ROLE_ADMINISTRATOR", "ROLE_ADMINISTRATOR_ORGANIZATION")')
+@GrailsCompileStatic
 class UserController {
 
     UserService userService

@@ -1,5 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -9,6 +10,7 @@ import java.time.LocalDateTime
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class MailPasswordReset {
 
     String external
@@ -58,7 +60,7 @@ class MailPasswordReset {
         fromNull(findByExternal(external))
     }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

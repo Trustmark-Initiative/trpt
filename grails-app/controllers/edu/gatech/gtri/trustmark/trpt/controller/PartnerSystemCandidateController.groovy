@@ -2,6 +2,7 @@ package edu.gatech.gtri.trustmark.trpt.controller
 
 import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateFindAllRequest
 import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateService
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
 import grails.plugin.springsecurity.userdetails.GrailsUser
@@ -13,6 +14,7 @@ import static edu.gatech.gtri.trustmark.trpt.controller.ResponseUtility.toRespon
 @CompileStatic
 @Transactional
 @Secured('hasAnyRole("ROLE_ADMINISTRATOR", "ROLE_ADMINISTRATOR_ORGANIZATION")')
+@GrailsCompileStatic
 class PartnerSystemCandidateController {
 
     PartnerSystemCandidateService partnerSystemCandidateService
