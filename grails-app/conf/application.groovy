@@ -42,7 +42,12 @@ environments {
     production {
         dataSource {
             dbCreate = 'update'
-            testWhileIdle = true
+            properties {
+                 testWhileIdle = true
+                 dbProperties {
+                     autoReconnect = true
+                 }
+            }
         }
     }
 }

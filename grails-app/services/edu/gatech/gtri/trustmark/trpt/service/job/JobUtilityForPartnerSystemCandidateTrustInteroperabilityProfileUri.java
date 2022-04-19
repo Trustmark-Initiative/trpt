@@ -5,6 +5,7 @@ import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateMailEvaluatio
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateTrustInteroperabilityProfileUri;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateTrustmarkUri;
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystem;
+import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemPartnerSystemCandidate;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustInteroperabilityProfileUri;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkUri;
 import edu.gatech.gtri.trustmark.trpt.service.job.resolver.DatabaseCacheTrustInteroperabilityProfileResolver;
@@ -253,6 +254,21 @@ public class JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri 
                                             .filter(pInner -> pInner._2().isEmpty())
                                             .length())
                                     .orSuccess((Integer) null));
+
+                    ProtectedSystemPartnerSystemCandidate.executeUpdateHelper("DELETE FROM ProtectedSystemPartnerSystemCandidate protectedSystemPartnerSystemCandidate " +
+                            "WHERE id IN (SELECT DISTINCT protectedSystemPartnerSystemCandidateInner.id FROM ProtectedSystemPartnerSystemCandidate protectedSystemPartnerSystemCandidateInner " +
+                            "JOIN protectedSystemPartnerSystemCandidateInner.protectedSystem protectedSystem " +
+                            "JOIN protectedSystem.protectedSystemTrustInteroperabilityProfileUriSet protectedSystemTrustInteroperabilityProfileUri " +
+                            "JOIN protectedSystemTrustInteroperabilityProfileUri.trustInteroperabilityProfileUri trustInteroperabilityProfileUri1 " +
+                            "JOIN protectedSystemPartnerSystemCandidateInner.partnerSystemCandidate partnerSystemCandidate " +
+                            "JOIN partnerSystemCandidate.partnerSystemCandidateTrustInteroperabilityProfileUriSet partnerSystemCandidateTrustInteroperabilityProfileUri " +
+                            "JOIN partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUri trustInteroperabilityProfileUri2 " +
+                            "WHERE " +
+                            "protectedSystemPartnerSystemCandidateInner.trust = TRUE AND " +
+                            "protectedSystemTrustInteroperabilityProfileUri.mandatory = TRUE AND " +
+                            "(partnerSystemCandidateTrustInteroperabilityProfileUri.evaluationTrustExpressionSatisfied IS NULL OR " +
+                            "partnerSystemCandidateTrustInteroperabilityProfileUri.evaluationTrustExpressionSatisfied = FALSE) AND " +
+                            "trustInteroperabilityProfileUri1.id = trustInteroperabilityProfileUri2.id)");
 
                     if (mail) {
 

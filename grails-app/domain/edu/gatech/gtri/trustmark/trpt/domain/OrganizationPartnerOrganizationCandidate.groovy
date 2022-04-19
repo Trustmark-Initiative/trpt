@@ -71,4 +71,8 @@ class OrganizationPartnerOrganizationCandidate {
                 .map({ collection -> iterableList(collection) })
                 .orSome(org.gtri.fj.data.List.<OrganizationPartnerOrganizationCandidate> nil());
     }
+
+    static Integer executeUpdateHelper(final String query) {
+        executeUpdate(query);
+    }
 }

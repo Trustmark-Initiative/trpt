@@ -316,38 +316,22 @@
                             By toggling this trust control, you have chosen to configure
                             <span class="organization-element-name fw-bold"></span>
                             to trust
-                            <span class="partner-organization-candidate-element-name fw-bold"></span>.
-                        Please
-                        take note of the following implications of your decision.
+                            <span class="partner-organization-candidate-element-name fw-bold"></span>.</p>
+
+                        <p>
+                            Because you have chosen to trust <span class="partner-organization-candidate-element-name fw-bold"></span>,
+                        this tool will begin to closely monitor <span class="partner-organization-candidate-element-name fw-bold"></span>
+                            for changes in its trustmark disposition with respect to the trust policy that
+                            you have defined for <span class="organization-element-name fw-bold"></span>. If
+                        any future changes should occur – e.g., if any trustmark bound to <span class="partner-organization-candidate-element-name fw-bold"></span>
+                            should expire or become revoked by its issuer, or if you change your trust policy
+                            for <span class="organization-element-name fw-bold"></span> – you will receive an
+                        automated email from this tool, informing you of the change and cautioning you about
+                        important steps to take at that time. If you receive such an email, you should immediately
+                        revisit this Trust Dashboard page, reassess your decision to trust <span class="partner-organization-candidate-element-name fw-bold"></span>,
+                        and change <span class="organization-element-name fw-bold"></span>'s trust perspective
+                        on <span class="partner-organization-candidate-element-name fw-bold"></span> if appropriate.
                         </p>
-
-                        <ol>
-                            <li class="mb-3">You must download a copy of the SAML metadata for <span class="partner-organization-candidate-element-name fw-bold"></span>,
-                            and install it within <span class="organization-element-name fw-bold"></span>,
-                            to enable <span class="organization-element-name fw-bold"></span> to trust <span class="partner-organization-candidate-element-name fw-bold"></span>.
-                            This is a manual reconfiguration process of <span class="organization-element-name fw-bold"></span>
-                                that depends on its implementation details, including the software platform
-                                on which <span class="organization-element-name fw-bold"></span> is built. Completion
-                            of this process typically requires you to have administrative access to <span class="organization-element-name fw-bold"></span>.
-                            To download a copy of the SAML metadata for <span class="partner-organization-candidate-element-name fw-bold"></span>,
-                            click <a target="_blank" class="partner-organization-candidate-element-trust-fabric-metadata fw-bold"></a>.</li>
-
-
-                            <li>
-                                Because you have chosen to trust <span class="partner-organization-candidate-element-name fw-bold"></span>,
-                            this tool will begin to closely monitor <span class="partner-organization-candidate-element-name fw-bold"></span>
-                                for changes in its trustmark disposition with respect to the trust policy that
-                                you have defined for <span class="organization-element-name fw-bold"></span>. If
-                            any future changes should occur – e.g., if any trustmark bound to <span class="partner-organization-candidate-element-name fw-bold"></span>
-                                should expire or become revoked by its issuer, or if you change your trust policy
-                                for <span class="organization-element-name fw-bold"></span> – you will receive an
-                            automated email from this tool, informing you of the change and cautioning you about
-                            important steps to take at that time. If you receive such an email, you should immediately
-                            revisit this Trust Dashboard page, reassess your decision to trust <span class="partner-organization-candidate-element-name fw-bold"></span>,
-                            and change <span class="organization-element-name fw-bold"></span>'s trust perspective
-                            on <span class="partner-organization-candidate-element-name fw-bold"></span> if appropriate.
-                            </li>
-                        </ol>
                     </div>
 
                     <div class="modal-header d-none" id="modal-header-do-not-trust">
@@ -358,29 +342,16 @@
                     <div class="modal-body d-none" id="modal-body-do-not-trust">
                         <p>
                             By toggling this trust control, you have chosen to configure <span class="organization-element-name fw-bold"></span>
-                            to stop trusting <span class="partner-organization-candidate-element-name fw-bold"></span>.
-                        Please take note of the following implications of your decision.</p>
+                            to stop trusting <span class="partner-organization-candidate-element-name fw-bold"></span>.</p>
 
-                        <ol>
-                            <li class="mb-3">You must immediately reconfigure <span class="organization-element-name fw-bold"></span>
-                                so that it no longer trusts <span class="partner-organization-candidate-element-name fw-bold"></span>.
-                            This is a manual reconfiguration process of <span class="organization-element-name fw-bold"></span>
-                                that depends on its implementation details, including the software platform on
-                                which <span class="organization-element-name fw-bold"></span> is built. Typically,
-                            this process involves editing <span class="organization-element-name fw-bold"></span>'s
-                            list of trusted remote partner systems, so that the list no longer includes <span class="partner-organization-candidate-element-name fw-bold"></span>.
-                            Completion of this process typically requires you to have administrative access to
-                                <span class="organization-element-name fw-bold"></span>.</li>
-
-                            <li>Because you have chosen to stop trusting <span class="partner-organization-candidate-element-name fw-bold"></span>,
-                            this tool will no longer monitor <span class="partner-organization-candidate-element-name fw-bold"></span>
-                                for changes in its trustmark disposition with respect to the trust policy for
-                                <span class="organization-element-name fw-bold"></span>. If at any future point in
-                            time, you want to change <span class="organization-element-name fw-bold"></span>'s trust
-                            perspective on <span class="partner-organization-candidate-element-name fw-bold"></span>, you
-                            can do so by toggling the trust control for <span class="partner-organization-candidate-element-name fw-bold"></span>
-                                on this page.</li>
-                        </ol>
+                        <p>Because you have chosen to stop trusting <span class="partner-organization-candidate-element-name fw-bold"></span>,
+                        this tool will no longer monitor <span class="partner-organization-candidate-element-name fw-bold"></span>
+                            for changes in its trustmark disposition with respect to the trust policy for
+                            <span class="organization-element-name fw-bold"></span>. If at any future point in
+                        time, you want to change <span class="organization-element-name fw-bold"></span>'s trust
+                        perspective on <span class="partner-organization-candidate-element-name fw-bold"></span>, you
+                        can do so by toggling the trust control for <span class="partner-organization-candidate-element-name fw-bold"></span>
+                            on this page.</p>
                     </div>
 
                     <div class="modal-footer">

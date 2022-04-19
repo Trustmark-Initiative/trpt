@@ -71,4 +71,8 @@ class ProtectedSystemPartnerSystemCandidate {
                 .map({ collection -> iterableList(collection) })
                 .orSome(org.gtri.fj.data.List.<ProtectedSystemPartnerSystemCandidate> nil());
     }
+
+    static Integer executeUpdateHelper(final String query) {
+        executeUpdate(query);
+    }
 }

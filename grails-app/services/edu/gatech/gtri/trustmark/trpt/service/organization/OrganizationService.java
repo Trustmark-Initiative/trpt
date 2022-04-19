@@ -9,10 +9,6 @@ import edu.gatech.gtri.trustmark.trpt.domain.TrustInteroperabilityProfileUri;
 import edu.gatech.gtri.trustmark.trpt.domain.User;
 import edu.gatech.gtri.trustmark.trpt.service.ApplicationProperties;
 import edu.gatech.gtri.trustmark.trpt.service.job.urisynchronizer.UriSynchronizerForTrustInteroperabilityProfile;
-import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemField;
-import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemPartnerSystemCandidateFindOneRequest;
-import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemResponseWithTrustExpressionEvaluation;
-import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility;
 import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
 import grails.gorm.transactions.Transactional;
 import org.gtri.fj.data.Either;
@@ -42,14 +38,12 @@ import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionName.O
 import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionName.ORGANIZATION_INSERT;
 import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionName.ORGANIZATION_SELECT;
 import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionName.ORGANIZATION_UPDATE;
-import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionName.PROTECTED_SYSTEM_SELECT;
 import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionUtility.userMay;
-import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.protectedSystemResponseWithTrustExpressionEvaluation;
-import static edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility.validationPartnerSystemCandidate;
 import static edu.gatech.gtri.trustmark.trpt.service.trustInteroperabilityProfile.TrustInteroperabilityProfileUtility.upsertTrustInteroperabilityProfileUri;
 import static org.gtri.fj.data.List.iterableList;
 import static org.gtri.fj.data.List.nil;
 import static org.gtri.fj.data.List.single;
+import static org.gtri.fj.data.Option.fromNull;
 import static org.gtri.fj.data.Validation.accumulate;
 import static org.gtri.fj.data.Validation.success;
 import static org.gtri.fj.product.P.p;
@@ -186,12 +180,21 @@ public class OrganizationService {
         }));
 
         // add the associations with partner system candidates
-        organization.organizationPartnerOrganizationCandidateSetHelper(partnerOrganizationCandidateList.map(partnerOrganizationCandidate -> {
-            final OrganizationPartnerOrganizationCandidate organizationPartnerOrganizationCandidate = new OrganizationPartnerOrganizationCandidate();
-            organizationPartnerOrganizationCandidate.partnerOrganizationCandidateHelper(partnerOrganizationCandidate);
-            organizationPartnerOrganizationCandidate.organizationHelper(organization);
-            return organizationPartnerOrganizationCandidate.saveHelper();
-        }));
+        organization.organizationPartnerOrganizationCandidateSetHelper(partnerOrganizationCandidateList
+                .filter(partnerOrganizationCandidate -> organization
+                        .organizationTrustInteroperabilityProfileUriSetHelper()
+                        .bind(organizationTrustInteroperabilityProfileUri -> organizationTrustInteroperabilityProfileUri
+                                .trustInteroperabilityProfileUriHelper()
+                                .partnerOrganizationCandidateTrustInteroperabilityProfileUriSetHelper()
+                                .filter(partnerOrganizationCandidateTrustInteroperabilityProfileUri -> partnerOrganizationCandidateTrustInteroperabilityProfileUri.partnerOrganizationCandidateHelper().idHelper() == partnerOrganizationCandidate.idHelper())
+                                .map(partnerOrganizationCandidateTrustInteroperabilityProfileUri -> p(organizationTrustInteroperabilityProfileUri.isMandatory(), partnerOrganizationCandidateTrustInteroperabilityProfileUri)))
+                        .foldLeft((trustable, p) -> trustable && (!p._1() || fromNull(p._2().getEvaluationTrustExpressionSatisfied()).orSome(false)), true))
+                .map(partnerOrganizationCandidate -> {
+                    final OrganizationPartnerOrganizationCandidate organizationPartnerOrganizationCandidate = new OrganizationPartnerOrganizationCandidate();
+                    organizationPartnerOrganizationCandidate.partnerOrganizationCandidateHelper(partnerOrganizationCandidate);
+                    organizationPartnerOrganizationCandidate.organizationHelper(organization);
+                    return organizationPartnerOrganizationCandidate.saveHelper();
+                }));
 
         organization.saveAndFlushHelper();
 

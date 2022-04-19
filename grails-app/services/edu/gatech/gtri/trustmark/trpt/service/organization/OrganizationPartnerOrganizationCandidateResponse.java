@@ -8,6 +8,7 @@ import java.util.List;
 public class OrganizationPartnerOrganizationCandidateResponse {
 
     private final PartnerOrganizationCandidateResponse partnerOrganizationCandidate;
+    private final boolean trustable;
     private final boolean trust;
     private final Integer evaluationTrustmarkDefinitionRequirementSatisfied;
     private final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied;
@@ -17,6 +18,7 @@ public class OrganizationPartnerOrganizationCandidateResponse {
 
     public OrganizationPartnerOrganizationCandidateResponse(
             final PartnerOrganizationCandidateResponse partnerOrganizationCandidate,
+            final boolean trustable,
             final boolean trust,
             final Integer evaluationTrustmarkDefinitionRequirementSatisfied,
             final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied,
@@ -24,6 +26,7 @@ public class OrganizationPartnerOrganizationCandidateResponse {
             final Integer evaluationTrustExpressionUnsatisfied,
             final List<PartnerOrganizationCandidateTrustInteroperabilityProfileResponse> partnerOrganizationCandidateTrustInteroperabilityProfileList) {
         this.partnerOrganizationCandidate = partnerOrganizationCandidate;
+        this.trustable = trustable;
         this.trust = trust;
         this.evaluationTrustmarkDefinitionRequirementSatisfied = evaluationTrustmarkDefinitionRequirementSatisfied;
         this.evaluationTrustmarkDefinitionRequirementUnsatisfied = evaluationTrustmarkDefinitionRequirementUnsatisfied;
@@ -34,6 +37,10 @@ public class OrganizationPartnerOrganizationCandidateResponse {
 
     public PartnerOrganizationCandidateResponse getPartnerOrganizationCandidate() {
         return partnerOrganizationCandidate;
+    }
+
+    public boolean isTrustable() {
+        return trustable;
     }
 
     public boolean isTrust() {

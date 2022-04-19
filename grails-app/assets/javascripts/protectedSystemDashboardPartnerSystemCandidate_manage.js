@@ -42,6 +42,10 @@ function initialize(
                     document.querySelector(".partner-system-candidate-element-trust").outerHTML = document.querySelector(".partner-system-candidate-element-trust").outerHTML
                     const partnerSystemCandidateElementTrust = document.querySelector(".partner-system-candidate-element-trust")
 
+                    if (!protectedSystemPartnerSystemCandidate.trustable) {
+                        partnerSystemCandidateElementTrust.disabled = true
+                        partnerSystemCandidateElementTrust.parentNode.title = "This candidate partner system does not satisfy a required TIP."
+                    }
                     partnerSystemCandidateElementTrust.checked = protectedSystemPartnerSystemCandidate.trust
                     if (partnerSystemCandidateElementTrust.checked) {
                         partnerSystemCandidateElementTrust.addEventListener("click", () => {

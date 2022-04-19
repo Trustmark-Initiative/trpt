@@ -8,6 +8,7 @@ import java.util.List;
 public class ProtectedSystemPartnerSystemCandidateResponse {
 
     private final PartnerSystemCandidateResponse partnerSystemCandidate;
+    private final boolean trustable;
     private final boolean trust;
     private final Integer evaluationTrustmarkDefinitionRequirementSatisfied;
     private final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied;
@@ -17,6 +18,7 @@ public class ProtectedSystemPartnerSystemCandidateResponse {
 
     public ProtectedSystemPartnerSystemCandidateResponse(
             final PartnerSystemCandidateResponse partnerSystemCandidate,
+            final boolean trustable,
             final boolean trust,
             final Integer evaluationTrustmarkDefinitionRequirementSatisfied,
             final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied,
@@ -24,6 +26,7 @@ public class ProtectedSystemPartnerSystemCandidateResponse {
             final Integer evaluationTrustExpressionUnsatisfied,
             final List<PartnerSystemCandidateTrustInteroperabilityProfileResponse> partnerSystemCandidateTrustInteroperabilityProfileList) {
         this.partnerSystemCandidate = partnerSystemCandidate;
+        this.trustable = trustable;
         this.trust = trust;
         this.evaluationTrustmarkDefinitionRequirementSatisfied = evaluationTrustmarkDefinitionRequirementSatisfied;
         this.evaluationTrustmarkDefinitionRequirementUnsatisfied = evaluationTrustmarkDefinitionRequirementUnsatisfied;
@@ -34,6 +37,10 @@ public class ProtectedSystemPartnerSystemCandidateResponse {
 
     public PartnerSystemCandidateResponse getPartnerSystemCandidate() {
         return partnerSystemCandidate;
+    }
+
+    public boolean isTrustable() {
+        return trustable;
     }
 
     public boolean isTrust() {

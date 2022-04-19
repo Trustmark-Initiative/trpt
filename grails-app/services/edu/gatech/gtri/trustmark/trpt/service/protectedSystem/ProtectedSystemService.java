@@ -45,6 +45,7 @@ import static edu.gatech.gtri.trustmark.trpt.service.trustInteroperabilityProfil
 import static org.gtri.fj.data.List.iterableList;
 import static org.gtri.fj.data.List.nil;
 import static org.gtri.fj.data.List.single;
+import static org.gtri.fj.data.Option.fromNull;
 import static org.gtri.fj.data.Validation.accumulate;
 import static org.gtri.fj.data.Validation.success;
 import static org.gtri.fj.product.P.p;
@@ -185,12 +186,21 @@ public class ProtectedSystemService {
         }));
 
         // add the associations with partner system candidates
-        protectedSystem.protectedSystemPartnerSystemCandidateSetHelper(partnerSystemCandidateList.map(partnerSystemCandidate -> {
-            final ProtectedSystemPartnerSystemCandidate protectedSystemPartnerSystemCandidate = new ProtectedSystemPartnerSystemCandidate();
-            protectedSystemPartnerSystemCandidate.partnerSystemCandidateHelper(partnerSystemCandidate);
-            protectedSystemPartnerSystemCandidate.protectedSystemHelper(protectedSystem);
-            return protectedSystemPartnerSystemCandidate.saveHelper();
-        }));
+        protectedSystem.protectedSystemPartnerSystemCandidateSetHelper(partnerSystemCandidateList
+                .filter(partnerSystemCandidate -> protectedSystem
+                        .protectedSystemTrustInteroperabilityProfileUriSetHelper()
+                        .bind(protectedSystemTrustInteroperabilityProfileUri -> protectedSystemTrustInteroperabilityProfileUri
+                                .trustInteroperabilityProfileUriHelper()
+                                .partnerSystemCandidateTrustInteroperabilityProfileUriSetHelper()
+                                .filter(partnerSystemCandidateTrustInteroperabilityProfileUri -> partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper().idHelper() == partnerSystemCandidate.idHelper())
+                                .map(partnerSystemCandidateTrustInteroperabilityProfileUri -> p(protectedSystemTrustInteroperabilityProfileUri.isMandatory(), partnerSystemCandidateTrustInteroperabilityProfileUri)))
+                        .foldLeft((trustable, p) -> trustable && (!p._1() || fromNull(p._2().getEvaluationTrustExpressionSatisfied()).orSome(false)), true))
+                .map(partnerSystemCandidate -> {
+                    final ProtectedSystemPartnerSystemCandidate protectedSystemPartnerSystemCandidate = new ProtectedSystemPartnerSystemCandidate();
+                    protectedSystemPartnerSystemCandidate.partnerSystemCandidateHelper(partnerSystemCandidate);
+                    protectedSystemPartnerSystemCandidate.protectedSystemHelper(protectedSystem);
+                    return protectedSystemPartnerSystemCandidate.saveHelper();
+                }));
 
         protectedSystem.saveAndFlushHelper();
 

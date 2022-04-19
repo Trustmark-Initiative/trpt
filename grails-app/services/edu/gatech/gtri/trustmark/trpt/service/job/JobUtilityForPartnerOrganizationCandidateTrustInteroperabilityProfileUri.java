@@ -1,6 +1,7 @@
 package edu.gatech.gtri.trustmark.trpt.service.job;
 
 import edu.gatech.gtri.trustmark.trpt.domain.Organization;
+import edu.gatech.gtri.trustmark.trpt.domain.OrganizationPartnerOrganizationCandidate;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerOrganizationCandidate;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerOrganizationCandidateMailEvaluationUpdate;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerOrganizationCandidateTrustInteroperabilityProfileUri;
@@ -251,6 +252,21 @@ public class JobUtilityForPartnerOrganizationCandidateTrustInteroperabilityProfi
                                             .filter(pInner -> pInner._2().isEmpty())
                                             .length())
                                     .orSuccess((Integer) null));
+
+                    OrganizationPartnerOrganizationCandidate.executeUpdateHelper("DELETE FROM OrganizationPartnerOrganizationCandidate organizationPartnerOrganizationCandidate " +
+                            "WHERE id IN (SELECT DISTINCT organizationPartnerOrganizationCandidateInner.id FROM OrganizationPartnerOrganizationCandidate organizationPartnerOrganizationCandidateInner " +
+                            "JOIN organizationPartnerOrganizationCandidateInner.organization organization " +
+                            "JOIN organization.organizationTrustInteroperabilityProfileUriSet organizationTrustInteroperabilityProfileUri " +
+                            "JOIN organizationTrustInteroperabilityProfileUri.trustInteroperabilityProfileUri trustInteroperabilityProfileUri1 " +
+                            "JOIN organizationPartnerOrganizationCandidateInner.partnerOrganizationCandidate partnerOrganizationCandidate " +
+                            "JOIN partnerOrganizationCandidate.partnerOrganizationCandidateTrustInteroperabilityProfileUriSet partnerOrganizationCandidateTrustInteroperabilityProfileUri " +
+                            "JOIN partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUri trustInteroperabilityProfileUri2 " +
+                            "WHERE " +
+                            "organizationPartnerOrganizationCandidateInner.trust = TRUE AND " +
+                            "organizationTrustInteroperabilityProfileUri.mandatory = TRUE AND " +
+                            "(partnerOrganizationCandidateTrustInteroperabilityProfileUri.evaluationTrustExpressionSatisfied IS NULL OR " +
+                            "partnerOrganizationCandidateTrustInteroperabilityProfileUri.evaluationTrustExpressionSatisfied = FALSE) AND " +
+                            "trustInteroperabilityProfileUri1.id = trustInteroperabilityProfileUri2.id)");
 
                     if (mail) {
 

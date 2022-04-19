@@ -1,4 +1,4 @@
-<%@ page import="org.json.JSONObject" contentType="text/html;charset=UTF-8" %>
+<%@ page import="java.time.format.DateTimeFormatter; org.json.JSONObject" contentType="text/html;charset=UTF-8" %>
 <%@ page import="org.json.JSONArray" contentType="text/html;charset=UTF-8" %>
 
 <g:set var="protectedSystemPartnerSystemCandidate" value="${protectedSystem.protectedSystemPartnerSystemCandidateList[0]}"/>
@@ -52,8 +52,9 @@
                             <div class="TrustExpressionEvaluation Body">
                                 <div class="TrustExpressionContainer">
                                     <div class="Body">
+
                                         <g:render template="dashboardTrustExpression"
-                                                  model="${[evaluationLocalDateTime: partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime.format("MMMM dd YYYY, h:mm:ss a") + " UTC", trustExpression: trustExpression, trustInteroperabilityProfileParentURI: ""]}"/>
+                                                  model="${[evaluationLocalDateTime: partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime.format(java.time.format.DateTimeFormatter.ofPattern("MMMM dd YYYY, h:mm:ss a")) + " UTC", trustExpression: trustExpression, trustInteroperabilityProfileParentURI: ""]}"/>
                                     </div>
                                 </div>
                             </div>

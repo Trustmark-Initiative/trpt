@@ -35,6 +35,10 @@ function initialize(
                     document.querySelector(".partner-organization-candidate-element-trust").outerHTML = document.querySelector(".partner-organization-candidate-element-trust").outerHTML;
                     const partnerOrganizationCandidateElementTrust = document.querySelector(".partner-organization-candidate-element-trust")
 
+                    if (!organizationPartnerOrganizationCandidate.trustable) {
+                        partnerOrganizationCandidateElementTrust.disabled = true
+                        partnerOrganizationCandidateElementTrust.parentNode.title = "This candidate partner system does not satisfy a required TIP."
+                    }
                     partnerOrganizationCandidateElementTrust.checked = organizationPartnerOrganizationCandidate.trust
                     if (partnerOrganizationCandidateElementTrust.checked) {
 

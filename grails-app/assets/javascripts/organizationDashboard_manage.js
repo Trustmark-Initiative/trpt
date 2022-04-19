@@ -105,6 +105,10 @@ function initialize(
                 const partnerOrganizationCandidateElementTrustInteroperabilityProfileEvaluationLocalDateTime = partnerOrganizationCandidateElement.querySelector(".partner-organization-candidate-element-trust-interoperability-profile-evaluation-local-date-time")
                 const partnerOrganizationCandidateElementActionDetail = partnerOrganizationCandidateElement.querySelector(".partner-organization-candidate-action-detail")
 
+                if (!organizationPartnerOrganizationCandidate.trustable) {
+                    partnerOrganizationCandidateElementTrust.disabled = true
+                    partnerOrganizationCandidateElementTrust.parentNode.title = "This candidate partner system does not satisfy a required TIP."
+                }
                 partnerOrganizationCandidateElementTrust.checked = organizationPartnerOrganizationCandidate.trust
                 if (partnerOrganizationCandidateElementTrust.checked) {
                     partnerOrganizationCandidateElementTrust.addEventListener("click", () => {
