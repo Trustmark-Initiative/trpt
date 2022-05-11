@@ -127,7 +127,7 @@ public class ProtectedSystemService {
                 validationName(protectedSystemInsertRequest.getOrganization(), protectedSystemInsertRequest.getName()),
                 validationType(protectedSystemInsertRequest.getType()),
                 this::saveHelper)
-                .map(protectedSystem -> protectedSystemResponse(protectedSystem));
+                .map(this::synchronizeHelper);
     }
 
     private Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, ProtectedSystemResponse> updateHelper(
@@ -144,7 +144,7 @@ public class ProtectedSystemService {
                 validationName(protectedSystemUpdateRequest.getId(), protectedSystemUpdateRequest.getOrganization(), protectedSystemUpdateRequest.getName()),
                 validationType(protectedSystemUpdateRequest.getType()),
                 this::saveHelper)
-                .map(protectedSystem -> protectedSystemResponse(protectedSystem));
+                .map(this::synchronizeHelper);
     }
 
     private ProtectedSystem saveHelper(
@@ -202,7 +202,13 @@ public class ProtectedSystemService {
                     return protectedSystemPartnerSystemCandidate.saveHelper();
                 }));
 
-        protectedSystem.saveAndFlushHelper();
+        return protectedSystem.saveAndFlushHelper();
+    }
+
+    private ProtectedSystemResponse synchronizeHelper(
+            final ProtectedSystem protectedSystem) {
+
+        final ProtectedSystemResponse protectedSystemResponse = protectedSystemResponse(protectedSystem);
 
         // synchronize evaluations, if necessary
         synchronizePartnerSystemCandidateTrustInteroperabilityProfileUri(
@@ -218,7 +224,7 @@ public class ProtectedSystemService {
                 .map(trustInteroperabilityProfileUri -> trustInteroperabilityProfileUri.getUri())
                 .forEach(uri -> (new Thread(() -> UriSynchronizerForTrustInteroperabilityProfile.INSTANCE.synchronizeUri(LocalDateTime.now(ZoneOffset.UTC), uri))).start());
 
-        return protectedSystem;
+        return protectedSystemResponse;
     }
 
     private Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, Unit> deleteHelper(

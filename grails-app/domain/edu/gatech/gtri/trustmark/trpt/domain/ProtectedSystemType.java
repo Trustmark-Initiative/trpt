@@ -11,10 +11,10 @@ import static org.gtri.fj.product.P.p;
 public enum ProtectedSystemType {
     SAML_IDENTITY_PROVIDER("SAML Identity Provider"),
     SAML_SERVICE_PROVIDER("SAML Service Provider"),
-    OPENID_CONNECT_PROVIDER("OpenID Connect Provider"),
-    OPENID_CONNECT_CLIENT("OpenID Connect Client"),
-    WEB_SERVICE_PROVIDER("Web Service Provider"),
-    WEB_SERVICE_CONSUMER("Web Service Consumer"),
+//    OPENID_CONNECT_PROVIDER("OpenID Connect Provider"),
+//    OPENID_CONNECT_CLIENT("OpenID Connect Client"),
+//    WEB_SERVICE_PROVIDER("Web Service Provider"),
+//    WEB_SERVICE_CONSUMER("Web Service Consumer"),
     CERTIFICATE_RELYING_PARTY("Certificate Relying Party");
 
     private final String name;
@@ -38,9 +38,9 @@ public enum ProtectedSystemType {
     private static final HashMap<ProtectedSystemType, List<TrustmarkBindingRegistrySystemType>> partnerSystemCandidateTypeMap = HashMap.arrayHashMap(
             p(SAML_IDENTITY_PROVIDER, arrayList(TrustmarkBindingRegistrySystemType.SAML_SP)),
             p(SAML_SERVICE_PROVIDER, arrayList(TrustmarkBindingRegistrySystemType.SAML_IDP)),
-            p(OPENID_CONNECT_PROVIDER, nil()),
-            p(OPENID_CONNECT_CLIENT, nil()),
-            p(WEB_SERVICE_PROVIDER, nil()),
-            p(WEB_SERVICE_CONSUMER, nil()),
+//            p(OPENID_CONNECT_PROVIDER, nil()),
+//            p(OPENID_CONNECT_CLIENT, nil()),
+//            p(WEB_SERVICE_PROVIDER, nil()),
+//            p(WEB_SERVICE_CONSUMER, nil()),
             p(CERTIFICATE_RELYING_PARTY, arrayList(TrustmarkBindingRegistrySystemType.CERTIFICATE)));
 }

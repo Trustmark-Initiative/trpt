@@ -124,7 +124,7 @@ public class OrganizationService {
                 validationUri(organizationInsertRequest.getUri()),
                 validationDescription(organizationInsertRequest.getDescription()),
                 this::saveHelper)
-                .map(organization -> organizationResponseWithDetail(organization));
+                .map(this::synchronizeHelper);
     }
 
     private Validation<NonEmptyList<ValidationMessage<OrganizationField>>, OrganizationResponseWithDetail> updateHelper(
@@ -141,7 +141,7 @@ public class OrganizationService {
                 validationUri(organizationUpdateRequest.getId(), organizationUpdateRequest.getUri()),
                 validationDescription(organizationUpdateRequest.getDescription()),
                 this::saveHelper)
-                .map(organization -> organizationResponseWithDetail(organization));
+                .map(this::synchronizeHelper);
     }
 
     private Organization saveHelper(
@@ -196,7 +196,13 @@ public class OrganizationService {
                     return organizationPartnerOrganizationCandidate.saveHelper();
                 }));
 
-        organization.saveAndFlushHelper();
+        return organization.saveAndFlushHelper();
+    }
+
+    private OrganizationResponseWithDetail synchronizeHelper(
+            final Organization organization) {
+
+        final OrganizationResponseWithDetail organizationResponse = organizationResponseWithDetail(organization);
 
         // synchronize evaluations, if necessary
         synchronizePartnerOrganizationCandidateTrustInteroperabilityProfileUri(
@@ -212,8 +218,7 @@ public class OrganizationService {
                 .map(trustInteroperabilityProfileUri -> trustInteroperabilityProfileUri.getUri())
                 .forEach(trustInteroperabilityProfileUriUri -> (new Thread(() -> UriSynchronizerForTrustInteroperabilityProfile.INSTANCE.synchronizeUri(LocalDateTime.now(ZoneOffset.UTC), trustInteroperabilityProfileUriUri))).start());
 
-
-        return organization;
+        return organizationResponse;
     }
 
     private Validation<NonEmptyList<ValidationMessage<OrganizationField>>, Unit> deleteHelper(

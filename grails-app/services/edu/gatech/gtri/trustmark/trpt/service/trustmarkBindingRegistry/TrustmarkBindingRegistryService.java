@@ -24,6 +24,7 @@ import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionName.T
 import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionName.TRUSTMARK_BINDING_REGISTRY_SELECT;
 import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionName.TRUSTMARK_BINDING_REGISTRY_UPDATE;
 import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionUtility.userMay;
+import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.trustmarkBindingRegistryResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.validationDescription;
 import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.validationId;
 import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.validationIdList;
@@ -111,7 +112,7 @@ public class TrustmarkBindingRegistryService {
                 validationUri(trustmarkBindingRegistryInsertRequest.getOrganization(), trustmarkBindingRegistryInsertRequest.getUri()),
                 validationDescription(trustmarkBindingRegistryInsertRequest.getDescription()),
                 this::saveHelper)
-                .map(TrustmarkBindingRegistryUtility::trustmarkBindingRegistryResponse);
+                .map(this::synchronizeHelper);
     }
 
     private Validation<NonEmptyList<ValidationMessage<TrustmarkBindingRegistryField>>, TrustmarkBindingRegistryResponse> updateHelper(
@@ -127,7 +128,7 @@ public class TrustmarkBindingRegistryService {
                 validationUri(trustmarkBindingRegistryUpdateRequest.getId(), trustmarkBindingRegistryUpdateRequest.getOrganization(), trustmarkBindingRegistryUpdateRequest.getUri()),
                 validationDescription(trustmarkBindingRegistryUpdateRequest.getDescription()),
                 this::saveHelper)
-                .map(TrustmarkBindingRegistryUtility::trustmarkBindingRegistryResponse);
+                .map(this::synchronizeHelper);
     }
 
     private TrustmarkBindingRegistry saveHelper(
@@ -141,14 +142,21 @@ public class TrustmarkBindingRegistryService {
         trustmarkBindingRegistry.setDescription(description);
         trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper(upsertTrustmarkBindingRegistryUri(uri));
         trustmarkBindingRegistry.organizationHelper(organization);
-        trustmarkBindingRegistry.saveAndFlushHelper();
+
+        return trustmarkBindingRegistry.saveAndFlushHelper();
+    }
+
+    private TrustmarkBindingRegistryResponse synchronizeHelper(
+            final TrustmarkBindingRegistry trustmarkBindingRegistry) {
+
+        final TrustmarkBindingRegistryResponse trustmarkBindingRegistryResponse = trustmarkBindingRegistryResponse(trustmarkBindingRegistry);
 
         (new Thread(() -> synchronizeTrustmarkBindingRegistryUriAndDependencies(
                 Duration.parse(applicationProperties.getProperty(ApplicationProperties.propertyNameJobForPartnerSystemCandidateTrustInteroperabilityProfileUriEvaluationPeriodMaximum)),
                 LocalDateTime.now(ZoneOffset.UTC),
-                uri))).start();
+                trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().getUri()))).start();
 
-        return trustmarkBindingRegistry;
+        return trustmarkBindingRegistryResponse;
     }
 
     private TrustmarkBindingRegistryUri upsertTrustmarkBindingRegistryUri(

@@ -64,7 +64,7 @@ configurations {
 }
 
 dependencies {
-    implementation 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.44'
+    implementation 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.46'
     implementation 'edu.gatech.gtri.trustmark:tf-api:1.4.30'
 
     implementation 'com.fasterxml.jackson.core:jackson-core:2.13.2'

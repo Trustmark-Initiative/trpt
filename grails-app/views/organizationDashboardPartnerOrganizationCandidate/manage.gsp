@@ -6,6 +6,7 @@
 <html>
     <head>
         <asset:javascript src="organizationDashboardPartnerOrganizationCandidate_manage.js"/>
+        <asset:javascript src="trustExpression.js"/>
         <asset:stylesheet src="organization_dashboard.css"/>
 
         <meta name="layout" content="main"/>
@@ -48,10 +49,19 @@
                         <div class="TrustInteroperabilityProfile">
                             <div class="TrustExpressionEvaluation Body">
                                 <div class="TrustExpressionContainer">
-                                    <div class="Body">
-                                        <g:render template="dashboardTrustExpression"
-                                                  model="${[evaluationLocalDateTime: partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationLocalDateTime.format("MMMM dd YYYY, h:mm:ss a") + " UTC", trustExpression: trustExpression, trustInteroperabilityProfileParentURI: ""]}"/>
-                                    </div>
+                                    <g:set var="id" value="${UUID.randomUUID().toString()}"/>
+                                    <div class="Body" id="${id}"></div>
+                                    <script>
+                                        document.addEventListener("readystatechange", function () {
+                                            if (document.readyState === "complete") {
+                                                document.getElementById("${id}").innerHTML = trustExpressionAll(
+                                                    "",
+                                                    ${raw(trustExpression.toString())},
+                                                    "${partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime.format(java.time.format.DateTimeFormatter.ofPattern("MMMM dd YYYY, h:mm:ss a")) + " UTC"}",
+                                                    generator("${id}"));
+                                            }
+                                        })
+                                    </script>
                                 </div>
                             </div>
 
