@@ -395,15 +395,38 @@ function trustExpressionFailure(
         evaluationLocalDateTime,
         generator) {
 
-        function trustExpressionFailureHelper(id, title, labelContent, body, trustInteroperabilityProfileList) {
+        function trustExpressionFailureHelper(id, title, icon, labelContent, body, trustInteroperabilityProfileList) {
 
             return [
                 label({for: id, title: title},
-                    span({class: "glyphicon bi-tag"}), labelContent),
+                    span({class: `glyphicon ${icon}`}), labelContent),
                 div({class: "TrustExpressionDetail"},
                     div({class: "Head"}, "Failure"),
                     div(body),
                     trustInteroperabilityProfileReferenceListBody(trustInteroperabilityProfileList))]
+        }
+
+        function trustExpressionFailureResolveTrustInteroperabilityProfile(trustExpressionFailure, id) {
+
+            return trustExpressionFailureHelper(
+                id,
+                trustExpressionFailure["Uri"],
+                "bi-list-ul",
+                trustExpressionFailure["Uri"],
+                `The system could not resolve the Trust Interoperability Profile ("${trustExpressionFailure["Uri"]}"): ${trustExpressionFailure["Message"]}.`,
+                trustExpressionFailure["TrustInteroperabilityProfileList"])
+        }
+
+
+        function trustExpressionFailureResolveTrustmarkDefinition(trustExpressionFailure, id) {
+
+            return trustExpressionFailureHelper(
+                id,
+                trustExpressionFailure["Uri"],
+                "bi-tag",
+                trustExpressionFailure["Uri"],
+                `The system could not resolve the Trustmark Definition ("${trustExpressionFailure["Uri"]}"): ${trustExpressionFailure["Message"]}.`,
+                trustExpressionFailure["TrustInteroperabilityProfileList"])
         }
 
         function trustExpressionFailureTrustmarkAbsent(trustExpressionFailure, id) {
@@ -411,6 +434,7 @@ function trustExpressionFailure(
             return trustExpressionFailureHelper(
                 id,
                 `The trustmark &quot;${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}&quot; does not appear to be bound to the candidate system; the parameter &quot;${trustExpressionFailure["TrustmarkDefinitionParameterIdentifier"]}&quot; does not appear to be bound to a value.`,
+                "bi-tag",
                 `${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}: ${trustExpressionFailure["TrustmarkDefinitionParameterIdentifier"]}`,
                 `The trustmark "${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}" does not appear to be bound to the candidate system; the parameter "${trustExpressionFailure["TrustmarkDefinitionParameterIdentifier"]}" does not appear to be bound to a value.`,
                 trustExpressionFailure["TrustInteroperabilityProfileList"])
@@ -421,6 +445,7 @@ function trustExpressionFailure(
             return trustExpressionFailureHelper(
                 id,
                 `The trustmark &quot${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}&quot; is bound to the candidate system, but the trustmark relying party tool could not verify the trustmark.`,
+                "bi-tag",
                 trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"],
                 `The trustmark "${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}" is bound to the candidate system, but the trustmark relying party tool could not verify the trustmark.`,
                 trustExpressionFailure["TrustInteroperabilityProfileList"])
@@ -435,9 +460,10 @@ function trustExpressionFailure(
 
             return trustExpressionFailureHelper(
                 id,
-                trustExpressionFailure[$Type],
-                trustExpressionFailure[$Type],
-                trustExpressionFailure[$Type],
+                trustExpressionFailure["$Type"],
+                "bi-tag",
+                trustExpressionFailure["$Type"],
+                trustExpressionFailure["$Type"],
                 trustExpressionFailure["TrustInteroperabilityProfileList"])
         }
 
@@ -448,9 +474,9 @@ function trustExpressionFailure(
             matchTrustExpressionFailure(
                 trustExpression["TrustExpressionFailureList"][0]["$Type"],
                 /* fTrustExpressionFailureURI                                              */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
-                /* fTrustExpressionFailureResolveTrustInteroperabilityProfile              */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureResolveTrustInteroperabilityProfile              */ () => trustExpressionFailureResolveTrustInteroperabilityProfile(trustExpression["TrustExpressionFailureList"][0], id),
                 /* fTrustExpressionFailureCycle                                            */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
-                /* fTrustExpressionFailureResolveTrustmarkDefinition                       */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureResolveTrustmarkDefinition                       */ () => trustExpressionFailureResolveTrustmarkDefinition(trustExpression["TrustExpressionFailureList"][0], id),
                 /* fTrustExpressionFailureParser                                           */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
                 /* fTrustExpressionFailureIdentifierUnknown                                */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
                 /* fTrustExpressionFailureIdentifierUnexpectedTrustInteroperabilityProfile */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),

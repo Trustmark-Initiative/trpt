@@ -236,6 +236,9 @@ function initialize(
                     } else if (partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === false) {
                         partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
                             `<span class="bi-x-circle-fill text-danger" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
+                    } else {
+                        partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
+                            `<span class="" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}">&#9888;️</span>`
                     }
                 });
 
@@ -259,11 +262,13 @@ function initialize(
                         "(NA)" :
                         moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')
 
-                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileSatisfied.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime === null || partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === null ?
+                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileSatisfied.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime === null ?
                         `<span class="bi-question-circle"></span>` :
                         partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === true ?
                             `<span class="bi-check-circle-fill text-success"></span>` :
-                            `<span class="bi-x-circle-fill text-danger"></span>`
+                            partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === false ?
+                                `<span class="bi-x-circle-fill text-danger"></span>` :
+                                `<span class="">&#9888;️</span>`
 
                     partnerSystemCandidateDetailElementTrustInteroperabilityProfileTrustmarkDefinition.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied === 0 ?
                         "(NA)" :
