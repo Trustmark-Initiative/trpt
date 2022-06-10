@@ -9,6 +9,8 @@ import org.gtri.fj.function.F1;
 import org.gtri.fj.function.F2;
 import org.gtri.fj.function.F3;
 import org.gtri.fj.function.F4;
+import org.gtri.fj.function.F5;
+import org.gtri.fj.function.F6;
 import org.gtri.fj.function.Try;
 
 import java.io.File;
@@ -69,6 +71,25 @@ public abstract class DatabaseCacheResolver<T1> implements ArtifactResolver<T1> 
     }
 
     public <T2> T2 resolve(
+            final URL url,
+            final F2<URL, T1, T2> onArtifactSuccess,
+            final F3<URL, ResolveException, URL, T2> onContextSuccess,
+            final F5<URL, ResolveException, URL, ResolveException, URL, T2> onServerSuccess,
+            final F6<URL, ResolveException, URL, ResolveException, URL, ResolveException, T2> onServerFailure) {
+        throw new RuntimeException();
+    }
+
+    public <T2> T2 resolve(
+            final URL url,
+            final Boolean validate,
+            final F2<URL, T1, T2> onArtifactSuccess,
+            final F3<URL, ResolveException, URL, T2> onContextSuccess,
+            final F5<URL, ResolveException, URL, ResolveException, URL, T2> onServerSuccess,
+            final F6<URL, ResolveException, URL, ResolveException, URL, ResolveException, T2> onServerFailure) {
+        throw new RuntimeException();
+    }
+
+    public <T2> T2 resolve(
             final URI uri,
             final F2<URI, T1, T2> onArtifactSuccess,
             final F3<URI, ResolveException, URI, T2> onServerSuccess,
@@ -82,6 +103,25 @@ public abstract class DatabaseCacheResolver<T1> implements ArtifactResolver<T1> 
             final F2<URI, T1, T2> onArtifactSuccess,
             final F3<URI, ResolveException, URI, T2> onServerSuccess,
             final F4<URI, ResolveException, URI, ResolveException, T2> onServerFailure) {
+        throw new RuntimeException();
+    }
+
+    public <T2> T2 resolve(
+            final URI url,
+            final F2<URI, T1, T2> onArtifactSuccess,
+            final F3<URI, ResolveException, URI, T2> onContextSuccess,
+            final F5<URI, ResolveException, URI, ResolveException, URI, T2> onServerSuccess,
+            final F6<URI, ResolveException, URI, ResolveException, URI, ResolveException, T2> onServerFailure) {
+        throw new RuntimeException();
+    }
+
+    public <T2> T2 resolve(
+            final URI url,
+            final Boolean validate,
+            final F2<URI, T1, T2> onArtifactSuccess,
+            final F3<URI, ResolveException, URI, T2> onContextSuccess,
+            final F5<URI, ResolveException, URI, ResolveException, URI, T2> onServerSuccess,
+            final F6<URI, ResolveException, URI, ResolveException, URI, ResolveException, T2> onServerFailure) {
         throw new RuntimeException();
     }
 
