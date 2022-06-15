@@ -1,5 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -7,7 +8,12 @@ import org.gtri.fj.function.F0
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class UserRole {
+
+    static mapping = {
+        table 'user_role'
+    }
 
     static belongsTo = [
             user: User,
@@ -22,7 +28,7 @@ class UserRole {
 
     void roleHelper(final Role role) { this.role = role }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

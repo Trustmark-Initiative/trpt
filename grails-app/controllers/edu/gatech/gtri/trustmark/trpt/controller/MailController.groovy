@@ -4,6 +4,7 @@ import edu.gatech.gtri.trustmark.trpt.service.mail.MailFindRequest
 import edu.gatech.gtri.trustmark.trpt.service.mail.MailService
 import edu.gatech.gtri.trustmark.trpt.service.mail.MailTestRequest
 import edu.gatech.gtri.trustmark.trpt.service.mail.MailUpdateRequest
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
 import grails.plugin.springsecurity.userdetails.GrailsUser
@@ -15,6 +16,7 @@ import static edu.gatech.gtri.trustmark.trpt.controller.ResponseUtility.toRespon
 @CompileStatic
 @Transactional
 @Secured('hasAnyRole("ROLE_ADMINISTRATOR")')
+@GrailsCompileStatic
 class MailController {
 
     MailService mailService

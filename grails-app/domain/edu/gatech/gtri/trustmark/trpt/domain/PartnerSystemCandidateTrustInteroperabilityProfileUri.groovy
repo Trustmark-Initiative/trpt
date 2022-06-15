@@ -1,25 +1,30 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
+import org.gtri.fj.lang.StringUtility
+import org.gtri.fj.product.P
+import org.gtri.fj.product.P3
 
 import java.time.LocalDateTime
 
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class PartnerSystemCandidateTrustInteroperabilityProfileUri {
 
     LocalDateTime evaluationAttemptLocalDateTime
     LocalDateTime evaluationLocalDateTime
 
     Boolean evaluationTrustExpressionSatisfied
-    byte[] evaluationTrustExpression
+    File evaluationTrustExpression
 
     Integer evaluationTrustmarkDefinitionRequirementSatisfied
     Integer evaluationTrustmarkDefinitionRequirementUnsatisfied
-    byte[] evaluationTrustmarkDefinitionRequirement
+    File evaluationTrustmarkDefinitionRequirement
 
     static constraints = {
         evaluationAttemptLocalDateTime nullable: true
@@ -33,16 +38,15 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
 
     static mapping = {
         table 'partner_system_candidate_trust_interoperability_profile_uri'
-        evaluationTrustExpression sqlType: 'mediumblob'
-        evaluationTrustmarkDefinitionRequirement sqlType: 'mediumblob'
     }
 
     static belongsTo = [
             partnerSystemCandidate         : PartnerSystemCandidate,
             trustInteroperabilityProfileUri: TrustInteroperabilityProfileUri
     ]
+
     static hasMany = [
-            mailEvaluationUpdateSet: MailEvaluationUpdate
+            partnerSystemCandidateMailEvaluationUpdateSet: PartnerSystemCandidateMailEvaluationUpdate
     ]
 
     PartnerSystemCandidate partnerSystemCandidateHelper() { getPartnerSystemCandidate() }
@@ -53,16 +57,46 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
 
     void trustInteroperabilityProfileUriHelper(final TrustInteroperabilityProfileUri trustInteroperabilityProfileUri) { setTrustInteroperabilityProfileUri(trustInteroperabilityProfileUri) }
 
-    org.gtri.fj.data.List<MailEvaluationUpdate> mailEvaluationUpdateSetHelper() { fromNull(mailEvaluationUpdateSet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<MailEvaluationUpdate> nil()) }
+    org.gtri.fj.data.List<PartnerSystemCandidateMailEvaluationUpdate> partnerSystemCandidateMailEvaluationUpdateSetHelper() { fromNull(partnerSystemCandidateMailEvaluationUpdateSet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<PartnerSystemCandidateMailEvaluationUpdate> nil()) }
 
-    void mailEvaluationUpdateSetHelper(final org.gtri.fj.data.List<MailEvaluationUpdate> mailEvaluationUpdateSet) { setMailEvaluationUpdateSet(new HashSet<>(mailEvaluationUpdateSet.toJavaList())) }
+    void partnerSystemCandidateMailEvaluationUpdateSetHelper(final org.gtri.fj.data.List<PartnerSystemCandidateMailEvaluationUpdate> partnerSystemCandidateMailEvaluationUpdateSet) { setPartnerSystemCandidateMailEvaluationUpdateSet(new HashSet<>(partnerSystemCandidateMailEvaluationUpdateSet.toJavaList())) }
 
     static Option<PartnerSystemCandidateTrustInteroperabilityProfileUri> findByPartnerSystemCandidateAndTrustInteroperabilityProfileUriHelper(final PartnerSystemCandidate partnerSystemCandidate, final TrustInteroperabilityProfileUri trustInteroperabilityProfileUri) {
 
         fromNull(findByPartnerSystemCandidateAndTrustInteroperabilityProfileUri(partnerSystemCandidate, trustInteroperabilityProfileUri))
     }
 
-    long idHelper() {
+    static org.gtri.fj.data.List<P3<PartnerSystemCandidate, TrustInteroperabilityProfileUri, Option<PartnerSystemCandidateTrustInteroperabilityProfileUri>>> findByPartnerSystemCandidateAndTrustInteroperabilityProfileUriAndProtectedSystemHelper(
+            final org.gtri.fj.data.List<PartnerSystemCandidate> partnerSystemCandidateList,
+            final org.gtri.fj.data.List<TrustInteroperabilityProfileUri> trustInteroperabilityProfileUriList,
+            final org.gtri.fj.data.List<ProtectedSystem> protectedSystemList) {
+
+        return fromNull(PartnerSystemCandidateTrustInteroperabilityProfileUri.executeQuery("SELECT DISTINCT partnerSystemCandidate, trustInteroperabilityProfileUri, partnerSystemCandidateTrustInteroperabilityProfileUri " +
+                "FROM PartnerSystemCandidate partnerSystemCandidate, TrustInteroperabilityProfileUri trustInteroperabilityProfileUri " +
+                "JOIN partnerSystemCandidate.trustmarkBindingRegistrySystemMapUriType trustmarkBindingRegistrySystemMapUriType " +
+                "JOIN trustmarkBindingRegistrySystemMapUriType.trustmarkBindingRegistryUri trustmarkBindingRegistryUri " +
+                "JOIN trustmarkBindingRegistryUri.trustmarkBindingRegistrySet trustmarkBindingRegistry " +
+                "JOIN trustmarkBindingRegistry.organization organization " +
+                "JOIN organization.protectedSystemSet organizationProtectedSystem " +
+                "JOIN trustInteroperabilityProfileUri.protectedSystemTrustInteroperabilityProfileUriSet protectedSystemTrustInteroperabilityProfileUri " +
+                "JOIN protectedSystemTrustInteroperabilityProfileUri.protectedSystem protectedSystemTrustInteroperabilityProfileUriProtectedSystem " +
+                "LEFT JOIN PartnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUri " +
+                "ON partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidate = partnerSystemCandidate " +
+                "AND partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUri = trustInteroperabilityProfileUri " +
+                "WHERE organizationProtectedSystem = protectedSystemTrustInteroperabilityProfileUriProtectedSystem " +
+                (partnerSystemCandidateList.isNotEmpty() ? "AND (partnerSystemCandidate IN (:partnerSystemCandidateList)) " : "") +
+                (trustInteroperabilityProfileUriList.isNotEmpty() ? "AND (trustInteroperabilityProfileUri IN (:trustInteroperabilityProfileUriList)) " : "") +
+                (protectedSystemList.isNotEmpty() ? "AND (organizationProtectedSystem IN (:protectedSystemList)) " : "") +
+                "ORDER BY partnerSystemCandidateTrustInteroperabilityProfileUri.evaluationAttemptLocalDateTime ",
+                org.gtri.fj.data.TreeMap.iterableTreeMap(StringUtility.stringOrd, org.gtri.fj.data.Option.somes(org.gtri.fj.data.List.arrayList(
+                        Option.iif(partnerSystemCandidateList.isNotEmpty(), P.p("partnerSystemCandidateList", partnerSystemCandidateList.toJavaList())),
+                        Option.iif(trustInteroperabilityProfileUriList.isNotEmpty(), P.p("trustInteroperabilityProfileUriList", trustInteroperabilityProfileUriList.toJavaList())),
+                        Option.iif(protectedSystemList.isNotEmpty(), P.p("protectedSystemList", protectedSystemList.toJavaList()))))).toMutableMap()))
+                .map({ list -> iterableList(list).map({ Object[] array -> P.p((PartnerSystemCandidate) array[0], (TrustInteroperabilityProfileUri) array[1], fromNull((PartnerSystemCandidateTrustInteroperabilityProfileUri) array[2])) }) })
+                .orSome(org.gtri.fj.data.List.<P3<PartnerSystemCandidate, TrustInteroperabilityProfileUri, Option<PartnerSystemCandidateTrustInteroperabilityProfileUri>>> nil())
+    }
+
+    Long idHelper() {
         id
     }
 

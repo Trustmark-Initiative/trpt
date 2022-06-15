@@ -1,7 +1,7 @@
 package edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate;
 
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidate;
-import edu.gatech.gtri.trustmark.v1_0.model.TrustmarkBindingRegistrySystemType;
+import edu.gatech.gtri.trustmark.v1_0.model.trustmarkBindingRegistry.TrustmarkBindingRegistrySystemType;
 
 import static edu.gatech.gtri.trustmark.trpt.service.trustmarkBindingRegistry.TrustmarkBindingRegistryUtility.trustmarkBindingRegistryResponse;
 
@@ -19,9 +19,9 @@ public final class PartnerSystemCandidateUtility {
                 partnerSystemCandidate.getSuccessLocalDateTime(),
                 partnerSystemCandidate.getFailureLocalDateTime(),
                 partnerSystemCandidate.getFailureMessage(),
-                partnerSystemCandidate.trustmarkBindingRegistryUriTypeHelper().trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySetHelper().isEmpty() ?
+                partnerSystemCandidate.trustmarkBindingRegistrySystemMapUriTypeHelper().trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySetHelper().isEmpty() ?
                         null :
-                        trustmarkBindingRegistryResponse(partnerSystemCandidate.trustmarkBindingRegistryUriTypeHelper().trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySetHelper().head()));
+                        trustmarkBindingRegistryResponse(partnerSystemCandidate.trustmarkBindingRegistrySystemMapUriTypeHelper().trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySetHelper().head()));
     }
 
     public static PartnerSystemCandidateTypeResponse partnerSystemCandidateTypeResponse(final TrustmarkBindingRegistrySystemType partnerSystemCandidateType) {

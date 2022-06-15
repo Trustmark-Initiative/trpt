@@ -10,7 +10,8 @@
                 "${createLink(controller:'organization', action: 'findOne')}",
                 "${createLink(controller:'organization', action: 'insert')}",
                 "${createLink(controller:'organization', action: 'update')}",
-                "${createLink(controller:'organization', action: 'delete')}");
+                "${createLink(controller:'organization', action: 'delete')}",
+                "${createLink(controller:'organizationDashboard', action: 'manage')}");
         </script>
     </head>
 
@@ -39,7 +40,7 @@
                     <tr class="organization-element">
                         <td><a href="#" class="bi-pencil organization-action-update"></a></td>
                         <td><input type="checkbox" class="form-check-input organization-action-delete-queue"></td>
-                        <td><div class="organization-element-name"></div></td>
+                        <td><a class="organization-element-name"></a></td>
                         <td><a href="" target="_blank" class="organization-element-uri"></a></td>
                         <td><div class="organization-element-description"></div></td>
                     </tr>

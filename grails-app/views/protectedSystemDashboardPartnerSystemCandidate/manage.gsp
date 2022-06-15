@@ -1,4 +1,4 @@
-<%@ page import="org.json.JSONObject" contentType="text/html;charset=UTF-8" %>
+<%@ page import="java.time.format.DateTimeFormatter; org.json.JSONObject" contentType="text/html;charset=UTF-8" %>
 <%@ page import="org.json.JSONArray" contentType="text/html;charset=UTF-8" %>
 
 <g:set var="protectedSystemPartnerSystemCandidate" value="${protectedSystem.protectedSystemPartnerSystemCandidateList[0]}"/>
@@ -6,6 +6,7 @@
 <html>
     <head>
         <asset:javascript src="protectedSystemDashboardPartnerSystemCandidate_manage.js"/>
+        <asset:javascript src="trustExpression.js"/>
         <asset:stylesheet src="protectedSystem_dashboard.css"/>
 
         <meta name="layout" content="main"/>
@@ -51,10 +52,19 @@
                         <div class="TrustInteroperabilityProfile">
                             <div class="TrustExpressionEvaluation Body">
                                 <div class="TrustExpressionContainer">
-                                    <div class="Body">
-                                        <g:render template="dashboardTrustExpression"
-                                                  model="${[evaluationLocalDateTime: partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime.format("MMMM dd YYYY, h:mm:ss a") + " UTC", trustExpression: trustExpression, trustInteroperabilityProfileParentURI: ""]}"/>
-                                    </div>
+                                    <g:set var="id" value="${UUID.randomUUID().toString()}"/>
+                                    <div class="Body" id="${id}"></div>
+                                    <script>
+                                        document.addEventListener("readystatechange", function () {
+                                            if (document.readyState === "complete") {
+                                                document.getElementById("${id}").innerHTML = trustExpressionAll(
+                                                    "",
+                                                    ${raw(trustExpression.toString())},
+                                                    "${partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime.format(java.time.format.DateTimeFormatter.ofPattern("MMMM dd YYYY, h:mm:ss a")) + " UTC"}",
+                                                    generator("${id}"));
+                                            }
+                                        })
+                                    </script>
                                 </div>
                             </div>
 
@@ -178,7 +188,14 @@
                         </p>
 
                         <ol>
-                            <li class="mb-3">You must download a copy of the SAML metadata for <span class="partner-system-candidate-element-name fw-bold"></span>,
+                            <li class="mb-3 d-none protected-system-element-type-certificate-relying-party">You must download a copy of the certificate for <span class="partner-system-candidate-element-name fw-bold"></span>,
+                            and configure it within <span class="protected-system-element-name fw-bold"></span>, to enable <span class="protected-system-element-name fw-bold"></span>
+                                to trust <span class="partner-system-candidate-element-name fw-bold"></span>.
+                            This process heavily depends on the implementation details of <span class="protected-system-element-name fw-bold"></span>.
+                            To download a copy of the certificate for <span class="partner-system-candidate-element-name fw-bold"></span>, click <a target="_blank" class="partner-system-candidate-element-trust-fabric-metadata fw-bold"></a>.
+                            </li>
+
+                            <li class="mb-3 d-none protected-system-element-type-other">You must download a copy of the SAML metadata for <span class="partner-system-candidate-element-name fw-bold"></span>,
                             and install it within <span class="protected-system-element-name fw-bold"></span>,
                             to enable <span class="protected-system-element-name fw-bold"></span> to trust <span class="partner-system-candidate-element-name fw-bold"></span>.
                             This is a manual reconfiguration process of <span class="protected-system-element-name fw-bold"></span>

@@ -27,6 +27,8 @@ function initialize(
         afterFindHelper(uriSet.trustmarkDefinitionUriList, document.getElementById("trustmark-definition-uri-tbody"), document.getElementById("trustmark-definition-uri-template-empty"), document.getElementById("trustmark-definition-uri-template-summary"))
         afterFindHelper(uriSet.trustmarkUriList, document.getElementById("trustmark-uri-tbody"), document.getElementById("trustmark-uri-template-empty"), document.getElementById("trustmark-uri-template-summary"))
         afterFindHelper(uriSet.trustmarkStatusReportUriList, document.getElementById("trustmark-status-report-uri-tbody"), document.getElementById("trustmark-status-report-uri-template-empty"), document.getElementById("trustmark-status-report-uri-template-summary"))
+        afterFindHelper(uriSet.trustmarkBindingRegistryOrganizationMapUriList, document.getElementById("trustmark-binding-registry-organization-map-uri-tbody"), document.getElementById("trustmark-binding-registry-organization-map-uri-template-empty"), document.getElementById("trustmark-binding-registry-organization-map-uri-template-summary"))
+        afterFindHelper(uriSet.trustmarkBindingRegistryOrganizationTrustmarkMapUriList, document.getElementById("trustmark-binding-registry-organization-trustmark-map-uri-tbody"), document.getElementById("trustmark-binding-registry-organization-trustmark-map-uri-template-empty"), document.getElementById("trustmark-binding-registry-organization-trustmark-map-uri-template-summary"))
     }
 
     function afterFindHelper(uriList, tbody, templateEmpty, templateSummary) {

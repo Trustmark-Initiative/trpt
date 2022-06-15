@@ -24,7 +24,7 @@ public class ProtectedSystemTypeService {
             final String requesterUsername,
             final ProtectedSystemTypeFindAllRequest protectedSystemTypeFindAllRequest) {
 
-        return userMay(requesterUsername, PROTECTED_SYSTEM_TYPE_SELECT, (requesterUser, requesterProtectedSystemTypeList, requesterRoleList) -> findAllHelper(requesterUser, requesterProtectedSystemTypeList, requesterRoleList, protectedSystemTypeFindAllRequest));
+        return userMay(requesterUsername, PROTECTED_SYSTEM_TYPE_SELECT, (requesterUser, requesterOrganizationList, requesterRoleList) -> findAllHelper(requesterUser, requesterOrganizationList, requesterRoleList, protectedSystemTypeFindAllRequest));
     }
 
     public Validation<NonEmptyList<ValidationMessage<ProtectedSystemTypeField>>, List<ProtectedSystemTypeResponse>> findAllHelper(

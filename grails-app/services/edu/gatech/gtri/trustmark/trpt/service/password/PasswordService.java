@@ -1,8 +1,8 @@
 package edu.gatech.gtri.trustmark.trpt.service.password;
 
 import edu.gatech.gtri.trustmark.trpt.domain.MailPasswordReset;
+import edu.gatech.gtri.trustmark.trpt.service.ApplicationProperties;
 import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
-import grails.core.GrailsApplication;
 import grails.gorm.services.Service;
 import grails.gorm.transactions.Transactional;
 import grails.plugin.springsecurity.SpringSecurityService;
@@ -15,6 +15,8 @@ import java.time.ZoneOffset;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import static edu.gatech.gtri.trustmark.trpt.service.ApplicationProperties.propertyForUserPasswordPattern;
+import static edu.gatech.gtri.trustmark.trpt.service.ApplicationProperties.propertyForUserPasswordPatternDescription;
 import static edu.gatech.gtri.trustmark.trpt.service.password.PasswordUtility.validationExternal;
 import static edu.gatech.gtri.trustmark.trpt.service.password.PasswordUtility.validationNewPassword;
 import static edu.gatech.gtri.trustmark.trpt.service.password.PasswordUtility.validationOldPassword;
@@ -26,13 +28,10 @@ import static org.gtri.fj.data.Validation.accumulate;
 public class PasswordService {
 
     @Autowired
-    private GrailsApplication grailsApplication;
+    private ApplicationProperties applicationProperties;
 
     @Autowired
     private SpringSecurityService springSecurityService;
-
-    private static String propertyForUserPasswordPattern = "passwordService.userPasswordPattern";
-    private static String propertyForUserPasswordPatternDescription = "passwordService.userPasswordPatternDescription";
 
     public Validation<NonEmptyList<ValidationMessage<PasswordField>>, PasswordResetResponse> resetSubmit(
             final PasswordResetRequest passwordResetRequest) {
@@ -70,7 +69,7 @@ public class PasswordService {
 
         return accumulate(
                 validationExternal(passwordChangeRequestWithoutAuthentication.getExternal()),
-                validationNewPassword(Pattern.compile(grailsApplication.getConfig().getProperty(propertyForUserPasswordPattern)), grailsApplication.getConfig().getProperty(propertyForUserPasswordPatternDescription), passwordChangeRequestWithoutAuthentication.getPasswordNew1(), passwordChangeRequestWithoutAuthentication.getPasswordNew2()),
+                validationNewPassword(Pattern.compile(applicationProperties.getProperty(propertyForUserPasswordPattern)), applicationProperties.getProperty(propertyForUserPasswordPatternDescription), passwordChangeRequestWithoutAuthentication.getPasswordNew1(), passwordChangeRequestWithoutAuthentication.getPasswordNew2()),
                 (mailPasswordReset, password) -> {
 
                     final LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
@@ -93,7 +92,7 @@ public class PasswordService {
 
         return accumulate(
                 validationOldPassword(springSecurityService, requesterUsername, passwordChangeRequestWithAuthentication.getPasswordOld()),
-                validationNewPassword(Pattern.compile(grailsApplication.getConfig().getProperty(propertyForUserPasswordPattern)), grailsApplication.getConfig().getProperty(propertyForUserPasswordPatternDescription), passwordChangeRequestWithAuthentication.getPasswordNew1(), passwordChangeRequestWithAuthentication.getPasswordNew2()),
+                validationNewPassword(Pattern.compile(applicationProperties.getProperty(propertyForUserPasswordPattern)), applicationProperties.getProperty(propertyForUserPasswordPatternDescription), passwordChangeRequestWithAuthentication.getPasswordNew1(), passwordChangeRequestWithAuthentication.getPasswordNew2()),
                 (user, password) -> {
 
                     user.setPassword(password);

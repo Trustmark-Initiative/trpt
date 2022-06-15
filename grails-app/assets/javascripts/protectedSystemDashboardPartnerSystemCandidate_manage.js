@@ -25,76 +25,87 @@ function initialize(
 
         stateReset()
 
+        if (protectedSystem.type.value == "CERTIFICATE_RELYING_PARTY") {
+            Array.from(document.querySelectorAll(".protected-system-element-type-certificate-relying-party")).map(element => element.classList.remove("d-none"))
+        } else {
+            Array.from(document.querySelectorAll(".protected-system-element-type-other")).map(element => element.classList.remove("d-none"))
+        }
+
         if (protectedSystem.protectedSystemPartnerSystemCandidateList.length === 0) {
 
         } else {
 
             protectedSystem.protectedSystemPartnerSystemCandidateList
-                .filter(protectedSystemPartnerSystemCandidate =>  protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id === parseInt((new URLSearchParams(document.location.search)).get("partnerSystemCandidate")))
+                .filter(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id === parseInt((new URLSearchParams(document.location.search)).get("partnerSystemCandidate")))
                 .forEach(protectedSystemPartnerSystemCandidate => {
 
-                const partnerSystemCandidateElementTrust = document.querySelector(".partner-system-candidate-element-trust")
+                    document.querySelector(".partner-system-candidate-element-trust").outerHTML = document.querySelector(".partner-system-candidate-element-trust").outerHTML
+                    const partnerSystemCandidateElementTrust = document.querySelector(".partner-system-candidate-element-trust")
 
-                partnerSystemCandidateElementTrust.checked = protectedSystemPartnerSystemCandidate.trust
-                if (partnerSystemCandidateElementTrust.checked) {
-                    partnerSystemCandidateElementTrust.addEventListener("click", () => {
+                    if (!protectedSystemPartnerSystemCandidate.trustable) {
+                        partnerSystemCandidateElementTrust.disabled = true
+                        partnerSystemCandidateElementTrust.parentNode.title = "This candidate partner system does not satisfy a required TIP."
+                    }
+                    partnerSystemCandidateElementTrust.checked = protectedSystemPartnerSystemCandidate.trust
+                    if (partnerSystemCandidateElementTrust.checked) {
+                        partnerSystemCandidateElementTrust.addEventListener("click", () => {
 
-                        document.getElementById("modal-header-trust").classList.add("d-none")
-                        document.getElementById("modal-body-trust").classList.add("d-none")
+                            document.getElementById("modal-header-trust").classList.add("d-none")
+                            document.getElementById("modal-body-trust").classList.add("d-none")
 
-                        document.getElementById("modal-header-do-not-trust").classList.remove("d-none")
-                        document.getElementById("modal-body-do-not-trust").classList.remove("d-none")
+                            document.getElementById("modal-header-do-not-trust").classList.remove("d-none")
+                            document.getElementById("modal-body-do-not-trust").classList.remove("d-none")
 
-                        Array.from(document.querySelectorAll("#modal-trust .partner-system-candidate-element-trust-fabric-metadata"))
-                            .forEach(element => {
-                                if (protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor == null) {
+                            Array.from(document.querySelectorAll("#modal-trust .partner-system-candidate-element-trust-fabric-metadata"))
+                                .forEach(element => {
+                                    if (protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor == null) {
 
-                                    element.innerHTML = "the link"
-                                    element.title = ""
-                                    element.href = ""
+                                        element.innerHTML = "the link"
+                                        element.title = ""
+                                        element.href = ""
 
-                                } else {
+                                    } else {
 
-                                    element.innerHTML = `${protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor}`
-                                    element.title = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
-                                    element.href = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
-                                }
-                            })
+                                        element.innerHTML = `${protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor}`
+                                        element.title = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
+                                        element.href = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
+                                    }
+                                })
 
-                        onUpdateSubmitForPartnerSystemCandidateRemove(protectedSystem, protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id)
-                    });
-                } else {
-                    partnerSystemCandidateElementTrust.addEventListener("click", () => {
+                            onUpdateSubmitForPartnerSystemCandidateRemove(protectedSystem, protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id)
+                        });
+                    } else {
+                        partnerSystemCandidateElementTrust.addEventListener("click", () => {
 
-                        document.getElementById("modal-header-trust").classList.remove("d-none")
-                        document.getElementById("modal-body-trust").classList.remove("d-none")
+                            document.getElementById("modal-header-trust").classList.remove("d-none")
+                            document.getElementById("modal-body-trust").classList.remove("d-none")
 
-                        document.getElementById("modal-header-do-not-trust").classList.add("d-none")
-                        document.getElementById("modal-body-do-not-trust").classList.add("d-none")
+                            document.getElementById("modal-header-do-not-trust").classList.add("d-none")
+                            document.getElementById("modal-body-do-not-trust").classList.add("d-none")
 
-                        Array.from(document.querySelectorAll("#modal-trust .partner-system-candidate-element-trust-fabric-metadata"))
-                            .forEach(element => {
-                                if (protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor == null) {
+                            Array.from(document.querySelectorAll("#modal-trust .partner-system-candidate-element-trust-fabric-metadata"))
+                                .forEach(element => {
+                                    if (protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor == null) {
 
-                                    element.innerHTML = "the link"
-                                    element.title = ""
-                                    element.href = ""
+                                        element.innerHTML = "the link"
+                                        element.title = ""
+                                        element.href = ""
 
-                                } else {
+                                    } else {
 
-                                    element.innerHTML = `${protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor}`
-                                    element.title = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
-                                    element.href = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
-                                }
-                            })
+                                        element.innerHTML = `${protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor}`
+                                        element.title = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
+                                        element.href = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.uriEntityDescriptor
+                                    }
+                                })
 
-                        Array.from(document.querySelectorAll("#modal-trust .partner-system-candidate-element-name"))
-                            .forEach(element => element.innerHTML = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.name)
+                            Array.from(document.querySelectorAll("#modal-trust .partner-system-candidate-element-name"))
+                                .forEach(element => element.innerHTML = protectedSystemPartnerSystemCandidate.partnerSystemCandidate.name)
 
-                        onUpdateSubmitForPartnerSystemCandidateAdd(protectedSystem, protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id)
-                    });
-                }
-            })
+                            onUpdateSubmitForPartnerSystemCandidateAdd(protectedSystem, protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id)
+                        });
+                    }
+                })
         }
     }
 

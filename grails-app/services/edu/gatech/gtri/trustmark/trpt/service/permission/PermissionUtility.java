@@ -21,7 +21,16 @@ public class PermissionUtility {
     private PermissionUtility() {
     }
 
-    public static List<Organization> organizationListAdministrator(final String requesterUsername) {
+    public static <T1, T2> Validation<NonEmptyList<ValidationMessage<T1>>, T2> userMay(final String requesterUserName, final PermissionName permissionName, final F3<User, List<Organization>, List<Role>, Validation<NonEmptyList<ValidationMessage<T1>>, T2>> f) {
+
+        return User
+                .findByUsernameHelper(requesterUserName)
+                .filter(user -> user.userRoleSetHelper().exists(userRole -> permissionName.getRoleNameList().exists(roleName -> RoleName.valueOf(userRole.roleHelper().getName()).equals(roleName))))
+                .map(user -> f.f(user, organizationListAdministrator(requesterUserName), roleListAdministrator(requesterUserName)))
+                .orSome(fail(nel(validationMessageMustHavePermission(null))));
+    }
+
+    private static List<Organization> organizationListAdministrator(final String requesterUsername) {
 
         return User
                 .findByUsernameHelper(requesterUsername)
@@ -38,7 +47,7 @@ public class PermissionUtility {
                 .orSome(nil());
     }
 
-    public static List<Role> roleListAdministrator(final String requesterUsername) {
+    private static List<Role> roleListAdministrator(final String requesterUsername) {
 
         return User
                 .findByUsernameHelper(requesterUsername)
@@ -53,14 +62,5 @@ public class PermissionUtility {
                                         .map(userRole -> arrayList(userRole.roleHelper()))
                                         .orSome(nil()))
                 .orSome(nil());
-    }
-
-    public static <T1, T2> Validation<NonEmptyList<ValidationMessage<T1>>, T2> userMay(final String requesterUserName, final PermissionName permissionName, final F3<User, List<Organization>, List<Role>, Validation<NonEmptyList<ValidationMessage<T1>>, T2>> f) {
-
-        return User
-                .findByUsernameHelper(requesterUserName)
-                .filter(user -> user.userRoleSetHelper().exists(userRole -> permissionName.getRoleNameList().exists(roleName -> RoleName.valueOf(userRole.roleHelper().getName()).equals(roleName))))
-                .map(user -> f.f(user, organizationListAdministrator(requesterUserName), roleListAdministrator(requesterUserName)))
-                .orSome(fail(nel(validationMessageMustHavePermission(null))));
     }
 }

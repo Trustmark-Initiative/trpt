@@ -29,25 +29,25 @@ public final class TrustmarkBindingRegistryUtility {
 
     public static TrustmarkBindingRegistryResponse trustmarkBindingRegistryResponse(final TrustmarkBindingRegistry trustmarkBindingRegistry) {
 
-        return trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistryUriTypeSetHelper().maximumOption(ord((o1, o2) ->
+        return trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySystemMapUriTypeSetHelper().maximumOption(ord((o1, o2) ->
                         o1.getDocumentRequestLocalDateTime() == null && o2.getDocumentRequestLocalDateTime() == null ? Ordering.EQ :
                                 o1.getDocumentRequestLocalDateTime() == null ? Ordering.LT :
                                         o2.getDocumentRequestLocalDateTime() == null ? Ordering.GT :
                                                 Ordering.fromInt(o1.getDocumentRequestLocalDateTime().compareTo(o2.getDocumentRequestLocalDateTime()))))
-                .map(trustmarkBindingRegistryUriType -> new TrustmarkBindingRegistryResponse(
+                .map(trustmarkBindingRegistrySystemMapUriType -> new TrustmarkBindingRegistryResponse(
                         trustmarkBindingRegistry.idHelper(),
                         trustmarkBindingRegistry.getName(),
                         trustmarkBindingRegistry.getDescription(),
                         trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().getUri(),
-                        trustmarkBindingRegistryUriType.getDocumentRequestLocalDateTime(),
-                        trustmarkBindingRegistryUriType.getDocumentSuccessLocalDateTime(),
-                        trustmarkBindingRegistryUriType.getDocumentFailureLocalDateTime(),
-                        trustmarkBindingRegistryUriType.getDocumentFailureMessage(),
-                        trustmarkBindingRegistryUriType.getServerRequestLocalDateTime(),
-                        trustmarkBindingRegistryUriType.getServerSuccessLocalDateTime(),
-                        trustmarkBindingRegistryUriType.getServerFailureLocalDateTime(),
-                        trustmarkBindingRegistryUriType.getServerFailureMessage(),
-                        trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistryUriTypeSetHelper().foldLeft((sum, trustmarkBindingRegistryUriTypeInner) -> sum + trustmarkBindingRegistryUriTypeInner.partnerSystemCandidateSetHelper().length(), 0),
+                        trustmarkBindingRegistrySystemMapUriType.getDocumentRequestLocalDateTime(),
+                        trustmarkBindingRegistrySystemMapUriType.getDocumentSuccessLocalDateTime(),
+                        trustmarkBindingRegistrySystemMapUriType.getDocumentFailureLocalDateTime(),
+                        trustmarkBindingRegistrySystemMapUriType.getDocumentFailureMessage(),
+                        trustmarkBindingRegistrySystemMapUriType.getServerRequestLocalDateTime(),
+                        trustmarkBindingRegistrySystemMapUriType.getServerSuccessLocalDateTime(),
+                        trustmarkBindingRegistrySystemMapUriType.getServerFailureLocalDateTime(),
+                        trustmarkBindingRegistrySystemMapUriType.getServerFailureMessage(),
+                        trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySystemMapUriTypeSetHelper().foldLeft((sum, trustmarkBindingRegistrySystemMapUriTypeInner) -> sum + trustmarkBindingRegistrySystemMapUriTypeInner.partnerSystemCandidateSetHelper().length(), 0),
                         organizationResponse(trustmarkBindingRegistry.organizationHelper())))
                 .orSome(() -> new TrustmarkBindingRegistryResponse(
                         trustmarkBindingRegistry.idHelper(),
@@ -62,7 +62,7 @@ public final class TrustmarkBindingRegistryUtility {
                         null,
                         null,
                         null,
-                        trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistryUriTypeSetHelper().foldLeft((sum, trustmarkBindingRegistryUriType) -> sum + trustmarkBindingRegistryUriType.partnerSystemCandidateSetHelper().length(), 0),
+                        trustmarkBindingRegistry.trustmarkBindingRegistryUriHelper().trustmarkBindingRegistrySystemMapUriTypeSetHelper().foldLeft((sum, trustmarkBindingRegistrySystemMapUriType) -> sum + trustmarkBindingRegistrySystemMapUriType.partnerSystemCandidateSetHelper().length(), 0),
                         organizationResponse(trustmarkBindingRegistry.organizationHelper())));
     }
 

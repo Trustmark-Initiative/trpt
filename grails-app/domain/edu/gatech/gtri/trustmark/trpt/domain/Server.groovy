@@ -1,5 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -7,11 +8,16 @@ import org.gtri.fj.function.F0
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class Server {
 
     String url
 
-    long idHelper() {
+    static mapping = {
+        table 'server'
+    }
+
+    Long idHelper() {
         id
     }
 

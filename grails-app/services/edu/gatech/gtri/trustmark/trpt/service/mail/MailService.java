@@ -5,7 +5,6 @@ import edu.gatech.gtri.trustmark.trpt.domain.Organization;
 import edu.gatech.gtri.trustmark.trpt.domain.Role;
 import edu.gatech.gtri.trustmark.trpt.domain.User;
 import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
-import grails.gorm.services.Service;
 import grails.gorm.transactions.Transactional;
 import org.gtri.fj.data.List;
 import org.gtri.fj.data.NonEmptyList;

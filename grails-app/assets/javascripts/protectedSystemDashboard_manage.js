@@ -39,6 +39,12 @@ function initialize(
         Array.from(document.querySelectorAll(".protected-system-element-type"))
             .map(element => element.innerHTML = protectedSystem.type.label)
 
+        if (protectedSystem.type.value == "CERTIFICATE_RELYING_PARTY") {
+            Array.from(document.querySelectorAll(".protected-system-element-type-certificate-relying-party")).map(element => element.classList.remove("d-none"))
+        } else {
+            Array.from(document.querySelectorAll(".protected-system-element-type-other")).map(element => element.classList.remove("d-none"))
+        }
+
         const trustInteroperabilityProfileTBody = document.getElementById("trust-interoperability-profile-tbody")
         trustInteroperabilityProfileTBody.innerHTML = ""
 
@@ -111,6 +117,10 @@ function initialize(
                 const partnerSystemCandidateElementTrustInteroperabilityProfileEvaluationLocalDateTime = partnerSystemCandidateElement.querySelector(".partner-system-candidate-element-trust-interoperability-profile-evaluation-local-date-time")
                 const partnerSystemCandidateElementActionDetail = partnerSystemCandidateElement.querySelector(".partner-system-candidate-action-detail")
 
+                if (!protectedSystemPartnerSystemCandidate.trustable) {
+                    partnerSystemCandidateElementTrust.disabled = true
+                    partnerSystemCandidateElementTrust.parentNode.title = "This candidate partner system does not satisfy a required TIP."
+                }
                 partnerSystemCandidateElementTrust.checked = protectedSystemPartnerSystemCandidate.trust
                 if (partnerSystemCandidateElementTrust.checked) {
                     partnerSystemCandidateElementTrust.addEventListener("click", () => {
@@ -222,10 +232,13 @@ function initialize(
                             `<span class="bi-question-circle" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name}"></span>`
                     } else if (partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === true) {
                         partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
-                            `<span class="bi-check-circle" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
+                            `<span class="bi-check-circle-fill text-success" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
                     } else if (partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === false) {
                         partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
-                            `<span class="bi-x-circle-fill" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
+                            `<span class="bi-x-circle-fill text-danger" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
+                    } else {
+                        partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
+                            `<span class="" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}">&#9888;️</span>`
                     }
                 });
 
@@ -249,11 +262,13 @@ function initialize(
                         "(NA)" :
                         moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')
 
-                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileSatisfied.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime === null || partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === null ?
+                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileSatisfied.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime === null ?
                         `<span class="bi-question-circle"></span>` :
                         partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === true ?
-                            `<span class="bi-check-circle"></span>` :
-                            `<span class="bi-x-circle-fill"></span>`
+                            `<span class="bi-check-circle-fill text-success"></span>` :
+                            partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === false ?
+                                `<span class="bi-x-circle-fill text-danger"></span>` :
+                                `<span class="">&#9888;️</span>`
 
                     partnerSystemCandidateDetailElementTrustInteroperabilityProfileTrustmarkDefinition.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied === 0 ?
                         "(NA)" :

@@ -69,6 +69,11 @@
     border-left: 1px solid darkgray;
 }
 
+.TrustExpressionSub > .TrustExpressionTerminal {
+    margin-left: 96px;
+    border-left: 1px solid rgb(221, 221, 221);
+}
+
 .TrustExpressionOperatorBinary, .TrustExpressionOperatorUnary {
     display: grid;
     grid-template-columns: min-content 1fr;

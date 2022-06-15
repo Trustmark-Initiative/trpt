@@ -1,5 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -9,6 +10,7 @@ import org.gtri.fj.product.P2
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class ProtectedSystem {
 
     String name
@@ -52,14 +54,14 @@ class ProtectedSystem {
             'in'("organization", organizationList.toJavaList())
             order('name', 'asc')
         })
-                .map({ collection -> iterableList(collection) })
+                .map({ collection -> iterableList((Iterable<ProtectedSystem>) collection) })
                 .orSome(org.gtri.fj.data.List.<ProtectedSystem> nil());
     }
 
-    static final org.gtri.fj.data.List<P2<ProtectedSystem, MailEvaluationUpdate>> findAllByMailEvaluationUpdateMailLocalDateTimeIsNullHelper() {
+    static final org.gtri.fj.data.List<P2<ProtectedSystem, PartnerSystemCandidateMailEvaluationUpdate>> findAllByPartnerSystemCandidateMailEvaluationUpdateMailLocalDateTimeIsNullHelper() {
 
-        fromNull(ProtectedSystem.executeQuery("SELECT DISTINCT protectedSystem1, mailEvaluationUpdate FROM MailEvaluationUpdate mailEvaluationUpdate " +
-                "JOIN mailEvaluationUpdate.partnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUri " +
+        fromNull(ProtectedSystem.executeQuery("SELECT DISTINCT protectedSystem1, partnerSystemCandidateMailEvaluationUpdate FROM PartnerSystemCandidateMailEvaluationUpdate partnerSystemCandidateMailEvaluationUpdate " +
+                "JOIN partnerSystemCandidateMailEvaluationUpdate.partnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUri " +
                 "JOIN partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidate partnerSystemCandidate " +
                 "JOIN partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUri trustInteroperabilityProfileUri " +
                 "JOIN partnerSystemCandidate.protectedSystemPartnerSystemCandidateSet protectedSystemPartnerSystemCandidate " +
@@ -67,14 +69,14 @@ class ProtectedSystem {
                 "JOIN protectedSystemPartnerSystemCandidate.protectedSystem protectedSystem1 " +
                 "JOIN protectedSystemTrustInteroperabilityProfileUri.protectedSystem protectedSystem2 " +
                 "WHERE protectedSystem1 = protectedSystem2 " +
-                "AND mailEvaluationUpdate.mailDateTime IS NULL"))
-                .map({ list -> iterableList(list).map({ Object[] array -> P.p(array[0], array[1]) }) })
-                .orSome(org.gtri.fj.data.List.nil())
+                "AND partnerSystemCandidateMailEvaluationUpdate.mailDateTime IS NULL"))
+                .map({ list -> iterableList(list).map({ Object[] array -> P.p((ProtectedSystem) array[0], (PartnerSystemCandidateMailEvaluationUpdate) array[1]) }) })
+                .orSome(org.gtri.fj.data.List.<P2<ProtectedSystem, PartnerSystemCandidateMailEvaluationUpdate>> nil())
     }
 
     static final Option<ProtectedSystem> findByOrganizationAndNameHelper(final Organization organization, final String name) { fromNull(findByOrganizationAndName(organization, name)) }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

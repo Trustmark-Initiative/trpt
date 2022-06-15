@@ -1,18 +1,23 @@
 package edu.gatech.gtri.trustmark.trpt.service.job;
 
+import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistryOrganizationMapUri;
+import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistrySystemMapUriType;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistryUri;
-import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistryUriType;
-import edu.gatech.gtri.trustmark.trpt.service.job.urisynchronizer.UriSynchronizerForTrustmarkBindingRegistry;
-import edu.gatech.gtri.trustmark.v1_0.model.TrustmarkBindingRegistrySystemType;
+import edu.gatech.gtri.trustmark.trpt.service.job.urisynchronizer.UriSynchronizerForTrustmarkBindingRegistryOrganizationMap;
+import edu.gatech.gtri.trustmark.trpt.service.job.urisynchronizer.UriSynchronizerForTrustmarkBindingRegistrySystemMap;
+import edu.gatech.gtri.trustmark.v1_0.model.trustmarkBindingRegistry.TrustmarkBindingRegistrySystemType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gtri.fj.data.List;
 import org.gtri.fj.function.F0;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForPartnerOrganizationCandidate.synchronizePartnerOrganizationCandidate;
 import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForPartnerSystemCandidate.synchronizePartnerSystemCandidate;
+import static edu.gatech.gtri.trustmark.trpt.service.job.RetryTemplateUtility.retry;
 import static org.gtri.fj.data.List.arrayList;
 
 public class JobUtilityForTrustmarkBindingRegistry {
@@ -25,31 +30,23 @@ public class JobUtilityForTrustmarkBindingRegistry {
     /**
      * Synchronize all trustmark binding registry URIs; use now as the timestamp.
      */
-    public static void synchronizeTrustmarkBindingRegistryUriAndDependencies() {
+    public static void synchronizeTrustmarkBindingRegistryUriAndDependencies(final Duration duration) {
 
-        synchronizeTrustmarkBindingRegistryUri();
-        UriSynchronizerForTrustmarkBindingRegistry.INSTANCE.synchronizeUri();
-        synchronizePartnerSystemCandidate();
+        synchronizeTrustmarkBindingRegistryUri(duration);
+
+        UriSynchronizerForTrustmarkBindingRegistrySystemMap.INSTANCE.synchronizeUri();
+        synchronizePartnerSystemCandidate(duration);
+
+        UriSynchronizerForTrustmarkBindingRegistryOrganizationMap.INSTANCE.synchronizeUri();
+        synchronizePartnerOrganizationCandidate(duration);
     }
 
     /**
      * Synchronize all trustmark binding registry URIs; use now as the timestamp.
      */
-    public static void synchronizeTrustmarkBindingRegistryUri() {
+    public static void synchronizeTrustmarkBindingRegistryUri(final Duration duration) {
 
-        synchronizeTrustmarkBindingRegistryUri(LocalDateTime.now(ZoneOffset.UTC));
-    }
-
-    /**
-     * Synchronize all trustmark binding registry URIs; use now as the timestamp.
-     *
-     * @param now the timestamp
-     */
-    public static void synchronizeTrustmarkBindingRegistryUriAndDependencies(final LocalDateTime now) {
-
-        synchronizeTrustmarkBindingRegistryUri(now);
-        UriSynchronizerForTrustmarkBindingRegistry.INSTANCE.synchronizeUri();
-        synchronizePartnerSystemCandidate(now);
+        synchronizeTrustmarkBindingRegistryUri(duration, LocalDateTime.now(ZoneOffset.UTC));
     }
 
     /**
@@ -57,9 +54,14 @@ public class JobUtilityForTrustmarkBindingRegistry {
      *
      * @param now the timestamp
      */
-    public static void synchronizeTrustmarkBindingRegistryUri(final LocalDateTime now) {
+    public static void synchronizeTrustmarkBindingRegistryUriAndDependencies(final Duration duration, final LocalDateTime now) {
 
-        synchronizeTrustmarkBindingRegistryUri(now, () -> TrustmarkBindingRegistryUri.findAllHelper());
+        synchronizeTrustmarkBindingRegistryUri(duration, now);
+        UriSynchronizerForTrustmarkBindingRegistrySystemMap.INSTANCE.synchronizeUri();
+        synchronizePartnerSystemCandidate(duration, now);
+
+        UriSynchronizerForTrustmarkBindingRegistryOrganizationMap.INSTANCE.synchronizeUri();
+        synchronizePartnerOrganizationCandidate(duration, now);
     }
 
     /**
@@ -67,14 +69,30 @@ public class JobUtilityForTrustmarkBindingRegistry {
      *
      * @param now the timestamp
      */
-    public static void synchronizeTrustmarkBindingRegistryUriAndDependencies(final LocalDateTime now, final String uriString) {
+    public static void synchronizeTrustmarkBindingRegistryUri(final Duration duration, final LocalDateTime now) {
 
-        synchronizeTrustmarkBindingRegistryUri(now, uriString);
-        TrustmarkBindingRegistryUri
+        synchronizeTrustmarkBindingRegistryUri(duration, now, () -> TrustmarkBindingRegistryUri.findAllHelper());
+    }
+
+    /**
+     * Synchronize all trustmark binding registry URIs; use now as the timestamp.
+     *
+     * @param now the timestamp
+     */
+    public static void synchronizeTrustmarkBindingRegistryUriAndDependencies(final Duration duration, final LocalDateTime now, final String uriString) {
+
+        synchronizeTrustmarkBindingRegistryUri(duration, now, uriString);
+        retry(() -> TrustmarkBindingRegistryUri
                 .withTransactionHelper(() -> TrustmarkBindingRegistryUri.findByUriHelper(uriString).toList()
-                        .bind(trustmarkBindingRegistryUri -> trustmarkBindingRegistryUri.trustmarkBindingRegistryUriTypeSetHelper())
-                        .map(trustmarkBindingRegistryUriType -> UriSynchronizerForTrustmarkBindingRegistry.INSTANCE.synchronizeUri(now, trustmarkBindingRegistryUriType.getUri())));
-        synchronizePartnerSystemCandidate(now, uriString);
+                        .bind(trustmarkBindingRegistryUri -> trustmarkBindingRegistryUri.trustmarkBindingRegistrySystemMapUriTypeSetHelper())
+                        .map(trustmarkBindingRegistrySystemMapUriType -> trustmarkBindingRegistrySystemMapUriType.getUri())), log)
+                .map(uri -> UriSynchronizerForTrustmarkBindingRegistrySystemMap.INSTANCE.synchronizeUri(now, uri));
+        retry(() -> TrustmarkBindingRegistryUri
+                .withTransactionHelper(() -> TrustmarkBindingRegistryUri.findByUriHelper(uriString).toList()
+                        .bind(trustmarkBindingRegistryUri -> trustmarkBindingRegistryUri.trustmarkBindingRegistryOrganizationMapUriSetHelper())
+                        .map(trustmarkBindingRegistryOrganizationMapUri -> trustmarkBindingRegistryOrganizationMapUri.getUri())), log)
+                .map(uri -> UriSynchronizerForTrustmarkBindingRegistryOrganizationMap.INSTANCE.synchronizeUri(now, uri));
+        synchronizePartnerSystemCandidate(duration, now, uriString);
     }
 
     /**
@@ -83,23 +101,32 @@ public class JobUtilityForTrustmarkBindingRegistry {
      * @param now       the timestamp
      * @param uriString the uri
      */
-    public static void synchronizeTrustmarkBindingRegistryUri(final LocalDateTime now, final String uriString) {
+    public static void synchronizeTrustmarkBindingRegistryUri(final Duration duration, final LocalDateTime now, final String uriString) {
 
-        synchronizeTrustmarkBindingRegistryUri(now, () -> TrustmarkBindingRegistryUri.findByUriHelper(uriString).toList());
+        synchronizeTrustmarkBindingRegistryUri(duration, now, () -> TrustmarkBindingRegistryUri.findByUriHelper(uriString).toList());
     }
 
-    private static void synchronizeTrustmarkBindingRegistryUri(final LocalDateTime now, final F0<List<TrustmarkBindingRegistryUri>> find) {
+    private static void synchronizeTrustmarkBindingRegistryUri(final Duration duration, final LocalDateTime now, final F0<List<TrustmarkBindingRegistryUri>> find) {
 
-        TrustmarkBindingRegistryUri
+        retry(() -> TrustmarkBindingRegistryUri
                 .withTransactionHelper(() -> find.f()
-                        .map(trustmarkBindingRegistryUri -> arrayList(TrustmarkBindingRegistrySystemType.values())
-                                .map(trustmarkBindingRegistrySystemType -> TrustmarkBindingRegistryUriType.findByUriHelper(trustmarkBindingRegistryUri.getUri() + trustmarkBindingRegistrySystemType.getUriRelative())
-                                        .orSome(() -> {
-                                            final TrustmarkBindingRegistryUriType trustmarkBindingRegistryUriType = new TrustmarkBindingRegistryUriType();
-                                            trustmarkBindingRegistryUriType.trustmarkBindingRegistryUriHelper(trustmarkBindingRegistryUri);
-                                            trustmarkBindingRegistryUriType.setUri(trustmarkBindingRegistryUri.getUri() + trustmarkBindingRegistrySystemType.getUriRelative());
-                                            trustmarkBindingRegistryUriType.setType(trustmarkBindingRegistrySystemType);
-                                            return trustmarkBindingRegistryUriType.saveAndFlushHelper();
-                                        }))));
+                        .forEach(trustmarkBindingRegistryUri -> {
+                            TrustmarkBindingRegistryOrganizationMapUri.findByUriHelper(trustmarkBindingRegistryUri.getUri() + "/public/organizations/").orSome(() -> {
+                                final TrustmarkBindingRegistryOrganizationMapUri trustmarkBindingRegistryOrganizationMapUri = new TrustmarkBindingRegistryOrganizationMapUri();
+                                trustmarkBindingRegistryOrganizationMapUri.trustmarkBindingRegistryUriHelper(trustmarkBindingRegistryUri);
+                                trustmarkBindingRegistryOrganizationMapUri.setUri(trustmarkBindingRegistryUri.getUri() + "/public/organizations/");
+                                return trustmarkBindingRegistryOrganizationMapUri.saveHelper();
+                            });
+
+                            arrayList(TrustmarkBindingRegistrySystemType.values())
+                                    .map(trustmarkBindingRegistrySystemType -> TrustmarkBindingRegistrySystemMapUriType.findByUriHelper(trustmarkBindingRegistryUri.getUri() + trustmarkBindingRegistrySystemType.getUriRelative())
+                                            .orSome(() -> {
+                                                final TrustmarkBindingRegistrySystemMapUriType trustmarkBindingRegistrySystemMapUriType = new TrustmarkBindingRegistrySystemMapUriType();
+                                                trustmarkBindingRegistrySystemMapUriType.trustmarkBindingRegistryUriHelper(trustmarkBindingRegistryUri);
+                                                trustmarkBindingRegistrySystemMapUriType.setUri(trustmarkBindingRegistryUri.getUri() + trustmarkBindingRegistrySystemType.getUriRelative());
+                                                trustmarkBindingRegistrySystemMapUriType.setType(trustmarkBindingRegistrySystemType);
+                                                return trustmarkBindingRegistrySystemMapUriType.saveHelper();
+                                            }));
+                        })), log);
     }
 }

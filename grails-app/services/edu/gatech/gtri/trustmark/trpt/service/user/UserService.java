@@ -184,9 +184,7 @@ public class UserService {
         user.organizationHelper(organization);
         user.userRoleSetHelper(arrayList(userRole));
 
-        user.saveAndFlushHelper();
-
-        return user;
+        return user.saveAndFlushHelper();
     }
 
     private Validation<NonEmptyList<ValidationMessage<UserField>>, Unit> deleteHelper(

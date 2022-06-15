@@ -5,6 +5,7 @@ import edu.gatech.gtri.trustmark.trpt.service.password.PasswordChangeRequestWith
 import edu.gatech.gtri.trustmark.trpt.service.password.PasswordResetRequest
 import edu.gatech.gtri.trustmark.trpt.service.password.PasswordResetStatusRequest
 import edu.gatech.gtri.trustmark.trpt.service.password.PasswordService
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
 import grails.plugin.springsecurity.userdetails.GrailsUser
@@ -15,6 +16,7 @@ import static edu.gatech.gtri.trustmark.trpt.controller.ResponseUtility.toRespon
 
 @CompileStatic
 @Transactional
+@GrailsCompileStatic
 class PasswordController {
 
     PasswordService passwordService

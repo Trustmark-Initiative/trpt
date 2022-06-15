@@ -1,6 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
-
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -8,6 +8,7 @@ import org.gtri.fj.function.F0
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class TrustmarkBindingRegistry {
 
     String name
@@ -46,7 +47,7 @@ class TrustmarkBindingRegistry {
             'in'("organization", organizationList.toJavaList())
             order('name', 'asc')
         })
-                .map({ collection -> iterableList(collection) })
+                .map({ collection -> iterableList((Iterable<TrustmarkBindingRegistry>) collection) })
                 .orSome(org.gtri.fj.data.List.<TrustmarkBindingRegistry> nil());
     }
 
@@ -54,7 +55,7 @@ class TrustmarkBindingRegistry {
 
     static final Option<TrustmarkBindingRegistry> findByOrganizationAndTrustmarkBindingRegistryUriHelper(final Organization organization, final TrustmarkBindingRegistryUri trustmarkBindingRegistryUri) { fromNull(findByOrganizationAndTrustmarkBindingRegistryUri(organization, trustmarkBindingRegistryUri)) }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

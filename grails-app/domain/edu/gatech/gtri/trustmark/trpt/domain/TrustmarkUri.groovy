@@ -1,5 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -9,11 +10,12 @@ import java.time.LocalDateTime
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class TrustmarkUri implements Uri {
 
     String uri
     String hash
-    String document
+    File document
     LocalDateTime documentRequestLocalDateTime
     LocalDateTime documentSuccessLocalDateTime
     LocalDateTime documentFailureLocalDateTime
@@ -45,7 +47,6 @@ class TrustmarkUri implements Uri {
         table 'trustmark_uri'
         uri length: 1000
         hash length: 1000
-        document type: 'text'
         documentFailureMessage length: 1000
         serverFailureMessage length: 1000
     }
@@ -54,13 +55,17 @@ class TrustmarkUri implements Uri {
             partnerSystemCandidateTrustmarkUriSet: PartnerSystemCandidateTrustmarkUri
     ]
 
+    File fileHelper() { getDocument() }
+
+    void fileHelper(final File file) { setDocument(file) }
+
     org.gtri.fj.data.List<PartnerSystemCandidateTrustmarkUri> partnerSystemCandidateTrustmarkUriSetHelper() { fromNull(getPartnerSystemCandidateTrustmarkUriSet()).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<PartnerSystemCandidateTrustmarkUri> nil()) }
 
     void partnerSystemCandidateTrustmarkUriSetHelper(final org.gtri.fj.data.List<PartnerSystemCandidateTrustmarkUri> partnerSystemCandidateTrustmarkUriSet) { setPartnerSystemCandidateTrustmarkUriSet(new HashSet<>(partnerSystemCandidateTrustmarkUriSet.toJavaList())) }
 
     static final Option<TrustmarkUri> findByUriHelper(final String uri) { fromNull(findByUri(uri)) }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 

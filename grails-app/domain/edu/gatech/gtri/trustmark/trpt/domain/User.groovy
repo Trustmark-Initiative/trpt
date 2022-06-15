@@ -1,5 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.domain
 
+import grails.compiler.GrailsCompileStatic
 import org.gtri.fj.data.Option
 import org.gtri.fj.function.Effect0
 import org.gtri.fj.function.F0
@@ -7,6 +8,7 @@ import org.gtri.fj.function.F0
 import static org.gtri.fj.data.List.iterableList
 import static org.gtri.fj.data.Option.fromNull
 
+@GrailsCompileStatic
 class User {
 
     String username
@@ -31,6 +33,10 @@ class User {
         passwordExpired nullable: true
     }
 
+    static mapping = {
+        table 'user'
+    }
+
     static hasMany = [
             userRoleSet         : UserRole,
             mailPasswordResetSet: MailPasswordReset
@@ -50,7 +56,7 @@ class User {
 
     org.gtri.fj.data.List<MailPasswordReset> mailPasswordResetSetHelper() { fromNull(mailPasswordResetSet).map({ collection -> iterableList(collection) }).orSome(org.gtri.fj.data.List.<MailPasswordReset> nil()) }
 
-    void mailPasswordResetSetHelper(final org.gtri.fj.data.List<MailPasswordReset> mailPasswordResetSet) { setMailPasswordResetSet(mailPasswordResetSet.toJavaList()) }
+    void mailPasswordResetSetHelper(final org.gtri.fj.data.List<MailPasswordReset> mailPasswordResetSet) { setMailPasswordResetSet(new HashSet<>(mailPasswordResetSet.toJavaList())) }
 
     static final org.gtri.fj.data.List<User> findAllByOrderByNameFamilyAscNameGivenAscHelper(final org.gtri.fj.data.List<Organization> organizationList, final org.gtri.fj.data.List<Role> roleList) {
 
@@ -59,15 +65,15 @@ class User {
                 "WHERE userRole.role IN (:roleList) " +
                 "AND user.organization IN (:organizationList)",
                 [roleList: roleList.toJavaList(), organizationList: organizationList.toJavaList()]))
-                .map({ list -> iterableList(list).map({ Object[] array -> array[0] }) })
-                .orSome(org.gtri.fj.data.List.nil())
+                .map({ list -> iterableList(list).map({ Object[] array -> (User) array[0] }) })
+                .orSome(org.gtri.fj.data.List.<User> nil())
     }
 
     static final Option<User> findByUsernameHelper(final String username) { fromNull(findByUsername(username)) }
 
     Set<Role> getAuthorities() { new HashSet<>(userRoleSetHelper().map({ UserRole userRole -> userRole.roleHelper() }).toJavaList()) }
 
-    long idHelper() {
+    Long idHelper() {
         id
     }
 
