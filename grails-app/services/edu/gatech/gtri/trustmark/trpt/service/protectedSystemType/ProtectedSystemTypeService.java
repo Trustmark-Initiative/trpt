@@ -4,8 +4,8 @@ import edu.gatech.gtri.trustmark.trpt.domain.Organization;
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemType;
 import edu.gatech.gtri.trustmark.trpt.domain.Role;
 import edu.gatech.gtri.trustmark.trpt.domain.User;
+import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemResponseUtility;
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemTypeResponse;
-import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemUtility;
 import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
 import grails.gorm.transactions.Transactional;
 import org.gtri.fj.data.List;
@@ -34,6 +34,6 @@ public class ProtectedSystemTypeService {
             final ProtectedSystemTypeFindAllRequest protectedSystemTypeFindAllRequest) {
 
         return success(arrayList(ProtectedSystemType.values())
-                .map(ProtectedSystemUtility::protectedSystemTypeResponse));
+                .map(ProtectedSystemResponseUtility::protectedSystemTypeResponse));
     }
 }

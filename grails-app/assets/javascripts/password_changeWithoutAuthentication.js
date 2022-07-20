@@ -2,12 +2,12 @@ function initialize(
     resetStatusSubmit,
     changeWithoutAuthenticationSubmit) {
 
-    document.onreadystatechange = function () {
+    document.addEventListener("readystatechange", function () {
 
         if (document.readyState === "complete") {
             onReady()
         }
-    }
+    })
 
     function onReady() {
 

@@ -25,7 +25,7 @@ public class PermissionUtility {
 
         return User
                 .findByUsernameHelper(requesterUserName)
-                .filter(user -> user.userRoleSetHelper().exists(userRole -> permissionName.getRoleNameList().exists(roleName -> RoleName.valueOf(userRole.roleHelper().getName()).equals(roleName))))
+                .filter(user -> user.userRoleSetHelper().exists(userRole -> permissionName.getRoleNameList().isEmpty() || permissionName.getRoleNameList().exists(roleName -> RoleName.valueOf(userRole.roleHelper().getName()).equals(roleName))))
                 .map(user -> f.f(user, organizationListAdministrator(requesterUserName), roleListAdministrator(requesterUserName)))
                 .orSome(fail(nel(validationMessageMustHavePermission(null))));
     }

@@ -9,7 +9,7 @@ import org.gtri.fj.data.NonEmptyList;
 import org.gtri.fj.data.Validation;
 
 import static edu.gatech.gtri.trustmark.trpt.domain.User.findByUsernameHelper;
-import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.organizationResponse;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationResponseUtility.organizationResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.role.RoleUtility.roleResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndDistinctAndValid;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndLength;

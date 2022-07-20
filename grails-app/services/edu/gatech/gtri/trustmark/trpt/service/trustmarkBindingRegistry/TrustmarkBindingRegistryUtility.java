@@ -11,7 +11,7 @@ import org.gtri.fj.data.List;
 import org.gtri.fj.data.NonEmptyList;
 import org.gtri.fj.data.Validation;
 
-import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.organizationResponse;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationResponseUtility.organizationResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndDistinctAndValid;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndLength;
 import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndUniqueAndLength;

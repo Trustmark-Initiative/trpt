@@ -2,12 +2,19 @@
 <html>
     <head>
         <meta name="layout" content="main"/>
+
+        <asset:javascript src="login_auth.js"/>
+        <script type="text/javascript">
+            initialize(
+                "${request.contextPath}/login/authenticate",
+                "${request.contextPath}/protectedSystem/manage");
+        </script>
     </head>
 
     <body>
 
         <div class="container pt-4" style="max-width: 540px;">
-            <form action="${request.contextPath}/login/authenticate" method="POST" class="border rounded card" id="login-form" autocomplete="off">
+            <div class="border rounded card" id="login-form">
                 <div class="card-header fw-bold">
                     <div class="row">
                         <div class="col-12">
@@ -47,15 +54,12 @@
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
 
-        <g:if test="${flash.message}">
-            <div class="container pt-4" style="max-width: 540px;">
-                <div class="alert alert-danger text-center">
-                    ${flash.message}
-                </div>
+        <div class="d-none container pt-4" style="max-width: 540px;" id="login-message-container">
+            <div class="alert alert-danger text-center" id="login-message">
             </div>
-        </g:if>
+        </div>
     </body>
 </html>

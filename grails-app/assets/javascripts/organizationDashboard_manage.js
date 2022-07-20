@@ -4,12 +4,12 @@ function initialize(
     partnerOrganizationCandidateFindAllUrl,
     partnerOrganizationCandidateDashboard) {
 
-    document.onreadystatechange = function () {
+    document.addEventListener("readystatechange", function () {
 
         if (document.readyState === "complete") {
             onComplete()
         }
-    }
+    })
 
     function onComplete() {
 
@@ -202,7 +202,7 @@ function initialize(
                         `${organizationPartnerOrganizationCandidate.evaluationTrustmarkDefinitionRequirementSatisfied} of ${(organizationPartnerOrganizationCandidate.evaluationTrustmarkDefinitionRequirementUnsatisfied + organizationPartnerOrganizationCandidate.evaluationTrustmarkDefinitionRequirementSatisfied)}`
 
                 const partnerOrganizationCandidateElementTrustInteroperabilityProfileEvaluationLocalDateTimeList = organizationPartnerOrganizationCandidate.partnerOrganizationCandidateTrustInteroperabilityProfileList
-                    .map(partnerOrganizationCandidateTrustInteroperabilityProfile => partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationLocalDateTime)
+                    .map(partnerOrganizationCandidateTrustInteroperabilityProfile => partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime)
                     .filter(evaluationLocalDateTime => evaluationLocalDateTime !== null)
                     .sort((evaluationLocalDateTime1, evaluationLocalDateTime2) => new Date(evaluationLocalDateTime1) - new Date(evaluationLocalDateTime2))
 
@@ -215,18 +215,18 @@ function initialize(
 
                 organizationPartnerOrganizationCandidate.partnerOrganizationCandidateTrustInteroperabilityProfileList.forEach(partnerOrganizationCandidateTrustInteroperabilityProfile => {
 
-                    if (partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationLocalDateTime == null) {
+                    if (partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime == null) {
                         partnerOrganizationCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerOrganizationCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
                             `<span class="bi-question-circle" title="${partnerOrganizationCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name}"></span>`
-                    } else if (partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === true) {
+                    } else if (partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustExpressionSatisfied === true) {
                         partnerOrganizationCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerOrganizationCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
-                            `<span class="bi-check-circle-fill text-success" title="${partnerOrganizationCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
-                    } else if (partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === false) {
+                            `<span class="bi-check-circle-fill text-success" title="${partnerOrganizationCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
+                    } else if (partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustExpressionSatisfied === false) {
                         partnerOrganizationCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerOrganizationCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
-                            `<span class="bi-x-circle-fill text-danger" title="${partnerOrganizationCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
+                            `<span class="bi-x-circle-fill text-danger" title="${partnerOrganizationCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
                     } else {
                         partnerOrganizationCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerOrganizationCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
-                            `<span class="" title="${partnerOrganizationCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}">&#9888;</span>`
+                            `<span class="" title="${partnerOrganizationCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}">&#9888;</span>`
                     }
                 });
 
@@ -246,28 +246,27 @@ function initialize(
                         partnerOrganizationCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.uri :
                         partnerOrganizationCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name
 
-                    partnerOrganizationCandidateDetailElementTrustInteroperabilityProfileEvaluationLocalDateTime.innerHTML = partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationLocalDateTime === null ?
+                    partnerOrganizationCandidateDetailElementTrustInteroperabilityProfileEvaluationLocalDateTime.innerHTML = partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime === null ?
                         "(NA)" :
-                        moment(partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')
+                        moment(partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')
 
-                    partnerOrganizationCandidateDetailElementTrustInteroperabilityProfileSatisfied.innerHTML = partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationLocalDateTime === null ?
+                    partnerOrganizationCandidateDetailElementTrustInteroperabilityProfileSatisfied.innerHTML = partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime === null ?
                         `<span class="bi-question-circle"></span>` :
-                        partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === true ?
+                        partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustExpressionSatisfied === true ?
                             `<span class="bi-check-circle-fill text-success"></span>` :
-                            partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === false ?
-                            `<span class="bi-x-circle-fill text-danger"></span>` :
+                            partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustExpressionSatisfied === false ?
+                                `<span class="bi-x-circle-fill text-danger"></span>` :
                                 `<span class="">&#9888;</span>`
 
-
-                    partnerOrganizationCandidateDetailElementTrustInteroperabilityProfileTrustmarkDefinition.innerHTML = partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied === 0 ?
+                    partnerOrganizationCandidateDetailElementTrustInteroperabilityProfileTrustmarkDefinition.innerHTML = partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementSatisfied === 0 ?
                         "(NA)" :
-                        Math.round(partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied /
-                            (partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied) *
+                        Math.round(partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementSatisfied /
+                            (partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementSatisfied) *
                             100) + "%"
 
-                    partnerOrganizationCandidateDetailElementTrustInteroperabilityProfileTrustmarkDefinition.title = partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied === 0 ?
+                    partnerOrganizationCandidateDetailElementTrustInteroperabilityProfileTrustmarkDefinition.title = partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementSatisfied === 0 ?
                         "(NA)" :
-                        `${partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied} of ${(partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerOrganizationCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied)}`
+                        `${partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementSatisfied} of ${(partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerOrganizationCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementSatisfied)}`
 
                     partnerOrganizationCandidateTBody.appendChild(partnerOrganizationCandidateDetailElement);
                 });

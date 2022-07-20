@@ -24,16 +24,16 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForPartnerOrganizationCandidateTrustInteroperabilityProfileUri.synchronizePartnerOrganizationCandidateTrustInteroperabilityProfileUri;
-import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.organizationResponseWithDetail;
-import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.organizationResponseWithTrustExpressionEvaluation;
-import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationDescription;
-import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationId;
-import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationIdList;
-import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationName;
-import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationOrganizationTrustInteroperabilityProfileList;
-import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationPartnerOrganizationCandidate;
-import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationPartnerOrganizationCandidateList;
-import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationUtility.validationUri;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationResponseUtility.organizationResponseWithDetail;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationResponseUtility.organizationResponseWithTrustExpressionEvaluation;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationValidationUtility.validationDescription;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationValidationUtility.validationId;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationValidationUtility.validationIdList;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationValidationUtility.validationName;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationValidationUtility.validationOrganizationTrustInteroperabilityProfileList;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationValidationUtility.validationPartnerOrganizationCandidate;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationValidationUtility.validationPartnerOrganizationCandidateList;
+import static edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationValidationUtility.validationUri;
 import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionName.ORGANIZATION_DELETE;
 import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionName.ORGANIZATION_INSERT;
 import static edu.gatech.gtri.trustmark.trpt.service.permission.PermissionName.ORGANIZATION_SELECT;
@@ -97,7 +97,7 @@ public class OrganizationService {
             final OrganizationFindAllRequest organizationFindAllRequest) {
 
         return success(requesterOrganizationList
-                .map(OrganizationUtility::organizationResponseWithDetail));
+                .map(OrganizationResponseUtility::organizationResponseWithDetail));
     }
 
     private Validation<NonEmptyList<ValidationMessage<OrganizationField>>, OrganizationResponseWithDetail> findOneHelper(
@@ -107,7 +107,7 @@ public class OrganizationService {
             final OrganizationFindOneRequest organizationFindOneRequest) {
 
         return validationId(organizationFindOneRequest.getId(), requesterOrganizationList)
-                .map(OrganizationUtility::organizationResponseWithDetail);
+                .map(OrganizationResponseUtility::organizationResponseWithDetail);
     }
 
     private Validation<NonEmptyList<ValidationMessage<OrganizationField>>, OrganizationResponseWithDetail> insertHelper(
@@ -250,7 +250,7 @@ public class OrganizationService {
             final OrganizationPartnerOrganizationCandidateFindOneRequest organizationPartnerOrganizationCandidateFindOneRequest) {
 
         return accumulate(
-                OrganizationUtility.validationId(organizationPartnerOrganizationCandidateFindOneRequest.getId(), requesterOrganizationList),
+                OrganizationValidationUtility.validationId(organizationPartnerOrganizationCandidateFindOneRequest.getId(), requesterOrganizationList),
                 validationPartnerOrganizationCandidate(organizationPartnerOrganizationCandidateFindOneRequest.getPartnerOrganizationCandidate()),
                 (organization, partnerOrganizationCandidate) -> p(organization, partnerOrganizationCandidate))
                 .map(p -> organizationResponseWithTrustExpressionEvaluation(p._1(), p._2()));

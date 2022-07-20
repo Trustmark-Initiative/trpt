@@ -3,6 +3,7 @@ package edu.gatech.gtri.trustmark.trpt.service.job;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidate;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateMailEvaluationUpdate;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateTrustInteroperabilityProfileUri;
+import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateTrustInteroperabilityProfileUriHistory;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateTrustmarkUri;
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystem;
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemPartnerSystemCandidate;
@@ -221,6 +222,18 @@ public class JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri 
                         partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper(),
                         partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper())
                 .forEach(partnerSystemCandidateTrustInteroperabilityProfileUriInner -> {
+
+                    final PartnerSystemCandidateTrustInteroperabilityProfileUriHistory partnerSystemCandidateTrustInteroperabilityProfileUriHistory = new PartnerSystemCandidateTrustInteroperabilityProfileUriHistory();
+                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationAttemptLocalDateTime(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationAttemptLocalDateTime());
+                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationLocalDateTime(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationLocalDateTime());
+                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustExpressionSatisfied(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpressionSatisfied());
+                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustExpression(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpression());
+                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustmarkDefinitionRequirementSatisfied(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementSatisfied());
+                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustmarkDefinitionRequirementUnsatisfied(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementUnsatisfied());
+                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustmarkDefinitionRequirement(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirement());
+                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.partnerSystemCandidateHelper(partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper());
+                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.trustInteroperabilityProfileUriHelper(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper());
+                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.saveHelper();
 
                     final LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 

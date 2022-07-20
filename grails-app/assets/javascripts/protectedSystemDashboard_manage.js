@@ -4,12 +4,12 @@ function initialize(
     partnerSystemCandidateFindAllUrl,
     partnerSystemCandidateDashboard) {
 
-    document.onreadystatechange = function () {
+    document.addEventListener("readystatechange", function () {
 
         if (document.readyState === "complete") {
             onComplete()
         }
-    }
+    })
 
     function onComplete() {
 
@@ -214,7 +214,7 @@ function initialize(
                         `${protectedSystemPartnerSystemCandidate.evaluationTrustmarkDefinitionRequirementSatisfied} of ${(protectedSystemPartnerSystemCandidate.evaluationTrustmarkDefinitionRequirementUnsatisfied + protectedSystemPartnerSystemCandidate.evaluationTrustmarkDefinitionRequirementSatisfied)}`
 
                 const partnerSystemCandidateElementTrustInteroperabilityProfileEvaluationLocalDateTimeList = protectedSystemPartnerSystemCandidate.partnerSystemCandidateTrustInteroperabilityProfileList
-                    .map(partnerSystemCandidateTrustInteroperabilityProfile => partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime)
+                    .map(partnerSystemCandidateTrustInteroperabilityProfile => partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime)
                     .filter(evaluationLocalDateTime => evaluationLocalDateTime !== null)
                     .sort((evaluationLocalDateTime1, evaluationLocalDateTime2) => new Date(evaluationLocalDateTime1) - new Date(evaluationLocalDateTime2))
 
@@ -227,18 +227,18 @@ function initialize(
 
                 protectedSystemPartnerSystemCandidate.partnerSystemCandidateTrustInteroperabilityProfileList.forEach(partnerSystemCandidateTrustInteroperabilityProfile => {
 
-                    if (partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime == null) {
+                    if (partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime == null) {
                         partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
                             `<span class="bi-question-circle" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name}"></span>`
-                    } else if (partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === true) {
+                    } else if (partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustExpressionSatisfied === true) {
                         partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
-                            `<span class="bi-check-circle-fill text-success" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
-                    } else if (partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === false) {
+                            `<span class="bi-check-circle-fill text-success" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
+                    } else if (partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustExpressionSatisfied === false) {
                         partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
-                            `<span class="bi-x-circle-fill text-danger" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
+                            `<span class="bi-x-circle-fill text-danger" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}"></span>`
                     } else {
                         partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML = partnerSystemCandidateElementPercentTrustInteroperabilityProfile.innerHTML +
-                            `<span class="" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}">&#9888;️</span>`
+                            `<span class="" title="${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name} - ${moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')}">&#9888;️</span>`
                     }
                 });
 
@@ -258,27 +258,27 @@ function initialize(
                         partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.uri :
                         partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name
 
-                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileEvaluationLocalDateTime.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime === null ?
+                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileEvaluationLocalDateTime.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime === null ?
                         "(NA)" :
-                        moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')
+                        moment(partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC')
 
-                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileSatisfied.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime === null ?
+                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileSatisfied.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationLocalDateTime === null ?
                         `<span class="bi-question-circle"></span>` :
-                        partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === true ?
+                        partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustExpressionSatisfied === true ?
                             `<span class="bi-check-circle-fill text-success"></span>` :
-                            partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustExpressionSatisfied === false ?
+                            partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustExpressionSatisfied === false ?
                                 `<span class="bi-x-circle-fill text-danger"></span>` :
                                 `<span class="">&#9888;️</span>`
 
-                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileTrustmarkDefinition.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied === 0 ?
+                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileTrustmarkDefinition.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementSatisfied === 0 ?
                         "(NA)" :
-                        Math.round(partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied /
-                            (partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied) *
+                        Math.round(partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementSatisfied /
+                            (partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementSatisfied) *
                             100) + "%"
 
-                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileTrustmarkDefinition.title = partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied === 0 ?
+                    partnerSystemCandidateDetailElementTrustInteroperabilityProfileTrustmarkDefinition.title = partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementSatisfied === 0 ?
                         "(NA)" :
-                        `${partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied} of ${(partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluationTrustmarkDefinitionRequirementSatisfied)}`
+                        `${partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementSatisfied} of ${(partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementUnsatisfied + partnerSystemCandidateTrustInteroperabilityProfile.evaluation.evaluationTrustmarkDefinitionRequirementSatisfied)}`
 
                     partnerSystemCandidateTBody.appendChild(partnerSystemCandidateDetailElement);
                 });

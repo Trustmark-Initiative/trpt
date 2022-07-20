@@ -23,13 +23,16 @@ grails.views.default.codec = 'html'
 
 dataSource {
     driverClassName = 'com.mysql.cj.jdbc.Driver'
-    url = 'jdbc:mysql://trptDatabase:3306/trpt_db?verifyServerCertificate=false&useSSL=false&allowPublicKeyRetrieval=true'
+    url = 'jdbc:mysql://trptDatabase:3306/trpt_db?verifyServerCertificate=false&useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true'
     username = 'trpt_user'
     password = 'trpt_pw_11'
 }
 
 environments {
     development {
+        // required for development server to locate git.properties file
+        spring.info.git.location='file:build/resources/main/git.properties'
+
         dataSource {
             dbCreate = 'update'
         }
@@ -122,6 +125,8 @@ grails.views.gsp.codecs.staticparts = 'none'
 
 management.endpoints['enabled-by-default'] = false
 management.endpoint.health.enabled = true
+management.endpoint.info.enabled = true
+management.endpoints.web.exposure.include = 'health,info'
 
 // See Appendix A: Common Application Properties https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#application-properties
 // ---------------------------------------------------------------------------------------------------------------------
@@ -164,7 +169,7 @@ grails.plugin.springsecurity.userLookup.enabledPropertyName = 'userEnabled'
 grails.plugin.springsecurity.userLookup.passwordExpiredPropertyName = 'passwordExpired'
 
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-        [pattern: '/actuator/health', access: ['permitAll']],
+        [pattern: '/actuator/**', access: ['permitAll']],
         [pattern: '/password/reset', access: ['permitAll']],
         [pattern: '/password/resetSubmit', access: ['permitAll']],
         [pattern: '/password/resetStatus', access: ['permitAll']],
@@ -172,3 +177,6 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         [pattern: '/password/changeWithoutAuthentication', access: ['permitAll']],
         [pattern: '/password/changeWithoutAuthenticationSubmit', access: ['permitAll']]
 ]
+
+info.app.version='1.1.1'
+

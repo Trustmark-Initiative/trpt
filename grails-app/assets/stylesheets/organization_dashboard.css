@@ -169,6 +169,13 @@
     color: #b36200;
 }
 
+.INCOMPLETE {
+    background: white;
+    font-style: italic;
+    color: grey;
+}
+
+
 .Head {
     font-weight: bold;
 }

@@ -1,12 +1,12 @@
 function initialize(
     resetSubmit) {
 
-    document.onreadystatechange = function () {
+    document.addEventListener("readystatechange", function () {
 
         if (document.readyState === "complete") {
             onReady()
         }
-    }
+    })
 
     function onReady() {
 
