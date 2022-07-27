@@ -449,9 +449,9 @@ function trustExpressionFailure(
                 trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"],
                 `The trustmark "${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}" is bound to the candidate system, but the trustmark relying party tool could not verify the trustmark.`,
                 trustExpressionFailure["TrustInteroperabilityProfileList"])
-                .append(ul(
+                .concat( ul(
                     trustExpressionFailure["TrustmarkVerifierFailureNonEmptyList"].map(trustmarkVerifierFailure =>
-                        li(trustmarkVerifierFailure))))
+                        li(trustmarkVerifierFailure))) )
         }
 
         function trustExpressionFailureOther(
