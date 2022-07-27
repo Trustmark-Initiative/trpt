@@ -178,5 +178,5 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         [pattern: '/password/changeWithoutAuthenticationSubmit', access: ['permitAll']]
 ]
 
-info.app.version='1.1.1'
+info.app.version='1.1.2'
 
