@@ -15,10 +15,10 @@
     </head>
 
     <body>
-        <div class="container pt-4">
+        <div class="container pt-4 placeholder-glow">
             <h2 class="d-flex justify-content-between">
                 <div>
-                    Trust Dashboard for <span class="organization-element-name"></span> with <span class="organization-element-organization-partner-organization-candidate-partner-organization-candidate-name"></span>
+                    Trust Dashboard for <span class="organization-element-name placeholder-hack col-4"></span> with <span class="organization-element-organization-partner-organization-candidate-partner-organization-candidate-name placeholder-hack col-4"></span>
                 </div>
 
                 <div class="d-flex">
@@ -29,11 +29,11 @@
             </h2>
 
             <div class="pt-2">
-                This page provides details about how well <span class="organization-element-organization-partner-organization-candidate-partner-organization-candidate-name"></span>
-                satisfies the trust policy for <span class="organization-element-name"></span> at <span class="organization-element-name"></span>.</div>
+                This page provides details about how well <span class="organization-element-organization-partner-organization-candidate-partner-organization-candidate-name placeholder-hack col-3"></span>
+                satisfies the trust policy for <span class="organization-element-name placeholder-hack col-3"></span> at <span class="organization-element-name placeholder-hack col-3"></span>.</div>
         </div>
 
-        <div class="container pt-4" id="organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list">
+        <div class="container pt-4">
             <template id="organization-template-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile">
                 <div class="TrustInteroperabilityProfileContainer Body">
                     <div class="TrustInteroperabilityProfile">
@@ -50,6 +50,8 @@
                     </div>
                 </div>
             </template>
+
+            <div id="organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list"></div>
         </div>
 
         <div class="container pt-4" style="max-width: 540px;">
@@ -63,69 +65,71 @@
                 </div>
 
                 <div class="card-body">
-                    <div class="TrustInteroperabilityProfileContainer Body">
-                        <div class="TrustInteroperabilityProfile">
-                            <div class="TrustExpressionEvaluation Body">
-                                <div class="TrustExpressionContainer">
-                                    <div class="Body">
-                                        <div class="TrustExpressionTop TRUE">
-                                            <label class="TrustInteroperabilityProfileInner">Black text indicates an expression that evaluates to the boolean value true.</label>
+                    <div id="organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list-legend">
+                        <div class="TrustInteroperabilityProfileContainer Body">
+                            <div class="TrustInteroperabilityProfile">
+                                <div class="TrustExpressionEvaluation Body">
+                                    <div class="TrustExpressionContainer">
+                                        <div class="Body">
+                                            <div class="TrustExpressionTop TRUE">
+                                                <label class="TrustInteroperabilityProfileInner">Black text indicates an expression that evaluates to the boolean value true.</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="TrustInteroperabilityProfileContainer Body">
-                        <div class="TrustInteroperabilityProfile">
-                            <div class="TrustExpressionEvaluation Body">
-                                <div class="TrustExpressionContainer">
-                                    <div class="Body">
-                                        <div class="TrustExpressionTop FALSE">
-                                            <label class="TrustInteroperabilityProfileInner">Red text on a grey background indicates an expression that evaluates to the boolean value false.</label>
+                        <div class="TrustInteroperabilityProfileContainer Body">
+                            <div class="TrustInteroperabilityProfile">
+                                <div class="TrustExpressionEvaluation Body">
+                                    <div class="TrustExpressionContainer">
+                                        <div class="Body">
+                                            <div class="TrustExpressionTop FALSE">
+                                                <label class="TrustInteroperabilityProfileInner">Red text on a grey background indicates an expression that evaluates to the boolean value false.</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="TrustInteroperabilityProfileContainer Body">
-                        <div class="TrustInteroperabilityProfile">
-                            <div class="TrustExpressionEvaluation Body">
-                                <div class="TrustExpressionContainer">
-                                    <div class="Body">
-                                        <div class="TrustExpressionTop FAILURE">
-                                            <label class="TrustInteroperabilityProfileInner">Red italic text on a grey brackground indicates an expression that fails to evaluate.</label>
+                        <div class="TrustInteroperabilityProfileContainer Body">
+                            <div class="TrustInteroperabilityProfile">
+                                <div class="TrustExpressionEvaluation Body">
+                                    <div class="TrustExpressionContainer">
+                                        <div class="Body">
+                                            <div class="TrustExpressionTop FAILURE">
+                                                <label class="TrustInteroperabilityProfileInner">Red italic text on a grey brackground indicates an expression that fails to evaluate.</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="TrustInteroperabilityProfileContainer Body">
-                        <div class="TrustInteroperabilityProfile">
-                            <div class="TrustExpressionEvaluation Body">
-                                <div class="TrustExpressionContainer">
-                                    <div class="Body">
-                                        <div class="TrustExpressionTop UNKNOWN">
-                                            <label class="TrustInteroperabilityProfileInner">Orange text indicates an expression that evaluates to a non-boolean value; for example, a string.</label>
+                        <div class="TrustInteroperabilityProfileContainer Body">
+                            <div class="TrustInteroperabilityProfile">
+                                <div class="TrustExpressionEvaluation Body">
+                                    <div class="TrustExpressionContainer">
+                                        <div class="Body">
+                                            <div class="TrustExpressionTop UNKNOWN">
+                                                <label class="TrustInteroperabilityProfileInner">Orange text indicates an expression that evaluates to a non-boolean value; for example, a string.</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="TrustInteroperabilityProfileContainer Body">
-                        <div class="TrustInteroperabilityProfile">
-                            <div class="TrustExpressionEvaluation Body">
-                                <div class="TrustExpressionContainer">
-                                    <div class="Body">
-                                        <div class="TrustExpressionTop INCOMPLETE">
-                                            <label class="TrustInteroperabilityProfileInner">Grey italic text indicates an expression that the system has not yet evaluated.</label>
+                        <div class="TrustInteroperabilityProfileContainer Body">
+                            <div class="TrustInteroperabilityProfile">
+                                <div class="TrustExpressionEvaluation Body">
+                                    <div class="TrustExpressionContainer">
+                                        <div class="Body">
+                                            <div class="TrustExpressionTop INCOMPLETE">
+                                                <label class="TrustInteroperabilityProfileInner">Grey italic text indicates an expression that the system has not yet evaluated.</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

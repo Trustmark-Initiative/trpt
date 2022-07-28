@@ -273,7 +273,11 @@
     border-left: 1px solid darkgrey
 }
 
-.TrustInteroperabilityProfileContainer:last-child > .TrustInteroperabilityProfile > .TrustExpressionEvaluation > .TrustExpressionContainer > .Body {
+#protected-system-element-protected-system-partner-system-candidate-partner-system-candidate-trust-interoperability-profile-list:empty {
+    border-bottom: 0px
+}
+
+#protected-system-element-protected-system-partner-system-candidate-partner-system-candidate-trust-interoperability-profile-list, #protected-system-element-protected-system-partner-system-candidate-partner-system-candidate-trust-interoperability-profile-list-legend {
     border-bottom: 1px solid darkgrey
 }
 

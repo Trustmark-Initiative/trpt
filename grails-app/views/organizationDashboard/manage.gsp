@@ -17,13 +17,13 @@
     </head>
 
     <body>
-        <div class="container pt-4">
-            <h2>Trust Dashboard for <span class="organization-element-name"></span></h2>
+        <div class="container pt-4 placeholder-glow">
+            <h2>Trust Dashboard for <span class="organization-element-name placeholder-hack col-4"></span></h2>
 
-            <div class="fw-bold mt-2">Trust Policy for <span class="organization-element-name"></span></div>
+            <div class="fw-bold mt-2">Trust Policy for <span class="organization-element-name placeholder-hack col-4"></span></div>
 
             <div class="mt-2">
-                Add trust interoperability profiles (TIPs${raw(grailsApplication.config.getProperty('server.artifact'))}) to this table to define the trust policy for <span class="organization-element-name"></span></span>.
+                Add trust interoperability profiles (TIPs${raw(grailsApplication.config.getProperty('server.artifact'))}) to this table to define the trust policy for <span class="organization-element-name placeholder-hack col-3"></span></span>.
             </div>
             <table class="mt-2 table table-bordered table-striped-hack mb-0">
                 <thead>
@@ -53,7 +53,12 @@
                         <td class="trust-interoperability-profile-element-mandatory"></td>
                     </tr>
                 </template>
-                <tbody id="trust-interoperability-profile-tbody">
+                <tbody id="trust-interoperability-profile-tbody" class="placeholder-glow">
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
                 </tbody>
             </table>
         </div>
@@ -241,11 +246,11 @@
             </div>
         </div>
 
-        <div class="container pt-4">
-            <div class="fw-bold">Candidate Partner Organizations for <span class="organization-element-name"></span></div>
+        <div class="container pt-4 placeholder-glow">
+            <div class="fw-bold">Candidate Partner Organizations for <span class="organization-element-name placeholder-hack col-3"></span></div>
 
             <div class="mt-2">
-                This table allows you to control which candidate partner organizations are trusted by <span class="organization-element-name"></span>.
+                This table allows you to control which candidate partner organizations are trusted by <span class="organization-element-name placeholder-hack col-3"></span>.
             </div>
 
             <table class="mt-2 table table-bordered mb-0">
@@ -298,8 +303,15 @@
                         <td></td>
                     </tr>
                 </template>
-                <tbody id="partner-organization-candidate-tbody">
+                <tbody id="partner-organization-candidate-tbody" class="placeholder-glow">
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
                 </tbody>
+            </tbody>
             </table>
         </div>
 

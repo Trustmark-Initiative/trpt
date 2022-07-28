@@ -62,3 +62,30 @@ td.unhack > div {
 .invalid-feedback ul, .invalid-feedback ol, .invalid-feedback dl {
     margin-bottom: 0px;
 }
+
+.placeholder-glow .placeholder-hack:empty {
+    animation: placeholder-glow 2s ease-in-out infinite;
+}
+
+@keyframes placeholder-glow {
+    50% {
+        opacity: 0.2;
+    }
+}
+
+.placeholder-hack:empty {
+    display: inline-block;
+    min-height: 1em;
+    vertical-align: middle;
+    cursor: wait;
+    background-color: currentColor;
+    opacity: 0.5;
+}
+
+.placeholder-hack {
+    display: initial;
+    vertical-align: initial;
+    cursor: initial;
+    background-color: initial;
+    opacity: initial;
+}

@@ -69,6 +69,11 @@
     border-left: 1px solid darkgray;
 }
 
+.TrustExpressionSub > .TrustExpressionTerminal {
+    margin-left: 96px;
+    border-left: 1px solid rgb(221, 221, 221);
+}
+
 .TrustExpressionOperatorBinary, .TrustExpressionOperatorUnary {
     display: grid;
     grid-template-columns: min-content 1fr;
@@ -175,7 +180,6 @@
     color: grey;
 }
 
-
 .Head {
     font-weight: bold;
 }
@@ -269,7 +273,11 @@
     border-left: 1px solid darkgrey
 }
 
-.TrustInteroperabilityProfileContainer:last-child > .TrustInteroperabilityProfile > .TrustExpressionEvaluation > .TrustExpressionContainer > .Body {
+#organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list:empty {
+    border-bottom: 0px
+}
+
+#organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list, #organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list-legend {
     border-bottom: 1px solid darkgrey
 }
 
