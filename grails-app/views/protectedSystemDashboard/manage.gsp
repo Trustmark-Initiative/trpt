@@ -250,7 +250,7 @@
             <div class="fw-bold">Candidate Partner Systems for <span class="protected-system-element-name placeholder-hack col-3"></span></div>
 
             <div class="mt-2">
-                This table allows you to control which candidate partner <span class="partner-system-candidate-element-type placeholder-hack col-3"></span> systems are trusted by <span class="protected-system-element-name placeholder-hack col-3"></span>.
+                This table allows you to control which candidate partner <span class="partner-system-candidate-element-type"></span> systems are trusted by <span class="protected-system-element-name placeholder-hack col-3"></span>.
             </div>
 
             <table class="mt-2 table table-bordered mb-0">

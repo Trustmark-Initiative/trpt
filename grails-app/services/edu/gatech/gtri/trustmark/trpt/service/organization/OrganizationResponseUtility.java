@@ -10,6 +10,7 @@ import edu.gatech.gtri.trustmark.trpt.service.partnerOrganizationCandidate.Partn
 import edu.gatech.gtri.trustmark.trpt.service.partnerOrganizationCandidate.PartnerOrganizationCandidateTrustInteroperabilityProfileResponse;
 import edu.gatech.gtri.trustmark.trpt.service.partnerOrganizationCandidate.PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation;
 import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.EvaluationResponse;
+import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.EvaluationResponseWithTrustExpressionEvaluation;
 import edu.gatech.gtri.trustmark.trpt.service.trustInteroperabilityProfile.TrustInteroperabilityProfileResponse;
 import org.gtri.fj.Ordering;
 import org.gtri.fj.data.List;
@@ -181,15 +182,43 @@ public final class OrganizationResponseUtility {
         return new PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation(
                 trustInteroperabilityProfileResponse(partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
                 Stream.concat(
-                                Stream.of(evaluationResponse(partnerOrganizationCandidateTrustInteroperabilityProfileUri)),
+                                Stream.of(evaluationResponseWithTrustExpressionEvaluation(partnerOrganizationCandidateTrustInteroperabilityProfileUri)),
                                 PartnerOrganizationCandidateTrustInteroperabilityProfileUriHistory
                                         .findAllByPartnerOrganizationCandidateTrustInteroperabilityProfileUriHelper(
                                                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.partnerOrganizationCandidateHelper(),
                                                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper())
-                                        .map(OrganizationResponseUtility::evaluationResponse)
+                                        .map(OrganizationResponseUtility::evaluationResponseWithTrustExpressionEvaluation)
                                         .toJavaList()
                                         .stream())
                         .collect(Collectors.toList()));
+    }
+
+    public static EvaluationResponseWithTrustExpressionEvaluation evaluationResponseWithTrustExpressionEvaluation(
+            final PartnerOrganizationCandidateTrustInteroperabilityProfileUri partnerOrganizationCandidateTrustInteroperabilityProfileUri) {
+
+        return new EvaluationResponseWithTrustExpressionEvaluation(
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.idHelper(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationAttemptLocalDateTime(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
+                true,
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : new JSONObject(stringFor(partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression())));
+    }
+
+    public static EvaluationResponseWithTrustExpressionEvaluation evaluationResponseWithTrustExpressionEvaluation(
+            final PartnerOrganizationCandidateTrustInteroperabilityProfileUriHistory partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory) {
+
+        return new EvaluationResponseWithTrustExpressionEvaluation(
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.idHelper(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationAttemptLocalDateTime(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationLocalDateTime(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpressionSatisfied(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
+                false,
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpression() == null ? null : new JSONObject(stringFor(partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpression())));
     }
 
     public static EvaluationResponse evaluationResponse(
@@ -202,8 +231,7 @@ public final class OrganizationResponseUtility {
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied(),
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
-                true,
-                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : new JSONObject(stringFor(partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression())));
+                true);
     }
 
     public static EvaluationResponse evaluationResponse(
@@ -216,7 +244,6 @@ public final class OrganizationResponseUtility {
                 partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpressionSatisfied(),
                 partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
                 partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
-                false,
-                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpression() == null ? null : new JSONObject(stringFor(partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpression())));
+                false);
     }
 }

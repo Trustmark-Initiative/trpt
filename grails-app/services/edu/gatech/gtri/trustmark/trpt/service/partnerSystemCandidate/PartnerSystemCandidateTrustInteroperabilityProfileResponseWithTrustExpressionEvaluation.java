@@ -7,11 +7,11 @@ import java.util.List;
 public class PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation {
 
     private final TrustInteroperabilityProfileResponse trustInteroperabilityProfile;
-    private final List<EvaluationResponse> evaluationList;
+    private final List<EvaluationResponseWithTrustExpressionEvaluation> evaluationList;
 
     public PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation(
             final TrustInteroperabilityProfileResponse trustInteroperabilityProfile,
-            final List<EvaluationResponse> evaluationList) {
+            final List<EvaluationResponseWithTrustExpressionEvaluation> evaluationList) {
 
         this.trustInteroperabilityProfile = trustInteroperabilityProfile;
         this.evaluationList = evaluationList;
@@ -21,7 +21,7 @@ public class PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrust
         return trustInteroperabilityProfile;
     }
 
-    public List<EvaluationResponse> getEvaluationList() {
+    public List<EvaluationResponseWithTrustExpressionEvaluation> getEvaluationList() {
         return evaluationList;
     }
 }

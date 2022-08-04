@@ -1,7 +1,5 @@
 package edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate;
 
-import org.json.JSONObject;
-
 import java.time.LocalDateTime;
 
 public class EvaluationResponse {
@@ -13,7 +11,6 @@ public class EvaluationResponse {
     private final Integer evaluationTrustmarkDefinitionRequirementSatisfied;
     private final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied;
     private final boolean evaluationCurrent;
-    private final JSONObject evaluation;
 
     public EvaluationResponse(
             final long id,
@@ -22,8 +19,7 @@ public class EvaluationResponse {
             final Boolean evaluationTrustExpressionSatisfied,
             final Integer evaluationTrustmarkDefinitionRequirementSatisfied,
             final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied,
-            final boolean evaluationCurrent,
-            final JSONObject evaluation) {
+            final boolean evaluationCurrent) {
         this.id = id;
         this.evaluationAttemptLocalDateTime = evaluationAttemptLocalDateTime;
         this.evaluationLocalDateTime = evaluationLocalDateTime;
@@ -31,7 +27,6 @@ public class EvaluationResponse {
         this.evaluationTrustmarkDefinitionRequirementSatisfied = evaluationTrustmarkDefinitionRequirementSatisfied;
         this.evaluationTrustmarkDefinitionRequirementUnsatisfied = evaluationTrustmarkDefinitionRequirementUnsatisfied;
         this.evaluationCurrent = evaluationCurrent;
-        this.evaluation = evaluation;
     }
 
     public long getId() {
@@ -60,9 +55,5 @@ public class EvaluationResponse {
 
     public boolean isEvaluationCurrent() {
         return evaluationCurrent;
-    }
-
-    public JSONObject getEvaluation() {
-        return evaluation;
     }
 }

@@ -305,6 +305,9 @@ class BootStrap {
 
         jobDataMap.forEach({ key, value -> jobDetail.getJobDataMap().put(key, value) })
 
+        if (scheduler.checkExists(jobDetail.getKey())) {
+            scheduler.deleteJob(jobDetail.getKey())
+        }
         scheduler.scheduleJob(jobDetail, jobTrigger)
     }
 

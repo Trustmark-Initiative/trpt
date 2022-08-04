@@ -1,6 +1,5 @@
 package edu.gatech.gtri.trustmark.trpt.service.protectedSystem;
 
-import edu.gatech.gtri.trustmark.trpt.domain.PartnerOrganizationCandidateTrustInteroperabilityProfileUriHistory;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidate;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateTrustInteroperabilityProfileUri;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerSystemCandidateTrustInteroperabilityProfileUriHistory;
@@ -10,11 +9,11 @@ import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemTrustInteroperabilit
 import edu.gatech.gtri.trustmark.trpt.domain.ProtectedSystemType;
 import edu.gatech.gtri.trustmark.trpt.service.organization.OrganizationResponse;
 import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.EvaluationResponse;
+import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.EvaluationResponseWithTrustExpressionEvaluation;
 import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateResponse;
 import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateTrustInteroperabilityProfileResponse;
 import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation;
 import edu.gatech.gtri.trustmark.trpt.service.trustInteroperabilityProfile.TrustInteroperabilityProfileResponse;
-import edu.gatech.gtri.trustmark.trpt.service.trustInteroperabilityProfile.TrustInteroperabilityProfileUtility;
 import org.gtri.fj.Ordering;
 import org.gtri.fj.data.List;
 import org.gtri.fj.function.F1;
@@ -178,12 +177,12 @@ public final class ProtectedSystemResponseUtility {
         return new PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation(
                 trustInteroperabilityProfileResponse(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
                 Stream.concat(
-                                Stream.of(evaluationResponse(partnerSystemCandidateTrustInteroperabilityProfileUri)),
+                                Stream.of(evaluationResponseWithTrustExpressionEvaluation(partnerSystemCandidateTrustInteroperabilityProfileUri)),
                                 PartnerSystemCandidateTrustInteroperabilityProfileUriHistory
                                         .findAllByPartnerSystemCandidateTrustInteroperabilityProfileUriHelper(
                                                 partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper(),
                                                 partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper())
-                                        .map(ProtectedSystemResponseUtility::evaluationResponse)
+                                        .map(ProtectedSystemResponseUtility::evaluationResponseWithTrustExpressionEvaluation)
                                         .toJavaList()
                                         .stream())
                         .collect(Collectors.toList()));
@@ -197,6 +196,32 @@ public final class ProtectedSystemResponseUtility {
                 protectedSystemTrustInteroperabilityProfileUri.isMandatory());
     }
 
+    public static EvaluationResponseWithTrustExpressionEvaluation evaluationResponseWithTrustExpressionEvaluation(
+            final PartnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUri) {
+
+        return new EvaluationResponseWithTrustExpressionEvaluation(partnerSystemCandidateTrustInteroperabilityProfileUri.idHelper(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationAttemptLocalDateTime(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
+                true,
+                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : new JSONObject(stringFor(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression())));
+    }
+
+    public static EvaluationResponseWithTrustExpressionEvaluation evaluationResponseWithTrustExpressionEvaluation(
+            final PartnerSystemCandidateTrustInteroperabilityProfileUriHistory partnerSystemCandidateTrustInteroperabilityProfileUriHistory) {
+
+        return new EvaluationResponseWithTrustExpressionEvaluation(partnerSystemCandidateTrustInteroperabilityProfileUriHistory.idHelper(),
+                partnerSystemCandidateTrustInteroperabilityProfileUriHistory.getEvaluationAttemptLocalDateTime(),
+                partnerSystemCandidateTrustInteroperabilityProfileUriHistory.getEvaluationLocalDateTime(),
+                partnerSystemCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpressionSatisfied(),
+                partnerSystemCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
+                partnerSystemCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
+                false,
+                partnerSystemCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpression() == null ? null : new JSONObject(stringFor(partnerSystemCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpression())));
+    }
+
     public static EvaluationResponse evaluationResponse(
             final PartnerSystemCandidateTrustInteroperabilityProfileUri partnerSystemCandidateTrustInteroperabilityProfileUri) {
 
@@ -206,8 +231,7 @@ public final class ProtectedSystemResponseUtility {
                 partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied(),
                 partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
                 partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
-                true,
-                partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : new JSONObject(stringFor(partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression())));
+                true);
     }
 
     public static EvaluationResponse evaluationResponse(
@@ -219,7 +243,6 @@ public final class ProtectedSystemResponseUtility {
                 partnerSystemCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpressionSatisfied(),
                 partnerSystemCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
                 partnerSystemCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
-                false,
-                partnerSystemCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpression() == null ? null : new JSONObject(stringFor(partnerSystemCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpression())));
+                false);
     }
 }

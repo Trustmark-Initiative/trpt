@@ -1,6 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.service.partnerOrganizationCandidate;
 
-import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.EvaluationResponse;
+import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.EvaluationResponseWithTrustExpressionEvaluation;
 import edu.gatech.gtri.trustmark.trpt.service.trustInteroperabilityProfile.TrustInteroperabilityProfileResponse;
 
 import java.util.List;
@@ -8,11 +8,11 @@ import java.util.List;
 public class PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation {
 
     private final TrustInteroperabilityProfileResponse trustInteroperabilityProfile;
-    private final List<EvaluationResponse> evaluationList;
+    private final List<EvaluationResponseWithTrustExpressionEvaluation> evaluationList;
 
     public PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation(
             final TrustInteroperabilityProfileResponse trustInteroperabilityProfile,
-            final List<EvaluationResponse> evaluationList) {
+            final List<EvaluationResponseWithTrustExpressionEvaluation> evaluationList) {
         this.trustInteroperabilityProfile = trustInteroperabilityProfile;
         this.evaluationList = evaluationList;
     }
@@ -21,7 +21,7 @@ public class PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWit
         return trustInteroperabilityProfile;
     }
 
-    public List<EvaluationResponse> getEvaluationList() {
+    public List<EvaluationResponseWithTrustExpressionEvaluation> getEvaluationList() {
         return evaluationList;
     }
 }
