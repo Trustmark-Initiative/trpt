@@ -43,6 +43,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.fileFor;
+import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.stringFor;
 import static edu.gatech.gtri.trustmark.trpt.service.job.RetryTemplateUtility.retry;
 import static java.lang.String.format;
 import static org.gtri.fj.data.Either.reduce;
@@ -205,11 +206,6 @@ public class JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri 
                         .map(PartnerSystemCandidateTrustmarkUri::trustmarkUriHelper)
                         .map(TrustmarkUri::getUri));
 
-// For now, don't save the trust expression evaluation json.
-        final String trustExpressionEvaluationJsonString = jsonProducerForTrustExpressionEvaluation
-                .serialize(trustExpressionEvaluation)
-                .toString(4);
-
         final TrustmarkDefinitionRequirementEvaluation trustmarkDefinitionRequirementEvaluation = trustmarkDefinitionRequirementEvaluator.evaluate(
                 partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(),
                 partnerSystemCandidateTrustInteroperabilityProfileUri
@@ -223,50 +219,90 @@ public class JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri 
                         partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper())
                 .forEach(partnerSystemCandidateTrustInteroperabilityProfileUriInner -> {
 
-                    final PartnerSystemCandidateTrustInteroperabilityProfileUriHistory partnerSystemCandidateTrustInteroperabilityProfileUriHistory = new PartnerSystemCandidateTrustInteroperabilityProfileUriHistory();
-                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationAttemptLocalDateTime(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationAttemptLocalDateTime());
-                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationLocalDateTime(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationLocalDateTime());
-                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustExpressionSatisfied(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpressionSatisfied());
-                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustExpression(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpression());
-                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustmarkDefinitionRequirementSatisfied(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementSatisfied());
-                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustmarkDefinitionRequirementUnsatisfied(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementUnsatisfied());
-                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustmarkDefinitionRequirement(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirement());
-                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.partnerSystemCandidateHelper(partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper());
-                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.trustInteroperabilityProfileUriHelper(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper());
-                    partnerSystemCandidateTrustInteroperabilityProfileUriHistory.saveHelper();
+                    final LocalDateTime evaluationLocalDateTime = LocalDateTime.now(ZoneOffset.UTC);
 
-                    final LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+                    final String evaluationTrustExpressionString = jsonProducerForTrustExpressionEvaluation
+                            .serialize(trustExpressionEvaluation)
+                            .toString(4);
 
-                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationLocalDateTime(now);
-                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustExpression(fileFor(trustExpressionEvaluationJsonString));
-
-// For now, don't save the trustmark definition requirement evaluation json; it is not currently in use.
-//                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustmarkDefinitionRequirement(fileFor(jsonProducerForTrustmarkDefinitionRequirementEvaluation
+//                    final File evaluationTrustmarkDefinitionRequirement = fileFor(jsonProducerForTrustmarkDefinitionRequirementEvaluation
 //                            .serialize(trustmarkDefinitionRequirementEvaluation)
-//                            .toString()));
+//                            .toString(4));
 
-                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustExpressionSatisfied(
-                            reduce(trustExpressionEvaluation.getTrustExpression().getData().toEither().bimap(
-                                    nel -> null,
-                                    data -> data.matchValueBoolean(
-                                            value -> value,
-                                            () -> null))));
+                    final boolean evaluationTrustExpressionSatisfied = reduce(trustExpressionEvaluation.getTrustExpression().getData().toEither().bimap(
+                            nel -> null,
+                            data -> data.matchValueBoolean(
+                                    value -> value,
+                                    () -> null)));
 
-                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustmarkDefinitionRequirementSatisfied(
-                            trustmarkDefinitionRequirementEvaluation
-                                    .getTrustmarkDefinitionRequirementSatisfaction()
-                                    .map(list -> list
-                                            .filter(pInner -> pInner._2().isNotEmpty())
-                                            .length())
-                                    .orSuccess((Integer) null));
+                    final int evaluationTrustmarkDefinitionRequirementSatisfied = trustmarkDefinitionRequirementEvaluation
+                            .getTrustmarkDefinitionRequirementSatisfaction()
+                            .map(list -> list
+                                    .filter(pInner -> pInner._2().isNotEmpty())
+                                    .length())
+                            .orSuccess((Integer) null);
 
-                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustmarkDefinitionRequirementUnsatisfied(
-                            trustmarkDefinitionRequirementEvaluation
-                                    .getTrustmarkDefinitionRequirementSatisfaction()
-                                    .map(list -> list
-                                            .filter(pInner -> pInner._2().isEmpty())
-                                            .length())
-                                    .orSuccess((Integer) null));
+                    final int evaluationTrustmarkDefinitionRequirementUnsatisfied = trustmarkDefinitionRequirementEvaluation
+                            .getTrustmarkDefinitionRequirementSatisfaction()
+                            .map(list -> list
+                                    .filter(pInner -> pInner._2().isEmpty())
+                                    .length())
+                            .orSuccess((Integer) null);
+
+                    if (partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpression() != null &&
+                            ((evaluationTrustExpressionSatisfied != partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpressionSatisfied()) ||
+                                    (evaluationTrustmarkDefinitionRequirementUnsatisfied != partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()) ||
+                                    (evaluationTrustmarkDefinitionRequirementSatisfied != partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementSatisfied()) ||
+                                    (!evaluationTrustExpressionString.equals(stringFor(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpression()))))) {
+
+                        if (evaluationTrustExpressionSatisfied != partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpressionSatisfied()) {
+                            log.info(format("Evaluation for trust interoperability profile '%s' and partner system candidate '%s' changed; trust expression satisfaction changed from '%s' to '%s'.",
+                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.trustInteroperabilityProfileUriHelper().getUri(),
+                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.partnerSystemCandidateHelper().getName(),
+                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpressionSatisfied(),
+                                    evaluationTrustExpressionSatisfied));
+                        }
+
+                        if (evaluationTrustmarkDefinitionRequirementUnsatisfied != partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()) {
+                            log.info(format("Evaluation for trust interoperability profile '%s' and partner system candidate '%s' changed; trustmark definition requirements unsatisfied changed from '%s' to '%s'.",
+                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.trustInteroperabilityProfileUriHelper().getUri(),
+                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.partnerSystemCandidateHelper().getName(),
+                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
+                                    evaluationTrustmarkDefinitionRequirementUnsatisfied));
+                        }
+
+                        if (evaluationTrustmarkDefinitionRequirementSatisfied != partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementSatisfied()) {
+                            log.info(format("Evaluation for trust interoperability profile '%s' and partner system candidate '%s' changed; trustmark definition requirements satisfied changed from '%s' to '%s'.",
+                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.trustInteroperabilityProfileUriHelper().getUri(),
+                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.partnerSystemCandidateHelper().getName(),
+                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
+                                    evaluationTrustmarkDefinitionRequirementSatisfied));
+                        }
+
+                        if (!evaluationTrustExpressionString.equals(stringFor(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpression()))) {
+                            log.info(format("Evaluation for trust interoperability profile '%s' and partner system candidate '%s' changed; trust expression evaluation changed.",
+                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.trustInteroperabilityProfileUriHelper().getUri(),
+                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.partnerSystemCandidateHelper().getName()));
+                        }
+
+                        final PartnerSystemCandidateTrustInteroperabilityProfileUriHistory partnerSystemCandidateTrustInteroperabilityProfileUriHistory = new PartnerSystemCandidateTrustInteroperabilityProfileUriHistory();
+                        partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationAttemptLocalDateTime(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationAttemptLocalDateTime());
+                        partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationLocalDateTime(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationLocalDateTime());
+                        partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustExpressionSatisfied(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpressionSatisfied());
+                        partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustExpression(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpression());
+                        partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustmarkDefinitionRequirementSatisfied(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementSatisfied());
+                        partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustmarkDefinitionRequirementUnsatisfied(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementUnsatisfied());
+                        partnerSystemCandidateTrustInteroperabilityProfileUriHistory.setEvaluationTrustmarkDefinitionRequirement(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirement());
+                        partnerSystemCandidateTrustInteroperabilityProfileUriHistory.partnerSystemCandidateHelper(partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper());
+                        partnerSystemCandidateTrustInteroperabilityProfileUriHistory.trustInteroperabilityProfileUriHelper(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper());
+                        partnerSystemCandidateTrustInteroperabilityProfileUriHistory.saveHelper();
+                    }
+
+                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationLocalDateTime(evaluationLocalDateTime);
+                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustExpression(fileFor(evaluationTrustExpressionString));
+                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustExpressionSatisfied(evaluationTrustExpressionSatisfied);
+                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustmarkDefinitionRequirementSatisfied(evaluationTrustmarkDefinitionRequirementSatisfied);
+                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustmarkDefinitionRequirementUnsatisfied(evaluationTrustmarkDefinitionRequirementUnsatisfied);
 
                     ProtectedSystemPartnerSystemCandidate.executeUpdateHelper("DELETE FROM ProtectedSystemPartnerSystemCandidate protectedSystemPartnerSystemCandidate " +
                             "WHERE id IN (SELECT DISTINCT protectedSystemPartnerSystemCandidateInner.id FROM ProtectedSystemPartnerSystemCandidate protectedSystemPartnerSystemCandidateInner " +
@@ -287,7 +323,7 @@ public class JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri 
 
                         final PartnerSystemCandidateMailEvaluationUpdate partnerSystemCandidateMailEvaluationUpdate = new PartnerSystemCandidateMailEvaluationUpdate();
                         partnerSystemCandidateMailEvaluationUpdate.partnerSystemCandidateTrustInteroperabilityProfileUriHelper(partnerSystemCandidateTrustInteroperabilityProfileUriInner);
-                        partnerSystemCandidateMailEvaluationUpdate.setRequestDateTime(now);
+                        partnerSystemCandidateMailEvaluationUpdate.setRequestDateTime(evaluationLocalDateTime);
                         partnerSystemCandidateMailEvaluationUpdate.saveHelper();
 
                         partnerSystemCandidateTrustInteroperabilityProfileUriInner.partnerSystemCandidateMailEvaluationUpdateSetHelper(
