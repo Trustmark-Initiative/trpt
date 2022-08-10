@@ -453,6 +453,24 @@
     float: right;
 }
 
+select.EvaluationLocalDateTime {
+    width: 300px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.EvaluationExpand {
+    float: right;
+    padding-right: 5px;
+    margin-right: 5px;
+    border-right: 1px solid lightgray;
+}
+
+.EvaluationCollapse {
+    float: right;
+    padding-right: 10px;
+}
+
 .TrustExpressionTop > .TrustInteroperabilityProfileInner > .EvaluationLocalDateTime {
     display: inline;
 }

@@ -444,7 +444,7 @@ public class UriSynchronizer<T1 extends HasIdentifier, T2 extends Uri, T3 extend
      * @return the URI
      */
     private T2 updateUri(final T2 uriRequest, final T2 uriResolve, final F1<T2, T2> uriUpdate) {
-        return uriSave.f(uriUpdate.f(uriCoalesce.f(uriResolve, uriRequest)));
+        return uriSave.f(uriUpdate.f(uriCoalesce.f(uriRequest, uriResolve)));
     }
 
     private T2 onDocumentSuccess(
@@ -473,7 +473,7 @@ public class UriSynchronizer<T1 extends HasIdentifier, T2 extends Uri, T3 extend
 
         } else {
 
-            log.info(format("%s uri '%s' document did not change.", nameForHasSource, uri.getUri()));
+            log.trace(format("%s uri '%s' document did not change.", nameForHasSource, uri.getUri()));
         }
 
         return uri;

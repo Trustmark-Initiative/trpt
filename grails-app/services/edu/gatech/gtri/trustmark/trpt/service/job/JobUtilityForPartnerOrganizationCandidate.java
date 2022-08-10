@@ -148,7 +148,7 @@ public class JobUtilityForPartnerOrganizationCandidate {
 
                                     } else {
 
-                                        log.info(format("Trustmark binding registry organization map uri '%s' content changed; partner organization candidate uri '%s' content did not change.", trustmarkBindingRegistryOrganizationMapUri.getUri(), partnerOrganizationCandidateOld.getIdentifier()));
+                                        log.trace(format("Trustmark binding registry organization map uri '%s' content changed; partner organization candidate uri '%s' content did not change.", trustmarkBindingRegistryOrganizationMapUri.getUri(), partnerOrganizationCandidateOld.getIdentifier()));
                                     }
 
                                     return p(

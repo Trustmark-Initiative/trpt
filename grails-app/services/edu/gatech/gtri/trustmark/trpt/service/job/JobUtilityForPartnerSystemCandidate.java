@@ -149,7 +149,7 @@ public class JobUtilityForPartnerSystemCandidate {
 
                                     } else {
 
-                                        log.info(format("Trustmark binding registry system map uri '%s' content changed; partner system candidate uri '%s' content did not change.", trustmarkBindingRegistrySystemMapUriType.getUri(), partnerSystemCandidateOld.getUri()));
+                                        log.trace(format("Trustmark binding registry system map uri '%s' content changed; partner system candidate uri '%s' content did not change.", trustmarkBindingRegistrySystemMapUriType.getUri(), partnerSystemCandidateOld.getUri()));
                                     }
 
                                     return p(

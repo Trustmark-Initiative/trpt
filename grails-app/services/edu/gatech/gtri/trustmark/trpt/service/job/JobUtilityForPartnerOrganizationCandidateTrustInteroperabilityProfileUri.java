@@ -178,7 +178,7 @@ public class JobUtilityForPartnerOrganizationCandidateTrustInteroperabilityProfi
 
         } else {
 
-            log.info(format("Evaluation for trust interoperability profile '%s' and partner organization candidate '%s' unchanged.",
+            log.trace(format("Evaluation for trust interoperability profile '%s' and partner organization candidate '%s' did not change.",
                     partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(),
                     partnerOrganizationCandidateTrustInteroperabilityProfileUri.partnerOrganizationCandidateHelper().getName()));
 
@@ -206,6 +206,16 @@ public class JobUtilityForPartnerOrganizationCandidateTrustInteroperabilityProfi
                         .map(PartnerOrganizationCandidateTrustmarkUri::trustmarkUriHelper)
                         .map(TrustmarkUri::getUri));
 
+        // identify the source of the occasional NullPointerException
+        log.info(format("partnerSystemCandidateTrustInteroperabilityProfileUri => %s", partnerOrganizationCandidateTrustInteroperabilityProfileUri));
+        log.info(format("partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper() => %s", partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()));
+        log.info(format("partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri() => %s", partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri()));
+        log.info(format("partnerSystemCandidateTrustInteroperabilityProfileUri => %s", partnerOrganizationCandidateTrustInteroperabilityProfileUri));
+        log.info(format("partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper() => %s", partnerOrganizationCandidateTrustInteroperabilityProfileUri.partnerOrganizationCandidateHelper()));
+        log.info(format("partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper().partnerSystemCandidateTrustmarkUriSetHelper() is null? => %s", partnerOrganizationCandidateTrustInteroperabilityProfileUri.partnerOrganizationCandidateHelper().partnerOrganizationCandidateTrustmarkUriSetHelper() == null));
+        log.info(format("partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper().partnerSystemCandidateTrustmarkUriSetHelper().map(PartnerSystemCandidateTrustmarkUri::trustmarkUriHelper) is null? => %s", partnerOrganizationCandidateTrustInteroperabilityProfileUri.partnerOrganizationCandidateHelper().partnerOrganizationCandidateTrustmarkUriSetHelper().map(PartnerOrganizationCandidateTrustmarkUri::trustmarkUriHelper) == null));
+        log.info(format("partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper().partnerSystemCandidateTrustmarkUriSetHelper().map(PartnerSystemCandidateTrustmarkUri::trustmarkUriHelper).map(TrustmarkUri::getUri) is null? => %s", partnerOrganizationCandidateTrustInteroperabilityProfileUri.partnerOrganizationCandidateHelper().partnerOrganizationCandidateTrustmarkUriSetHelper().map(PartnerOrganizationCandidateTrustmarkUri::trustmarkUriHelper).map(TrustmarkUri::getUri) == null));
+
         final TrustmarkDefinitionRequirementEvaluation trustmarkDefinitionRequirementEvaluation = trustmarkDefinitionRequirementEvaluator.evaluate(
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(),
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri
@@ -229,20 +239,20 @@ public class JobUtilityForPartnerOrganizationCandidateTrustInteroperabilityProfi
 //                            .serialize(trustmarkDefinitionRequirementEvaluation)
 //                            .toString(4));
 
-                    final boolean evaluationTrustExpressionSatisfied = reduce(trustExpressionEvaluation.getTrustExpression().getData().toEither().bimap(
+                    final Boolean evaluationTrustExpressionSatisfied = reduce(trustExpressionEvaluation.getTrustExpression().getData().toEither().bimap(
                             nel -> null,
                             data -> data.matchValueBoolean(
                                     value -> value,
                                     () -> null)));
 
-                    final int evaluationTrustmarkDefinitionRequirementSatisfied = trustmarkDefinitionRequirementEvaluation
+                    final Integer evaluationTrustmarkDefinitionRequirementSatisfied = trustmarkDefinitionRequirementEvaluation
                             .getTrustmarkDefinitionRequirementSatisfaction()
                             .map(list -> list
                                     .filter(pInner -> pInner._2().isNotEmpty())
                                     .length())
                             .orSuccess((Integer) null);
 
-                    final int evaluationTrustmarkDefinitionRequirementUnsatisfied = trustmarkDefinitionRequirementEvaluation
+                    final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied = trustmarkDefinitionRequirementEvaluation
                             .getTrustmarkDefinitionRequirementSatisfaction()
                             .map(list -> list
                                     .filter(pInner -> pInner._2().isEmpty())

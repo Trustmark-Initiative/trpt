@@ -114,9 +114,6 @@ function initialize(
                             const select = document.createElement("select")
                             select.classList.add("EvaluationLocalDateTime")
                             select.classList.add("form-select")
-                            select.style.width = "300px"
-                            select.style.paddingTop = "0px"
-                            select.style.paddingBottom = "0px"
                             select.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationList
                                 .filter(evaluation => evaluation.evaluationLocalDateTime != null)
                                 .sort((evaluation1, evaluation2) => moment(evaluation2.evaluationLocalDateTime).toDate() - moment(evaluation1.evaluationLocalDateTime).toDate())
@@ -130,6 +127,31 @@ function initialize(
                             });
 
                             label.parentNode.replaceChild(select, label)
+
+                            const collapse = document.createElement("span")
+                            collapse.classList.add("bi")
+                            collapse.classList.add("bi-arrows-collapse")
+                            collapse.classList.add("EvaluationCollapse")
+                            collapse.addEventListener("click", (event) => {
+                                Array.from(event.target.parentNode.parentNode.querySelectorAll("input[type='checkbox']")).forEach(input => {
+                                    input.checked = false
+                                })
+                                event.preventDefault()
+                            });
+
+                            const expand = document.createElement("span")
+                            expand.classList.add("bi")
+                            expand.classList.add("bi-arrows-expand")
+                            expand.classList.add("EvaluationExpand")
+                            expand.addEventListener("click", (event) => {
+                                Array.from(event.target.parentNode.parentNode.querySelectorAll("input[type='checkbox']")).forEach(input => {
+                                    input.checked = true
+                                })
+                                event.preventDefault()
+                            });
+
+                            select.parentNode.appendChild(collapse)
+                            select.parentNode.appendChild(expand)
                         }))
         }
 

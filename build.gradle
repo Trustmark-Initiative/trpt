@@ -31,7 +31,7 @@ plugins {
 // Maven coordinates.
 // These must appear before "apply plugin" for version to appear in grails.build.info.
 
-version '1.1.4'
+version '1.1.5'
 group 'edu.gatech.gtri.trustmark.trpt'
 
 // With the introduction of the plugins DSL, users should have little reason to use the legacy method of applying
