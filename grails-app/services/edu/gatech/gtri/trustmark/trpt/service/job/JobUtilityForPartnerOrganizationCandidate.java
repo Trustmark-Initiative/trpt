@@ -23,7 +23,6 @@ import org.json.JSONArray;
 import org.springframework.security.crypto.codec.Hex;
 
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -108,6 +107,8 @@ public class JobUtilityForPartnerOrganizationCandidate {
                                     partnerOrganizationCandidateOld.setNameLong(trustmarkBindingRegistryOrganization.getDisplayName());
                                     partnerOrganizationCandidateOld.setDescription(trustmarkBindingRegistryOrganization.getDescription());
 
+                                    partnerOrganizationCandidateOld.setTrustmarkRecipientIdentifierArrayJson(new JSONArray(trustmarkBindingRegistryOrganization.getTrustmarkRecipientIdentifiers().map(URI::toString).toCollection()).toString());
+
                                     partnerOrganizationCandidateOld.setRequestLocalDateTime(now);
                                     partnerOrganizationCandidateOld.setSuccessLocalDateTime(now);
 
@@ -158,7 +159,7 @@ public class JobUtilityForPartnerOrganizationCandidate {
                                 })
                                 .orSome(() -> {
 
-                                    log.info(format("Trustmark binding registry organization map uri '%s' content changed; partner organization candidate uri '%s' relying on cache, if any.", trustmarkBindingRegistryOrganizationMapUri.getUri(), partnerOrganizationCandidateOld.getIdentifier()));
+                                    log.info(format("Trustmark binding registry organization map uri '%s' content changed; partner organization candidate uri '%s' removed.", trustmarkBindingRegistryOrganizationMapUri.getUri(), partnerOrganizationCandidateOld.getIdentifier()));
 
                                     partnerOrganizationCandidateOld.setRequestLocalDateTime(now);
                                     partnerOrganizationCandidateOld.setFailureLocalDateTime(now);
@@ -220,7 +221,7 @@ public class JobUtilityForPartnerOrganizationCandidate {
 
         pUpdate2._1().forEach(partnerOrganizationCandidate -> partnerOrganizationCandidate.saveHelper()); // insert
         pUpdate2._2().forEach(partnerOrganizationCandidate -> partnerOrganizationCandidate.saveHelper()); // update
-        pUpdate2._3().forEach(partnerOrganizationCandidate -> partnerOrganizationCandidate.saveHelper()); // delete?
+        pUpdate2._3().forEach(partnerOrganizationCandidate -> partnerOrganizationCandidate.deleteHelper()); // delete
 
         // synchronize evaluations, if necessary
 //
@@ -228,8 +229,7 @@ public class JobUtilityForPartnerOrganizationCandidate {
 
         trustmarkBindingRegistryOrganizationMapUri.partnerOrganizationCandidateSetHelper(
                 pUpdate2._1()
-                        .append(pUpdate2._2())
-                        .append(pUpdate2._3()));
+                        .append(pUpdate2._2()));
 
         trustmarkBindingRegistryOrganizationMapUri.saveHelper();
     }

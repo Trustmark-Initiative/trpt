@@ -60,7 +60,7 @@ class PartnerSystemCandidate {
             protectedSystemPartnerSystemCandidateSet                : ProtectedSystemPartnerSystemCandidate,
     ]
 
-    static hasOne = [
+    static belongsTo = [
             trustmarkBindingRegistrySystemMapUriType: TrustmarkBindingRegistrySystemMapUriType
     ]
 

@@ -57,7 +57,7 @@ public final class FileUtility {
         return gunzip(file.getData()).toOption().orSome(new byte[]{});
     }
 
-    private static final boolean compress = true;
+    private static final boolean compress = false;
 
     public static Validation<IOException, byte[]> gzip(final byte[] byteArray) {
 

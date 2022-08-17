@@ -267,7 +267,9 @@ class BootStrap {
 
     private void initializeJob() {
 
-        final SchedulerFactory schedulerFactory = new StdSchedulerFactory()
+        final Properties properties = new Properties();
+        properties.setProperty("org.quartz.threadPool.threadCount", "1")
+        final SchedulerFactory schedulerFactory = new StdSchedulerFactory(properties)
         final Scheduler scheduler = schedulerFactory.getScheduler()
 
         initializeJobHelper(scheduler, JobForTrustmarkUri.class, ApplicationProperties.propertyNameJobForTrustmarkUriCronExpression, new HashMap<String, Object>())

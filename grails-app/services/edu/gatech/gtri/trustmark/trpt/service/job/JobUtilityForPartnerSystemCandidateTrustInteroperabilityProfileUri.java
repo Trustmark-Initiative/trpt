@@ -34,6 +34,7 @@ import edu.gatech.gtri.trustmark.v1_0.trust.TrustmarkVerifierFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gtri.fj.data.List;
+import org.gtri.fj.data.Option;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -49,6 +50,13 @@ import static java.lang.String.format;
 import static org.gtri.fj.data.Either.reduce;
 import static org.gtri.fj.data.List.iterableList;
 import static org.gtri.fj.data.List.nil;
+import static org.gtri.fj.data.Option.fromNull;
+import static org.gtri.fj.data.Option.none;
+import static org.gtri.fj.data.Option.optionEqual;
+import static org.gtri.fj.data.Option.some;
+import static org.gtri.fj.lang.BooleanUtility.booleanEqual;
+import static org.gtri.fj.lang.IntegerUtility.intEqual;
+import static org.gtri.fj.lang.StringUtility.stringEqual;
 
 public class JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri {
 
@@ -132,14 +140,18 @@ public class JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri 
 
         } else if (partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime().isBefore(partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getDocumentChangeLocalDateTime())) {
 
-            log.info(format("Evaluation for trust interoperability profile '%s' and partner system candidate '%s' changed (due to changed trust interoperability profile); re-evaluating...",
+            log.info(format("Evaluation (%s) for trust interoperability profile '%s' (%s) and partner system candidate '%s' changed (due to changed trust interoperability profile); re-evaluating...",
+                    partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime(),
                     partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(),
+                    partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getDocumentChangeLocalDateTime(),
                     partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper().getName()));
 
             synchronizePartnerSystemCandidateTrustInteroperabilityProfileUri(partnerSystemCandidateTrustInteroperabilityProfileUri, true);
 
-            log.info(format("Evaluation for trust interoperability profile '%s' and partner system candidate '%s' changed (due to changed trust interoperability profile); re-evaluated",
+            log.info(format("Evaluation (%s) for trust interoperability profile '%s' (%s) and partner system candidate '%s' changed (due to changed trust interoperability profile); re-evaluated",
+                    partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime(),
                     partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(),
+                    partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getDocumentChangeLocalDateTime(),
                     partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper().getName()));
 
         } else if (partnerSystemCandidateTrustInteroperabilityProfileUri
@@ -166,13 +178,15 @@ public class JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri 
 
         } else if (partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime().isBefore(LocalDateTime.now(ZoneOffset.UTC).minus(duration))) {
 
-            log.info(format("Evaluation for trust interoperability profile '%s' and partner system candidate '%s' expired; re-evaluating...",
+            log.info(format("Evaluation (%s) for trust interoperability profile '%s' and partner system candidate '%s' expired; re-evaluating...",
+                    partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime(),
                     partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(),
                     partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper().getName()));
 
             synchronizePartnerSystemCandidateTrustInteroperabilityProfileUri(partnerSystemCandidateTrustInteroperabilityProfileUri, false);
 
-            log.info(format("Evaluation for trust interoperability profile '%s' and partner system candidate '%s' expired; re-evaluated.",
+            log.info(format("Evaluation (%s) for trust interoperability profile '%s' and partner system candidate '%s' expired; re-evaluated.",
+                    partnerSystemCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime(),
                     partnerSystemCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper().getUri(),
                     partnerSystemCandidateTrustInteroperabilityProfileUri.partnerSystemCandidateHelper().getName()));
 
@@ -239,57 +253,56 @@ public class JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri 
 //                            .serialize(trustmarkDefinitionRequirementEvaluation)
 //                            .toString(4));
 
-                    final Boolean evaluationTrustExpressionSatisfied = reduce(trustExpressionEvaluation.getTrustExpression().getData().toEither().bimap(
-                            nel -> null,
+                    final Option<Boolean> evaluationTrustExpressionSatisfied = reduce(trustExpressionEvaluation.getTrustExpression().getData().toEither().bimap(
+                            nel -> none(),
                             data -> data.matchValueBoolean(
-                                    value -> value,
-                                    () -> null)));
+                                    value -> some(value),
+                                    () -> none())));
 
-                    final Integer evaluationTrustmarkDefinitionRequirementSatisfied = trustmarkDefinitionRequirementEvaluation
+                    final Option<Integer> evaluationTrustmarkDefinitionRequirementSatisfied = trustmarkDefinitionRequirementEvaluation
                             .getTrustmarkDefinitionRequirementSatisfaction()
-                            .map(list -> list
+                            .map(list -> some(list
                                     .filter(pInner -> pInner._2().isNotEmpty())
-                                    .length())
-                            .orSuccess((Integer) null);
+                                    .length()))
+                            .orSuccess(none());
 
-                    final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied = trustmarkDefinitionRequirementEvaluation
+                    final Option<Integer> evaluationTrustmarkDefinitionRequirementUnsatisfied = trustmarkDefinitionRequirementEvaluation
                             .getTrustmarkDefinitionRequirementSatisfaction()
-                            .map(list -> list
+                            .map(list -> some(list
                                     .filter(pInner -> pInner._2().isEmpty())
-                                    .length())
-                            .orSuccess((Integer) null);
+                                    .length()))
+                            .orSuccess(none());
 
-                    if (partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpression() != null &&
-                            ((evaluationTrustExpressionSatisfied != partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpressionSatisfied()) ||
-                                    (evaluationTrustmarkDefinitionRequirementUnsatisfied != partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()) ||
-                                    (evaluationTrustmarkDefinitionRequirementSatisfied != partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementSatisfied()) ||
-                                    (!evaluationTrustExpressionString.equals(stringFor(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpression()))))) {
+                    if ((!optionEqual(booleanEqual).eq(evaluationTrustExpressionSatisfied, fromNull(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpressionSatisfied()))) ||
+                            (!optionEqual(intEqual).eq(evaluationTrustmarkDefinitionRequirementUnsatisfied, fromNull(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()))) ||
+                            (!optionEqual(intEqual).eq(evaluationTrustmarkDefinitionRequirementSatisfied, fromNull(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementSatisfied()))) ||
+                            (!optionEqual(stringEqual).eq(fromNull(evaluationTrustExpressionString), fromNull(stringFor(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpression()))))) {
 
-                        if (evaluationTrustExpressionSatisfied != partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpressionSatisfied()) {
+                        if (!optionEqual(booleanEqual).eq(evaluationTrustExpressionSatisfied, fromNull(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpressionSatisfied()))) {
                             log.info(format("Evaluation for trust interoperability profile '%s' and partner system candidate '%s' changed; trust expression satisfaction changed from '%s' to '%s'.",
                                     partnerSystemCandidateTrustInteroperabilityProfileUriInner.trustInteroperabilityProfileUriHelper().getUri(),
                                     partnerSystemCandidateTrustInteroperabilityProfileUriInner.partnerSystemCandidateHelper().getName(),
-                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpressionSatisfied(),
+                                    fromNull(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpressionSatisfied()),
                                     evaluationTrustExpressionSatisfied));
                         }
 
-                        if (evaluationTrustmarkDefinitionRequirementUnsatisfied != partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()) {
+                        if (!optionEqual(intEqual).eq(evaluationTrustmarkDefinitionRequirementUnsatisfied, fromNull(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()))) {
                             log.info(format("Evaluation for trust interoperability profile '%s' and partner system candidate '%s' changed; trustmark definition requirements unsatisfied changed from '%s' to '%s'.",
                                     partnerSystemCandidateTrustInteroperabilityProfileUriInner.trustInteroperabilityProfileUriHelper().getUri(),
                                     partnerSystemCandidateTrustInteroperabilityProfileUriInner.partnerSystemCandidateHelper().getName(),
-                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
+                                    fromNull(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementUnsatisfied()),
                                     evaluationTrustmarkDefinitionRequirementUnsatisfied));
                         }
 
-                        if (evaluationTrustmarkDefinitionRequirementSatisfied != partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementSatisfied()) {
+                        if (!optionEqual(intEqual).eq(evaluationTrustmarkDefinitionRequirementSatisfied, fromNull(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementSatisfied()))) {
                             log.info(format("Evaluation for trust interoperability profile '%s' and partner system candidate '%s' changed; trustmark definition requirements satisfied changed from '%s' to '%s'.",
                                     partnerSystemCandidateTrustInteroperabilityProfileUriInner.trustInteroperabilityProfileUriHelper().getUri(),
                                     partnerSystemCandidateTrustInteroperabilityProfileUriInner.partnerSystemCandidateHelper().getName(),
-                                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
+                                    fromNull(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustmarkDefinitionRequirementSatisfied()),
                                     evaluationTrustmarkDefinitionRequirementSatisfied));
                         }
 
-                        if (!evaluationTrustExpressionString.equals(stringFor(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpression()))) {
+                        if (!optionEqual(stringEqual).eq(fromNull(evaluationTrustExpressionString), fromNull(stringFor(partnerSystemCandidateTrustInteroperabilityProfileUriInner.getEvaluationTrustExpression())))) {
                             log.info(format("Evaluation for trust interoperability profile '%s' and partner system candidate '%s' changed; trust expression evaluation changed.",
                                     partnerSystemCandidateTrustInteroperabilityProfileUriInner.trustInteroperabilityProfileUriHelper().getUri(),
                                     partnerSystemCandidateTrustInteroperabilityProfileUriInner.partnerSystemCandidateHelper().getName()));
@@ -310,9 +323,9 @@ public class JobUtilityForPartnerSystemCandidateTrustInteroperabilityProfileUri 
 
                     partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationLocalDateTime(evaluationLocalDateTime);
                     partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustExpression(fileFor(evaluationTrustExpressionString));
-                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustExpressionSatisfied(evaluationTrustExpressionSatisfied);
-                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustmarkDefinitionRequirementSatisfied(evaluationTrustmarkDefinitionRequirementSatisfied);
-                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustmarkDefinitionRequirementUnsatisfied(evaluationTrustmarkDefinitionRequirementUnsatisfied);
+                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustExpressionSatisfied(evaluationTrustExpressionSatisfied.toNull());
+                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustmarkDefinitionRequirementSatisfied(evaluationTrustmarkDefinitionRequirementSatisfied.toNull());
+                    partnerSystemCandidateTrustInteroperabilityProfileUriInner.setEvaluationTrustmarkDefinitionRequirementUnsatisfied(evaluationTrustmarkDefinitionRequirementUnsatisfied.toNull());
 
                     ProtectedSystemPartnerSystemCandidate.executeUpdateHelper("DELETE FROM ProtectedSystemPartnerSystemCandidate protectedSystemPartnerSystemCandidate " +
                             "WHERE id IN (SELECT DISTINCT protectedSystemPartnerSystemCandidateInner.id FROM ProtectedSystemPartnerSystemCandidate protectedSystemPartnerSystemCandidateInner " +

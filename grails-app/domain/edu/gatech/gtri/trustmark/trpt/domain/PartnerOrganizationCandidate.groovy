@@ -26,7 +26,6 @@ class PartnerOrganizationCandidate {
     LocalDateTime changeLocalDateTime
     String failureMessage
 
-
     static constraints = {
         identifier nullable: true
         name nullable: true
@@ -60,7 +59,7 @@ class PartnerOrganizationCandidate {
             organizationPartnerOrganizationCandidateSet                   : OrganizationPartnerOrganizationCandidate,
     ]
 
-    static hasOne = [
+    static belongsTo = [
             trustmarkBindingRegistryOrganizationMapUri: TrustmarkBindingRegistryOrganizationMapUri
     ]
 
