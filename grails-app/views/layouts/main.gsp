@@ -7,6 +7,13 @@
         <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
         <asset:stylesheet src="application.css"/>
         <asset:javascript src="application.js"/>
+        <asset:javascript src="profile.js"/>
+
+        <script type="text/javascript">
+            profile(
+                "${createLink(controller:'profile', action: 'findOne')}",
+                "${createLink(uri:'/actuator/info')}");
+        </script>
 
         <title>${grailsApplication.config.getProperty('server.title')}</title>
 
@@ -14,64 +21,47 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <div class="navbar navbar-collapse p-0">
+        <main>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item fw-bold pe-4"><a class="nav-link" href="${createLink(uri: "/")}">Trustmark Relying Party Tool</a></li>
-                        <sec:ifLoggedIn>
-                            <sec:ifAllGranted roles="ROLE_ADMINISTRATOR">
-                                <li class="nav-item ps-4 pe-4"><a class="nav-link" href="${createLink(controller: "protectedSystem", action: "manage")}">Protected Systems</a></li>
-                                <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "trustmarkBindingRegistry", action: "manage")}">Trustmark Binding Registries</a></li>
-                                <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "organization", action: "manage")}">Organizations</a></li>
-                                <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "user", action: "manage")}">Users</a></li>
-                                <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "mail", action: "manage")}">Mail</a></li>
-                                <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "uriSet", action: "manage")}">Status</a></li>
-                            </sec:ifAllGranted>
-                            <sec:ifAllGranted roles="ROLE_ADMINISTRATOR_ORGANIZATION">
-                                <li class="nav-item ps-4 pe-4"><a class="nav-link" href="${createLink(controller: "protectedSystem", action: "manage")}">Protected Systems</a></li>
-                                <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "trustmarkBindingRegistry", action: "manage")}">Trustmark Binding Registries</a></li>
-                                <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "organization", action: "manage")}">Organizations</a></li>
-                                <li class="nav-item pe-4"><a class="nav-link" href="${createLink(controller: "user", action: "manage")}">Users</a></li>
-                            </sec:ifAllGranted>
-                        </sec:ifLoggedIn>
+                        <li class="d-none nav-item ps-4 pe-4 role-administrator-organization role-administrator"><a class="nav-link" href="${createLink(controller: "protectedSystem", action: "manage")}">Protected Systems</a></li>
+                        <li class="d-none nav-item pe-4      role-administrator-organization role-administrator"><a class="nav-link" href="${createLink(controller: "trustmarkBindingRegistry", action: "manage")}">Trustmark Binding Registries</a></li>
+                        <li class="d-none nav-item pe-4      role-administrator-organization role-administrator"><a class="nav-link" href="${createLink(controller: "organization", action: "manage")}">Organizations</a></li>
+                        <li class="d-none nav-item pe-4      role-administrator-organization role-administrator"><a class="nav-link" href="${createLink(controller: "user", action: "manage")}">Users</a></li>
+                        <li class="d-none nav-item pe-4                                      role-administrator"><a class="nav-link" href="${createLink(controller: "mail", action: "manage")}">Mail</a></li>
+                        <li class="d-none nav-item pe-4                                      role-administrator"><a class="nav-link" href="${createLink(controller: "uriSet", action: "manage")}">Status</a></li>
                     </ul>
-
                     <ul class="navbar-nav">
-                        <sec:ifLoggedIn>
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <sec:username/>
-                                </a>
+                        <li class="d-none log-in  nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
 
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="${createLink(controller: "password", action: "changeWithAuthentication")}">Change Password</a></li>
-                                    <li><a class="dropdown-item" href="${createLink(controller: "logout", action: "index")}">Logout</a></li>
-                                </ul>
-                            </li>
-                        </sec:ifLoggedIn>
-                        <sec:ifNotLoggedIn>
-                            <li class="nav-item"><a class="nav-link" href="${createLink(controller: "login")}">Login</a></li>
-                        </sec:ifNotLoggedIn>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="${createLink(controller: "password", action: "changeWithAuthentication")}">Change Password</a></li>
+                                <li><a class="dropdown-item" href="${createLink(controller: "logout", action: "index")}">Logout</a></li>
+                            </ul>
+                        </li>
+                        <li class="d-none log-out nav-item"><a class="nav-link" href="${createLink(controller: "login")}">Login</a></li>
                     </ul>
                 </div>
-            </div>
-        </nav>
+            </nav>
 
-        <div class="container pt-4">
-            <div class="row">
-                <div class="col-12">
-                    <asset:image src="tmi-header.png" height="90em"/>
+            <div class="container pt-4">
+                <div class="row">
+                    <div class="col-12">
+                        <asset:image src="tmi-header.png" height="90em"/>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <g:layoutBody/>
+            <g:layoutBody/>
+        </main>
 
-        <footer class="container pt-4">
-            <div class="row">
-                <div class="col-12 text-center">
-                    Copyright &copy; 2021 Georgia Tech Research Institute
+        <footer class="navbar navbar-expand-lg navbar-dark bg-dark mt-4 p-2">
+            <div class="container">
+                <div class="navbar-nav mx-auto">
+                    <a class="nav-link">Version <span id="application-version"></span>; Build Date <span id="git-commit-time"></span></a>
                 </div>
             </div>
         </footer>

@@ -37,7 +37,7 @@ class PartnerSystemCandidateTrustInteroperabilityProfileUri {
     }
 
     static mapping = {
-        table 'partner_system_candidate_trust_interoperability_profile_uri'
+        table 'psc_tip_uri'
     }
 
     static belongsTo = [

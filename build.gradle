@@ -24,8 +24,15 @@ buildscript {
 plugins {
     id 'com.diffplug.spotless' version '6.4.0'
     id 'com.github.ben-manes.versions' version '0.42.0'
+    id 'com.gorylenko.gradle-git-properties' version '2.4.1'
     id 'war'
 }
+
+// Maven coordinates.
+// These must appear before "apply plugin" for version to appear in grails.build.info.
+
+version '1.1.6'
+group 'edu.gatech.gtri.trustmark.trpt'
 
 // With the introduction of the plugins DSL, users should have little reason to use the legacy method of applying
 // plugins. It is documented here in case a build author cannot use the plugins DSL due to restrictions in how it
@@ -37,11 +44,6 @@ apply plugin: 'org.grails.grails-web' // web must appear before gsp; otherwise, 
 apply plugin: 'org.grails.grails-gsp'
 apply plugin: 'com.github.erdi.webdriver-binaries'
 apply plugin: 'com.bertramlabs.asset-pipeline' // asset-pipeline must appear after web; otherwise, the system fails to find a property.
-
-// Maven coordinates.
-
-version '1.1'
-group 'edu.gatech.gtri.trustmark.trpt'
 
 // https://docs.gradle.org/current/userguide/declaring_repositories.html
 
@@ -64,8 +66,8 @@ configurations {
 }
 
 dependencies {
-    implementation 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.51'
-    implementation 'edu.gatech.gtri.trustmark:tf-api:1.4.34'
+    implementation 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.56'
+    implementation 'edu.gatech.gtri.trustmark:tf-api:1.4.36'
 
     implementation 'com.fasterxml.jackson.core:jackson-core:2.13.2'
     implementation 'javax.el:javax.el-api:2.2.5'
@@ -155,4 +157,12 @@ compileJava.dependsOn spotlessApply
 
 tasks.withType(Test) {
     useJUnitPlatform()
+}
+
+gitProperties {
+    keys = [
+        'git.commit.id.abbrev',
+        'git.commit.id',
+        'git.commit.time'
+    ]
 }

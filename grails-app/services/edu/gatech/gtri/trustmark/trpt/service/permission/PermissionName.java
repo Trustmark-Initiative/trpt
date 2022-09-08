@@ -6,6 +6,7 @@ import org.gtri.fj.data.List;
 import static edu.gatech.gtri.trustmark.trpt.domain.RoleName.ROLE_ADMINISTRATOR;
 import static edu.gatech.gtri.trustmark.trpt.domain.RoleName.ROLE_ADMINISTRATOR_ORGANIZATION;
 import static org.gtri.fj.data.List.arrayList;
+import static org.gtri.fj.data.List.nil;
 
 public enum PermissionName {
     ORGANIZATION_SELECT(arrayList(ROLE_ADMINISTRATOR, ROLE_ADMINISTRATOR_ORGANIZATION)),
@@ -17,6 +18,8 @@ public enum PermissionName {
     USER_INSERT(arrayList(ROLE_ADMINISTRATOR, ROLE_ADMINISTRATOR_ORGANIZATION)),
     USER_UPDATE(arrayList(ROLE_ADMINISTRATOR, ROLE_ADMINISTRATOR_ORGANIZATION)),
     USER_DELETE(arrayList(ROLE_ADMINISTRATOR, ROLE_ADMINISTRATOR_ORGANIZATION)),
+
+    PROFILE_SELECT(nil()),
 
     ROLE_SELECT(arrayList(ROLE_ADMINISTRATOR, ROLE_ADMINISTRATOR_ORGANIZATION)),
 

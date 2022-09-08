@@ -436,7 +436,7 @@ function trustExpressionFailure(
                 `The trustmark &quot;${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}&quot; does not appear to be bound to the candidate system; the parameter &quot;${trustExpressionFailure["TrustmarkDefinitionParameterIdentifier"]}&quot; does not appear to be bound to a value.`,
                 "bi-tag",
                 `${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}: ${trustExpressionFailure["TrustmarkDefinitionParameterIdentifier"]}`,
-                `The trustmark "${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}" does not appear to be bound to the candidate system; the parameter "${trustExpressionFailure["TrustmarkDefinitionParameterIdentifier"]}" does not appear to be bound to a value.`,
+                `The trustmark "${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}" does not ap pear to be bound to the candidate system; the parameter "${trustExpressionFailure["TrustmarkDefinitionParameterIdentifier"]}" does not appear to be bound to a value.`,
                 trustExpressionFailure["TrustInteroperabilityProfileList"])
         }
 
@@ -449,9 +449,9 @@ function trustExpressionFailure(
                 trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"],
                 `The trustmark "${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}" is bound to the candidate system, but the trustmark relying party tool could not verify the trustmark.`,
                 trustExpressionFailure["TrustInteroperabilityProfileList"])
-                .append(ul(
+                .concat( ul(
                     trustExpressionFailure["TrustmarkVerifierFailureNonEmptyList"].map(trustmarkVerifierFailure =>
-                        li(trustmarkVerifierFailure))))
+                        li(trustmarkVerifierFailure))) )
         }
 
         function trustExpressionFailureOther(

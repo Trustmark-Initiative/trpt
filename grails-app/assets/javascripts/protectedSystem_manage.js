@@ -8,12 +8,12 @@ function initialize(
     typeFindAll,
     protectedSystemDashboard) {
 
-    document.onreadystatechange = function () {
+    document.addEventListener("readystatechange", function () {
 
         if (document.readyState === "complete") {
             onComplete()
         }
-    }
+    })
 
     function onComplete() {
 

@@ -6,12 +6,12 @@ function initialize(
     organizationDelete,
     organizationDashboard) {
 
-    document.onreadystatechange = function () {
+    document.addEventListener("readystatechange", function () {
 
         if (document.readyState === "complete") {
             onComplete()
         }
-    }
+    })
 
     function onComplete() {
 

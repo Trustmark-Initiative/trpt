@@ -1,5 +1,6 @@
 package edu.gatech.gtri.trustmark.trpt.controller
 
+
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemPartnerSystemCandidateFindOneRequest
 import edu.gatech.gtri.trustmark.trpt.service.protectedSystem.ProtectedSystemService
 import grails.compiler.GrailsCompileStatic
@@ -19,10 +20,13 @@ class ProtectedSystemDashboardPartnerSystemCandidateController {
 
     ProtectedSystemService protectedSystemService
 
-    Object manage(final ProtectedSystemPartnerSystemCandidateFindOneRequest protectedSystemPartnerSystemCandidateFindOneRequest) {
+    Object manage() {
+    }
+
+    Object findOne(final ProtectedSystemPartnerSystemCandidateFindOneRequest protectedSystemPartnerSystemCandidateFindOneRequest) {
 
         final P2<Object, Integer> response = toResponse(protectedSystemService.findOne(((GrailsUser) getPrincipal()).username, protectedSystemPartnerSystemCandidateFindOneRequest))
 
-        [protectedSystem: response._1()]
+        respond response._1(), status: response._2()
     }
 }

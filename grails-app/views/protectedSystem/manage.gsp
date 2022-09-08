@@ -46,7 +46,14 @@
                         <td><div class="text-center protected-system-element-tip-count"></div></td>
                     </tr>
                 </template>
-                <tbody id="protected-system-tbody">
+                <tbody id="protected-system-tbody" class="placeholder-glow">
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                </tbody>
                 </tbody>
             </table>
         </div>

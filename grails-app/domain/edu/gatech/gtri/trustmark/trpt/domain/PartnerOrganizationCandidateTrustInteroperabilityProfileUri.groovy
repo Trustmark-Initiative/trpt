@@ -37,7 +37,7 @@ class PartnerOrganizationCandidateTrustInteroperabilityProfileUri {
     }
 
     static mapping = {
-        table 'partner_organization_candidate_trust_interoperability_profile_ur'
+        table 'poc_tip_uri'
     }
 
     static belongsTo = [

@@ -18,11 +18,9 @@ import org.gtri.fj.function.Try1;
 import org.springframework.security.crypto.codec.Hex;
 
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.byteArrayFor;
 import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.fileFor;
 import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtility.truncate;
 import static java.lang.String.format;
@@ -446,7 +444,7 @@ public class UriSynchronizer<T1 extends HasIdentifier, T2 extends Uri, T3 extend
      * @return the URI
      */
     private T2 updateUri(final T2 uriRequest, final T2 uriResolve, final F1<T2, T2> uriUpdate) {
-        return uriSave.f(uriUpdate.f(uriCoalesce.f(uriResolve, uriRequest)));
+        return uriSave.f(uriUpdate.f(uriCoalesce.f(uriRequest, uriResolve)));
     }
 
     private T2 onDocumentSuccess(
@@ -475,7 +473,7 @@ public class UriSynchronizer<T1 extends HasIdentifier, T2 extends Uri, T3 extend
 
         } else {
 
-            log.info(format("%s uri '%s' document did not change.", nameForHasSource, uri.getUri()));
+            log.trace(format("%s uri '%s' document did not change.", nameForHasSource, uri.getUri()));
         }
 
         return uri;
@@ -522,7 +520,7 @@ public class UriSynchronizer<T1 extends HasIdentifier, T2 extends Uri, T3 extend
             final T3 uriHistory = uriHistorySupplierInner.f();
             uriHistory.setUri(uri.getUri());
             uriHistory.setHash(uri.getHash());
-            uriHistory.fileHelper(fileFor(byteArrayFor(uri.fileHelper())));
+            uriHistory.fileHelper(uri.fileHelper());
             uriHistory.setDocumentRequestLocalDateTime(uri.getDocumentRequestLocalDateTime());
             uriHistory.setDocumentSuccessLocalDateTime(uri.getDocumentSuccessLocalDateTime());
             uriHistory.setDocumentFailureLocalDateTime(uri.getDocumentFailureLocalDateTime());

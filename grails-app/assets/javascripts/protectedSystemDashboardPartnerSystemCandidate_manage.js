@@ -1,13 +1,14 @@
 function initialize(
+    protectedSystemPartnerSystemCandidateFindOneUrl,
     protectedSystemFindOneUrl,
     protectedSystemUpdateUrl) {
 
-    document.onreadystatechange = function () {
+    document.addEventListener("readystatechange", function () {
 
         if (document.readyState === "complete") {
             onComplete()
         }
-    }
+    })
 
     function onComplete() {
 
@@ -15,15 +16,151 @@ function initialize(
     }
 
     function findOne() {
-
-        fetchGet(protectedSystemFindOneUrl + "?" + new URLSearchParams({"id": (new URLSearchParams(document.location.search)).get("id")}))
+        fetchGet(protectedSystemPartnerSystemCandidateFindOneUrl + "?" + new URLSearchParams({"id": (new URLSearchParams(document.location.search)).get("id"), "partnerSystemCandidate": (new URLSearchParams(document.location.search)).get("partnerSystemCandidate")}))
             .then(response => response.json())
-            .then(afterFindOne)
+            .then(protectedSystemPartnerSystemCandidate => fetchGet(protectedSystemFindOneUrl + "?" + new URLSearchParams({"id": (new URLSearchParams(document.location.search)).get("id")}))
+                .then(response => response.json())
+                .then(protectedSystem => afterFindOne(protectedSystemPartnerSystemCandidate, protectedSystem)))
     }
 
-    function afterFindOne(protectedSystem) {
+    function afterFindOne(protectedSystemPartnerSystemCandidate, protectedSystem) {
 
         stateReset()
+
+        Array.from(document.querySelectorAll(".protected-system-element-name"))
+            .map(element => element.innerHTML = protectedSystemPartnerSystemCandidate.name)
+
+        Array.from(document.querySelectorAll(".protected-system-element-organization-name"))
+            .map(element => element.innerHTML = protectedSystemPartnerSystemCandidate.organization.name)
+
+        Array.from(document.querySelectorAll(".protected-system-element-protected-system-partner-system-candidate-partner-system-candidate-name"))
+            .map(element => element.innerHTML = protectedSystemPartnerSystemCandidate.protectedSystemPartnerSystemCandidateList[0].partnerSystemCandidate.name)
+
+        if (protectedSystemPartnerSystemCandidate.protectedSystemPartnerSystemCandidateList.length === 0 || protectedSystemPartnerSystemCandidate.protectedSystemPartnerSystemCandidateList[0].partnerSystemCandidateTrustInteroperabilityProfileList.length === 0) {
+
+        } else {
+
+            protectedSystemPartnerSystemCandidate.protectedSystemPartnerSystemCandidateList[0].partnerSystemCandidateTrustInteroperabilityProfileList
+                .forEach((partnerSystemCandidateTrustInteroperabilityProfile, partnerSystemCandidateTrustInteroperabilityProfileIndex) =>
+                    partnerSystemCandidateTrustInteroperabilityProfile.evaluationList
+                        .filter(evaluation => evaluation.evaluationLocalDateTime != null)
+                        .sort((evaluation1, evaluation2) => moment(evaluation2.evaluationLocalDateTime).toDate() - moment(evaluation1.evaluationLocalDateTime).toDate())
+                        .forEach((evaluation, evaluationIndex) => {
+
+                            const partnerSystemCandidateTrustInteroperabilityProfileElement = document.getElementById("protected-system-template-protected-system-partner-system-candidate-partner-system-candidate-trust-interoperability-profile").content.firstElementChild.cloneNode(true)
+                            partnerSystemCandidateTrustInteroperabilityProfileElement.id = `id-${partnerSystemCandidateTrustInteroperabilityProfileIndex}-${evaluationIndex}`
+                            if(evaluationIndex !== 0) partnerSystemCandidateTrustInteroperabilityProfileElement.classList.add("d-none")
+
+                            const body = partnerSystemCandidateTrustInteroperabilityProfileElement.querySelector(".TrustExpressionContainer .Body")
+
+                            if (evaluation.evaluation) {
+
+                                body.innerHTML = trustExpressionAll(
+                                    "",
+                                    evaluation.evaluation["TrustExpression"],
+                                    evaluation.evaluationLocalDateTime ? moment(evaluation.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC') : "",
+                                    generator(`id-${partnerSystemCandidateTrustInteroperabilityProfileIndex}-${evaluationIndex}-`));
+
+                                if (evaluation.evaluation["TrustExpressionEvaluatorFailureList"].length === 0) {
+
+                                    partnerSystemCandidateTrustInteroperabilityProfileElement.querySelector(".TrustExpressionEvaluatorFailureListContainer").parentNode.removeChild(partnerSystemCandidateTrustInteroperabilityProfileElement.querySelector(".TrustExpressionEvaluatorFailureListContainer"))
+                                } else {
+                                    const trustExpressionEvaluatorFailureElement = partnerSystemCandidateTrustInteroperabilityProfileElement.querySelector(".TrustExpressionEvaluatorFailure")
+
+                                    evaluation.evaluation["TrustExpressionEvaluatorFailureList"].forEach(trustExpressionEvaluatorFailure => {
+                                        if (trustExpressionEvaluatorFailure["$Type"] === "TrustExpressionFailureURI") {
+
+                                            const divMessage = document.createElement("div")
+                                            const divCode = document.createElement("div")
+
+                                            divMessage.className = "Message"
+                                            divMessage.innerHTML = "The system could not parse the URI."
+                                            divCode.className = "UriString code"
+                                            divCode.innerHTML = trustExpressionEvaluatorFailure["$Type"]["UriString"]
+
+                                            trustExpressionEvaluatorFailureElement.appendChild(divMessage)
+                                            trustExpressionEvaluatorFailureElement.appendChild(divCode)
+
+                                        } else if (trustExpressionEvaluatorFailure["$Type"] === "TrustExpressionEvaluatorFailureResolve") {
+
+                                            const divMessage = document.createElement("div")
+                                            const divCode = document.createElement("div")
+
+                                            divMessage.className = "Message"
+                                            divMessage.innerHTML = "The system could not resolve the URI."
+                                            divCode.className = "Uri code"
+                                            divCode.innerHTML = trustExpressionEvaluatorFailure["$Type"]["Uri"]
+
+                                            trustExpressionEvaluatorFailureElement.appendChild(divMessage)
+                                            trustExpressionEvaluatorFailureElement.appendChild(divCode)
+                                        } else {
+                                        }
+                                    })
+                                }
+                            } else {
+                                partnerSystemCandidateTrustInteroperabilityProfileElement.querySelector(".TrustExpressionEvaluatorFailureListContainer").parentNode.removeChild(partnerSystemCandidateTrustInteroperabilityProfileElement.querySelector(".TrustExpressionEvaluatorFailureListContainer"))
+
+                                body.innerHTML = `<div class="TrustExpressionTop INCOMPLETE">` +
+                                    `<label class="TrustInteroperabilityProfileInner">` +
+                                    `<span class="glyphicon bi-list-ul"></span> ${partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name ? partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.name : partnerSystemCandidateTrustInteroperabilityProfile.trustInteroperabilityProfile.uri}` +
+                                    `<span class="EvaluationLocalDateTime">(not yet evaluated)</span>` +
+                                    `</label>` +
+                                    `</div>`;
+                            }
+
+                            document.getElementById("protected-system-element-protected-system-partner-system-candidate-partner-system-candidate-trust-interoperability-profile-list").appendChild(partnerSystemCandidateTrustInteroperabilityProfileElement)
+
+                            const label = partnerSystemCandidateTrustInteroperabilityProfileElement.querySelector(".EvaluationLocalDateTime")
+                            const select = document.createElement("select")
+                            select.classList.add("EvaluationLocalDateTime")
+                            select.classList.add("form-select")
+                            select.innerHTML = partnerSystemCandidateTrustInteroperabilityProfile.evaluationList
+                                .filter(evaluation => evaluation.evaluationLocalDateTime != null)
+                                .sort((evaluation1, evaluation2) => moment(evaluation2.evaluationLocalDateTime).toDate() - moment(evaluation1.evaluationLocalDateTime).toDate())
+                                .map((evaluation, evaluationIndex) => `<option value="id-${partnerSystemCandidateTrustInteroperabilityProfileIndex}-${evaluationIndex}">${evaluation.evaluationLocalDateTime ? moment(evaluation.evaluationLocalDateTime).format('MMMM Do YYYY, h:mm:ss A UTC') : ""}</option>`)
+                                .join("")
+                            select.value = `id-${partnerSystemCandidateTrustInteroperabilityProfileIndex}-${evaluationIndex}`
+                            select.addEventListener("change", function(event) {
+                                partnerSystemCandidateTrustInteroperabilityProfileElement.classList.add("d-none")
+                                document.getElementById(select.value).classList.remove("d-none")
+                                document.getElementById(select.value).querySelector(".EvaluationLocalDateTime").value = select.value
+                            });
+
+                            label.parentNode.replaceChild(select, label)
+
+                            const collapse = document.createElement("span")
+                            collapse.classList.add("bi")
+                            collapse.classList.add("bi-arrows-collapse")
+                            collapse.classList.add("EvaluationCollapse")
+                            collapse.addEventListener("click", (event) => {
+                                Array.from(event.target.parentNode.parentNode.querySelectorAll("input[type='checkbox']")).forEach(input => {
+                                    input.checked = false
+                                })
+                                event.preventDefault()
+                            });
+
+                            const expand = document.createElement("span")
+                            expand.classList.add("bi")
+                            expand.classList.add("bi-arrows-expand")
+                            expand.classList.add("EvaluationExpand")
+                            expand.addEventListener("click", (event) => {
+                                Array.from(event.target.parentNode.parentNode.querySelectorAll("input[type='checkbox']")).forEach(input => {
+                                    input.checked = true
+                                })
+                                event.preventDefault()
+                            });
+
+                            select.parentNode.appendChild(collapse)
+                            select.parentNode.appendChild(expand)
+                        }))
+        }
+
+        if (protectedSystemPartnerSystemCandidate.protectedSystemPartnerSystemCandidateList[0].partnerSystemCandidate.uriEntityDescriptor === null) {
+            document.getElementById("protected-system-element-protected-system-partner-system-candidate-partner-system-candidate-uri-entity-descriptor").parentNode.removeChild(document.getElementById("protected-system-element-protected-system-partner-system-candidate-partner-system-candidate-uri-entity-descriptor"))
+        } else {
+            document.getElementById("protected-system-element-protected-system-partner-system-candidate-partner-system-candidate-uri-entity-descriptor").href = protectedSystemPartnerSystemCandidate.protectedSystemPartnerSystemCandidateList[0].partnerSystemCandidate.uriEntityDescriptor;
+        }
+
 
         if (protectedSystem.type.value == "CERTIFICATE_RELYING_PARTY") {
             Array.from(document.querySelectorAll(".protected-system-element-type-certificate-relying-party")).map(element => element.classList.remove("d-none"))

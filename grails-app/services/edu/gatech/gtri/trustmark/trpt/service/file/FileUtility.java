@@ -14,6 +14,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import static java.util.Objects.requireNonNull;
+import static org.gtri.fj.data.Validation.success;
 
 public final class FileUtility {
 
@@ -56,35 +57,45 @@ public final class FileUtility {
         return gunzip(file.getData()).toOption().orSome(new byte[]{});
     }
 
+    private static final boolean compress = false;
+
     public static Validation<IOException, byte[]> gzip(final byte[] byteArray) {
 
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        if (compress) {
+            final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        return Try.<GZIPOutputStream, IOException>f(() -> new GZIPOutputStream(byteArrayOutputStream))._1()
-                .bind(gzipOutputStream -> TryEffect.<Unit, IOException>f(() -> gzipOutputStream.write(byteArray))._1()
-                        .map(unit -> gzipOutputStream))
-                .bind(gzipOutputStream -> TryEffect.<Unit, IOException>f(() -> gzipOutputStream.flush())._1()
-                        .map(unit -> gzipOutputStream))
-                .bind(gzipOutputStream -> TryEffect.<Unit, IOException>f(() -> gzipOutputStream.close())._1()
-                        .map(unit -> gzipOutputStream))
-                .map(gzipOutputStream -> byteArrayOutputStream.toByteArray());
+            return Try.<GZIPOutputStream, IOException>f(() -> new GZIPOutputStream(byteArrayOutputStream))._1()
+                    .bind(gzipOutputStream -> TryEffect.<Unit, IOException>f(() -> gzipOutputStream.write(byteArray))._1()
+                            .map(unit -> gzipOutputStream))
+                    .bind(gzipOutputStream -> TryEffect.<Unit, IOException>f(() -> gzipOutputStream.flush())._1()
+                            .map(unit -> gzipOutputStream))
+                    .bind(gzipOutputStream -> TryEffect.<Unit, IOException>f(() -> gzipOutputStream.close())._1()
+                            .map(unit -> gzipOutputStream))
+                    .map(gzipOutputStream -> byteArrayOutputStream.toByteArray());
+        } else {
+            return success(byteArray);
+        }
     }
 
     public static Validation<IOException, byte[]> gunzip(final byte[] byteArray) {
 
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        if (compress) {
+            final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        final Validation<IOException, byte[]> validation = Try.<GZIPInputStream, IOException>f(() -> new GZIPInputStream(new ByteArrayInputStream(byteArray)))._1()
-                .bind(gzipOutputStream -> TryEffect.<Unit, IOException>f(() -> {
-                    int read;
-                    while ((read = gzipOutputStream.read()) != -1) {
-                        byteArrayOutputStream.write(read);
-                    }
-                })._1().map(unit -> gzipOutputStream))
-                .bind(gzipInputStream -> TryEffect.<Unit, IOException>f(() -> gzipInputStream.close())._1()
-                        .map(unit -> gzipInputStream))
-                .map(gzipInputStream -> byteArrayOutputStream.toByteArray());
+            final Validation<IOException, byte[]> validation = Try.<GZIPInputStream, IOException>f(() -> new GZIPInputStream(new ByteArrayInputStream(byteArray)))._1()
+                    .bind(gzipOutputStream -> TryEffect.<Unit, IOException>f(() -> {
+                        int read;
+                        while ((read = gzipOutputStream.read()) != -1) {
+                            byteArrayOutputStream.write(read);
+                        }
+                    })._1().map(unit -> gzipOutputStream))
+                    .bind(gzipInputStream -> TryEffect.<Unit, IOException>f(() -> gzipInputStream.close())._1()
+                            .map(unit -> gzipInputStream))
+                    .map(gzipInputStream -> byteArrayOutputStream.toByteArray());
 
-        return validation;
+            return validation;
+        } else {
+            return success(byteArray);
+        }
     }
 }

@@ -3,6 +3,7 @@ package edu.gatech.gtri.trustmark.trpt.service.job;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistryOrganizationMapUri;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistrySystemMapUriType;
 import edu.gatech.gtri.trustmark.trpt.domain.TrustmarkBindingRegistryUri;
+import edu.gatech.gtri.trustmark.trpt.service.file.FileUtility;
 import edu.gatech.gtri.trustmark.trpt.service.job.urisynchronizer.UriSynchronizerForTrustmarkBindingRegistryOrganizationMap;
 import edu.gatech.gtri.trustmark.trpt.service.job.urisynchronizer.UriSynchronizerForTrustmarkBindingRegistrySystemMap;
 import edu.gatech.gtri.trustmark.v1_0.model.trustmarkBindingRegistry.TrustmarkBindingRegistrySystemType;
@@ -15,6 +16,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.fileFor;
 import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForPartnerOrganizationCandidate.synchronizePartnerOrganizationCandidate;
 import static edu.gatech.gtri.trustmark.trpt.service.job.JobUtilityForPartnerSystemCandidate.synchronizePartnerSystemCandidate;
 import static edu.gatech.gtri.trustmark.trpt.service.job.RetryTemplateUtility.retry;
@@ -125,6 +127,7 @@ public class JobUtilityForTrustmarkBindingRegistry {
                                                 trustmarkBindingRegistrySystemMapUriType.trustmarkBindingRegistryUriHelper(trustmarkBindingRegistryUri);
                                                 trustmarkBindingRegistrySystemMapUriType.setUri(trustmarkBindingRegistryUri.getUri() + trustmarkBindingRegistrySystemType.getUriRelative());
                                                 trustmarkBindingRegistrySystemMapUriType.setType(trustmarkBindingRegistrySystemType);
+                                                trustmarkBindingRegistrySystemMapUriType.fileHelper(fileFor(new byte[]{}));
                                                 return trustmarkBindingRegistrySystemMapUriType.saveHelper();
                                             }));
                         })), log);

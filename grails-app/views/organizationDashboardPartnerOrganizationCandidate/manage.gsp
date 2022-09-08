@@ -1,8 +1,3 @@
-<%@ page import="org.json.JSONObject" contentType="text/html;charset=UTF-8" %>
-<%@ page import="org.json.JSONArray" contentType="text/html;charset=UTF-8" %>
-
-<g:set var="organizationPartnerOrganizationCandidate" value="${organization.organizationPartnerOrganizationCandidateList[0]}"/>
-
 <html>
     <head>
         <asset:javascript src="organizationDashboardPartnerOrganizationCandidate_manage.js"/>
@@ -13,16 +8,17 @@
 
         <script type="text/javascript">
             initialize(
+                "${createLink(controller:'organizationDashboardPartnerOrganizationCandidate', action: 'findOne')}",
                 "${createLink(controller:'organization', action: 'findOne')}",
                 "${createLink(controller:'organization', action: 'update')}")
         </script>
     </head>
 
     <body>
-        <div class="container pt-4">
+        <div class="container pt-4 placeholder-glow">
             <h2 class="d-flex justify-content-between">
                 <div>
-                    Trust Dashboard for ${organization.name} with ${organizationPartnerOrganizationCandidate.partnerOrganizationCandidate.name}
+                    Trust Dashboard for <span class="organization-element-name placeholder-hack col-4"></span> with <span class="organization-element-organization-partner-organization-candidate-partner-organization-candidate-name placeholder-hack col-4"></span>
                 </div>
 
                 <div class="d-flex">
@@ -33,66 +29,29 @@
             </h2>
 
             <div class="pt-2">
-                This page provides details about how well ${organizationPartnerOrganizationCandidate.partnerOrganizationCandidate.name}
-                satisfies the trust policy for ${organization.name}
-                at ${organization.organization.name}.</div>
+                This page provides details about how well <span class="organization-element-organization-partner-organization-candidate-partner-organization-candidate-name placeholder-hack col-3"></span>
+                satisfies the trust policy for <span class="organization-element-name placeholder-hack col-3"></span> at <span class="organization-element-name placeholder-hack col-3"></span>.</div>
         </div>
 
         <div class="container pt-4">
-            <g:each in="${organizationPartnerOrganizationCandidate.partnerOrganizationCandidateTrustInteroperabilityProfileList}" var="partnerOrganizationCandidateTrustInteroperabilityProfile">
-                <g:set var="json" value="${partnerOrganizationCandidateTrustInteroperabilityProfile.trustExpressionEvaluation}"/>
-                <g:if test="${json != null}">
-                    <div class="TrustInteroperabilityProfileContainer Body">
-                        <g:set var="trustExpression" value="${json.get("TrustExpression") as JSONObject}"/>
-                        <g:set var="trustExpressionEvaluatorFailureList" value="${json.get("TrustExpressionEvaluatorFailureList") as JSONArray}"/>
-
-                        <div class="TrustInteroperabilityProfile">
-                            <div class="TrustExpressionEvaluation Body">
-                                <div class="TrustExpressionContainer">
-                                    <g:set var="id" value="${UUID.randomUUID().toString()}"/>
-                                    <div class="Body" id="${id}"></div>
-                                    <script>
-                                        document.addEventListener("readystatechange", function () {
-                                            if (document.readyState === "complete") {
-                                                document.getElementById("${id}").innerHTML = trustExpressionAll(
-                                                    "",
-                                                    ${raw(trustExpression.toString())},
-                                                    "${partnerSystemCandidateTrustInteroperabilityProfile.evaluationLocalDateTime.format(java.time.format.DateTimeFormatter.ofPattern("MMMM dd YYYY, h:mm:ss a")) + " UTC"}",
-                                                    generator("${id}"));
-                                            }
-                                        })
-                                    </script>
-                                </div>
+            <template id="organization-template-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile">
+                <div class="TrustInteroperabilityProfileContainer Body">
+                    <div class="TrustInteroperabilityProfile">
+                        <div class="TrustExpressionEvaluation Body">
+                            <div class="TrustExpressionContainer">
+                                <div class="Body"></div>
                             </div>
+                        </div>
 
-                            <g:if test="${trustExpressionEvaluatorFailureList.isEmpty()}">
-                            </g:if>
-                            <g:else>
-                                <div class="TrustExpressionEvaluatorFailureListContainer Body">
-                                    <div class="TrustExpressionEvaluatorFailure">
-                                        <g:each in="${trustExpressionEvaluatorFailureList}"
-                                                var="failure">
-                                            <g:if test="${(failure as JSONObject).get("\$Type").equals("TrustExpressionFailureURI")}">
-                                                <div class="Message">The system could not parse the URI.</div>
-
-                                                <div class="UriString code">${(failure as JSONObject).get("UriString")}</div>
-                                            </g:if>
-                                        </g:each>
-                                        <g:each in="${trustExpressionEvaluatorFailureList}"
-                                                var="failure">
-                                            <g:if test="${(failure as JSONObject).get("\$Type").equals("TrustExpressionEvaluatorFailureResolve")}">
-                                                <div class="Message">The system could not resolve the URI.</div>
-
-                                                <div class="Uri code">The system could not parse the URI ${(failure as JSONObject).get("Uri")}</div>
-                                            </g:if>
-                                        </g:each>
-                                    </div>
-                                </div>
-                            </g:else>
+                        <div class="TrustExpressionEvaluatorFailureListContainer Body">
+                            <div class="TrustExpressionEvaluatorFailure">
+                            </div>
                         </div>
                     </div>
-                </g:if>
-            </g:each>
+                </div>
+            </template>
+
+            <div id="organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list"></div>
         </div>
 
         <div class="container pt-4" style="max-width: 540px;">
@@ -106,55 +65,71 @@
                 </div>
 
                 <div class="card-body">
-                    <div class="TrustInteroperabilityProfileContainer Body">
-                        <div class="TrustInteroperabilityProfile">
-                            <div class="TrustExpressionEvaluation Body">
-                                <div class="TrustExpressionContainer">
-                                    <div class="Body">
-                                        <div class="TrustExpressionTop TRUE">
-                                            <label class="TrustInteroperabilityProfileInner">Black text indicates an expression that evaluates to the boolean value true.</label>
+                    <div id="organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list-legend">
+                        <div class="TrustInteroperabilityProfileContainer Body">
+                            <div class="TrustInteroperabilityProfile">
+                                <div class="TrustExpressionEvaluation Body">
+                                    <div class="TrustExpressionContainer">
+                                        <div class="Body">
+                                            <div class="TrustExpressionTop TRUE">
+                                                <label class="TrustInteroperabilityProfileInner">Black text indicates an expression that evaluates to the boolean value true.</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="TrustInteroperabilityProfileContainer Body">
-                        <div class="TrustInteroperabilityProfile">
-                            <div class="TrustExpressionEvaluation Body">
-                                <div class="TrustExpressionContainer">
-                                    <div class="Body">
-                                        <div class="TrustExpressionTop FALSE">
-                                            <label class="TrustInteroperabilityProfileInner">Red text on a grey background indicates an expression that evaluates to the boolean value false.</label>
+                        <div class="TrustInteroperabilityProfileContainer Body">
+                            <div class="TrustInteroperabilityProfile">
+                                <div class="TrustExpressionEvaluation Body">
+                                    <div class="TrustExpressionContainer">
+                                        <div class="Body">
+                                            <div class="TrustExpressionTop FALSE">
+                                                <label class="TrustInteroperabilityProfileInner">Red text on a grey background indicates an expression that evaluates to the boolean value false.</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="TrustInteroperabilityProfileContainer Body">
-                        <div class="TrustInteroperabilityProfile">
-                            <div class="TrustExpressionEvaluation Body">
-                                <div class="TrustExpressionContainer">
-                                    <div class="Body">
-                                        <div class="TrustExpressionTop FAILURE">
-                                            <label class="TrustInteroperabilityProfileInner">Red italic text on a grey brackground indicates an expression that fails to evaluate.</label>
+                        <div class="TrustInteroperabilityProfileContainer Body">
+                            <div class="TrustInteroperabilityProfile">
+                                <div class="TrustExpressionEvaluation Body">
+                                    <div class="TrustExpressionContainer">
+                                        <div class="Body">
+                                            <div class="TrustExpressionTop FAILURE">
+                                                <label class="TrustInteroperabilityProfileInner">Red italic text on a grey brackground indicates an expression that fails to evaluate.</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="TrustInteroperabilityProfileContainer Body">
-                        <div class="TrustInteroperabilityProfile">
-                            <div class="TrustExpressionEvaluation Body">
-                                <div class="TrustExpressionContainer">
-                                    <div class="Body">
-                                        <div class="TrustExpressionTop UNKNOWN">
-                                            <label class="TrustInteroperabilityProfileInner">Orange text indicates an expression that evaluates to a non-boolean value; for example, a string.</label>
+                        <div class="TrustInteroperabilityProfileContainer Body">
+                            <div class="TrustInteroperabilityProfile">
+                                <div class="TrustExpressionEvaluation Body">
+                                    <div class="TrustExpressionContainer">
+                                        <div class="Body">
+                                            <div class="TrustExpressionTop UNKNOWN">
+                                                <label class="TrustInteroperabilityProfileInner">Orange text indicates an expression that evaluates to a non-boolean value; for example, a string.</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="TrustInteroperabilityProfileContainer Body">
+                            <div class="TrustInteroperabilityProfile">
+                                <div class="TrustExpressionEvaluation Body">
+                                    <div class="TrustExpressionContainer">
+                                        <div class="Body">
+                                            <div class="TrustExpressionTop INCOMPLETE">
+                                                <label class="TrustInteroperabilityProfileInner">Grey italic text indicates an expression that the system has not yet evaluated.</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

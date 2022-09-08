@@ -40,6 +40,10 @@ public class ApplicationProperties {
     public static final String propertyNameJobForMailEvaluationUpdateCronExpression = "jobForMailEvaluationUpdate.cronExpression";
     public static final String propertyForUserPasswordPattern = "passwordService.userPasswordPattern";
     public static final String propertyForUserPasswordPatternDescription = "passwordService.userPasswordPatternDescription";
+    public static final String propertyGitCommitIdAbbrev = "git.commit.id.abbrev";
+    public static final String propertyGitCommitId = "git.commit.id";
+    public static final String propertyGitCommitTime = "git.commit.time";
+    public static final String propertyApplicationVersion = "info.app.version";
 
     @Autowired
     private GrailsApplication grailsApplication;

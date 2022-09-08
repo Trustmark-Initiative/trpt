@@ -17,13 +17,13 @@
     </head>
 
     <body>
-        <div class="container pt-4">
-            <h2>Trust Dashboard for <span class="protected-system-element-name"></span></h2>
+        <div class="container pt-4 placeholder-glow">
+            <h2>Trust Dashboard for <span class="protected-system-element-name placeholder-hack col-4"></span></h2>
 
-            <div class="fw-bold mt-2">Trust Policy for <span class="protected-system-element-name"></span></div>
+            <div class="fw-bold mt-2">Trust Policy for <span class="protected-system-element-name placeholder-hack col-3"></span></div>
 
             <div class="mt-2">
-                Add trust interoperability profiles (TIPs${raw(grailsApplication.config.getProperty('server.artifact'))}) to this table to define the trust policy for <span class="protected-system-element-name"></span>, a <span class="protected-system-element-type"></span>.
+                Add trust interoperability profiles (TIPs${raw(grailsApplication.config.getProperty('server.artifact'))}) to this table to define the trust policy for <span class="protected-system-element-name placeholder-hack col-3"></span>, a <span class="protected-system-element-type placeholder-hack col-3"></span>.
             </div>
             <table class="mt-2 table table-bordered table-striped-hack mb-0">
                 <thead>
@@ -53,7 +53,12 @@
                         <td class="trust-interoperability-profile-element-mandatory"></td>
                     </tr>
                 </template>
-                <tbody id="trust-interoperability-profile-tbody">
+                <tbody id="trust-interoperability-profile-tbody" class="placeholder-glow">
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
                 </tbody>
             </table>
         </div>
@@ -241,11 +246,11 @@
             </div>
         </div>
 
-        <div class="container pt-4">
-            <div class="fw-bold">Candidate Partner Systems for <span class="protected-system-element-name"></span></div>
+        <div class="container pt-4 placeholder-glow">
+            <div class="fw-bold">Candidate Partner Systems for <span class="protected-system-element-name placeholder-hack col-3"></span></div>
 
             <div class="mt-2">
-                This table allows you to control which candidate partner <span class="partner-system-candidate-element-type"></span> systems are trusted by <span class="protected-system-element-name"></span>.
+                This table allows you to control which candidate partner <span class="partner-system-candidate-element-type"></span> systems are trusted by <span class="protected-system-element-name placeholder-hack col-3"></span>.
             </div>
 
             <table class="mt-2 table table-bordered mb-0">
@@ -298,8 +303,15 @@
                         <td></td>
                     </tr>
                 </template>
-                <tbody id="partner-system-candidate-tbody">
+                <tbody id="partner-system-candidate-tbody" class="placeholder-glow">
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
                 </tbody>
+            </tbody>
             </table>
         </div>
 
@@ -324,7 +336,7 @@
                         <ol>
                             <li class="mb-3 d-none protected-system-element-type-certificate-relying-party">You must download a copy of the certificate for <span class="partner-system-candidate-element-name fw-bold"></span>,
                             and configure it within <span class="protected-system-element-name fw-bold"></span>, to enable <span class="protected-system-element-name fw-bold"></span>
-                            to trust <span class="partner-system-candidate-element-name fw-bold"></span>.
+                                to trust <span class="partner-system-candidate-element-name fw-bold"></span>.
                             This process heavily depends on the implementation details of <span class="protected-system-element-name fw-bold"></span>.
                             To download a copy of the certificate for <span class="partner-system-candidate-element-name fw-bold"></span>, click <a target="_blank" class="partner-system-candidate-element-trust-fabric-metadata fw-bold"></a>.
                             </li>

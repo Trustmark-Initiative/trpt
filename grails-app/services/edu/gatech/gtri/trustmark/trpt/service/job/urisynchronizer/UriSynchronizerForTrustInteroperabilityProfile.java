@@ -46,7 +46,6 @@ public class UriSynchronizerForTrustInteroperabilityProfile extends UriSynchroni
                     uri.setIssuerName(truncate(hasSource.getIssuer().getName(), 1000));
                     uri.setIssuerIdentifier(truncate(hasSource.getIssuer().getIdentifier().toString(), 1000));
                 },
-                TrustInteroperabilityProfileUri::saveHelper,
-                TrustInteroperabilityProfileUri::coalesce);
+                TrustInteroperabilityProfileUri::saveHelper);
     }
 }

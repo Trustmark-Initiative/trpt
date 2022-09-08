@@ -69,6 +69,11 @@
     border-left: 1px solid darkgray;
 }
 
+.TrustExpressionSub > .TrustExpressionTerminal {
+    margin-left: 96px;
+    border-left: 1px solid rgb(221, 221, 221);
+}
+
 .TrustExpressionOperatorBinary, .TrustExpressionOperatorUnary {
     display: grid;
     grid-template-columns: min-content 1fr;
@@ -169,6 +174,12 @@
     color: #b36200;
 }
 
+.INCOMPLETE {
+    background: white;
+    font-style: italic;
+    color: grey;
+}
+
 .Head {
     font-weight: bold;
 }
@@ -262,7 +273,11 @@
     border-left: 1px solid darkgrey
 }
 
-.TrustInteroperabilityProfileContainer:last-child > .TrustInteroperabilityProfile > .TrustExpressionEvaluation > .TrustExpressionContainer > .Body {
+#organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list:empty {
+    border-bottom: 0px
+}
+
+#organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list, #organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list-legend {
     border-bottom: 1px solid darkgrey
 }
 
@@ -436,6 +451,24 @@
 .EvaluationLocalDateTime {
     display: none;
     float: right;
+}
+
+select.EvaluationLocalDateTime {
+    width: 300px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.EvaluationExpand {
+    float: right;
+    padding-right: 5px;
+    margin-right: 5px;
+    border-right: 1px solid lightgray;
+}
+
+.EvaluationCollapse {
+    float: right;
+    padding-right: 10px;
 }
 
 .TrustExpressionTop > .TrustInteroperabilityProfileInner > .EvaluationLocalDateTime {

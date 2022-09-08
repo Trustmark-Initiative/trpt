@@ -22,8 +22,9 @@
                 <thead>
                     <tr>
                         <th scope="col">
-                            <sec:ifAllGranted roles="ROLE_ADMINISTRATOR"><a href="#" class="bi-plus-lg" id="organization-action-insert"></a></sec:ifAllGranted>
-                            <sec:ifNotGranted roles="ROLE_ADMINISTRATOR"><div style="width: 17px"></div></sec:ifNotGranted>
+                            <a href="#" class="d-none role-administrator bi-plus-lg" id="organization-action-insert"></a>
+
+                            <div class="d-none role-administrator-organization" style="width: 17px"></div>
                         </th>
                         <th scope="col"><a href="#" class="bi-trash" id="organization-action-delete"></a></th>
                         <th scope="col" style="width:33%">Name</th>
@@ -45,7 +46,12 @@
                         <td><div class="organization-element-description"></div></td>
                     </tr>
                 </template>
-                <tbody id="organization-tbody">
+                <tbody id="organization-tbody" class="placeholder-glow">
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
+                    <td><span class="placeholder-hack col-3"></span></td>
                 </tbody>
             </table>
         </div>

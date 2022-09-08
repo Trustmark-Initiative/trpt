@@ -109,6 +109,8 @@ public class JobUtilityForPartnerSystemCandidate {
                                     partnerSystemCandidateOld.setUriEntityDescriptor(fromNull(trustmarkBindingRegistrySystem.getMetadata()).map(URI::toString).toNull());
                                     partnerSystemCandidateOld.setType(trustmarkBindingRegistrySystem.getSystemType());
 
+                                    partnerSystemCandidateOld.setTrustmarkRecipientIdentifierArrayJson(new JSONArray(trustmarkBindingRegistrySystem.getTrustmarkRecipientIdentifiers().map(URI::toString).toCollection()).toString());
+
                                     partnerSystemCandidateOld.setRequestLocalDateTime(now);
                                     partnerSystemCandidateOld.setSuccessLocalDateTime(now);
 
@@ -149,7 +151,7 @@ public class JobUtilityForPartnerSystemCandidate {
 
                                     } else {
 
-                                        log.info(format("Trustmark binding registry system map uri '%s' content changed; partner system candidate uri '%s' content did not change.", trustmarkBindingRegistrySystemMapUriType.getUri(), partnerSystemCandidateOld.getUri()));
+                                        log.trace(format("Trustmark binding registry system map uri '%s' content changed; partner system candidate uri '%s' content did not change.", trustmarkBindingRegistrySystemMapUriType.getUri(), partnerSystemCandidateOld.getUri()));
                                     }
 
                                     return p(
@@ -159,7 +161,7 @@ public class JobUtilityForPartnerSystemCandidate {
                                 })
                                 .orSome(() -> {
 
-                                    log.info(format("Trustmark binding registry system map uri '%s' content changed; partner system candidate uri '%s' relying on cache, if any.", trustmarkBindingRegistrySystemMapUriType.getUri(), partnerSystemCandidateOld.getUri()));
+                                    log.info(format("Trustmark binding registry system map uri '%s' content changed; partner system candidate uri '%s' removed.", trustmarkBindingRegistrySystemMapUriType.getUri(), partnerSystemCandidateOld.getUri()));
 
                                     partnerSystemCandidateOld.setRequestLocalDateTime(now);
                                     partnerSystemCandidateOld.setFailureLocalDateTime(now);
@@ -220,7 +222,7 @@ public class JobUtilityForPartnerSystemCandidate {
 
         pUpdate2._1().forEach(partnerSystemCandidate -> partnerSystemCandidate.saveHelper()); // insert
         pUpdate2._2().forEach(partnerSystemCandidate -> partnerSystemCandidate.saveHelper()); // update
-        pUpdate2._3().forEach(partnerSystemCandidate -> partnerSystemCandidate.saveHelper()); // delete?
+        pUpdate2._3().forEach(partnerSystemCandidate -> partnerSystemCandidate.deleteHelper()); // delete
 
         // synchronize evaluations, if necessary
 
@@ -228,8 +230,7 @@ public class JobUtilityForPartnerSystemCandidate {
 
         trustmarkBindingRegistrySystemMapUriType.partnerSystemCandidateSetHelper(
                 pUpdate2._1()
-                        .append(pUpdate2._2())
-                        .append(pUpdate2._3()));
+                        .append(pUpdate2._2()));
 
         trustmarkBindingRegistrySystemMapUriType.saveHelper();
     }

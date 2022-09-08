@@ -19,10 +19,13 @@ class OrganizationDashboardPartnerOrganizationCandidateController {
 
     OrganizationService organizationService
 
-    Object manage(final OrganizationPartnerOrganizationCandidateFindOneRequest organizationPartnerOrganizationCandidateFindOneRequest) {
+    Object manage() {
+    }
+
+    Object findOne(final OrganizationPartnerOrganizationCandidateFindOneRequest organizationPartnerOrganizationCandidateFindOneRequest) {
 
         final P2<Object, Integer> response = toResponse(organizationService.findOne(((GrailsUser) getPrincipal()).username, organizationPartnerOrganizationCandidateFindOneRequest))
 
-        [organization: response._1()]
+        respond response._1(), status: response._2()
     }
 }

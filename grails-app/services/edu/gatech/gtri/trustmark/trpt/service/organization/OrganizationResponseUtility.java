@@ -5,51 +5,36 @@ import edu.gatech.gtri.trustmark.trpt.domain.OrganizationPartnerOrganizationCand
 import edu.gatech.gtri.trustmark.trpt.domain.OrganizationTrustInteroperabilityProfileUri;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerOrganizationCandidate;
 import edu.gatech.gtri.trustmark.trpt.domain.PartnerOrganizationCandidateTrustInteroperabilityProfileUri;
-import edu.gatech.gtri.trustmark.trpt.domain.TrustInteroperabilityProfileUri;
+import edu.gatech.gtri.trustmark.trpt.domain.PartnerOrganizationCandidateTrustInteroperabilityProfileUriHistory;
 import edu.gatech.gtri.trustmark.trpt.service.partnerOrganizationCandidate.PartnerOrganizationCandidateResponse;
 import edu.gatech.gtri.trustmark.trpt.service.partnerOrganizationCandidate.PartnerOrganizationCandidateTrustInteroperabilityProfileResponse;
 import edu.gatech.gtri.trustmark.trpt.service.partnerOrganizationCandidate.PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation;
+import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.EvaluationResponse;
+import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.EvaluationResponseWithTrustExpressionEvaluation;
 import edu.gatech.gtri.trustmark.trpt.service.trustInteroperabilityProfile.TrustInteroperabilityProfileResponse;
-import edu.gatech.gtri.trustmark.trpt.service.trustInteroperabilityProfile.TrustInteroperabilityProfileUtility;
-import edu.gatech.gtri.trustmark.trpt.service.validation.ValidationMessage;
 import org.gtri.fj.Ordering;
-import org.gtri.fj.data.Either;
 import org.gtri.fj.data.List;
-import org.gtri.fj.data.NonEmptyList;
-import org.gtri.fj.data.Validation;
 import org.gtri.fj.function.F1;
-import org.gtri.fj.function.F5;
-import org.gtri.fj.function.F6;
-import org.gtri.fj.function.F7;
 import org.gtri.fj.function.F8;
-import org.gtri.fj.product.P2;
 import org.gtri.fj.product.P6;
 import org.json.JSONObject;
 
-import static edu.gatech.gtri.trustmark.trpt.domain.Organization.findByNameHelper;
-import static edu.gatech.gtri.trustmark.trpt.domain.Organization.findByUriHelper;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static edu.gatech.gtri.trustmark.trpt.service.file.FileUtility.stringFor;
 import static edu.gatech.gtri.trustmark.trpt.service.partnerOrganizationCandidate.PartnerOrganizationCandidateUtility.partnerOrganizationCandidateResponse;
 import static edu.gatech.gtri.trustmark.trpt.service.trustInteroperabilityProfile.TrustInteroperabilityProfileUtility.trustInteroperabilityProfileResponse;
-import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeEmpty;
-import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndDistinctAndValid;
-import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndLength;
-import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNonNullAndUniqueAndLength;
-import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeNullOr;
-import static edu.gatech.gtri.trustmark.trpt.service.validation.ValidationUtility.mustBeReference;
-import static org.gtri.fj.Equal.equal;
 import static org.gtri.fj.Ord.ord;
 import static org.gtri.fj.data.List.arrayList;
 import static org.gtri.fj.data.List.nil;
 import static org.gtri.fj.data.Option.fromNull;
-import static org.gtri.fj.data.Validation.accumulate;
-import static org.gtri.fj.lang.LongUtility.longOrd;
 import static org.gtri.fj.lang.StringUtility.stringOrd;
 import static org.gtri.fj.product.P.p;
 
-public final class OrganizationUtility {
+public final class OrganizationResponseUtility {
 
-    private OrganizationUtility() {
+    private OrganizationResponseUtility() {
     }
 
     public static OrganizationResponse organizationResponse(final Organization organization) {
@@ -69,7 +54,7 @@ public final class OrganizationUtility {
                 organization.getUri(),
                 organization
                         .organizationTrustInteroperabilityProfileUriSetHelper()
-                        .map(OrganizationUtility::organizationTrustInteroperabilityProfileResponse)
+                        .map(OrganizationResponseUtility::organizationTrustInteroperabilityProfileResponse)
                         .sort(ord((o1, o2) -> o1.getTrustInteroperabilityProfile().getName() != null && o2.getTrustInteroperabilityProfile().getName() != null ?
                                 stringOrd.compare(o1.getTrustInteroperabilityProfile().getName(), o2.getTrustInteroperabilityProfile().getName()) :
                                 o1.getTrustInteroperabilityProfile().getName() != null ?
@@ -95,7 +80,7 @@ public final class OrganizationUtility {
                 organization.getName(),
                 organization
                         .organizationTrustInteroperabilityProfileUriSetHelper()
-                        .map(OrganizationUtility::organizationTrustInteroperabilityProfileResponse)
+                        .map(OrganizationResponseUtility::organizationTrustInteroperabilityProfileResponse)
                         .sort(ord((o1, o2) -> o1.getTrustInteroperabilityProfile().getName() != null && o2.getTrustInteroperabilityProfile().getName() != null ?
                                 stringOrd.compare(o1.getTrustInteroperabilityProfile().getName(), o2.getTrustInteroperabilityProfile().getName()) :
                                 o1.getTrustInteroperabilityProfile().getName() != null ?
@@ -122,7 +107,7 @@ public final class OrganizationUtility {
         return organizationPartnerOrganizationCandidateResponseHelper(
                 organization,
                 partnerOrganizationCandidate,
-                OrganizationUtility::partnerOrganizationCandidateTrustInteroperabilityProfileResponse,
+                OrganizationResponseUtility::partnerOrganizationCandidateTrustInteroperabilityProfileResponse,
                 OrganizationPartnerOrganizationCandidateResponse::new,
                 PartnerOrganizationCandidateTrustInteroperabilityProfileResponse::getTrustInteroperabilityProfile);
     }
@@ -134,7 +119,7 @@ public final class OrganizationUtility {
         return organizationPartnerOrganizationCandidateResponseHelper(
                 organization,
                 partnerOrganizationCandidate,
-                OrganizationUtility::partnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation,
+                OrganizationResponseUtility::partnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation,
                 OrganizationPartnerOrganizationCandidateResponseWithTrustExpressionEvaluation::new,
                 PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation::getTrustInteroperabilityProfile);
     }
@@ -187,105 +172,78 @@ public final class OrganizationUtility {
             final PartnerOrganizationCandidateTrustInteroperabilityProfileUri partnerOrganizationCandidateTrustInteroperabilityProfileUri) {
 
         return new PartnerOrganizationCandidateTrustInteroperabilityProfileResponse(
-                TrustInteroperabilityProfileUtility.trustInteroperabilityProfileResponse(partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
-                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationAttemptLocalDateTime(),
-                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime(),
-                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied(),
-                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
-                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied());
+                trustInteroperabilityProfileResponse(partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
+                evaluationResponse(partnerOrganizationCandidateTrustInteroperabilityProfileUri));
     }
 
     private static PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation partnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation(
             final PartnerOrganizationCandidateTrustInteroperabilityProfileUri partnerOrganizationCandidateTrustInteroperabilityProfileUri) {
 
         return new PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation(
-                TrustInteroperabilityProfileUtility.trustInteroperabilityProfileResponse(partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
+                trustInteroperabilityProfileResponse(partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper()),
+                Stream.concat(
+                                Stream.of(evaluationResponseWithTrustExpressionEvaluation(partnerOrganizationCandidateTrustInteroperabilityProfileUri)),
+                                PartnerOrganizationCandidateTrustInteroperabilityProfileUriHistory
+                                        .findAllByPartnerOrganizationCandidateTrustInteroperabilityProfileUriHelper(
+                                                partnerOrganizationCandidateTrustInteroperabilityProfileUri.partnerOrganizationCandidateHelper(),
+                                                partnerOrganizationCandidateTrustInteroperabilityProfileUri.trustInteroperabilityProfileUriHelper())
+                                        .map(OrganizationResponseUtility::evaluationResponseWithTrustExpressionEvaluation)
+                                        .toJavaList()
+                                        .stream())
+                        .collect(Collectors.toList()));
+    }
+
+    public static EvaluationResponseWithTrustExpressionEvaluation evaluationResponseWithTrustExpressionEvaluation(
+            final PartnerOrganizationCandidateTrustInteroperabilityProfileUri partnerOrganizationCandidateTrustInteroperabilityProfileUri) {
+
+        return new EvaluationResponseWithTrustExpressionEvaluation(
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.idHelper(),
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationAttemptLocalDateTime(),
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime(),
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied(),
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
+                true,
                 partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression() == null ? null : new JSONObject(stringFor(partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpression())));
     }
 
-    private static boolean trustable() {
-        return false;
+    public static EvaluationResponseWithTrustExpressionEvaluation evaluationResponseWithTrustExpressionEvaluation(
+            final PartnerOrganizationCandidateTrustInteroperabilityProfileUriHistory partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory) {
+
+        return new EvaluationResponseWithTrustExpressionEvaluation(
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.idHelper(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationAttemptLocalDateTime(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationLocalDateTime(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpressionSatisfied(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
+                false,
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpression() == null ? null : new JSONObject(stringFor(partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpression())));
     }
 
-    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, String> validationName(final String name) {
+    public static EvaluationResponse evaluationResponse(
+            final PartnerOrganizationCandidateTrustInteroperabilityProfileUri partnerOrganizationCandidateTrustInteroperabilityProfileUri) {
 
-        return mustBeNonNullAndUniqueAndLength(OrganizationField.name, Organization::findByNameHelper, 1, 1000, name);
+        return new EvaluationResponse(
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.idHelper(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationAttemptLocalDateTime(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationLocalDateTime(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustExpressionSatisfied(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUri.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
+                true);
     }
 
-    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, String> validationName(final long id, final String name) {
+    public static EvaluationResponse evaluationResponse(
+            final PartnerOrganizationCandidateTrustInteroperabilityProfileUriHistory partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory) {
 
-        return mustBeNonNullAndUniqueAndLength(OrganizationField.name, nameInner -> findByNameHelper(nameInner).filter(organization -> organization.idHelper() != id), 1, 1000, name);
-    }
-
-    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, String> validationUri(final String uri) {
-
-        return mustBeNonNullAndUniqueAndLength(OrganizationField.uri, Organization::findByUriHelper, 1, 1000, uri);
-    }
-
-    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, String> validationUri(final long id, final String uri) {
-
-        return mustBeNonNullAndUniqueAndLength(OrganizationField.uri, uriInner -> findByUriHelper(uriInner).filter(organization -> organization.idHelper() != id), 1, 1000, uri);
-    }
-
-    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, String> validationDescription(final String description) {
-
-        return mustBeNullOr(OrganizationField.description, description, (field, value) -> mustBeNonNullAndLength(field, 1, 1000, value));
-    }
-
-    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, Organization> validationId(final long id, final List<Organization> organizationList) {
-
-        return mustBeReference(OrganizationField.id, Organization::findByIdHelper, id, organizationList, equal((o1, o2) -> o1.idHelper() == o2.idHelper()));
-    }
-
-    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, List<Organization>> validationIdList(final List<Long> idList, final List<Organization> organizationList) {
-
-        return mustBeNonNullAndDistinctAndValid(OrganizationField.idList, idList, longOrd, id -> validationId(id, organizationList)
-                .bind(organization -> accumulate(
-                        mustBeEmpty(OrganizationField.userSet, organization.userSetHelper()),
-                        mustBeEmpty(OrganizationField.protectedSystemSet, organization.protectedSystemSetHelper()),
-                        mustBeEmpty(OrganizationField.trustmarkBindingRegistrySet, organization.trustmarkBindingRegistrySetHelper()),
-                        (userSet, protectedSystemSet, trustmarkBindingRegistrySet) -> organization)));
-    }
-
-    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, List<P2<Either<String, TrustInteroperabilityProfileUri>, Boolean>>> validationOrganizationTrustInteroperabilityProfileList(final List<OrganizationTrustInteroperabilityProfileUpsertRequest> organizationTrustInteroperabilityProfileList) {
-
-        return mustBeNonNullAndDistinctAndValid(
-                OrganizationField.organizationTrustInteroperabilityProfileList,
-                organizationTrustInteroperabilityProfileList,
-                ord((o1, o2) -> o1.getUri() == null && o2.getUri() == null ?
-                        Ordering.EQ :
-                        o1.getUri() == null ?
-                                Ordering.LT :
-                                o2.getUri() == null ?
-                                        Ordering.GT :
-                                        stringOrd.compare(o1.getUri(), o2.getUri())),
-                nonNullAndDistinct -> mustBeNonNullAndLength(
-                        OrganizationField.uri,
-                        1,
-                        1000,
-                        nonNullAndDistinct.getUri())
-                        .map(uri -> p(TrustInteroperabilityProfileUri.findByUriHelper(uri).toEither(uri), nonNullAndDistinct.isMandatory())));
-    }
-
-    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, List<PartnerOrganizationCandidate>> validationPartnerOrganizationCandidateList(final List<Long> partnerOrganizationCandidateList) {
-
-        return mustBeNonNullAndDistinctAndValid(
-                OrganizationField.partnerOrganizationCandidateList,
-                partnerOrganizationCandidateList,
-                longOrd,
-                nonNullAndDistinct -> validationPartnerOrganizationCandidate(nonNullAndDistinct));
-    }
-
-    public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, PartnerOrganizationCandidate> validationPartnerOrganizationCandidate(final long partnerOrganizationCandidate) {
-
-        return mustBeReference(
-                OrganizationField.partnerOrganizationCandidate,
-                PartnerOrganizationCandidate::findByIdHelper,
-                partnerOrganizationCandidate);
+        return new EvaluationResponse(
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.idHelper(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationAttemptLocalDateTime(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationLocalDateTime(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustExpressionSatisfied(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustmarkDefinitionRequirementSatisfied(),
+                partnerOrganizationCandidateTrustInteroperabilityProfileUriHistory.getEvaluationTrustmarkDefinitionRequirementUnsatisfied(),
+                false);
     }
 }
