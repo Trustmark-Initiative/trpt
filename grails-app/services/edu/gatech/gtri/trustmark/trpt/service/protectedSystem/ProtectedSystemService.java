@@ -122,8 +122,8 @@ public class ProtectedSystemService {
         return accumulate(
                 success(new ProtectedSystem()),
                 validationOrganization(protectedSystemInsertRequest.getOrganization(), requesterOrganizationList),
-                validationProtectedSystemTrustInteroperabilityProfileList(iterableList(protectedSystemInsertRequest.getProtectedSystemTrustInteroperabilityProfileList())),
-                validationPartnerSystemCandidateList(iterableList(protectedSystemInsertRequest.getPartnerSystemCandidateList())),
+                validationProtectedSystemTrustInteroperabilityProfileList(iterableList(protectedSystemInsertRequest.getEntityTrustInteroperabilityProfileList())),
+                validationPartnerSystemCandidateList(iterableList(protectedSystemInsertRequest.getPartnerCandidateList())),
                 validationName(protectedSystemInsertRequest.getOrganization(), protectedSystemInsertRequest.getName()),
                 validationType(protectedSystemInsertRequest.getType()),
                 this::saveHelper)
@@ -139,8 +139,8 @@ public class ProtectedSystemService {
         return accumulate(
                 validationId(protectedSystemUpdateRequest.getId(), requesterOrganizationList),
                 validationOrganization(protectedSystemUpdateRequest.getOrganization(), requesterOrganizationList),
-                validationProtectedSystemTrustInteroperabilityProfileList(iterableList(protectedSystemUpdateRequest.getProtectedSystemTrustInteroperabilityProfileList())),
-                validationPartnerSystemCandidateList(iterableList(protectedSystemUpdateRequest.getPartnerSystemCandidateList())),
+                validationProtectedSystemTrustInteroperabilityProfileList(iterableList(protectedSystemUpdateRequest.getEntityTrustInteroperabilityProfileList())),
+                validationPartnerSystemCandidateList(iterableList(protectedSystemUpdateRequest.getPartnerCandidateList())),
                 validationName(protectedSystemUpdateRequest.getId(), protectedSystemUpdateRequest.getOrganization(), protectedSystemUpdateRequest.getName()),
                 validationType(protectedSystemUpdateRequest.getType()),
                 this::saveHelper)
@@ -257,7 +257,7 @@ public class ProtectedSystemService {
 
         return accumulate(
                 validationId(protectedSystemPartnerSystemCandidateFindOneRequest.getId(), requesterOrganizationList),
-                validationPartnerSystemCandidate(protectedSystemPartnerSystemCandidateFindOneRequest.getPartnerSystemCandidate()),
+                validationPartnerSystemCandidate(protectedSystemPartnerSystemCandidateFindOneRequest.getPartnerCandidate()),
                 (protectedSystem, partnerSystemCandidate) -> p(protectedSystem, partnerSystemCandidate))
                 .map(p -> protectedSystemResponseWithTrustExpressionEvaluation(p._1(), p._2()));
     }

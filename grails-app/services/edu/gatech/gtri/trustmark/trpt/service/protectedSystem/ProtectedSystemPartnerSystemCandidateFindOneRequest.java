@@ -3,24 +3,24 @@ package edu.gatech.gtri.trustmark.trpt.service.protectedSystem;
 public final class ProtectedSystemPartnerSystemCandidateFindOneRequest {
 
     private long id;
-    private long partnerSystemCandidate;
+    private long partnerCandidate;
 
     public ProtectedSystemPartnerSystemCandidateFindOneRequest() {
     }
 
     public ProtectedSystemPartnerSystemCandidateFindOneRequest(
             final long id,
-            final long partnerSystemCandidate) {
+            final long partnerCandidate) {
 
         this.id = id;
-        this.partnerSystemCandidate = partnerSystemCandidate;
+        this.partnerCandidate = partnerCandidate;
     }
 
     public long getId() {
         return id;
     }
 
-    public long getPartnerSystemCandidate() {
-        return partnerSystemCandidate;
+    public long getPartnerCandidate() {
+        return partnerCandidate;
     }
 }

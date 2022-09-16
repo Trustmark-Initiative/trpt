@@ -94,7 +94,7 @@ public final class OrganizationValidationUtility {
     public static Validation<NonEmptyList<ValidationMessage<OrganizationField>>, List<PartnerOrganizationCandidate>> validationPartnerOrganizationCandidateList(final List<Long> partnerOrganizationCandidateList) {
 
         return mustBeNonNullAndDistinctAndValid(
-                OrganizationField.partnerOrganizationCandidateList,
+                OrganizationField.partnerCandidateList,
                 partnerOrganizationCandidateList,
                 longOrd,
                 nonNullAndDistinct -> validationPartnerOrganizationCandidate(nonNullAndDistinct));

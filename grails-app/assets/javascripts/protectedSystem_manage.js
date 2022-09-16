@@ -1,12 +1,12 @@
 function initialize(
-    protectedSystemFindAll,
-    protectedSystemFindOne,
-    protectedSystemInsert,
-    protectedSystemUpdate,
-    protectedSystemDelete,
+    entityFindAll,
+    entityFindOne,
+    entityInsert,
+    entityUpdate,
+    entityDelete,
+    entityDashboard,
     organizationFindAll,
-    typeFindAll,
-    protectedSystemDashboard) {
+    typeFindAll) {
 
     document.addEventListener("readystatechange", function () {
 
@@ -22,81 +22,89 @@ function initialize(
 
     function findAll() {
 
-        fetchGet(protectedSystemFindAll)
+        fetchGet(entityFindAll)
             .then(response => response.json())
             .then(afterFindAll)
     }
 
-    function afterFindAll(protectedSystemList) {
+    function afterFindAll(entityList) {
 
         stateReset()
 
-        document.getElementById("protected-system-action-insert").outerHTML = document.getElementById("protected-system-action-insert").outerHTML
-        document.getElementById("protected-system-action-delete").outerHTML = document.getElementById("protected-system-action-delete").outerHTML
+        if (document.getElementById("entity-action-insert") != null) {
+            document.getElementById("entity-action-insert").outerHTML = document.getElementById("entity-action-insert").outerHTML
+            document.getElementById("entity-action-insert").addEventListener("click", beforeInsertOpen)
+        }
 
-        document.getElementById("protected-system-action-insert").addEventListener("click", () => {
+        document.getElementById("entity-action-delete").outerHTML = document.getElementById("entity-action-delete").outerHTML
+        document.getElementById("entity-action-delete").addEventListener("click", () => onDeleteSubmit(entityList))
 
-            const organizationListPromise = fetchGet(organizationFindAll).then(response => response.json())
-            const typeListPromise = fetchGet(typeFindAll).then(response => response.json())
+        const entityTBody = document.getElementById("entity-tbody")
+        entityTBody.innerHTML = ""
 
-            Promise.all([organizationListPromise, typeListPromise]).then(array => onInsertOpen(array[0], array[1]))
-        })
-        document.getElementById("protected-system-action-delete").addEventListener("click", onDeleteSubmit)
+        if (entityList.length === 0) {
 
-        const protectedSystemTBody = document.getElementById("protected-system-tbody")
-        protectedSystemTBody.innerHTML = ""
+            const entityElement = document.getElementById("entity-template-empty").content.cloneNode(true)
 
-        if (protectedSystemList.length === 0) {
-
-            const protectedSystemElement = document.getElementById("protected-system-template-empty").content.cloneNode(true)
-
-            protectedSystemTBody.appendChild(protectedSystemElement)
+            entityTBody.appendChild(entityElement)
 
         } else {
 
-            protectedSystemList.forEach(protectedSystem => {
+            entityList.forEach(entity => {
 
-                const protectedSystemElement = document.getElementById("protected-system-template-summary").content.cloneNode(true)
+                const entityElement = document.getElementById("entity-template-summary").content.cloneNode(true)
 
-                const protectedSystemElementActionUpdate = protectedSystemElement.querySelector(".protected-system-action-update")
-                const protectedSystemElementActionDeleteQueue = protectedSystemElement.querySelector(".protected-system-action-delete-queue")
-                const protectedSystemElementName = protectedSystemElement.querySelector(".protected-system-element-name")
-                const protectedSystemElementType = protectedSystemElement.querySelector(".protected-system-element-type")
-                const protectedSystemElementOrganization = protectedSystemElement.querySelector(".protected-system-element-organization")
-                const protectedSystemElementTipCount = protectedSystemElement.querySelector(".protected-system-element-tip-count")
+                const entityElementActionUpdate = entityElement.querySelector(".entity-action-update")
+                const entityElementActionDeleteQueue = entityElement.querySelector(".entity-action-delete-queue")
+                const entityElementName = entityElement.querySelector(".entity-element-name")
 
+                // specific to this entity
+                const entityElementType = entityElement.querySelector(".protected-system-element-type")
+                const entityElementOrganization = entityElement.querySelector(".protected-system-element-organization")
+                const entityElementTipCount = entityElement.querySelector(".protected-system-element-tip-count")
 
-                protectedSystemElementActionUpdate.addEventListener("click", () => onUpdateOpen(protectedSystem))
-                protectedSystemElementActionDeleteQueue.dataset.id = protectedSystem.id
-                protectedSystemElementName.innerHTML = protectedSystem.name
-                protectedSystemElementName.title = protectedSystem.name
-                protectedSystemElementName.href = protectedSystemDashboard + "?" + new URLSearchParams({"id": protectedSystem.id})
-                protectedSystemElementType.innerHTML = protectedSystem.type.label
-                protectedSystemElementType.title = protectedSystem.type.label
-                protectedSystemElementOrganization.innerHTML = protectedSystem.organization.name
-                protectedSystemElementOrganization.title = protectedSystem.organization.name
-                protectedSystemElementTipCount.innerHTML = protectedSystem.protectedSystemTrustInteroperabilityProfileList.length
-                protectedSystemElementTipCount.title = protectedSystem.protectedSystemTrustInteroperabilityProfileList.length
+                entityElement.firstElementChild.dataset.id = entity.id
+                entityElementActionUpdate.addEventListener("click", () => onUpdateOpen(entity))
+                entityElementActionDeleteQueue.dataset.id = entity.id
+                entityElementName.innerHTML = entity.name
+                entityElementName.title = entity.name
+                entityElementName.href = entityDashboard + "?" + new URLSearchParams({"id": entity.id})
 
-                protectedSystemTBody.appendChild(protectedSystemElement)
+                // specific to this entity
+                entityElementType.innerHTML = entity.type.label
+                entityElementType.title = entity.type.label
+                entityElementOrganization.innerHTML = entity.organization.name
+                entityElementOrganization.title = entity.organization.name
+                entityElementTipCount.innerHTML = entity.entityTrustInteroperabilityProfileList.length
+                entityElementTipCount.title = entity.entityTrustInteroperabilityProfileList.length
+
+                entityTBody.appendChild(entityElement)
             })
         }
+    }
+
+    function beforeInsertOpen() {
+        const organizationListPromise = fetchGet(organizationFindAll).then(response => response.json())
+        const typeListPromise = fetchGet(typeFindAll).then(response => response.json())
+
+        Promise.all([organizationListPromise, typeListPromise]).then(array => onInsertOpen(array[0], array[1]))
     }
 
     function onInsertOpen(organizationList, typeList) {
 
         stateReset()
 
-        document.getElementById("protected-system-action-cancel").outerHTML = document.getElementById("protected-system-action-cancel").outerHTML
-        document.getElementById("protected-system-action-submit-insert").outerHTML = document.getElementById("protected-system-action-submit-insert").outerHTML
+        document.getElementById("entity-action-cancel").outerHTML = document.getElementById("entity-action-cancel").outerHTML
+        document.getElementById("entity-action-submit-insert").outerHTML = document.getElementById("entity-action-submit-insert").outerHTML
 
-        document.getElementById("protected-system-action-cancel").addEventListener("click", onCancel)
-        document.getElementById("protected-system-action-submit-insert").addEventListener("click", onInsertSubmit)
+        document.getElementById("entity-action-cancel").addEventListener("click", onCancel)
+        document.getElementById("entity-action-submit-insert").addEventListener("click", onInsertSubmit)
 
-        document.getElementById("protected-system-form").classList.remove("d-none")
-        document.getElementById("protected-system-form-header-insert").classList.remove("d-none")
-        document.getElementById("protected-system-action-submit-insert").classList.remove("d-none")
+        document.getElementById("entity-form").classList.remove("d-none")
+        document.getElementById("entity-form-header-insert").classList.remove("d-none")
+        document.getElementById("entity-action-submit-insert").classList.remove("d-none")
 
+        // specific to this entity
         organizationList.map(organization => {
             const option = document.createElement("option")
             option.value = organization.id
@@ -115,38 +123,41 @@ function initialize(
         })
     }
 
-    function onUpdateOpen(protectedSystem) {
+    function onUpdateOpen(entity) {
 
-        const protectedSystemPromise = fetchGet(protectedSystemFindOne + "?" + new URLSearchParams({"id": protectedSystem.id})).then(response => response.json())
+        const entityPromise = fetchGet(entityFindOne + "?" + new URLSearchParams({"id": entity.id})).then(response => response.json())
+
+        // specific to this entity
         const organizationListPromise = fetchGet(organizationFindAll).then(response => response.json())
         const typeListPromise = fetchGet(typeFindAll).then(response => response.json())
 
-        Promise.all([protectedSystemPromise, organizationListPromise, typeListPromise]).then(array => afterFindOne(array[0], array[1], array[2]))
+        Promise.all([entityPromise, organizationListPromise, typeListPromise]).then(array => afterFindOne(array[0], array[1], array[2]))
     }
 
-    function afterFindOne(protectedSystem, organizationList, typeList) {
+    function afterFindOne(entity, organizationList, typeList) {
 
         stateReset()
 
-        document.getElementById("protected-system-action-cancel").outerHTML = document.getElementById("protected-system-action-cancel").outerHTML
-        document.getElementById("protected-system-action-submit-update").outerHTML = document.getElementById("protected-system-action-submit-update").outerHTML
+        document.getElementById("entity-action-cancel").outerHTML = document.getElementById("entity-action-cancel").outerHTML
+        document.getElementById("entity-action-submit-update").outerHTML = document.getElementById("entity-action-submit-update").outerHTML
 
-        document.getElementById("protected-system-action-cancel").addEventListener("click", onCancel)
-        document.getElementById("protected-system-action-submit-update").addEventListener("click", () => onUpdateSubmit(protectedSystem))
+        document.getElementById("entity-action-cancel").addEventListener("click", onCancel)
+        document.getElementById("entity-action-submit-update").addEventListener("click", () => onUpdateSubmit(entity))
 
-        document.getElementById("protected-system-form").classList.remove("d-none")
-        document.getElementById("protected-system-form-header-update").classList.remove("d-none")
-        document.getElementById("protected-system-action-submit-update").classList.remove("d-none")
+        document.getElementById("entity-form").classList.remove("d-none")
+        document.getElementById("entity-form-header-update").classList.remove("d-none")
+        document.getElementById("entity-action-submit-update").classList.remove("d-none")
 
-        document.getElementById("protected-system-input-id").value = protectedSystem.id
-        document.getElementById("protected-system-input-name").value = protectedSystem.name
+        document.getElementById("protected-system-input-id").value = entity.id
+        document.getElementById("protected-system-input-name").value = entity.name
 
+        // specific to this entity
         organizationList.map(organization => {
 
             const option = document.createElement("option")
             option.value = organization.id
             option.innerHTML = organization.name
-            option.selected = organization.id === protectedSystem.organization.id
+            option.selected = organization.id === entity.organization.id
 
             document.getElementById("protected-system-input-organization").add(option)
         })
@@ -156,7 +167,7 @@ function initialize(
             const option = document.createElement("option")
             option.value = type.value
             option.innerHTML = type.label
-            option.selected = type.value === protectedSystem.type.value
+            option.selected = type.value === entity.type.value
 
             document.getElementById("protected-system-input-type").add(option)
         })
@@ -169,51 +180,51 @@ function initialize(
 
     function onInsertSubmit() {
 
-        fetchPost(protectedSystemInsert, {
+        fetchPost(entityInsert, {
             name: document.getElementById("protected-system-input-name").value,
             type: document.getElementById("protected-system-input-type").value,
             organization: document.getElementById("protected-system-input-organization").value,
-            protectedSystemTrustInteroperabilityProfileList: [],
-            partnerSystemCandidateList: []
+            entityTrustInteroperabilityProfileList: [],
+            partnerCandidateList: []
         })
             .then(response => response.status !== 200 ?
                 onFailure(response.json()) :
                 findAll())
     }
 
-    function onUpdateSubmit(protectedSystem) {
+    function onUpdateSubmit(entity) {
 
-        fetchPost(protectedSystemUpdate, {
+        fetchPost(entityUpdate, {
             id: document.getElementById("protected-system-input-id").value,
             name: document.getElementById("protected-system-input-name").value,
             type: document.getElementById("protected-system-input-type").value,
             organization: document.getElementById("protected-system-input-organization").value,
-            protectedSystemTrustInteroperabilityProfileList: protectedSystem.protectedSystemTrustInteroperabilityProfileList
-                .map(protectedSystemTrustInteroperabilityProfileInner => {
+            entityTrustInteroperabilityProfileList: entity.entityTrustInteroperabilityProfileList
+                .map(entityTrustInteroperabilityProfileInner => {
                     return {
-                        "mandatory": protectedSystemTrustInteroperabilityProfileInner.mandatory,
-                        "uri": protectedSystemTrustInteroperabilityProfileInner.trustInteroperabilityProfile.uri
+                        "mandatory": entityTrustInteroperabilityProfileInner.mandatory,
+                        "uri": entityTrustInteroperabilityProfileInner.trustInteroperabilityProfile.uri
                     }
                 }),
-            partnerSystemCandidateList: protectedSystem.protectedSystemPartnerSystemCandidateList
-                .filter(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.trust)
-                .map(protectedSystemPartnerSystemCandidate => protectedSystemPartnerSystemCandidate.partnerSystemCandidate.id)
+            partnerCandidateList: entity.entityPartnerCandidateList
+                .filter(entityPartnerCandidate => entityPartnerCandidate.trust)
+                .map(entityPartnerCandidate => entityPartnerCandidate.partnerCandidate.id)
         })
             .then(response => response.status !== 200 ?
                 onFailure(response.json()) :
                 findAll())
     }
 
-    function onDeleteSubmit(protectedSystemList) {
+    function onDeleteSubmit(entityList) {
 
-        const idList = Array.from(document.querySelectorAll(".protected-system-action-delete-queue:checked"))
+        const idList = Array.from(document.querySelectorAll(".entity-action-delete-queue:checked"))
             .map(element => element.dataset.id)
 
-        fetchPost(protectedSystemDelete, {
+        fetchPost(entityDelete, {
             idList: idList
         })
             .then(response => response.status !== 200 ?
-                onFailure(protectedSystemList, idList, response.json()) :
+                onFailureForDelete(entityList, idList, response.json()) :
                 findAll())
     }
 
@@ -230,18 +241,63 @@ function initialize(
         messageMapShow(failureMapPromise, "protected-system", labelFor)
     }
 
-    function onFailureForDelete(protectedSystemList, idList, failureMapPromise) {
+    function onFailureForDelete(entityList, idList, failureMapPromise) {
+
+        stateReset();
+
+        document.getElementById("entity-delete-response-failure").classList.remove("d-none")
+
+        const labelFor = {
+            "name": "name",
+            "type": "type",
+            "organization": "organization",
+            "idlist": "protected systems",
+            "id": "protected system",
+        }
+
+        failureMapPromise.then(failureMap => {
+
+            const messageMapResponse = messageMap(failureMap, field => labelFor[field])
+
+            if (messageMapResponse["idList"] !== undefined && messageMapResponse["idList"][0] !== undefined) {
+
+                const entityDeleteResponseFailure = document.getElementById("entity-delete-response-failure")
+                entityDeleteResponseFailure.innerHTML = ""
+
+                Object.entries(messageMapResponse["idList"][0]).forEach(entry => {
+
+                    const entityElement = document.getElementById("entity-template-delete-response-failure").content.cloneNode(true)
+                    const entityElementName = entityElement.querySelector(".entity-element-name")
+                    const entityElementMessage = entityElement.querySelector(".entity-element-message")
+
+                    entityElementName.innerHTML = `Could not delete "${entityList.find(entity => entity.id == idList[entry[0]]).name}":`
+
+                    Object.entries(entry[1]).forEach(entryInner => {
+
+                        entryInner[1].forEach(message => {
+
+                            const entityElementMessageInner = document.createElement("li")
+                            entityElementMessageInner.innerHTML = message;
+
+                            entityElementMessage.appendChild(entityElementMessageInner)
+                        })
+                    })
+
+                    entityDeleteResponseFailure.appendChild(entityElement)
+                })
+            }
+        })
     }
 
     function stateReset() {
 
-        document.getElementById("protected-system-form").classList.add("d-none")
-        document.getElementById("protected-system-form-header-insert").classList.add("d-none")
-        document.getElementById("protected-system-form-header-update").classList.add("d-none")
-        document.getElementById("protected-system-action-submit-insert").classList.add("d-none")
-        document.getElementById("protected-system-action-submit-update").classList.add("d-none")
-        document.getElementById("protected-system-delete-response-failure").classList.add("d-none")
-        document.getElementById("protected-system-delete-response-failure").innerHTML = ""
+        document.getElementById("entity-form").classList.add("d-none")
+        document.getElementById("entity-form-header-insert").classList.add("d-none")
+        document.getElementById("entity-form-header-update").classList.add("d-none")
+        document.getElementById("entity-action-submit-insert").classList.add("d-none")
+        document.getElementById("entity-action-submit-update").classList.add("d-none")
+        document.getElementById("entity-delete-response-failure").classList.add("d-none")
+        document.getElementById("entity-delete-response-failure").innerHTML = ""
 
         formResetValue()
     }
@@ -250,6 +306,8 @@ function initialize(
 
         document.getElementById("protected-system-input-id").value = ""
         document.getElementById("protected-system-input-name").value = ""
+
+        // specific to this entity
         document.getElementById("protected-system-input-type").innerHTML = ""
         document.getElementById("protected-system-input-organization").innerHTML = ""
 
@@ -260,6 +318,8 @@ function initialize(
 
         document.getElementById("protected-system-input-name").classList.remove("is-invalid")
         document.getElementById("protected-system-invalid-feedback-name").innerHTML = ""
+
+        // specific to this entity
         document.getElementById("protected-system-input-type").classList.remove("is-invalid")
         document.getElementById("protected-system-invalid-feedback-type").innerHTML = ""
         document.getElementById("protected-system-input-organization").classList.remove("is-invalid")

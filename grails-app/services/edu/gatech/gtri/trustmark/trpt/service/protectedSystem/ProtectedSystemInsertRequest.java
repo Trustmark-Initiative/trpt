@@ -9,8 +9,8 @@ public final class ProtectedSystemInsertRequest {
     private long organization;
     private ProtectedSystemType type;
     private String name;
-    private List<ProtectedSystemTrustInteroperabilityProfileUpsertRequest> protectedSystemTrustInteroperabilityProfileList;
-    private List<Long> partnerSystemCandidateList;
+    private List<ProtectedSystemTrustInteroperabilityProfileUpsertRequest> entityTrustInteroperabilityProfileList;
+    private List<Long> partnerCandidateList;
 
     public ProtectedSystemInsertRequest() {
     }
@@ -19,14 +19,14 @@ public final class ProtectedSystemInsertRequest {
             final long organization,
             final ProtectedSystemType type,
             final String name,
-            final List<ProtectedSystemTrustInteroperabilityProfileUpsertRequest> protectedSystemTrustInteroperabilityProfileList,
-            final List<Long> partnerSystemCandidateList) {
+            final List<ProtectedSystemTrustInteroperabilityProfileUpsertRequest> entityTrustInteroperabilityProfileList,
+            final List<Long> partnerCandidateList) {
 
         this.organization = organization;
         this.type = type;
         this.name = name;
-        this.protectedSystemTrustInteroperabilityProfileList = protectedSystemTrustInteroperabilityProfileList;
-        this.partnerSystemCandidateList = partnerSystemCandidateList;
+        this.entityTrustInteroperabilityProfileList = entityTrustInteroperabilityProfileList;
+        this.partnerCandidateList = partnerCandidateList;
     }
 
     public long getOrganization() {
@@ -53,19 +53,19 @@ public final class ProtectedSystemInsertRequest {
         this.name = name;
     }
 
-    public List<ProtectedSystemTrustInteroperabilityProfileUpsertRequest> getProtectedSystemTrustInteroperabilityProfileList() {
-        return protectedSystemTrustInteroperabilityProfileList;
+    public List<ProtectedSystemTrustInteroperabilityProfileUpsertRequest> getEntityTrustInteroperabilityProfileList() {
+        return entityTrustInteroperabilityProfileList;
     }
 
-    public void setProtectedSystemTrustInteroperabilityProfileList(final List<ProtectedSystemTrustInteroperabilityProfileUpsertRequest> protectedSystemTrustInteroperabilityProfileList) {
-        this.protectedSystemTrustInteroperabilityProfileList = protectedSystemTrustInteroperabilityProfileList;
+    public void setEntityTrustInteroperabilityProfileList(final List<ProtectedSystemTrustInteroperabilityProfileUpsertRequest> entityTrustInteroperabilityProfileList) {
+        this.entityTrustInteroperabilityProfileList = entityTrustInteroperabilityProfileList;
     }
 
-    public List<Long> getPartnerSystemCandidateList() {
-        return partnerSystemCandidateList;
+    public List<Long> getPartnerCandidateList() {
+        return partnerCandidateList;
     }
 
-    public void setPartnerSystemCandidateList(final List<Long> partnerSystemCandidateList) {
-        this.partnerSystemCandidateList = partnerSystemCandidateList;
+    public void setPartnerCandidateList(final List<Long> partnerCandidateList) {
+        this.partnerCandidateList = partnerCandidateList;
     }
 }

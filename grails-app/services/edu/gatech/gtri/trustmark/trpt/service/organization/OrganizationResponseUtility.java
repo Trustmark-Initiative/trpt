@@ -66,7 +66,7 @@ public final class OrganizationResponseUtility {
                 PartnerOrganizationCandidate
                         .findAllByOrganizationInHelper(arrayList(organization))
                         .map(partnerSystemCandidate -> organizationPartnerOrganizationCandidateResponse(organization, partnerSystemCandidate))
-                        .sort(ord((o1, o2) -> stringOrd.compare(o1.getPartnerOrganizationCandidate().getName(), o2.getPartnerOrganizationCandidate().getName())))
+                        .sort(ord((o1, o2) -> stringOrd.compare(o1.getPartnerCandidate().getName(), o2.getPartnerCandidate().getName())))
                         .toJavaList());
     }
 

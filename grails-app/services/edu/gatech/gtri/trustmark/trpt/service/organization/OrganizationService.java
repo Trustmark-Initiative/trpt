@@ -118,8 +118,8 @@ public class OrganizationService {
 
         return accumulate(
                 success(new Organization()),
-                validationOrganizationTrustInteroperabilityProfileList(iterableList(organizationInsertRequest.getOrganizationTrustInteroperabilityProfileList())),
-                validationPartnerOrganizationCandidateList(iterableList(organizationInsertRequest.getPartnerOrganizationCandidateList())),
+                validationOrganizationTrustInteroperabilityProfileList(iterableList(organizationInsertRequest.getEntityTrustInteroperabilityProfileList())),
+                validationPartnerOrganizationCandidateList(iterableList(organizationInsertRequest.getPartnerCandidateList())),
                 validationName(organizationInsertRequest.getName()),
                 validationUri(organizationInsertRequest.getUri()),
                 validationDescription(organizationInsertRequest.getDescription()),
@@ -135,8 +135,8 @@ public class OrganizationService {
 
         return accumulate(
                 validationId(organizationUpdateRequest.getId(), requesterOrganizationList),
-                validationOrganizationTrustInteroperabilityProfileList(iterableList(organizationUpdateRequest.getOrganizationTrustInteroperabilityProfileList())),
-                validationPartnerOrganizationCandidateList(iterableList(organizationUpdateRequest.getPartnerOrganizationCandidateList())),
+                validationOrganizationTrustInteroperabilityProfileList(iterableList(organizationUpdateRequest.getEntityTrustInteroperabilityProfileList())),
+                validationPartnerOrganizationCandidateList(iterableList(organizationUpdateRequest.getPartnerCandidateList())),
                 validationName(organizationUpdateRequest.getId(), organizationUpdateRequest.getName()),
                 validationUri(organizationUpdateRequest.getId(), organizationUpdateRequest.getUri()),
                 validationDescription(organizationUpdateRequest.getDescription()),
@@ -251,7 +251,7 @@ public class OrganizationService {
 
         return accumulate(
                 OrganizationValidationUtility.validationId(organizationPartnerOrganizationCandidateFindOneRequest.getId(), requesterOrganizationList),
-                validationPartnerOrganizationCandidate(organizationPartnerOrganizationCandidateFindOneRequest.getPartnerOrganizationCandidate()),
+                validationPartnerOrganizationCandidate(organizationPartnerOrganizationCandidateFindOneRequest.getPartnerCandidate()),
                 (organization, partnerOrganizationCandidate) -> p(organization, partnerOrganizationCandidate))
                 .map(p -> organizationResponseWithTrustExpressionEvaluation(p._1(), p._2()));
     }

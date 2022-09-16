@@ -1,29 +1,3 @@
-.OrganizationContainer {
-    margin-top: 20px;
-}
-
-
-.OrganizationContainer ol,
-.OrganizationContainer ul {
-    padding-bottom: 7px;
-    padding-top: 7px;
-    margin: 0;
-}
-
-.OrganizationContainer label,
-.TrustInteroperabilityProfileContainer label {
-    width: 100%;
-    font-weight: normal;
-}
-
-.OrganizationContainer > .Head {
-    font-size: 30px;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    font-weight: 500;
-    line-height: 1.1;
-}
-
 .TrustExpressionContainer > .Body {
     border-right: 1px solid rgb(221, 221, 221);
 }
@@ -32,11 +6,7 @@
     border-bottom: 1px solid darkgrey;
 }
 
-.OrganizationContainer,
 .TrustInteroperabilityProfileContainer,
-.PartnerOrganizationCandidateContainer,
-.PartnerOrganizationCandidate,
-.TrustExpressionEvaluationContainer,
 .TrustExpressionEvaluation,
 .TrustExpressionEvaluatorFailureListContainer,
 .TrustExpressionEvaluatorFailureListContainer > .Body,
@@ -106,11 +76,15 @@
     /*border-left: 1px solid rgb(221, 221, 221);*/
 }
 
+.TrustExpressionTerminalWithoutLabel {
+    padding: 0px 7px 0px 0px;
+    /*border-left: 1px solid rgb(221, 221, 221);*/
+}
+
 .TrustExpressionSub > input[type=checkbox],
 .TrustExpression > input[type=checkbox],
 .TrustExpressionTop > input[type=checkbox],
 .TrustExpressionTerminal > input[type=checkbox],
-.PartnerOrganizationCandidate > input[type=checkbox],
 .TrustInteroperabilityProfile > input[type=checkbox] {
     display: none;
 }
@@ -119,7 +93,6 @@
 .TrustExpression > input[type=checkbox] ~ label,
 .TrustExpressionTop > input[type=checkbox] ~ label,
 .TrustExpressionTerminal > input[type=checkbox] ~ label,
-.PartnerOrganizationCandidate > input[type=checkbox] ~ label,
 .TrustInteroperabilityProfile > input[type=checkbox] ~ label {
     cursor: pointer;
     white-space: nowrap;
@@ -129,23 +102,16 @@
 .TrustExpression > input[type=checkbox]:not(:checked) ~ div,
 .TrustExpressionTop > input[type=checkbox]:not(:checked) ~ div,
 .TrustExpressionTerminal > input[type=checkbox]:not(:checked) ~ div,
-.PartnerOrganizationCandidate > input[type=checkbox]:not(:checked) ~ div,
 .TrustInteroperabilityProfile > input[type=checkbox]:not(:checked) ~ div {
     display: none;
 }
 
-.PartnerOrganizationCandidate > label > span.glyphicon-triangle-bottom,
-.PartnerOrganizationCandidate > input[type=checkbox]:checked ~ label > span.glyphicon-triangle-right
-.PartnerOrganizationCandidate > input[type=checkbox]:not(:checked) ~ label > span.glyphicon-triangle-bottom,
-.PartnerOrganizationCandidate > input[type=checkbox]:checked ~ label > span.glyphicon-triangle-right,
 .TrustInteroperabilityProfile > input[type=checkbox]:not(:checked) ~ label > span.glyphicon-triangle-bottom,
 .TrustInteroperabilityProfile > input[type=checkbox]:checked ~ label > span.glyphicon-triangle-right {
     font-size: 10px;
     display: none;
 }
 
-.PartnerOrganizationCandidate > input[type=checkbox]:not(:checked) ~ label > span.glyphicon-triangle-right,
-.PartnerOrganizationCandidate > input[type=checkbox]:checked ~ label > span.glyphicon-triangle-bottom,
 .TrustInteroperabilityProfile > input[type=checkbox]:not(:checked) ~ label > span.glyphicon-triangle-right,
 .TrustInteroperabilityProfile > input[type=checkbox]:checked ~ label > span.glyphicon-triangle-bottom {
     font-size: 10px;
@@ -203,20 +169,30 @@
     border-top: 1px solid rgb(221, 221, 221);
 }
 
-.TrustExpressionDetail > div {
+.TrustExpressionDetailWithoutLabel {
+    color: black;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: min-content;
+    padding-top: 7px;
+    padding-left: 21px;
+    border-top: 1px solid rgb(221, 221, 221);
+}
+
+.TrustExpressionDetail > div, .TrustExpressionDetailWithoutLabel > div {
     padding-bottom: 7px;
     padding-top: 7px;
 }
 
-.TrustExpressionDetail > div:first-of-type {
+.TrustExpressionDetail > div:first-of-type, .TrustExpressionDetailWithoutLabel > div:first-of-type {
     padding-top: 0px;
 }
 
-.TrustExpressionDetail > div:last-of-type {
+.TrustExpressionDetail > div:last-of-type, .TrustExpressionDetailWithoutLabel > div:last-of-type {
     padding-bottom: 0px;
 }
 
-.TrustExpressionDetail .Head {
+.TrustExpressionDetail .Head, .TrustExpressionDetailWithoutLabel .Head {
     border-bottom: 1px solid rgb(221, 221, 221);
 }
 
@@ -271,14 +247,6 @@
 .TrustExpressionContainer > .Body > .TrustExpression,
 .TrustExpressionContainer > .Body > .TrustExpressionTop {
     border-left: 1px solid darkgrey
-}
-
-#organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list:empty {
-    border-bottom: 0px
-}
-
-#organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list, #organization-element-organization-partner-organization-candidate-partner-organization-candidate-trust-interoperability-profile-list-legend {
-    border-bottom: 1px solid darkgrey
 }
 
 .TrustExpressionContainer > .Body, .TrustExpressionEvaluatorFailureListContainer > .Body {
@@ -345,19 +313,6 @@
     padding-left: 7px;
 }
 
-.PartnerOrganizationCandidate > .Head {
-    font-weight: normal;
-    font-size: 14px;
-    padding: 5px;
-    color: rgb(51, 51, 51);
-    border-color: rgb(221, 221, 221);
-    border-width: 1px 1px 1px 1px;
-    display: block;
-    border-style: solid;
-    margin-bottom: -1px;
-    padding-left: 7px;
-}
-
 .TrustExpressionEvaluatorFailure {
     display: grid;
     grid-template-columns: min-content 1fr;
@@ -383,69 +338,6 @@
 
 .TrustExpressionEvaluatorFailure > div:nth-child(n + 1) {
     white-space: nowrap;
-}
-
-.PartnerOrganizationCandidateSummary,
-.OrganizationSummary {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-}
-
-.OrganizationSummary {
-    padding-top: 10px;
-}
-
-.PartnerOrganizationCandidateSummary {
-    margin-top: 10px;
-    padding-top: 10px;
-}
-
-.PartnerOrganizationCandidateSummary.Separate {
-    border-top: 1px solid lightgray;
-}
-
-.PartnerOrganizationCandidateSummary .Head,
-.OrganizationSummary .Head {
-    display: grid;
-    grid-gap: 5px;
-    grid-template-columns: 1fr min-content min-content min-content min-content;
-    grid-template-rows: 1fr;
-}
-
-.PartnerOrganizationCandidateSummary .Head div:not(:first-child),
-.OrganizationSummary .Head div:not(:first-child) {
-    font-weight: normal;
-    padding-left: 5px;
-    border-left: 1px solid lightgray;
-}
-
-.PartnerOrganizationCandidateSummary .Head div,
-.OrganizationSummary .Head div {
-    white-space: nowrap;
-}
-
-.PartnerOrganizationCandidateSummary .Head div:nth-child(1),
-.OrganizationSummary .Head div:nth-child(1) {
-    font-size: 30px;
-}
-
-.PartnerOrganizationCandidateSummary .Body,
-.OrganizationSummary .Body {
-    display: grid;
-    grid-gap: 5px;
-    grid-template-columns: min-content 1fr;
-    grid-template-rows: 1fr
-}
-
-.PartnerOrganizationCandidateSummary .Body > div:nth-child(2n - 1),
-.OrganizationSummary .Body > div:nth-child(2n - 1) {
-    font-weight: bold;
-}
-
-.PartnerOrganizationCandidateSummary .Neck {
-    margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 .EvaluationLocalDateTime {
@@ -475,3 +367,10 @@ select.EvaluationLocalDateTime {
     display: inline;
 }
 
+#TrustInteroperabilityProfileContainerList:empty {
+    border-bottom: 0px
+}
+
+#TrustInteroperabilityProfileContainerList, #TrustInteroperabilityProfileContainerList-legend {
+    border-bottom: 1px solid darkgrey
+}
