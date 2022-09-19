@@ -3,41 +3,40 @@ package edu.gatech.gtri.trustmark.trpt.service.protectedSystem;
 import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateResponse;
 import edu.gatech.gtri.trustmark.trpt.service.partnerSystemCandidate.PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProtectedSystemPartnerSystemCandidateResponseWithTrustExpressionEvaluation {
 
-    private final PartnerSystemCandidateResponse partnerSystemCandidate;
+    private final PartnerSystemCandidateResponse partnerCandidate;
     private final boolean trustable;
     private final boolean trust;
     private final Integer evaluationTrustmarkDefinitionRequirementSatisfied;
     private final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied;
     private final Integer evaluationTrustExpressionSatisfied;
     private final Integer evaluationTrustExpressionUnsatisfied;
-    private final List<PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation> partnerSystemCandidateTrustInteroperabilityProfileList;
+    private final List<PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation> partnerCandidateTrustInteroperabilityProfileList;
 
     public ProtectedSystemPartnerSystemCandidateResponseWithTrustExpressionEvaluation(
-            final PartnerSystemCandidateResponse partnerSystemCandidate,
+            final PartnerSystemCandidateResponse partnerCandidate,
             final boolean trustable,
             final boolean trust,
             final Integer evaluationTrustmarkDefinitionRequirementSatisfied,
             final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied,
             final Integer evaluationTrustExpressionSatisfied,
             final Integer evaluationTrustExpressionUnsatisfied,
-            final List<PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation> partnerSystemCandidateTrustInteroperabilityProfileList) {
-        this.partnerSystemCandidate = partnerSystemCandidate;
+            final List<PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation> partnerCandidateTrustInteroperabilityProfileList) {
+        this.partnerCandidate = partnerCandidate;
         this.trustable = trustable;
         this.trust = trust;
         this.evaluationTrustmarkDefinitionRequirementSatisfied = evaluationTrustmarkDefinitionRequirementSatisfied;
         this.evaluationTrustmarkDefinitionRequirementUnsatisfied = evaluationTrustmarkDefinitionRequirementUnsatisfied;
         this.evaluationTrustExpressionSatisfied = evaluationTrustExpressionSatisfied;
         this.evaluationTrustExpressionUnsatisfied = evaluationTrustExpressionUnsatisfied;
-        this.partnerSystemCandidateTrustInteroperabilityProfileList = partnerSystemCandidateTrustInteroperabilityProfileList;
+        this.partnerCandidateTrustInteroperabilityProfileList = partnerCandidateTrustInteroperabilityProfileList;
     }
 
-    public PartnerSystemCandidateResponse getPartnerSystemCandidate() {
-        return partnerSystemCandidate;
+    public PartnerSystemCandidateResponse getPartnerCandidate() {
+        return partnerCandidate;
     }
 
     public boolean isTrustable() {
@@ -64,7 +63,7 @@ public class ProtectedSystemPartnerSystemCandidateResponseWithTrustExpressionEva
         return evaluationTrustExpressionUnsatisfied;
     }
 
-    public List<PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation> getPartnerSystemCandidateTrustInteroperabilityProfileList() {
-        return partnerSystemCandidateTrustInteroperabilityProfileList;
+    public List<PartnerSystemCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation> getPartnerCandidateTrustInteroperabilityProfileList() {
+        return partnerCandidateTrustInteroperabilityProfileList;
     }
 }

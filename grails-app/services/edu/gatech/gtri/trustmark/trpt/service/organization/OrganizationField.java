@@ -10,6 +10,6 @@ public enum OrganizationField {
     protectedSystemSet,
     trustmarkBindingRegistrySet,
     organizationTrustInteroperabilityProfileList,
-    partnerOrganizationCandidateList,
+    partnerCandidateList,
     partnerOrganizationCandidate
 }

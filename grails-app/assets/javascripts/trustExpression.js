@@ -390,7 +390,6 @@ function trustExpressionFailure(
     generator) {
 
     function trustExpressionTerminalForTrustExpressionFailureDiv(
-        trustInteroperabilityProfileURI,
         trustExpression,
         evaluationLocalDateTime,
         generator) {
@@ -449,9 +448,9 @@ function trustExpressionFailure(
                 trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"],
                 `The trustmark "${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}" is bound to the candidate system, but the trustmark relying party tool could not verify the trustmark.`,
                 trustExpressionFailure["TrustInteroperabilityProfileList"])
-                .concat( ul(
+                .concat(ul(
                     trustExpressionFailure["TrustmarkVerifierFailureNonEmptyList"].map(trustmarkVerifierFailure =>
-                        li(trustmarkVerifierFailure))) )
+                        li(trustmarkVerifierFailure))))
         }
 
         function trustExpressionFailureOther(
@@ -497,19 +496,115 @@ function trustExpressionFailure(
                 /* fTrustExpressionFailureOther                                            */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id)))
     }
 
-    return trustExpressionDiv(
-        trustInteroperabilityProfileParentURI,
-        trustExpression["TrustExpressionFailureList"][0]["TrustInteroperabilityProfileList"][0]["Identifier"],
-        trustExpression["TrustExpressionFailureList"][0]["TrustInteroperabilityProfileList"][0]["Name"],
+    function trustExpressionTerminalForTrustExpressionFailureDivWithoutLabel(
         trustExpression,
-        "FAILURE",
         evaluationLocalDateTime,
-        generator,
-        trustExpressionTerminalForTrustExpressionFailureDiv(
+        generator) {
+
+        function trustExpressionFailureHelper(body, trustInteroperabilityProfileList) {
+
+            return [
+                div({class: "TrustExpressionDetailWithoutLabel"},
+                    div({class: "Head"}, "Failure"),
+                    div(body),
+                    trustInteroperabilityProfileReferenceListBody(trustInteroperabilityProfileList))]
+        }
+
+        function trustExpressionFailureResolveTrustInteroperabilityProfile(trustExpressionFailure, id) {
+
+            return trustExpressionFailureHelper(
+                `The system could not resolve the Trust Interoperability Profile ("${trustExpressionFailure["Uri"]}"): ${trustExpressionFailure["Message"]}.`,
+                trustExpressionFailure["TrustInteroperabilityProfileList"])
+        }
+
+
+        function trustExpressionFailureResolveTrustmarkDefinition(trustExpressionFailure, id) {
+
+            return trustExpressionFailureHelper(
+                `The system could not resolve the Trustmark Definition ("${trustExpressionFailure["Uri"]}"): ${trustExpressionFailure["Message"]}.`,
+                trustExpressionFailure["TrustInteroperabilityProfileList"])
+        }
+
+        function trustExpressionFailureTrustmarkAbsent(trustExpressionFailure, id) {
+
+            return trustExpressionFailureHelper(
+                `The trustmark "${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}" does not ap pear to be bound to the candidate system; the parameter "${trustExpressionFailure["TrustmarkDefinitionParameterIdentifier"]}" does not appear to be bound to a value.`,
+                trustExpressionFailure["TrustInteroperabilityProfileList"])
+        }
+
+        function trustExpressionFailureTrustmarkVerifierFailure(trustExpressionFailure, id) {
+
+            return trustExpressionFailureHelper(
+                `The trustmark "${trustExpressionFailure["TrustmarkDefinitionRequirement"]["Name"]}" is bound to the candidate system, but the trustmark relying party tool could not verify the trustmark.`,
+                trustExpressionFailure["TrustInteroperabilityProfileList"])
+                .concat(ul(
+                    trustExpressionFailure["TrustmarkVerifierFailureNonEmptyList"].map(trustmarkVerifierFailure =>
+                        li(trustmarkVerifierFailure))))
+        }
+
+        function trustExpressionFailureOther(
+            trustExpressionFailure,
+            id) {
+
+            return trustExpressionFailureHelper(
+                trustExpressionFailure["$Type"],
+                trustExpressionFailure["TrustInteroperabilityProfileList"])
+        }
+
+        const id = generator.next()
+
+        return div({class: "TrustExpressionTerminalWithoutLabel"},
+            matchTrustExpressionFailure(
+                trustExpression["TrustExpressionFailureList"][0]["$Type"],
+                /* fTrustExpressionFailureURI                                              */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureResolveTrustInteroperabilityProfile              */ () => trustExpressionFailureResolveTrustInteroperabilityProfile(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureCycle                                            */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureResolveTrustmarkDefinition                       */ () => trustExpressionFailureResolveTrustmarkDefinition(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureParser                                           */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureIdentifierUnknown                                */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureIdentifierUnexpectedTrustInteroperabilityProfile */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureIdentifierUnknownTrustmarkDefinitionParameter    */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureIdentifierUnknownTrustmarkDefinitionRequirement  */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureNonTerminalUnexpected                            */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureTrustmarkAbsent                                  */ () => trustExpressionFailureTrustmarkAbsent(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureTrustmarkVerifierFailure                         */ () => trustExpressionFailureTrustmarkVerifierFailure(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureTypeUnexpected                                   */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureTypeUnexpectedLeft                               */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureTypeUnexpectedRight                              */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureTypeMismatch                                     */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureTypeUnorderableLeft                              */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureTypeUnorderableRight                             */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureExpression                                       */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureExpressionLeft                                   */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureExpressionRight                                  */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id),
+                /* fTrustExpressionFailureOther                                            */ () => trustExpressionFailureOther(trustExpression["TrustExpressionFailureList"][0], id)))
+    }
+
+    if (trustExpression["TrustExpressionFailureList"][0]["TrustInteroperabilityProfileList"].length > 0) {
+        return trustExpressionDiv(
+            trustInteroperabilityProfileParentURI,
             trustExpression["TrustExpressionFailureList"][0]["TrustInteroperabilityProfileList"][0]["Identifier"],
+            trustExpression["TrustExpressionFailureList"][0]["TrustInteroperabilityProfileList"][0]["Name"],
             trustExpression,
+            "FAILURE",
             evaluationLocalDateTime,
-            generator))
+            generator,
+            trustExpressionTerminalForTrustExpressionFailureDiv(
+                trustExpression,
+                evaluationLocalDateTime,
+                generator))
+    } else {
+        return trustExpressionDivWithoutTrustInteroperabilityProfileList(
+            trustInteroperabilityProfileParentURI,
+            trustExpression,
+            "FAILURE",
+            evaluationLocalDateTime,
+            generator,
+            trustExpressionTerminalForTrustExpressionFailureDivWithoutLabel(
+                trustExpression,
+                evaluationLocalDateTime,
+                generator))
+    }
 }
 
 function trustExpressionDiv(
@@ -534,11 +629,37 @@ function trustExpressionDiv(
 
     return div({"class": [trustExpressionClassName(trustInteroperabilityProfileParentURI, trustInteroperabilityProfileURI), trustExpressionEvaluatorState].join(" ")},
         trustInteroperabilityProfileParentURI !== trustInteroperabilityProfileURI ? [
-            input({type: "checkbox", id: id, checked: trustInteroperabilityProfileParentURI !== "" && trustExpressionEvaluatorState !== "TRUE" }),
+            input({type: "checkbox", id: id, checked: trustInteroperabilityProfileParentURI !== "" && trustExpressionEvaluatorState !== "TRUE"}),
             label({for: id, class: "TrustInteroperabilityProfileInner"},
                 span({class: "glyphicon bi-list-ul"}),
                 trustInteroperabilityProfileName,
                 span({class: "EvaluationLocalDateTime"}, evaluationLocalDateTime))] : [],
+        content)
+}
+
+function trustExpressionDivWithoutTrustInteroperabilityProfileList(
+    trustInteroperabilityProfileParentURI,
+    trustExpression,
+    trustExpressionEvaluatorState,
+    evaluationLocalDateTime,
+    generator,
+    content) {
+
+    function trustExpressionClassName(trustInteroperabilityProfileParentURI) {
+        return trustInteroperabilityProfileParentURI === "" ?
+            "TrustExpressionTop" :
+            "TrustExpressionSub"
+    }
+
+    const id = generator.next()
+
+    return div({"class": [trustExpressionClassName(trustInteroperabilityProfileParentURI), trustExpressionEvaluatorState].join(" ")},
+        [
+            input({type: "checkbox", id: id, checked: trustInteroperabilityProfileParentURI !== "" && trustExpressionEvaluatorState !== "TRUE"}),
+            label({for: id, class: "TrustInteroperabilityProfileInner"},
+                span({class: "glyphicon bi-list-ul"}),
+                trustExpression["TrustExpressionFailureList"][0]["Uri"],
+                span({class: "EvaluationLocalDateTime"}, evaluationLocalDateTime))],
         content)
 }
 

@@ -10,22 +10,22 @@ public final class ProtectedSystemResponseWithTrustExpressionEvaluation {
     private final long id;
     private final ProtectedSystemTypeResponse type;
     private final String name;
-    private final List<ProtectedSystemTrustInteroperabilityProfileResponse> protectedSystemTrustInteroperabilityProfileList;
-    private final List<ProtectedSystemPartnerSystemCandidateResponseWithTrustExpressionEvaluation> protectedSystemPartnerSystemCandidateList;
+    private final List<ProtectedSystemTrustInteroperabilityProfileResponse> entityTrustInteroperabilityProfileList;
+    private final List<ProtectedSystemPartnerSystemCandidateResponseWithTrustExpressionEvaluation> entityPartnerCandidateList;
 
     public ProtectedSystemResponseWithTrustExpressionEvaluation(
             final OrganizationResponse organization,
             final long id,
             final ProtectedSystemTypeResponse type,
             final String name,
-            final List<ProtectedSystemTrustInteroperabilityProfileResponse> protectedSystemTrustInteroperabilityProfileList,
-            final List<ProtectedSystemPartnerSystemCandidateResponseWithTrustExpressionEvaluation> protectedSystemPartnerSystemCandidateList) {
+            final List<ProtectedSystemTrustInteroperabilityProfileResponse> entityTrustInteroperabilityProfileList,
+            final List<ProtectedSystemPartnerSystemCandidateResponseWithTrustExpressionEvaluation> entityPartnerCandidateList) {
         this.organization = organization;
         this.id = id;
         this.type = type;
         this.name = name;
-        this.protectedSystemTrustInteroperabilityProfileList = protectedSystemTrustInteroperabilityProfileList;
-        this.protectedSystemPartnerSystemCandidateList = protectedSystemPartnerSystemCandidateList;
+        this.entityTrustInteroperabilityProfileList = entityTrustInteroperabilityProfileList;
+        this.entityPartnerCandidateList = entityPartnerCandidateList;
     }
 
     public OrganizationResponse getOrganization() {
@@ -44,11 +44,11 @@ public final class ProtectedSystemResponseWithTrustExpressionEvaluation {
         return name;
     }
 
-    public List<ProtectedSystemTrustInteroperabilityProfileResponse> getProtectedSystemTrustInteroperabilityProfileList() {
-        return protectedSystemTrustInteroperabilityProfileList;
+    public List<ProtectedSystemTrustInteroperabilityProfileResponse> getEntityTrustInteroperabilityProfileList() {
+        return entityTrustInteroperabilityProfileList;
     }
 
-    public List<ProtectedSystemPartnerSystemCandidateResponseWithTrustExpressionEvaluation> getProtectedSystemPartnerSystemCandidateList() {
-        return protectedSystemPartnerSystemCandidateList;
+    public List<ProtectedSystemPartnerSystemCandidateResponseWithTrustExpressionEvaluation> getEntityPartnerCandidateList() {
+        return entityPartnerCandidateList;
     }
 }

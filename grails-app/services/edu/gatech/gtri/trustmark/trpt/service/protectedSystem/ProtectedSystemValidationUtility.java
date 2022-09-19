@@ -79,7 +79,7 @@ public final class ProtectedSystemValidationUtility {
     public static Validation<NonEmptyList<ValidationMessage<ProtectedSystemField>>, List<PartnerSystemCandidate>> validationPartnerSystemCandidateList(final List<Long> partnerSystemCandidateList) {
 
         return mustBeNonNullAndDistinctAndValid(
-                ProtectedSystemField.partnerSystemCandidateList,
+                ProtectedSystemField.partnerCandidateList,
                 partnerSystemCandidateList,
                 longOrd,
                 nonNullAndDistinct -> validationPartnerSystemCandidate(nonNullAndDistinct));

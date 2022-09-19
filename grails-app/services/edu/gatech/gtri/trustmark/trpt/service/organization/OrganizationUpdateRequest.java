@@ -7,8 +7,8 @@ public final class OrganizationUpdateRequest {
     private String name;
     private String uri;
     private String description;
-    private List<OrganizationTrustInteroperabilityProfileUpsertRequest> organizationTrustInteroperabilityProfileList;
-    private List<Long> partnerOrganizationCandidateList;
+    private List<OrganizationTrustInteroperabilityProfileUpsertRequest> entityTrustInteroperabilityProfileList;
+    private List<Long> partnerCandidateList;
 
     OrganizationUpdateRequest() {
     }
@@ -18,14 +18,14 @@ public final class OrganizationUpdateRequest {
             final String name,
             final String uri,
             final String description,
-            final List<OrganizationTrustInteroperabilityProfileUpsertRequest> organizationTrustInteroperabilityProfileList,
-            final List<Long> partnerOrganizationCandidateList) {
+            final List<OrganizationTrustInteroperabilityProfileUpsertRequest> entityTrustInteroperabilityProfileList,
+            final List<Long> partnerCandidateList) {
         this.id = id;
         this.name = name;
         this.uri = uri;
         this.description = description;
-        this.organizationTrustInteroperabilityProfileList = organizationTrustInteroperabilityProfileList;
-        this.partnerOrganizationCandidateList = partnerOrganizationCandidateList;
+        this.entityTrustInteroperabilityProfileList = entityTrustInteroperabilityProfileList;
+        this.partnerCandidateList = partnerCandidateList;
     }
 
     public long getId() {
@@ -44,11 +44,11 @@ public final class OrganizationUpdateRequest {
         return description;
     }
 
-    public List<OrganizationTrustInteroperabilityProfileUpsertRequest> getOrganizationTrustInteroperabilityProfileList() {
-        return organizationTrustInteroperabilityProfileList;
+    public List<OrganizationTrustInteroperabilityProfileUpsertRequest> getEntityTrustInteroperabilityProfileList() {
+        return entityTrustInteroperabilityProfileList;
     }
 
-    public List<Long> getPartnerOrganizationCandidateList() {
-        return partnerOrganizationCandidateList;
+    public List<Long> getPartnerCandidateList() {
+        return partnerCandidateList;
     }
 }

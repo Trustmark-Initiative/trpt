@@ -10,22 +10,22 @@ public final class ProtectedSystemResponse {
     private final long id;
     private final ProtectedSystemTypeResponse type;
     private final String name;
-    private final List<ProtectedSystemTrustInteroperabilityProfileResponse> protectedSystemTrustInteroperabilityProfileList;
-    private final List<ProtectedSystemPartnerSystemCandidateResponse> protectedSystemPartnerSystemCandidateList;
+    private final List<ProtectedSystemTrustInteroperabilityProfileResponse> entityTrustInteroperabilityProfileList;
+    private final List<ProtectedSystemPartnerSystemCandidateResponse> entityPartnerCandidateList;
 
     public ProtectedSystemResponse(
             final OrganizationResponse organization,
             final long id,
             final ProtectedSystemTypeResponse type,
             final String name,
-            final List<ProtectedSystemTrustInteroperabilityProfileResponse> protectedSystemTrustInteroperabilityProfileList,
-            final List<ProtectedSystemPartnerSystemCandidateResponse> protectedSystemPartnerSystemCandidateList) {
+            final List<ProtectedSystemTrustInteroperabilityProfileResponse> entityTrustInteroperabilityProfileList,
+            final List<ProtectedSystemPartnerSystemCandidateResponse> entityPartnerCandidateList) {
         this.organization = organization;
         this.id = id;
         this.type = type;
         this.name = name;
-        this.protectedSystemTrustInteroperabilityProfileList = protectedSystemTrustInteroperabilityProfileList;
-        this.protectedSystemPartnerSystemCandidateList = protectedSystemPartnerSystemCandidateList;
+        this.entityTrustInteroperabilityProfileList = entityTrustInteroperabilityProfileList;
+        this.entityPartnerCandidateList = entityPartnerCandidateList;
     }
 
     public OrganizationResponse getOrganization() {
@@ -44,11 +44,11 @@ public final class ProtectedSystemResponse {
         return name;
     }
 
-    public List<ProtectedSystemTrustInteroperabilityProfileResponse> getProtectedSystemTrustInteroperabilityProfileList() {
-        return protectedSystemTrustInteroperabilityProfileList;
+    public List<ProtectedSystemTrustInteroperabilityProfileResponse> getEntityTrustInteroperabilityProfileList() {
+        return entityTrustInteroperabilityProfileList;
     }
 
-    public List<ProtectedSystemPartnerSystemCandidateResponse> getProtectedSystemPartnerSystemCandidateList() {
-        return protectedSystemPartnerSystemCandidateList;
+    public List<ProtectedSystemPartnerSystemCandidateResponse> getEntityPartnerCandidateList() {
+        return entityPartnerCandidateList;
     }
 }

@@ -56,7 +56,7 @@ public final class ProtectedSystemResponseUtility {
                 PartnerSystemCandidate
                         .findAllByOrganizationInAndTypeInHelper(arrayList(protectedSystem.organizationHelper()), protectedSystem.getType().getPartnerSystemCandidateTypeList())
                         .map(partnerSystemCandidate -> protectedSystemPartnerSystemCandidateResponse(protectedSystem, partnerSystemCandidate))
-                        .sort(ord((o1, o2) -> stringOrd.compare(o1.getPartnerSystemCandidate().getName(), o2.getPartnerSystemCandidate().getName())))
+                        .sort(ord((o1, o2) -> stringOrd.compare(o1.getPartnerCandidate().getName(), o2.getPartnerCandidate().getName())))
                         .toJavaList(),
                 ProtectedSystemResponse::new);
     }

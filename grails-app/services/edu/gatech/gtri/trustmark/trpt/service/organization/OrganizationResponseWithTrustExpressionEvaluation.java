@@ -7,20 +7,20 @@ public final class OrganizationResponseWithTrustExpressionEvaluation {
     private final OrganizationResponse organization;
     private final long id;
     private final String name;
-    private final List<OrganizationTrustInteroperabilityProfileResponse> organizationTrustInteroperabilityProfileList;
-    private final List<OrganizationPartnerOrganizationCandidateResponseWithTrustExpressionEvaluation> organizationPartnerOrganizationCandidateList;
+    private final List<OrganizationTrustInteroperabilityProfileResponse> entityTrustInteroperabilityProfileList;
+    private final List<OrganizationPartnerOrganizationCandidateResponseWithTrustExpressionEvaluation> entityPartnerCandidateList;
 
     public OrganizationResponseWithTrustExpressionEvaluation(
             final OrganizationResponse organization,
             final long id,
             final String name,
-            final List<OrganizationTrustInteroperabilityProfileResponse> organizationTrustInteroperabilityProfileList,
-            final List<OrganizationPartnerOrganizationCandidateResponseWithTrustExpressionEvaluation> organizationPartnerOrganizationCandidateList) {
+            final List<OrganizationTrustInteroperabilityProfileResponse> entityTrustInteroperabilityProfileList,
+            final List<OrganizationPartnerOrganizationCandidateResponseWithTrustExpressionEvaluation> entityPartnerCandidateList) {
         this.organization = organization;
         this.id = id;
         this.name = name;
-        this.organizationTrustInteroperabilityProfileList = organizationTrustInteroperabilityProfileList;
-        this.organizationPartnerOrganizationCandidateList = organizationPartnerOrganizationCandidateList;
+        this.entityTrustInteroperabilityProfileList = entityTrustInteroperabilityProfileList;
+        this.entityPartnerCandidateList = entityPartnerCandidateList;
     }
 
     public OrganizationResponse getOrganization() {
@@ -35,11 +35,11 @@ public final class OrganizationResponseWithTrustExpressionEvaluation {
         return name;
     }
 
-    public List<OrganizationTrustInteroperabilityProfileResponse> getOrganizationTrustInteroperabilityProfileList() {
-        return organizationTrustInteroperabilityProfileList;
+    public List<OrganizationTrustInteroperabilityProfileResponse> getEntityTrustInteroperabilityProfileList() {
+        return entityTrustInteroperabilityProfileList;
     }
 
-    public List<OrganizationPartnerOrganizationCandidateResponseWithTrustExpressionEvaluation> getOrganizationPartnerOrganizationCandidateList() {
-        return organizationPartnerOrganizationCandidateList;
+    public List<OrganizationPartnerOrganizationCandidateResponseWithTrustExpressionEvaluation> getEntityPartnerCandidateList() {
+        return entityPartnerCandidateList;
     }
 }

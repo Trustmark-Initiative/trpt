@@ -7,36 +7,36 @@ import java.util.List;
 
 public class OrganizationPartnerOrganizationCandidateResponseWithTrustExpressionEvaluation {
 
-    private final PartnerOrganizationCandidateResponse partnerOrganizationCandidate;
+    private final PartnerOrganizationCandidateResponse partnerCandidate;
     private final boolean trustable;
     private final boolean trust;
     private final Integer evaluationTrustmarkDefinitionRequirementSatisfied;
     private final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied;
     private final Integer evaluationTrustExpressionSatisfied;
     private final Integer evaluationTrustExpressionUnsatisfied;
-    private final List<PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation> partnerOrganizationCandidateTrustInteroperabilityProfileList;
+    private final List<PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation> partnerCandidateTrustInteroperabilityProfileList;
 
     public OrganizationPartnerOrganizationCandidateResponseWithTrustExpressionEvaluation(
-            final PartnerOrganizationCandidateResponse partnerOrganizationCandidate,
+            final PartnerOrganizationCandidateResponse partnerCandidate,
             final boolean trustable,
             final boolean trust,
             final Integer evaluationTrustmarkDefinitionRequirementSatisfied,
             final Integer evaluationTrustmarkDefinitionRequirementUnsatisfied,
             final Integer evaluationTrustExpressionSatisfied,
             final Integer evaluationTrustExpressionUnsatisfied,
-            final List<PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation> partnerOrganizationCandidateTrustInteroperabilityProfileList) {
-        this.partnerOrganizationCandidate = partnerOrganizationCandidate;
+            final List<PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation> partnerCandidateTrustInteroperabilityProfileList) {
+        this.partnerCandidate = partnerCandidate;
         this.trustable = trustable;
         this.trust = trust;
         this.evaluationTrustmarkDefinitionRequirementSatisfied = evaluationTrustmarkDefinitionRequirementSatisfied;
         this.evaluationTrustmarkDefinitionRequirementUnsatisfied = evaluationTrustmarkDefinitionRequirementUnsatisfied;
         this.evaluationTrustExpressionSatisfied = evaluationTrustExpressionSatisfied;
         this.evaluationTrustExpressionUnsatisfied = evaluationTrustExpressionUnsatisfied;
-        this.partnerOrganizationCandidateTrustInteroperabilityProfileList = partnerOrganizationCandidateTrustInteroperabilityProfileList;
+        this.partnerCandidateTrustInteroperabilityProfileList = partnerCandidateTrustInteroperabilityProfileList;
     }
 
-    public PartnerOrganizationCandidateResponse getPartnerOrganizationCandidate() {
-        return partnerOrganizationCandidate;
+    public PartnerOrganizationCandidateResponse getPartnerCandidate() {
+        return partnerCandidate;
     }
 
     public boolean isTrustable() {
@@ -63,7 +63,7 @@ public class OrganizationPartnerOrganizationCandidateResponseWithTrustExpression
         return evaluationTrustExpressionUnsatisfied;
     }
 
-    public List<PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation> getPartnerOrganizationCandidateTrustInteroperabilityProfileList() {
-        return partnerOrganizationCandidateTrustInteroperabilityProfileList;
+    public List<PartnerOrganizationCandidateTrustInteroperabilityProfileResponseWithTrustExpressionEvaluation> getPartnerCandidateTrustInteroperabilityProfileList() {
+        return partnerCandidateTrustInteroperabilityProfileList;
     }
 }

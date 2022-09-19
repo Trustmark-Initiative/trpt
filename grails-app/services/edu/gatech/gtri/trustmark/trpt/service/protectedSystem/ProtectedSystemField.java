@@ -9,5 +9,5 @@ public enum ProtectedSystemField {
     protectedSystemTrustInteroperabilityProfileList,
     protectedSystemTrustInteroperabilityProfile,
     uri,
-    partnerSystemCandidate, partnerSystemCandidateList
+    partnerSystemCandidate, partnerCandidateList
 }

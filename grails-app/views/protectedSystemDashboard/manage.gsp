@@ -1,9 +1,8 @@
-<%@ page import="org.apache.commons.lang.StringEscapeUtils; org.json.JSONObject" contentType="text/html;charset=UTF-8" %>
-<%@ page import="org.json.JSONArray" contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
-        <asset:javascript src="protectedSystemDashboard_manage.js"/>
-        <asset:stylesheet src="protectedSystemDashboard_manage.css"/>
+        <asset:javascript src="dashboard_manage.js"/>
+        <asset:javascript src="dashboard_manage_protected_system.js"/>
+        <asset:stylesheet src="dashboard_manage.css"/>
 
         <meta name="layout" content="main"/>
 
@@ -18,12 +17,12 @@
 
     <body>
         <div class="container pt-4 placeholder-glow">
-            <h2>Trust Dashboard for <span class="protected-system-element-name placeholder-hack col-4"></span></h2>
+            <h2>Trust Dashboard for <span class="entity-element-name placeholder-hack col-4"></span></h2>
 
-            <div class="fw-bold mt-2">Trust Policy for <span class="protected-system-element-name placeholder-hack col-3"></span></div>
+            <div class="fw-bold mt-2">Trust Policy for <span class="entity-element-name placeholder-hack col-4"></span></div>
 
             <div class="mt-2">
-                Add trust interoperability profiles (TIPs${raw(grailsApplication.config.getProperty('server.artifact'))}) to this table to define the trust policy for <span class="protected-system-element-name placeholder-hack col-3"></span>, a <span class="protected-system-element-type placeholder-hack col-3"></span>.
+                Add trust interoperability profiles (TIPs${raw(grailsApplication.config.getProperty('server.artifact'))}) to this table to define the trust policy for <span class="entity-element-name placeholder-hack col-3"></span>, a <span class="protected-system-element-type placeholder-hack col-3"></span>.
             </div>
             <table class="mt-2 table table-bordered table-striped-hack mb-0">
                 <thead>
@@ -247,10 +246,10 @@
         </div>
 
         <div class="container pt-4 placeholder-glow">
-            <div class="fw-bold">Candidate Partner Systems for <span class="protected-system-element-name placeholder-hack col-3"></span></div>
+            <div class="fw-bold">Candidate Partner Systems for <span class="entity-element-name placeholder-hack col-3"></span></div>
 
             <div class="mt-2">
-                This table allows you to control which candidate partner <span class="partner-system-candidate-element-type"></span> systems are trusted by <span class="protected-system-element-name placeholder-hack col-3"></span>.
+                This table allows you to control which candidate partner <span class="partner-candidate-element-type"></span> systems are trusted by <span class="entity-element-name placeholder-hack col-3"></span>.
             </div>
 
             <table class="mt-2 table table-bordered mb-0">
@@ -264,35 +263,35 @@
                         <th scope="col" class="text-center">Trusted</th>
                     </tr>
                 </thead>
-                <template id="partner-system-candidate-template-empty">
+                <template id="partner-candidate-template-empty">
                     <tr>
                         <td colspan="6">(No candidate partner systems.)</td>
                     </tr>
                 </template>
-                <template id="partner-system-candidate-template-summary">
-                    <tr class="partner-system-candidate-summary">
+                <template id="partner-candidate-template-summary">
+                    <tr class="partner-candidate-summary">
                         <td>
-                            <a class="partner-system-candidate-element-name"></a>
-                            <a target="_blank" class="partner-system-candidate-element-trust-fabric-metadata"></a>
+                            <a class="partner-candidate-element-name"></a>
+                            <a target="_blank" class="partner-candidate-element-trust-fabric-metadata"></a>
                         </td>
                         <td>
-                            <a class="partner-system-candidate-element-trustmark-binding-registry"></a>
+                            <a class="partner-candidate-element-trustmark-binding-registry"></a>
                         </td>
-                        <td class="partner-system-candidate-element-trust-interoperability-profile-evaluation-local-date-time"></td>
+                        <td class="partner-candidate-element-trust-interoperability-profile-evaluation-local-date-time"></td>
                         <td>
-                            <div class="partner-system-candidate-element-percent-trust-interoperability-profile d-flex justify-content-around">
+                            <div class="partner-candidate-element-percent-trust-interoperability-profile d-flex justify-content-around">
                             </div>
                         </td>
-                        <td class="partner-system-candidate-element-percent-trustmark-definition-requirement text-center"></td>
+                        <td class="partner-candidate-element-percent-trustmark-definition-requirement text-center"></td>
                         <td>
                             <div class="d-flex justify-content-center form-check form-switch">
-                                <input type="checkbox" class="form-check-input partner-system-candidate-element-trust" data-bs-toggle="modal" data-bs-target="#modal-trust"/>
+                                <input type="checkbox" class="form-check-input partner-candidate-element-trust" data-bs-toggle="modal" data-bs-target="#modal-trust"/>
                             </div>
                         </td>
                     </tr>
                 </template>
-                <template id="partner-system-candidate-template-detail">
-                    <tr class="partner-system-candidate-detail d-none">
+                <template id="partner-candidate-template-detail">
+                    <tr class="partner-candidate-detail d-none">
                         <td colspan="2"><span class="glyphicon bi-list-ul me-2"></span><span class="trust-interoperability-profile-name"></span></td>
                         <td class="trust-interoperability-profile-evaluation-local-date-time"></td>
                         <td>
@@ -303,7 +302,7 @@
                         <td></td>
                     </tr>
                 </template>
-                <tbody id="partner-system-candidate-tbody" class="placeholder-glow">
+                <tbody id="partner-candidate-tbody" class="placeholder-glow">
                     <td><span class="placeholder-hack col-3"></span></td>
                     <td><span class="placeholder-hack col-3"></span></td>
                     <td><span class="placeholder-hack col-3"></span></td>
@@ -319,85 +318,85 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header d-none" id="modal-header-trust">
-                        <h5 class="modal-title">Trust <span class="partner-system-candidate-element-name"></span></h5>
+                        <h5 class="modal-title">Trust <span class="partner-candidate-element-name"></span></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body d-none" id="modal-body-trust">
                         <p>
                             By toggling this trust control, you have chosen to configure
-                            <span class="protected-system-element-name fw-bold"></span>
+                            <span class="entity-element-name fw-bold"></span>
                             to trust
-                            <span class="partner-system-candidate-element-name fw-bold"></span>.
+                            <span class="partner-candidate-element-name fw-bold"></span>.
                         Please
                         take note of the following implications of your decision.
                         </p>
 
                         <ol>
-                            <li class="mb-3 d-none protected-system-element-type-certificate-relying-party">You must download a copy of the certificate for <span class="partner-system-candidate-element-name fw-bold"></span>,
-                            and configure it within <span class="protected-system-element-name fw-bold"></span>, to enable <span class="protected-system-element-name fw-bold"></span>
-                                to trust <span class="partner-system-candidate-element-name fw-bold"></span>.
-                            This process heavily depends on the implementation details of <span class="protected-system-element-name fw-bold"></span>.
-                            To download a copy of the certificate for <span class="partner-system-candidate-element-name fw-bold"></span>, click <a target="_blank" class="partner-system-candidate-element-trust-fabric-metadata fw-bold"></a>.
+                            <li class="mb-3 d-none protected-system-element-type-certificate-relying-party">You must download a copy of the certificate for <span class="partner-candidate-element-name fw-bold"></span>,
+                            and configure it within <span class="entity-element-name fw-bold"></span>, to enable <span class="entity-element-name fw-bold"></span>
+                                to trust <span class="partner-candidate-element-name fw-bold"></span>.
+                            This process heavily depends on the implementation details of <span class="entity-element-name fw-bold"></span>.
+                            To download a copy of the certificate for <span class="partner-candidate-element-name fw-bold"></span>, click <a target="_blank" class="partner-candidate-element-trust-fabric-metadata fw-bold"></a>.
                             </li>
 
-                            <li class="mb-3 d-none protected-system-element-type-other">You must download a copy of the SAML metadata for <span class="partner-system-candidate-element-name fw-bold"></span>,
-                            and install it within <span class="protected-system-element-name fw-bold"></span>,
-                            to enable <span class="protected-system-element-name fw-bold"></span> to trust <span class="partner-system-candidate-element-name fw-bold"></span>.
-                            This is a manual reconfiguration process of <span class="protected-system-element-name fw-bold"></span>
+                            <li class="mb-3 d-none protected-system-element-type-other">You must download a copy of the SAML metadata for <span class="partner-candidate-element-name fw-bold"></span>,
+                            and install it within <span class="entity-element-name fw-bold"></span>,
+                            to enable <span class="entity-element-name fw-bold"></span> to trust <span class="partner-candidate-element-name fw-bold"></span>.
+                            This is a manual reconfiguration process of <span class="entity-element-name fw-bold"></span>
                                 that depends on its implementation details, including the software platform
-                                on which <span class="protected-system-element-name fw-bold"></span> is built. Completion
-                            of this process typically requires you to have administrative access to <span class="protected-system-element-name fw-bold"></span>.
-                            To download a copy of the SAML metadata for <span class="partner-system-candidate-element-name fw-bold"></span>,
-                            click <a target="_blank" class="partner-system-candidate-element-trust-fabric-metadata fw-bold"></a>.</li>
+                                on which <span class="entity-element-name fw-bold"></span> is built. Completion
+                            of this process typically requires you to have administrative access to <span class="entity-element-name fw-bold"></span>.
+                            To download a copy of the SAML metadata for <span class="partner-candidate-element-name fw-bold"></span>,
+                            click <a target="_blank" class="partner-candidate-element-trust-fabric-metadata fw-bold"></a>.</li>
 
 
                             <li>
-                                Because you have chosen to trust <span class="partner-system-candidate-element-name fw-bold"></span>,
-                            this tool will begin to closely monitor <span class="partner-system-candidate-element-name fw-bold"></span>
+                                Because you have chosen to trust <span class="partner-candidate-element-name fw-bold"></span>,
+                            this tool will begin to closely monitor <span class="partner-candidate-element-name fw-bold"></span>
                                 for changes in its trustmark disposition with respect to the trust policy that
-                                you have defined for <span class="protected-system-element-name fw-bold"></span>. If
-                            any future changes should occur – e.g., if any trustmark bound to <span class="partner-system-candidate-element-name fw-bold"></span>
+                                you have defined for <span class="entity-element-name fw-bold"></span>. If
+                            any future changes should occur – e.g., if any trustmark bound to <span class="partner-candidate-element-name fw-bold"></span>
                                 should expire or become revoked by its issuer, or if you change your trust policy
-                                for <span class="protected-system-element-name fw-bold"></span> – you will receive an
+                                for <span class="entity-element-name fw-bold"></span> – you will receive an
                             automated email from this tool, informing you of the change and cautioning you about
                             important steps to take at that time. If you receive such an email, you should immediately
-                            revisit this Trust Dashboard page, reassess your decision to trust <span class="partner-system-candidate-element-name fw-bold"></span>,
-                            and change <span class="protected-system-element-name fw-bold"></span>'s trust perspective
-                            on <span class="partner-system-candidate-element-name fw-bold"></span> if appropriate.
+                            revisit this Trust Dashboard page, reassess your decision to trust <span class="partner-candidate-element-name fw-bold"></span>,
+                            and change <span class="entity-element-name fw-bold"></span>'s trust perspective
+                            on <span class="partner-candidate-element-name fw-bold"></span> if appropriate.
                             </li>
                         </ol>
                     </div>
 
                     <div class="modal-header d-none" id="modal-header-do-not-trust">
-                        <h5 class="modal-title">Do Not Trust <span class="partner-system-candidate-element-name"></span></h5>
+                        <h5 class="modal-title">Do Not Trust <span class="partner-candidate-element-name"></span></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body d-none" id="modal-body-do-not-trust">
                         <p>
-                            By toggling this trust control, you have chosen to configure <span class="protected-system-element-name fw-bold"></span>
-                            to stop trusting <span class="partner-system-candidate-element-name fw-bold"></span>.
+                            By toggling this trust control, you have chosen to configure <span class="entity-element-name fw-bold"></span>
+                            to stop trusting <span class="partner-candidate-element-name fw-bold"></span>.
                         Please take note of the following implications of your decision.</p>
 
                         <ol>
-                            <li class="mb-3">You must immediately reconfigure <span class="protected-system-element-name fw-bold"></span>
-                                so that it no longer trusts <span class="partner-system-candidate-element-name fw-bold"></span>.
-                            This is a manual reconfiguration process of <span class="protected-system-element-name fw-bold"></span>
+                            <li class="mb-3">You must immediately reconfigure <span class="entity-element-name fw-bold"></span>
+                                so that it no longer trusts <span class="partner-candidate-element-name fw-bold"></span>.
+                            This is a manual reconfiguration process of <span class="entity-element-name fw-bold"></span>
                                 that depends on its implementation details, including the software platform on
-                                which <span class="protected-system-element-name fw-bold"></span> is built. Typically,
-                            this process involves editing <span class="protected-system-element-name fw-bold"></span>'s
-                            list of trusted remote partner systems, so that the list no longer includes <span class="partner-system-candidate-element-name fw-bold"></span>.
+                                which <span class="entity-element-name fw-bold"></span> is built. Typically,
+                            this process involves editing <span class="entity-element-name fw-bold"></span>'s
+                            list of trusted remote partner systems, so that the list no longer includes <span class="partner-candidate-element-name fw-bold"></span>.
                             Completion of this process typically requires you to have administrative access to
-                                <span class="protected-system-element-name fw-bold"></span>.</li>
+                                <span class="entity-element-name fw-bold"></span>.</li>
 
-                            <li>Because you have chosen to stop trusting <span class="partner-system-candidate-element-name fw-bold"></span>,
-                            this tool will no longer monitor <span class="partner-system-candidate-element-name fw-bold"></span>
+                            <li>Because you have chosen to stop trusting <span class="partner-candidate-element-name fw-bold"></span>,
+                            this tool will no longer monitor <span class="partner-candidate-element-name fw-bold"></span>
                                 for changes in its trustmark disposition with respect to the trust policy for
-                                <span class="protected-system-element-name fw-bold"></span>. If at any future point in
-                            time, you want to change <span class="protected-system-element-name fw-bold"></span>'s trust
-                            perspective on <span class="partner-system-candidate-element-name fw-bold"></span>, you
-                            can do so by toggling the trust control for <span class="partner-system-candidate-element-name fw-bold"></span>
+                                <span class="entity-element-name fw-bold"></span>. If at any future point in
+                            time, you want to change <span class="entity-element-name fw-bold"></span>'s trust
+                            perspective on <span class="partner-candidate-element-name fw-bold"></span>, you
+                            can do so by toggling the trust control for <span class="partner-candidate-element-name fw-bold"></span>
                                 on this page.</li>
                         </ol>
                     </div>

@@ -7,22 +7,22 @@ public final class OrganizationResponseWithDetail {
     private final String name;
     private final String description;
     private final String uri;
-    private final List<OrganizationTrustInteroperabilityProfileResponse> organizationTrustInteroperabilityProfileList;
-    private final List<OrganizationPartnerOrganizationCandidateResponse> organizationPartnerOrganizationCandidateList;
+    private final List<OrganizationTrustInteroperabilityProfileResponse> entityTrustInteroperabilityProfileList;
+    private final List<OrganizationPartnerOrganizationCandidateResponse> entityPartnerCandidateList;
 
     public OrganizationResponseWithDetail(
             final long id,
             final String name,
             final String description,
             final String uri,
-            final List<OrganizationTrustInteroperabilityProfileResponse> organizationTrustInteroperabilityProfileList,
-            final List<OrganizationPartnerOrganizationCandidateResponse> organizationPartnerOrganizationCandidateList) {
+            final List<OrganizationTrustInteroperabilityProfileResponse> entityTrustInteroperabilityProfileList,
+            final List<OrganizationPartnerOrganizationCandidateResponse> entityPartnerCandidateList) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.uri = uri;
-        this.organizationTrustInteroperabilityProfileList = organizationTrustInteroperabilityProfileList;
-        this.organizationPartnerOrganizationCandidateList = organizationPartnerOrganizationCandidateList;
+        this.entityTrustInteroperabilityProfileList = entityTrustInteroperabilityProfileList;
+        this.entityPartnerCandidateList = entityPartnerCandidateList;
     }
 
     public long getId() {
@@ -41,11 +41,11 @@ public final class OrganizationResponseWithDetail {
         return uri;
     }
 
-    public List<OrganizationTrustInteroperabilityProfileResponse> getOrganizationTrustInteroperabilityProfileList() {
-        return organizationTrustInteroperabilityProfileList;
+    public List<OrganizationTrustInteroperabilityProfileResponse> getEntityTrustInteroperabilityProfileList() {
+        return entityTrustInteroperabilityProfileList;
     }
 
-    public List<OrganizationPartnerOrganizationCandidateResponse> getOrganizationPartnerOrganizationCandidateList() {
-        return organizationPartnerOrganizationCandidateList;
+    public List<OrganizationPartnerOrganizationCandidateResponse> getEntityPartnerCandidateList() {
+        return entityPartnerCandidateList;
     }
 }

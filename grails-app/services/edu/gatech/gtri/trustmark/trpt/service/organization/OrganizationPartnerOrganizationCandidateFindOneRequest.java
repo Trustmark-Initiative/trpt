@@ -3,24 +3,24 @@ package edu.gatech.gtri.trustmark.trpt.service.organization;
 public final class OrganizationPartnerOrganizationCandidateFindOneRequest {
 
     private long id;
-    private long partnerOrganizationCandidate;
+    private long partnerCandidate;
 
     public OrganizationPartnerOrganizationCandidateFindOneRequest() {
     }
 
     public OrganizationPartnerOrganizationCandidateFindOneRequest(
             final long id,
-            final long partnerOrganizationCandidate) {
+            final long partnerCandidate) {
 
         this.id = id;
-        this.partnerOrganizationCandidate = partnerOrganizationCandidate;
+        this.partnerCandidate = partnerCandidate;
     }
 
     public long getId() {
         return id;
     }
 
-    public long getPartnerOrganizationCandidate() {
-        return partnerOrganizationCandidate;
+    public long getPartnerCandidate() {
+        return partnerCandidate;
     }
 }

@@ -1,10 +1,10 @@
 function initialize(
-    organizationFindAll,
-    organizationFindOne,
-    organizationInsert,
-    organizationUpdate,
-    organizationDelete,
-    organizationDashboard) {
+    entityFindAll,
+    entityFindOne,
+    entityInsert,
+    entityUpdate,
+    entityDelete,
+    entityDashboard) {
 
     document.addEventListener("readystatechange", function () {
 
@@ -20,101 +20,117 @@ function initialize(
 
     function findAll() {
 
-        fetchGet(organizationFindAll)
+        fetchGet(entityFindAll)
             .then(response => response.json())
             .then(afterFindAll)
     }
 
-    function afterFindAll(organizationList) {
+    function afterFindAll(entityList) {
 
         stateReset()
 
-        if (document.getElementById("organization-action-insert") != null) {
-            document.getElementById("organization-action-insert").outerHTML = document.getElementById("organization-action-insert").outerHTML
-            document.getElementById("organization-action-insert").addEventListener("click", onInsertOpen)
+        if (document.getElementById("entity-action-insert") != null) {
+            document.getElementById("entity-action-insert").outerHTML = document.getElementById("entity-action-insert").outerHTML
+            document.getElementById("entity-action-insert").addEventListener("click", beforeInsertOpen)
         }
 
-        document.getElementById("organization-action-delete").outerHTML = document.getElementById("organization-action-delete").outerHTML
-        document.getElementById("organization-action-delete").addEventListener("click", () => onDeleteSubmit(organizationList))
+        document.getElementById("entity-action-delete").outerHTML = document.getElementById("entity-action-delete").outerHTML
+        document.getElementById("entity-action-delete").addEventListener("click", () => onDeleteSubmit(entityList))
 
-        const organizationTBody = document.getElementById("organization-tbody")
-        organizationTBody.innerHTML = ""
+        const entityTBody = document.getElementById("entity-tbody")
+        entityTBody.innerHTML = ""
 
-        if (organizationList.length === 0) {
+        if (entityList.length === 0) {
 
-            const organizationElement = document.getElementById("organization-template-empty").content.cloneNode(true)
+            const entityElement = document.getElementById("entity-template-empty").content.cloneNode(true)
 
-            organizationTBody.appendChild(organizationElement)
+            entityTBody.appendChild(entityElement)
 
         } else {
 
-            organizationList.forEach(organization => {
+            entityList.forEach(entity => {
 
-                const organizationElement = document.getElementById("organization-template-summary").content.cloneNode(true)
+                const entityElement = document.getElementById("entity-template-summary").content.cloneNode(true)
 
-                const organizationElementActionUpdate = organizationElement.querySelector(".organization-action-update")
-                const organizationElementActionDeleteQueue = organizationElement.querySelector(".organization-action-delete-queue")
-                const organizationElementName = organizationElement.querySelector(".organization-element-name")
-                const organizationElementUri = organizationElement.querySelector(".organization-element-uri")
-                const organizationElementDescription = organizationElement.querySelector(".organization-element-description")
+                const entityElementActionUpdate = entityElement.querySelector(".entity-action-update")
+                const entityElementActionDeleteQueue = entityElement.querySelector(".entity-action-delete-queue")
+                const entityElementName = entityElement.querySelector(".entity-element-name")
 
-                organizationElement.firstElementChild.dataset.id = organization.id
-                organizationElementActionUpdate.addEventListener("click", () => onUpdateOpen(organization.id))
-                organizationElementActionDeleteQueue.dataset.id = organization.id
-                organizationElementName.innerHTML = organization.name
-                organizationElementName.title = organization.name
-                organizationElementName.href = organizationDashboard + "?" + new URLSearchParams({"id": organization.id})
-                organizationElementUri.innerHTML = organization.uri
-                organizationElementUri.href = organization.uri
-                organizationElementUri.title = organization.uri
-                organizationElementDescription.innerHTML = organization.description
-                organizationElementDescription.title = organization.description
+                // specific to this entity
+                const entityElementUri = entityElement.querySelector(".organization-element-uri")
+                const entityElementDescription = entityElement.querySelector(".organization-element-description")
 
-                organizationTBody.appendChild(organizationElement)
+                entityElement.firstElementChild.dataset.id = entity.id
+                entityElementActionUpdate.addEventListener("click", () => onUpdateOpen(entity))
+                entityElementActionDeleteQueue.dataset.id = entity.id
+                entityElementName.innerHTML = entity.name
+                entityElementName.title = entity.name
+                entityElementName.href = entityDashboard + "?" + new URLSearchParams({"id": entity.id})
+
+                // specific to this entity
+                entityElementUri.innerHTML = entity.uri
+                entityElementUri.href = entity.uri
+                entityElementUri.title = entity.uri
+                entityElementDescription.innerHTML = entity.description
+                entityElementDescription.title = entity.description
+
+                entityTBody.appendChild(entityElement)
             })
         }
+    }
+
+    function beforeInsertOpen() {
+        onInsertOpen()
     }
 
     function onInsertOpen() {
 
         stateReset()
 
-        document.getElementById("organization-action-cancel").outerHTML = document.getElementById("organization-action-cancel").outerHTML
-        document.getElementById("organization-action-submit-insert").outerHTML = document.getElementById("organization-action-submit-insert").outerHTML
+        document.getElementById("entity-action-cancel").outerHTML = document.getElementById("entity-action-cancel").outerHTML
+        document.getElementById("entity-action-submit-insert").outerHTML = document.getElementById("entity-action-submit-insert").outerHTML
 
-        document.getElementById("organization-action-cancel").addEventListener("click", onCancel)
-        document.getElementById("organization-action-submit-insert").addEventListener("click", onInsertSubmit)
+        document.getElementById("entity-action-cancel").addEventListener("click", onCancel)
+        document.getElementById("entity-action-submit-insert").addEventListener("click", onInsertSubmit)
 
-        document.getElementById("organization-form").classList.remove("d-none")
-        document.getElementById("organization-form-header-insert").classList.remove("d-none")
-        document.getElementById("organization-action-submit-insert").classList.remove("d-none")
+        document.getElementById("entity-form").classList.remove("d-none")
+        document.getElementById("entity-form-header-insert").classList.remove("d-none")
+        document.getElementById("entity-action-submit-insert").classList.remove("d-none")
+
+        // specific to this entity
+        // (nothing)
     }
 
-    function onUpdateOpen(organizationId) {
+    function onUpdateOpen(entity) {
 
-        fetchGet(organizationFindOne + "?" + new URLSearchParams({"id": organizationId}))
-            .then(response => response.json())
-            .then(afterFindOne)
+        const entityPromise = fetchGet(entityFindOne + "?" + new URLSearchParams({"id": entity.id})).then(response => response.json())
+
+        // specific to this entity
+        // (nothing)
+
+        Promise.all([entityPromise]).then(array => afterFindOne(array[0]))
     }
 
-    function afterFindOne(organization) {
+    function afterFindOne(entity) {
 
         stateReset()
 
-        document.getElementById("organization-action-cancel").outerHTML = document.getElementById("organization-action-cancel").outerHTML
-        document.getElementById("organization-action-submit-update").outerHTML = document.getElementById("organization-action-submit-update").outerHTML
+        document.getElementById("entity-action-cancel").outerHTML = document.getElementById("entity-action-cancel").outerHTML
+        document.getElementById("entity-action-submit-update").outerHTML = document.getElementById("entity-action-submit-update").outerHTML
 
-        document.getElementById("organization-action-cancel").addEventListener("click", onCancel)
-        document.getElementById("organization-action-submit-update").addEventListener("click", onUpdateSubmit)
+        document.getElementById("entity-action-cancel").addEventListener("click", onCancel)
+        document.getElementById("entity-action-submit-update").addEventListener("click", () => onUpdateSubmit(entity))
 
-        document.getElementById("organization-form").classList.remove("d-none")
-        document.getElementById("organization-form-header-update").classList.remove("d-none")
-        document.getElementById("organization-action-submit-update").classList.remove("d-none")
+        document.getElementById("entity-form").classList.remove("d-none")
+        document.getElementById("entity-form-header-update").classList.remove("d-none")
+        document.getElementById("entity-action-submit-update").classList.remove("d-none")
 
-        document.getElementById("organization-input-id").value = organization.id
-        document.getElementById("organization-input-name").value = organization.name
-        document.getElementById("organization-input-uri").value = organization.uri
-        document.getElementById("organization-input-description").value = organization.description
+        document.getElementById("organization-input-id").value = entity.id
+        document.getElementById("organization-input-name").value = entity.name
+
+        // specific to this entity
+        document.getElementById("organization-input-uri").value = entity.uri
+        document.getElementById("organization-input-description").value = entity.description
     }
 
     function onCancel() {
@@ -124,43 +140,51 @@ function initialize(
 
     function onInsertSubmit() {
 
-        fetchPost(organizationInsert, {
+        fetchPost(entityInsert, {
             name: document.getElementById("organization-input-name").value,
             uri: document.getElementById("organization-input-uri").value,
             description: document.getElementById("organization-input-description").value,
-            organizationTrustInteroperabilityProfileList: [],
-            partnerOrganizationCandidateList: [],
+            entityTrustInteroperabilityProfileList: [],
+            partnerCandidateList: []
         })
             .then(response => response.status !== 200 ?
                 onFailure(response.json()) :
                 findAll())
     }
 
-    function onUpdateSubmit() {
+    function onUpdateSubmit(entity) {
 
-        fetchPost(organizationUpdate, {
+        fetchPost(entityUpdate, {
             id: document.getElementById("organization-input-id").value,
             name: document.getElementById("organization-input-name").value,
             uri: document.getElementById("organization-input-uri").value,
             description: document.getElementById("organization-input-description").value,
-            organizationTrustInteroperabilityProfileList: [],
-            partnerOrganizationCandidateList: [],
+            entityTrustInteroperabilityProfileList: entity.entityTrustInteroperabilityProfileList
+                .map(entityTrustInteroperabilityProfileInner => {
+                    return {
+                        "mandatory": entityTrustInteroperabilityProfileInner.mandatory,
+                        "uri": entityTrustInteroperabilityProfileInner.trustInteroperabilityProfile.uri
+                    }
+                }),
+            partnerCandidateList: entity.entityPartnerCandidateList
+                .filter(entityPartnerCandidate => entityPartnerCandidate.trust)
+                .map(entityPartnerCandidate => entityPartnerCandidate.partnerCandidate.id)
         })
             .then(response => response.status !== 200 ?
                 onFailure(response.json()) :
                 findAll())
     }
 
-    function onDeleteSubmit(organizationList) {
+    function onDeleteSubmit(entityList) {
 
-        const idList = Array.from(document.querySelectorAll(".organization-action-delete-queue:checked"))
+        const idList = Array.from(document.querySelectorAll(".entity-action-delete-queue:checked"))
             .map(element => element.dataset.id)
 
-        fetchPost(organizationDelete, {
+        fetchPost(entityDelete, {
             idList: idList
         })
             .then(response => response.status !== 200 ?
-                onFailureForDelete(organizationList, idList, response.json()) :
+                onFailureForDelete(entityList, idList, response.json()) :
                 findAll())
     }
 
@@ -177,18 +201,18 @@ function initialize(
         messageMapShow(failureMapPromise, "organization", labelFor)
     }
 
-    function onFailureForDelete(organizationList, idList, failureMapPromise) {
+    function onFailureForDelete(entityList, idList, failureMapPromise) {
 
         stateReset();
 
-        document.getElementById("organization-delete-response-failure").classList.remove("d-none")
+        document.getElementById("entity-delete-response-failure").classList.remove("d-none")
 
         const labelFor = {
-            "name": "Name",
-            "uri": "URL",
-            "description": "Description",
-            "idList": "Organizations",
-            "id": "Organization",
+            "name": "name",
+            "uri": "url",
+            "description": "description",
+            "idList": "organizations",
+            "id": "organization",
             "userSet": "users",
             "protectedSystemSet": "protected systems",
             "trustmarkBindingRegistrySet": "trustmark binding registries",
@@ -200,29 +224,29 @@ function initialize(
 
             if (messageMapResponse["idList"] !== undefined && messageMapResponse["idList"][0] !== undefined) {
 
-                const organizationDeleteResponseFailure = document.getElementById("organization-delete-response-failure")
-                organizationDeleteResponseFailure.innerHTML = ""
+                const entityDeleteResponseFailure = document.getElementById("entity-delete-response-failure")
+                entityDeleteResponseFailure.innerHTML = ""
 
                 Object.entries(messageMapResponse["idList"][0]).forEach(entry => {
 
-                    const organizationElement = document.getElementById("organization-template-delete-response-failure").content.cloneNode(true)
-                    const organizationElementName = organizationElement.querySelector(".organization-element-name")
-                    const organizationElementMessage = organizationElement.querySelector(".organization-element-message")
+                    const entityElement = document.getElementById("entity-template-delete-response-failure").content.cloneNode(true)
+                    const entityElementName = entityElement.querySelector(".entity-element-name")
+                    const entityElementMessage = entityElement.querySelector(".entity-element-message")
 
-                    organizationElementName.innerHTML = `Could not delete "${organizationList.find(organization => organization.id == idList[entry[0]]).name}":`
+                    entityElementName.innerHTML = `Could not delete "${entityList.find(entity => entity.id == idList[entry[0]]).name}":`
 
                     Object.entries(entry[1]).forEach(entryInner => {
 
                         entryInner[1].forEach(message => {
 
-                            const organizationElementMessageInner = document.createElement("li")
-                            organizationElementMessageInner.innerHTML = message;
+                            const entityElementMessageInner = document.createElement("li")
+                            entityElementMessageInner.innerHTML = message;
 
-                            organizationElementMessage.appendChild(organizationElementMessageInner)
+                            entityElementMessage.appendChild(entityElementMessageInner)
                         })
                     })
 
-                    organizationDeleteResponseFailure.appendChild(organizationElement)
+                    entityDeleteResponseFailure.appendChild(entityElement)
                 })
             }
         })
@@ -230,13 +254,13 @@ function initialize(
 
     function stateReset() {
 
-        document.getElementById("organization-form").classList.add("d-none")
-        document.getElementById("organization-form-header-insert").classList.add("d-none")
-        document.getElementById("organization-form-header-update").classList.add("d-none")
-        document.getElementById("organization-action-submit-insert").classList.add("d-none")
-        document.getElementById("organization-action-submit-update").classList.add("d-none")
-        document.getElementById("organization-delete-response-failure").classList.add("d-none")
-        document.getElementById("organization-delete-response-failure").innerHTML = ""
+        document.getElementById("entity-form").classList.add("d-none")
+        document.getElementById("entity-form-header-insert").classList.add("d-none")
+        document.getElementById("entity-form-header-update").classList.add("d-none")
+        document.getElementById("entity-action-submit-insert").classList.add("d-none")
+        document.getElementById("entity-action-submit-update").classList.add("d-none")
+        document.getElementById("entity-delete-response-failure").classList.add("d-none")
+        document.getElementById("entity-delete-response-failure").innerHTML = ""
 
         formResetValue()
     }
@@ -245,6 +269,8 @@ function initialize(
 
         document.getElementById("organization-input-id").value = ""
         document.getElementById("organization-input-name").value = ""
+
+        // specific to this entity
         document.getElementById("organization-input-uri").value = ""
         document.getElementById("organization-input-description").value = ""
 
@@ -255,6 +281,8 @@ function initialize(
 
         document.getElementById("organization-input-name").classList.remove("is-invalid")
         document.getElementById("organization-invalid-feedback-name").innerHTML = ""
+
+        // specific to this entity
         document.getElementById("organization-input-uri").classList.remove("is-invalid")
         document.getElementById("organization-invalid-feedback-uri").innerHTML = ""
         document.getElementById("organization-input-description").classList.remove("is-invalid")
