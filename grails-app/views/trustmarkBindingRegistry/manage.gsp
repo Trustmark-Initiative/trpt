@@ -6,6 +6,7 @@
 
         <script type="text/javascript">
             initialize(
+                "${createLink(controller:'profile', action: 'findOne')}",
                 "${createLink(controller:'trustmarkBindingRegistry', action: 'findAll')}",
                 "${createLink(controller:'trustmarkBindingRegistry', action: 'findOne')}",
                 "${createLink(controller:'trustmarkBindingRegistry', action: 'insert')}",

@@ -8,6 +8,7 @@
 
         <script type="text/javascript">
             initialize(
+                "${createLink(controller:'profile', action: 'findOne')}",
                 "${createLink(controller:'organization', action: 'findOne')}",
                 "${createLink(controller:'organization', action: 'update')}",
                 "${createLink(controller:'partnerOrganizationCandidate', action: 'findAll')}",

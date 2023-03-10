@@ -1,6 +1,9 @@
 function initialize(
+    profileFindOneUrl,
     userFindAll,
     userFindOne,
+    userFindAllWithoutOrganization,
+    userFindOneWithoutOrganization,
     userInsert,
     userUpdate,
     userDelete,
@@ -21,14 +24,22 @@ function initialize(
 
     function findAll() {
 
-        fetchGet(userFindAll)
-            .then(response => response.json())
-            .then(afterFindAll)
+        profile(profileFindOneUrl)
+            .then(role => role === undefined ? Promise.resolve() : Promise.all([
+                fetchGet(userFindAll).then(response => response.status >= 400 ? undefined : response.json()),
+                fetchGet(userFindAllWithoutOrganization).then(response => response.status >= 400 ? undefined : response.json())
+            ])
+                .then(array => afterFindAll(array[0], array[1])))
     }
 
-    function afterFindAll(userList) {
+    function afterFindAll(userList, userListWithoutOrganization) {
 
         stateReset()
+        afterFindAllUserList(userList)
+        afterFindAllUserListWithoutOrganization(userListWithoutOrganization)
+    }
+
+    function afterFindAllUserList(userList) {
 
         document.getElementById("user-action-insert").outerHTML = document.getElementById("user-action-insert").outerHTML
         document.getElementById("user-action-delete").outerHTML = document.getElementById("user-action-delete").outerHTML
@@ -44,7 +55,7 @@ function initialize(
         const userTBody = document.getElementById("user-tbody")
         userTBody.innerHTML = ""
 
-        if (userList.length === 0) {
+        if (userList === undefined || userList.length === 0) {
 
             const userElement = document.getElementById("user-template-empty").content.cloneNode(true)
 
@@ -60,41 +71,67 @@ function initialize(
                 const userElementActionDeleteQueue = userElement.querySelector(".user-action-delete-queue")
                 const userElementName = userElement.querySelector(".user-element-name")
                 const userElementUsername = userElement.querySelector(".user-element-username")
-                const userElementTelephone = userElement.querySelector(".user-element-telephone")
+                const userElementEmail = userElement.querySelector(".user-element-email")
                 const userElementOrganization = userElement.querySelector(".user-element-organization")
                 const userElementRole = userElement.querySelector(".user-element-role")
-                const userElementUserDisabled = userElement.querySelector(".user-element-userDisabled")
-                const userElementUserLocked = userElement.querySelector(".user-element-userLocked")
-                const userElementUserExpired = userElement.querySelector(".user-element-userExpired")
-                const userElementPasswordExpired = userElement.querySelector(".user-element-passwordExpired")
 
                 userElementActionUpdate.addEventListener("click", () => onUpdateOpen(user.id))
                 userElementActionDeleteQueue.dataset.id = user.id
-                userElementName.innerHTML = user.nameFamily + ", " + user.nameGiven
-                userElementName.title = user.nameFamily + ", " + user.nameGiven
-                userElementUsername.innerHTML = user.username
-                userElementUsername.href = "mailto:" + user.username
-                userElementUsername.title = user.username
-                userElementTelephone.innerHTML = user.telephone
-                userElementTelephone.href = "tel:" + user.telephone
-                userElementTelephone.title = user.telephone
-                userElementOrganization.innerHTML = user.organization.name
-                userElementOrganization.title = user.organization.name
-                userElementRole.innerHTML = user.role.label
-                userElementRole.title = user.role.label
+                userElementName.innerHTML = (user.nameFamily == null ? "(none)" : user.nameFamily) + ", " + (user.nameGiven == null ? "(none)" : user.nameGiven)
+                userElementName.title = (user.nameFamily == null ? "(none)" : user.nameFamily) + ", " + (user.nameGiven == null ? "(none)" : user.nameGiven)
+                userElementUsername.innerHTML = user.username == null ? "(none)" : user.username
+                userElementEmail.innerHTML = user.contactEmail == null ? "(none)" : user.contactEmail
+                userElementEmail.href = user.contactEmail == null ? "" : "mailto:" + user.contactEmail
+                userElementEmail.title = user.contactEmail == null ? "(none)" : user.contactEmail
+                userElementOrganization.innerHTML = user.organization == null ? "(none)" : user.organization.name
+                userElementOrganization.title = user.organization == null ? "(none)" : user.organization.name
+                userElementRole.innerHTML = user.role == null ? "(none)" : user.role.label
+                userElementRole.title = user.role == null ? "(none)" : user.role.label
 
-                if (!user.userEnabled) {
-                    userElementUserDisabled.classList.add("bi-shield-slash")
-                }
-                if (user.userLocked) {
-                    userElementUserLocked.classList.add("bi-shield-lock")
-                }
-                if (user.userExpired) {
-                    userElementUserExpired.classList.add("bi-shield-x")
-                }
-                if (user.passwordExpired) {
-                    userElementPasswordExpired.classList.add("bi-file-medical")
-                }
+                userTBody.appendChild(userElement)
+            })
+        }
+    }
+
+    function afterFindAllUserListWithoutOrganization(userList) {
+
+        document.getElementById("user-action-delete-without-organization").outerHTML = document.getElementById("user-action-delete-without-organization").outerHTML
+        document.getElementById("user-action-delete-without-organization").addEventListener("click", onDeleteSubmit)
+
+        const userTBody = document.getElementById("user-tbody-without-organization")
+        userTBody.innerHTML = ""
+
+        if (userList === undefined || userList.length === 0) {
+
+            const userContainer = document.getElementById("user-container-without-organization")
+            userContainer.classList.add("d-none")
+
+        } else {
+
+            const userContainer = document.getElementById("user-container-without-organization")
+            userContainer.classList.remove("d-none")
+
+            userList.forEach(user => {
+
+                const userElement = document.getElementById("user-template-summary-without-organization").content.cloneNode(true)
+
+                const userElementActionUpdate = userElement.querySelector(".user-action-update")
+                const userElementActionDeleteQueue = userElement.querySelector(".user-action-delete-queue")
+                const userElementName = userElement.querySelector(".user-element-name")
+                const userElementUsername = userElement.querySelector(".user-element-username")
+                const userElementEmail = userElement.querySelector(".user-element-email")
+                const userElementRole = userElement.querySelector(".user-element-role")
+
+                userElementActionUpdate.addEventListener("click", () => onUpdateOpenWithoutOrganization(user.id))
+                userElementActionDeleteQueue.dataset.id = user.id
+                userElementName.innerHTML = (user.nameFamily == null ? "(none)" : user.nameFamily) + ", " + (user.nameGiven == null ? "(none)" : user.nameGiven)
+                userElementName.title = (user.nameFamily == null ? "(none)" : user.nameFamily) + ", " + (user.nameGiven == null ? "(none)" : user.nameGiven)
+                userElementUsername.innerHTML = user.username == null ? "(none)" : user.username
+                userElementEmail.innerHTML = user.contactEmail == null ? "(none)" : user.contactEmail
+                userElementEmail.href = user.contactEmail == null ? "" : "mailto:" + user.contactEmail
+                userElementEmail.title = user.contactEmail == null ? "(none)" : user.contactEmail
+                userElementRole.innerHTML = user.role == null ? "(none)" : user.role.label
+                userElementRole.title = user.role == null ? "(none)" : user.role.label
 
                 userTBody.appendChild(userElement)
             })
@@ -115,14 +152,12 @@ function initialize(
         document.getElementById("user-form-header-insert").classList.remove("d-none")
         document.getElementById("user-action-submit-insert").classList.remove("d-none")
 
-        document.getElementById("user-input-username").value = ""
-        document.getElementById("user-input-nameFamily").value = ""
-        document.getElementById("user-input-nameGiven").value = ""
-        document.getElementById("user-input-telephone").value = ""
-        document.getElementById("user-input-userDisabled").checked = false
-        document.getElementById("user-input-userLocked").checked = false
-        document.getElementById("user-input-userExpired").checked = false
-        document.getElementById("user-input-passwordExpired").checked = false
+        document.getElementById("user-row-organization").style.display = "flex"
+        document.getElementById("user-row-role").style.display = "none"
+        document.getElementById("user-row-username").style.display = "flex"
+        document.getElementById("user-row-email").style.display = "none"
+        document.getElementById("user-row-nameGiven").style.display = "none"
+        document.getElementById("user-row-nameFamily").style.display = "none"
 
         organizationList.map(organization => {
 
@@ -133,19 +168,37 @@ function initialize(
             document.getElementById("user-input-organization").add(option)
         })
 
-        roleList.map(role => {
+        const option = document.createElement("option")
+        option.value = -1
+        option.innerHTML = "(none)"
+        document.getElementById("user-input-organization").add(option)
 
-            const option = document.createElement("option")
-            option.value = role.id
-            option.innerHTML = role.label
+        document.getElementById("user-input-role").value = ""
+        document.getElementById("user-input-username").value = ""
+        document.getElementById("user-input-email").value = ""
+        document.getElementById("user-input-nameFamily").value = ""
+        document.getElementById("user-input-nameGiven").value = ""
 
-            document.getElementById("user-input-role").add(option)
-        })
+        document.getElementById("user-input-organization").disabled = false
+        document.getElementById("user-input-role").disabled = false
+        document.getElementById("user-input-username").disabled = false
+        document.getElementById("user-input-email").disabled = false
+        document.getElementById("user-input-nameFamily").disabled = false
+        document.getElementById("user-input-nameGiven").disabled = false
     }
 
     function onUpdateOpen(userId) {
 
         const userPromise = fetchGet(userFindOne + "?" + new URLSearchParams({"id": userId})).then(response => response.json())
+        const organizationListPromise = fetchGet(organizationFindAll).then(response => response.json())
+        const roleListPromise = fetchGet(roleFindAll).then(response => response.json())
+
+        Promise.all([userPromise, organizationListPromise, roleListPromise]).then(array => afterFindOne(array[0], array[1], array[2]))
+    }
+
+    function onUpdateOpenWithoutOrganization(userId) {
+
+        const userPromise = fetchGet(userFindOneWithoutOrganization + "?" + new URLSearchParams({"id": userId})).then(response => response.json())
         const organizationListPromise = fetchGet(organizationFindAll).then(response => response.json())
         const roleListPromise = fetchGet(roleFindAll).then(response => response.json())
 
@@ -166,48 +219,45 @@ function initialize(
         document.getElementById("user-form-header-update").classList.remove("d-none")
         document.getElementById("user-action-submit-update").classList.remove("d-none")
 
-        document.getElementById("user-input-id").value = user.id
-        document.getElementById("user-input-username").value = user.username
-        document.getElementById("user-input-nameFamily").value = user.nameFamily
-        document.getElementById("user-input-nameGiven").value = user.nameGiven
-        document.getElementById("user-input-telephone").value = user.telephone
-        document.getElementById("user-input-userDisabled").checked = !user.userEnabled
-        document.getElementById("user-input-userLocked").checked = user.userLocked
-        document.getElementById("user-input-userExpired").checked = user.userExpired
-        document.getElementById("user-input-passwordExpired").checked = user.passwordExpired
+        document.getElementById("user-row-organization").style.display = "flex"
+        document.getElementById("user-row-role").style.display = "flex"
+        document.getElementById("user-row-username").style.display = "flex"
+        document.getElementById("user-row-email").style.display = "flex"
+        document.getElementById("user-row-nameGiven").style.display = "flex"
+        document.getElementById("user-row-nameFamily").style.display = "flex"
 
         organizationList.map(organization => {
 
             const option = document.createElement("option")
             option.value = organization.id
             option.innerHTML = organization.name
-            option.selected = organization.id === user.organization.id
-            if (organization.id !== user.organization.id && !user.editable) option.disabled = true
+            option.selected = user.organization != null && organization.id === user.organization.id
+            if (!user.editable) option.disabled = true
 
             document.getElementById("user-input-organization").add(option)
         })
 
-        roleList.map(role => {
+        const option = document.createElement("option")
+        option.value = -1
+        option.innerHTML = "(none)"
+        option.selected = user.organization == null
+        if (!user.editable) option.disabled = true
+        document.getElementById("user-input-organization").add(option)
 
-            const option = document.createElement("option")
-            option.value = role.id
-            option.innerHTML = role.label
-            option.selected = role.id === user.role.id
-            if (role.id !== user.role.id && !user.editable) option.disabled = true
+        document.getElementById("user-input-id").value = user.id
+        document.getElementById("user-input-role").value = user.role == null ? "(none)" : user.role.label
+        document.getElementById("user-input-username").value = user.username
+        document.getElementById("user-input-email").value = user.contactEmail
+        document.getElementById("user-input-nameFamily").value = user.nameFamily
+        document.getElementById("user-input-nameGiven").value = user.nameGiven
 
-            document.getElementById("user-input-role").add(option)
-        })
-
-        document.getElementById("user-input-username").disabled = !user.editable
-        document.getElementById("user-input-nameFamily").disabled = !user.editable
-        document.getElementById("user-input-nameGiven").disabled = !user.editable
-        document.getElementById("user-input-telephone").disabled = !user.editable
-        document.getElementById("user-input-userDisabled").disabled = !user.editable
-        document.getElementById("user-input-userLocked").disabled = !user.editable
-        document.getElementById("user-input-userExpired").disabled = !user.editable
-        document.getElementById("user-input-passwordExpired").disabled = !user.editable
         document.getElementById("user-input-organization").disabled = !user.editable
-        document.getElementById("user-input-role").disabled = !user.editable
+        document.getElementById("user-input-role").disabled = true
+        document.getElementById("user-input-username").disabled = true
+        document.getElementById("user-input-email").disabled = true
+        document.getElementById("user-input-nameFamily").disabled = true
+        document.getElementById("user-input-nameGiven").disabled = true
+
         document.getElementById("user-action-submit-update").disabled = !user.editable
     }
 
@@ -220,15 +270,7 @@ function initialize(
 
         fetchPost(userInsert, {
             username: document.getElementById("user-input-username").value,
-            nameFamily: document.getElementById("user-input-nameFamily").value,
-            nameGiven: document.getElementById("user-input-nameGiven").value,
-            telephone: document.getElementById("user-input-telephone").value,
-            userEnabled: !document.getElementById("user-input-userDisabled").checked,
-            userLocked: document.getElementById("user-input-userLocked").checked,
-            userExpired: document.getElementById("user-input-userExpired").checked,
-            passwordExpired: document.getElementById("user-input-passwordExpired").checked,
-            organization: document.getElementById("user-input-organization").value,
-            role: document.getElementById("user-input-role").value
+            organization: document.getElementById("user-input-organization").value == -1 ? null : document.getElementById("user-input-organization").value,
         })
             .then(response => response.status !== 200 ?
                 onFailure(response.json()) :
@@ -239,16 +281,7 @@ function initialize(
 
         fetchPost(userUpdate, {
             id: document.getElementById("user-input-id").value,
-            username: document.getElementById("user-input-username").value,
-            nameFamily: document.getElementById("user-input-nameFamily").value,
-            nameGiven: document.getElementById("user-input-nameGiven").value,
-            telephone: document.getElementById("user-input-telephone").value,
-            userEnabled: !document.getElementById("user-input-userDisabled").checked,
-            userLocked: document.getElementById("user-input-userLocked").checked,
-            userExpired: document.getElementById("user-input-userExpired").checked,
-            passwordExpired: document.getElementById("user-input-passwordExpired").checked,
-            organization: document.getElementById("user-input-organization").value,
-            role: document.getElementById("user-input-role").value
+            organization: document.getElementById("user-input-organization").value == -1 ? null : document.getElementById("user-input-organization").value,
         })
             .then(response => response.status !== 200 ?
                 onFailure(response.json()) :
@@ -276,11 +309,6 @@ function initialize(
             "username": "username",
             "nameFamily": "nameFamily",
             "nameGiven": "nameGiven",
-            "telephone": "telephone",
-            "userEnabled": "userDisabled",
-            "userLocked": "userLocked",
-            "userExpired": "userExpired",
-            "passwordExpired": "passwordExpired",
             "organization": "organization",
             "role": "role",
         }
@@ -308,24 +336,16 @@ function initialize(
 
         document.getElementById("user-input-id").value = ""
         document.getElementById("user-input-username").value = ""
+        document.getElementById("user-input-email").value = ""
         document.getElementById("user-input-nameFamily").value = ""
         document.getElementById("user-input-nameGiven").value = ""
-        document.getElementById("user-input-telephone").value = ""
-        document.getElementById("user-input-userDisabled").checked = false
-        document.getElementById("user-input-userLocked").checked = false
-        document.getElementById("user-input-userExpired").checked = false
-        document.getElementById("user-input-passwordExpired").checked = false
         document.getElementById("user-input-organization").innerHTML = ""
         document.getElementById("user-input-role").innerHTML = ""
 
         document.getElementById("user-input-username").disabled = false
+        document.getElementById("user-input-email").disabled = false
         document.getElementById("user-input-nameFamily").disabled = false
         document.getElementById("user-input-nameGiven").disabled = false
-        document.getElementById("user-input-telephone").disabled = false
-        document.getElementById("user-input-userDisabled").disabled = false
-        document.getElementById("user-input-userLocked").disabled = false
-        document.getElementById("user-input-userExpired").disabled = false
-        document.getElementById("user-input-passwordExpired").disabled = false
         document.getElementById("user-input-organization").disabled = false
         document.getElementById("user-input-role").disabled = false
         document.getElementById("user-action-submit-update").disabled = false
@@ -337,20 +357,12 @@ function initialize(
 
         document.getElementById("user-input-username").classList.remove("is-invalid")
         document.getElementById("user-invalid-feedback-username").innerHTML = ""
+        document.getElementById("user-input-email").classList.remove("is-invalid")
+        document.getElementById("user-invalid-feedback-email").innerHTML = ""
         document.getElementById("user-input-nameFamily").classList.remove("is-invalid")
         document.getElementById("user-invalid-feedback-nameFamily").innerHTML = ""
         document.getElementById("user-input-nameGiven").classList.remove("is-invalid")
         document.getElementById("user-invalid-feedback-nameGiven").innerHTML = ""
-        document.getElementById("user-input-telephone").classList.remove("is-invalid")
-        document.getElementById("user-invalid-feedback-telephone").innerHTML = ""
-        document.getElementById("user-input-userDisabled").classList.remove("is-invalid")
-        document.getElementById("user-invalid-feedback-userDisabled").innerHTML = ""
-        document.getElementById("user-input-userLocked").classList.remove("is-invalid")
-        document.getElementById("user-invalid-feedback-userLocked").innerHTML = ""
-        document.getElementById("user-input-userExpired").classList.remove("is-invalid")
-        document.getElementById("user-invalid-feedback-userExpired").innerHTML = ""
-        document.getElementById("user-input-passwordExpired").classList.remove("is-invalid")
-        document.getElementById("user-invalid-feedback-passwordExpired").innerHTML = ""
         document.getElementById("user-input-organization").classList.remove("is-invalid")
         document.getElementById("user-invalid-feedback-organization").innerHTML = ""
         document.getElementById("user-input-role").classList.remove("is-invalid")

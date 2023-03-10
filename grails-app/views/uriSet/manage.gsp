@@ -7,6 +7,7 @@
 
         <script type="text/javascript">
             initialize(
+                "${createLink(controller:'profile', action: 'findOne')}",
                 "${createLink(controller:'uriSet', action: 'findOne')}"
             );
         </script>
@@ -51,6 +52,14 @@
                 <tbody id="trustmark-binding-registry-uri-tbody">
                 </tbody>
             </table>
+
+            <nav class="pt-2">
+                <ul class="pagination">
+                    <li class="page-item ms-auto"><a class="page-link" id="trustmark-binding-registry-uri-prev">Prev</a></li>
+                    <li class="page-item active"><span class="page-link" id="trustmark-binding-registry-uri-page">1</span></li>
+                    <li class="page-item"><a class="page-link" id="trustmark-binding-registry-uri-next">Next</a></li>
+                </ul>
+            </nav>
         </div>
 
         <div class="container pt-4">
@@ -91,6 +100,14 @@
                 <tbody id="trust-interoperability-profile-uri-tbody">
                 </tbody>
             </table>
+
+            <nav class="pt-2">
+                <ul class="pagination">
+                    <li class="page-item ms-auto"><a class="page-link" id="trust-interoperability-profile-uri-prev">Prev</a></li>
+                    <li class="page-item active"><span class="page-link" id="trust-interoperability-profile-uri-page">1</span></li>
+                    <li class="page-item"><a class="page-link" id="trust-interoperability-profile-uri-next">Next</a></li>
+                </ul>
+            </nav>
         </div>
 
         <div class="container pt-4">
@@ -131,6 +148,14 @@
                 <tbody id="trustmark-definition-uri-tbody">
                 </tbody>
             </table>
+
+            <nav class="pt-2">
+                <ul class="pagination">
+                    <li class="page-item ms-auto"><a class="page-link" id="trustmark-definition-uri-prev">Prev</a></li>
+                    <li class="page-item active"><span class="page-link" id="trustmark-definition-uri-page">1</span></li>
+                    <li class="page-item"><a class="page-link" id="trustmark-definition-uri-next">Next</a></li>
+                </ul>
+            </nav>
         </div>
 
         <div class="container pt-4">
@@ -171,6 +196,14 @@
                 <tbody id="trustmark-uri-tbody">
                 </tbody>
             </table>
+
+            <nav class="pt-2">
+                <ul class="pagination">
+                    <li class="page-item ms-auto"><a class="page-link" id="trustmark-uri-prev">Prev</a></li>
+                    <li class="page-item active"><span class="page-link" id="trustmark-uri-page">1</span></li>
+                    <li class="page-item"><a class="page-link" id="trustmark-uri-next">Next</a></li>
+                </ul>
+            </nav>
         </div>
 
         <div class="container pt-4">
@@ -211,6 +244,14 @@
                 <tbody id="trustmark-status-report-uri-tbody">
                 </tbody>
             </table>
+
+            <nav class="pt-2">
+                <ul class="pagination">
+                    <li class="page-item ms-auto"><a class="page-link" id="trustmark-status-report-uri-prev">Prev</a></li>
+                    <li class="page-item active"><span class="page-link" id="trustmark-status-report-uri-page">1</span></li>
+                    <li class="page-item"><a class="page-link" id="trustmark-status-report-uri-next">Next</a></li>
+                </ul>
+            </nav>
         </div>
 
         <div class="container pt-4">
@@ -251,6 +292,14 @@
                 <tbody id="trustmark-binding-registry-organization-map-uri-tbody">
                 </tbody>
             </table>
+
+            <nav class="pt-2">
+                <ul class="pagination">
+                    <li class="page-item ms-auto"><a class="page-link" id="trustmark-binding-registry-organization-map-uri-prev">Prev</a></li>
+                    <li class="page-item active"><span class="page-link" id="trustmark-binding-registry-organization-map-uri-page">1</span></li>
+                    <li class="page-item"><a class="page-link" id="trustmark-binding-registry-organization-map-uri-next">Next</a></li>
+                </ul>
+            </nav>
         </div>
 
         <div class="container pt-4">
@@ -291,6 +340,14 @@
                 <tbody id="trustmark-binding-registry-organization-trustmark-map-uri-tbody">
                 </tbody>
             </table>
+
+            <nav class="pt-2">
+                <ul class="pagination">
+                    <li class="page-item ms-auto"><a class="page-link" id="trustmark-binding-registry-organization-trustmark-map-uri-prev">Prev</a></li>
+                    <li class="page-item active"><span class="page-link" id="trustmark-binding-registry-organization-trustmark-map-uri-page">1</span></li>
+                    <li class="page-item"><a class="page-link" id="trustmark-binding-registry-organization-trustmark-map-uri-next">Next</a></li>
+                </ul>
+            </nav>
         </div>
     </body>
 </html>

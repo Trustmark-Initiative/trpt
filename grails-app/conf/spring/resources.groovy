@@ -1,7 +1,5 @@
-import edu.gatech.gtri.trustmark.trpt.listener.UserPasswordEncoderListener
-import edu.gatech.gtri.trustmark.trpt.service.ApplicationProperties
+import edu.gatech.gtri.trustmark.grails.trpt.service.ApplicationProperties
 
 beans = {
     applicationProperties(ApplicationProperties.class)
-    userPasswordEncoderListener(UserPasswordEncoderListener.class)
 }

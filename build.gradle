@@ -5,13 +5,13 @@
 
 buildscript {
     repositories {
-        maven { url 'https://repo.grails.org/grails/core' }
+        maven { url "https://repo.grails.org/grails/core" }
     }
     dependencies {
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:$comBertramlabsPluginsAssetPipelineGradle"
-        classpath 'gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.6'
-        classpath 'org.grails.plugins:hibernate5:7.1.0'
         classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
+        classpath "org.grails.plugins:hibernate5:7.3.1"
+        classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.6"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.3.4"
     }
 }
 
@@ -22,17 +22,17 @@ buildscript {
 // https://docs.gradle.org/current/userguide/plugins.html
 
 plugins {
-    id 'com.diffplug.spotless' version '6.4.0'
-    id 'com.github.ben-manes.versions' version '0.42.0'
-    id 'com.gorylenko.gradle-git-properties' version '2.4.1'
-    id 'war'
+    id "com.diffplug.spotless" version "6.4.0"
+    id "com.github.ben-manes.versions" version "0.42.0"
+    id "com.gorylenko.gradle-git-properties" version "2.4.1"
+    id "war"
 }
 
 // Maven coordinates.
 // These must appear before "apply plugin" for version to appear in grails.build.info.
 
-version '1.2'
-group 'edu.gatech.gtri.trustmark.trpt'
+version "2.0"
+group "edu.gatech.gtri.trustmark.trpt"
 
 // With the introduction of the plugins DSL, users should have little reason to use the legacy method of applying
 // plugins. It is documented here in case a build author cannot use the plugins DSL due to restrictions in how it
@@ -40,15 +40,18 @@ group 'edu.gatech.gtri.trustmark.trpt'
 //
 // https://docs.gradle.org/current/userguide/plugins.html
 
-apply plugin: 'org.grails.grails-web' // web must appear before gsp; otherwise, controllers fail to redirect to views.
-apply plugin: 'org.grails.grails-gsp'
-apply plugin: 'com.github.erdi.webdriver-binaries'
-apply plugin: 'com.bertramlabs.asset-pipeline' // asset-pipeline must appear after web; otherwise, the system fails to find a property.
+apply plugin: "eclipse"
+apply plugin: "idea"
+apply plugin: "war"
+apply plugin: "org.grails.grails-web" // web must appear before gsp; otherwise, controllers fail to redirect to views.
+apply plugin: "com.github.erdi.webdriver-binaries"
+apply plugin: "com.bertramlabs.asset-pipeline" // asset-pipeline must appear after web; otherwise, the system fails to find a property.
+apply plugin: "org.grails.grails-gsp"
 
 // https://docs.gradle.org/current/userguide/declaring_repositories.html
 
 repositories {
-    maven { url 'https://repo.grails.org/grails/core' }
+    maven { url "https://repo.grails.org/grails/core" }
     mavenCentral()
     mavenLocal()
 }
@@ -61,68 +64,79 @@ configurations {
         extendsFrom developmentOnly
     }
     all {
-        exclude group: 'pull-parser', module: 'pull-parser' // this transitive dependency prompts xml parsing errors in spring
+        exclude group: "pull-parser", module: "pull-parser" // this transitive dependency prompts xml parsing errors in spring
     }
 }
 
 dependencies {
-    implementation 'edu.gatech.gtri.trustmark:tf-api-impl:1.4.60'
-    implementation 'edu.gatech.gtri.trustmark:tf-api:1.4.38'
+    implementation "edu.gatech.gtri.trustmark:tf-api-impl:1.4.70"
+    implementation "edu.gatech.gtri.trustmark:tf-api:1.4.44"
+    implementation "edu.gatech.gtri.trustmark:tf-grails-shared-views:0.9.1"
 
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.2'
-    implementation 'javax.el:javax.el-api:2.2.5'
-    implementation 'org.grails.plugins:async'
-    implementation 'org.grails.plugins:cache'
-    implementation 'org.grails.plugins:events'
-    implementation 'org.grails.plugins:gsp'
-    implementation 'org.grails.plugins:hibernate5'
-    implementation 'org.grails.plugins:quartz:2.0.13' // required for quartz scheduler
-    implementation 'org.grails.plugins:scaffolding'
-    implementation 'org.grails.plugins:spring-security-core:4.0.3'
-    implementation 'org.grails:grails-core'
-    implementation 'org.grails:grails-logging'
-    implementation 'org.grails:grails-plugin-databinding'
-    implementation 'org.grails:grails-plugin-i18n'
-    implementation 'org.grails:grails-plugin-interceptors'
-    implementation 'org.grails:grails-plugin-rest'
-    implementation 'org.grails:grails-plugin-services'
-    implementation 'org.grails:grails-plugin-url-mappings'
-    implementation 'org.grails:grails-web-boot'
-    implementation 'org.gtri.functionaljava:functionaljava:4.10.1-GTRI'
-    implementation 'org.hibernate:hibernate-core:5.5.7.Final'
-    implementation 'org.hibernate:hibernate-ehcache:5.5.7.Final'
-    implementation 'org.quartz-scheduler:quartz:2.2.1' // required for quartz scheduler
-    implementation 'org.springframework.boot:spring-boot-autoconfigure'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-logging'
-    implementation 'org.springframework.boot:spring-boot-starter-tomcat'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.retry:spring-retry' // required for spring retry
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
 
-    console 'org.grails:grails-console'
+    implementation "org.springframework.security:spring-security-taglibs"
+    runtimeOnly "javax.servlet.jsp:javax.servlet.jsp-api:2.3.3"
 
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
-    profile 'org.grails.profiles:web'
-
-    runtimeOnly "com.bertramlabs.plugins:asset-pipeline-grails:$comBertramlabsPluginsAssetPipelineGradle"
-    runtimeOnly 'javax.xml.bind:jaxb-api:2.3.1'
-    runtimeOnly 'mysql:mysql-connector-java:8.0.28'
-    runtimeOnly 'org.apache.tomcat:tomcat-jdbc'
-    runtimeOnly 'org.glassfish.web:el-impl:2.2.1-b05'
-    runtimeOnly 'org.springframework.boot:spring-boot-starter-aop' // required for spring retry
+    compileOnly "io.micronaut:micronaut-inject-groovy"
+    console "org.grails:grails-console"
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+    implementation "com.fasterxml.jackson.core:jackson-core:2.13.2"
+    implementation "javax.el:javax.el-api:2.2.5"
+    implementation "org.grails.plugins:async"
+    implementation "org.grails.plugins:cache"
+    implementation "org.grails.plugins:events"
+    implementation "org.grails.plugins:gsp"
+    implementation "org.grails.plugins:hibernate5"
+    implementation "org.grails.plugins:quartz:2.0.13" // required for quartz scheduler
+    implementation "org.grails.plugins:scaffolding"
+    implementation "org.grails:grails-core"
+    implementation "org.grails:grails-logging"
+    implementation "org.grails:grails-plugin-databinding"
+    implementation "org.grails:grails-plugin-i18n"
+    implementation "org.grails:grails-plugin-interceptors"
+    implementation "org.grails:grails-plugin-rest"
+    implementation "org.grails:grails-plugin-services"
+    implementation "org.grails:grails-plugin-url-mappings"
+    implementation "org.grails:grails-web-boot"
+    implementation "org.gtri.functionaljava:functionaljava:4.10.1-GTRI"
+    implementation "org.hibernate:hibernate-core:5.6.15.Final"
+    implementation "org.hibernate:hibernate-ehcache:5.6.15.Final"
+    implementation "org.quartz-scheduler:quartz:2.2.1" // required for quartz scheduler
+    implementation "org.springframework.boot:spring-boot-autoconfigure"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-logging"
+    implementation "org.springframework.boot:spring-boot-starter-tomcat"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-starter-webflux"
+    implementation "org.springframework.retry:spring-retry" // required for spring retry
+    profile "org.grails.profiles:web"
+    runtimeOnly "com.bertramlabs.plugins:asset-pipeline-grails:3.3.4"
+    runtimeOnly "javax.xml.bind:jaxb-api:2.3.1"
+    runtimeOnly "mysql:mysql-connector-java:8.0.28"
+    runtimeOnly "org.apache.tomcat:tomcat-jdbc"
+    runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"
+    runtimeOnly "org.springframework.boot:spring-boot-starter-aop" // required for spring retry
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
 }
 
 bootRun {
+    environment "SPRING_BOOT_CONTEXT_PATH", "/trpt"
+    environment "SPRING_SECURITY_CLIENT_ID", "trpt"
+    environment "SPRING_SECURITY_REDIRECT_URI", "http://localhost:8080/trpt/login/oauth2/code/trpt"
+    environment "SPRING_SECURITY_ISSUER_URI", "https://host.docker.internal:9443/auth/realms/keycloak"
+
     ignoreExitValue true
     jvmArgs(
-            '-Dspring.output.ansi.enabled=always',
-            '-noverify',
-            '-XX:+HeapDumpOnOutOfMemoryError',
-            '-XX:HeapDumpPath=/Users/drewtaylor/Documents/work/TI/trpt/out.hprof',
-            '-Xmx1g')
+            "-Dspring.output.ansi.enabled=always",
+            "-noverify",
+            "-Xmx1g",
+            "-Djavax.net.ssl.trustStore=grails-app/conf/trpt-truststore.jks",
+            "-Djavax.net.ssl.trustStorePassword=changeit"
+            )
     sourceResources sourceSets.main
-    String springProfilesActive = 'spring.profiles.active'
+    String springProfilesActive = "spring.profiles.active"
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }
 
@@ -133,22 +147,22 @@ assets {
 
 spotless {
     groovy {
-        target '*.groovy'
-        importOrder('java', 'javax', '')
+        target "*.groovy"
+        importOrder("java", "javax", "")
 
-        greclipse('4.17.0').configFile('eclipse-formatter-config.xml')
+        greclipse("4.17.0").configFile("eclipse-formatter-config.xml")
     }
     groovyGradle {
-        target '*.gradle'
+        target "*.gradle"
 
-        importOrder('java', 'javax', 'groovy', '')
-        greclipse('4.17.0').configFile('eclipse-formatter-config.xml')
+        importOrder("java", "javax", "groovy", "")
+        greclipse("4.17.0").configFile("eclipse-formatter-config.xml")
     }
     java {
-        target '*.java'
-        importOrder('java', 'javax', '')
+        target "*.java"
+        importOrder("java", "javax", "")
 
-        eclipse('4.18.0').configFile('eclipse-formatter-config.xml')
+        eclipse("4.18.0").configFile("eclipse-formatter-config.xml")
     }
 }
 
@@ -161,8 +175,8 @@ tasks.withType(Test) {
 
 gitProperties {
     keys = [
-        'git.commit.id.abbrev',
-        'git.commit.id',
-        'git.commit.time'
+        "git.commit.id.abbrev",
+        "git.commit.id",
+        "git.commit.time"
     ]
 }

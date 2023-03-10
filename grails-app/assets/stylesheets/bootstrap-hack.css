@@ -89,3 +89,7 @@ td.unhack > div {
     background-color: initial;
     opacity: initial;
 }
+
+.page-item:not(.disabled) a {
+    cursor: pointer;
+}

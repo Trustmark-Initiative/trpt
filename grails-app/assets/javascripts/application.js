@@ -7,4 +7,3 @@
 //
 //= require bootstrap-5.1.3-dist/js/bootstrap.bundle
 //= require moment-2.29.1/moment
-//= require utility

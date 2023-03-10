@@ -1,10 +1,12 @@
 function initialize(
+    profileFindOneUrl,
     entityFindOneUrl,
     entityUpdateUrl,
     partnerCandidateFindAllUrl,
     partnerCandidateDashboard) {
 
     initializeHelper(
+        profileFindOneUrl,
         entityFindOneUrl,
         entityUpdateUrl,
         partnerCandidateFindAllUrl,

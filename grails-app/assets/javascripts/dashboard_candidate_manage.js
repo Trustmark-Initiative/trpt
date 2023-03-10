@@ -1,4 +1,5 @@
 function initializeHelper(
+    profileFindOneUrl,
     entityPartnerCandidateFindOneUrl,
     entityFindOneUrl,
     entityUpdateUrl,
@@ -18,11 +19,13 @@ function initializeHelper(
     }
 
     function findOne() {
-        fetchGet(entityPartnerCandidateFindOneUrl + "?" + new URLSearchParams({"id": (new URLSearchParams(document.location.search)).get("id"), "partnerCandidate": (new URLSearchParams(document.location.search)).get("partnerCandidate")}))
-            .then(response => response.json())
-            .then(entityPartnerCandidate => fetchGet(entityFindOneUrl + "?" + new URLSearchParams({"id": (new URLSearchParams(document.location.search)).get("id")}))
+
+        profile(profileFindOneUrl)
+            .then(role => role === undefined ? Promise.resolve() : fetchGet(entityPartnerCandidateFindOneUrl + "?" + new URLSearchParams({"id": (new URLSearchParams(document.location.search)).get("id"), "partnerCandidate": (new URLSearchParams(document.location.search)).get("partnerCandidate")}))
                 .then(response => response.json())
-                .then(entity => afterFindOne(entityPartnerCandidate, entity)))
+                .then(entityPartnerCandidate => fetchGet(entityFindOneUrl + "?" + new URLSearchParams({"id": (new URLSearchParams(document.location.search)).get("id")}))
+                    .then(response => response.json())
+                    .then(entity => afterFindOne(entityPartnerCandidate, entity))))
     }
 
     function afterFindOne(entityPartnerCandidate, entity) {
