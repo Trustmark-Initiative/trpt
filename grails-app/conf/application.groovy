@@ -161,3 +161,13 @@ hibernate {
         use_second_level_cache = false
     }
 }
+
+info {
+   app {
+     name = '@info.app.name@'
+     version = '@info.app.version@'
+     grailsVersion = '@info.app.grailsVersion@'
+   }
+}
+
+

@@ -80,7 +80,7 @@
         <footer class="navbar navbar-expand-lg navbar-dark bg-dark mt-4 p-2">
             <div class="container">
                 <div class="navbar-nav mx-auto">
-                    <a class="nav-link">Version <span id="application-version"></span>; Build Date <span id="git-commit-time"></span></a>
+                    <a class="nav-link">Version <g:meta name="info.app.version"/>; Build Date <span id="git-commit-time"></span></a>
                 </div>
             </div>
         </footer>
