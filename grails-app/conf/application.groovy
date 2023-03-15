@@ -31,25 +31,37 @@ dataSource {
 environments {
     development {
         // required for development server to locate git.properties file
-        spring.info.git.location='file:build/resources/main/git.properties'
+        spring.info.git.location = 'file:build/resources/main/git.properties'
 
         dataSource {
             dbCreate = 'update'
+            properties {
+                testWhileIdle = true
+                dbProperties {
+                    autoReconnect = true
+                }
+            }
         }
     }
     test {
         dataSource {
             dbCreate = 'update'
+            properties {
+                testWhileIdle = true
+                dbProperties {
+                    autoReconnect = true
+                }
+            }
         }
     }
     production {
         dataSource {
             dbCreate = 'update'
             properties {
-                 testWhileIdle = true
-                 dbProperties {
-                     autoReconnect = true
-                 }
+                testWhileIdle = true
+                dbProperties {
+                    autoReconnect = true
+                }
             }
         }
     }
@@ -150,33 +162,12 @@ hibernate {
     }
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
-// CONFIGURATION FROM SPRING SECURITY CORE
-// ---------------------------------------------------------------------------------------------------------------------
-// See Spring Security Core Plugin https://grails.github.io/grails-spring-security-core/4.0.x/index.html
+info {
+   app {
+     name = '@info.app.name@'
+     version = '@info.app.version@'
+     grailsVersion = '@info.app.grailsVersion@'
+   }
+}
 
-grails.plugin.springsecurity.securityConfigType = 'Annotation'
-
-grails.plugin.springsecurity.authority.className = 'edu.gatech.gtri.trustmark.trpt.domain.Role'
-grails.plugin.springsecurity.authority.nameField = 'name'
-
-grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'edu.gatech.gtri.trustmark.trpt.domain.UserRole'
-
-grails.plugin.springsecurity.userLookup.userDomainClassName = 'edu.gatech.gtri.trustmark.trpt.domain.User'
-grails.plugin.springsecurity.userLookup.accountExpiredPropertyName = 'userExpired'
-grails.plugin.springsecurity.userLookup.accountLockedPropertyName = 'userLocked'
-grails.plugin.springsecurity.userLookup.enabledPropertyName = 'userEnabled'
-grails.plugin.springsecurity.userLookup.passwordExpiredPropertyName = 'passwordExpired'
-
-grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-        [pattern: '/actuator/**', access: ['permitAll']],
-        [pattern: '/password/reset', access: ['permitAll']],
-        [pattern: '/password/resetSubmit', access: ['permitAll']],
-        [pattern: '/password/resetStatus', access: ['permitAll']],
-        [pattern: '/password/resetStatusSubmit', access: ['permitAll']],
-        [pattern: '/password/changeWithoutAuthentication', access: ['permitAll']],
-        [pattern: '/password/changeWithoutAuthenticationSubmit', access: ['permitAll']]
-]
-
-info.app.version='1.2'
 

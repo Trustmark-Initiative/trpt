@@ -1,4 +1,5 @@
 function initialize(
+    profileFindOneUrl,
     trustmarkBindingRegistryFindAll,
     trustmarkBindingRegistryFindOne,
     trustmarkBindingRegistryInsert,
@@ -20,9 +21,10 @@ function initialize(
 
     function findAll() {
 
-        fetchGet(trustmarkBindingRegistryFindAll)
-            .then(response => response.json())
-            .then(afterFindAll)
+        profile(profileFindOneUrl)
+            .then(role => role === undefined ? Promise.resolve() :  fetchGet(trustmarkBindingRegistryFindAll)
+                .then(response => response.json())
+                .then(afterFindAll))
     }
 
     function afterFindAll(trustmarkBindingRegistryList) {

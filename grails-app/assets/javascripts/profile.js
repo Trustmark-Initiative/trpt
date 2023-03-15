@@ -1,55 +1,70 @@
 function profile(
-    profileFindOneUrl,
-    actuatorInfoUrl) {
+    profileFindOneUrl) {
 
-    document.addEventListener("readystatechange", function () {
+    return fetchGet(profileFindOneUrl)
+        .then(response => response.json())
+        .then(profile => {
 
-        if (document.readyState === "complete") {
-            onComplete()
-        }
-    })
+            function modal(userWithoutRole, userWithoutOrganization) {
 
-    function onComplete() {
+                if (userWithoutRole) {
+                    document.getElementById("modal-role-organization-user-without-role").classList.remove("d-none")
+                }
 
-        find()
-    }
+                if (userWithoutOrganization) {
+                    document.getElementById("modal-role-organization-user-without-organization").classList.remove("d-none")
+                }
 
-    function find() {
+                if (userWithoutRole) {
+                    new bootstrap.Modal(document.getElementById("modal-role-organization"), {}).show()
+                }
+            }
 
-        fetchGet(profileFindOneUrl)
-            .then(response => response.json())
-            .then(profile => fetchGet(actuatorInfoUrl)
-                .then(response => response.json())
-                .then(info => afterFind(profile, info)))
-    }
+            function showUsername() {
+                Array.from(document.querySelectorAll(".log-in"))
+                    .forEach(element => element.classList.remove("d-none"))
 
-    function afterFind(profile, info) {
+                document.getElementById("navbarDropdown").innerHTML = profile.user.username
+            }
 
-        if (profile.role !== null) {
-            if (profile.role.value === "ROLE_ADMINISTRATOR_ORGANIZATION") {
+            function showRoleAdministratorOrganization(userWithoutOrganization) {
+                showUsername()
+
                 Array.from(document.querySelectorAll(".role-administrator-organization"))
                     .forEach(element => element.classList.remove("d-none"))
+
+                modal(false, userWithoutOrganization)
             }
-            if (profile.role.value === "ROLE_ADMINISTRATOR") {
+
+            function showRoleAdministrator(userWithoutOrganization) {
+                showUsername()
+
                 Array.from(document.querySelectorAll(".role-administrator"))
                     .forEach(element => element.classList.remove("d-none"))
+
+                modal(false, userWithoutOrganization)
             }
-        }
 
-        if (profile.username === null) {
+            function roleValue() {
+                return profile.user === undefined || profile.user === null || profile.user.role === undefined || profile.user.role === null || !(profile.user.role.value === "trpt-org-admin" || profile.user.role.value === "trpt-admin") ?
+                    undefined :
+                    profile.user.role.value
+            }
 
-            Array.from(document.querySelectorAll(".log-out"))
-                .forEach(element => element.classList.remove("d-none"))
+            function organization() {
+                return profile.user === undefined || profile.user === null || profile.user.organization === undefined || profile.user.organization === null ?
+                    undefined :
+                    profile.user.organization;
+            }
 
-        } else {
+            if (roleValue() === undefined) {
+                modal(true, organization() === undefined)
+            } else if (roleValue() === "trpt-org-admin") {
+                showRoleAdministratorOrganization(organization() === undefined)
+            } else if (roleValue() === "trpt-admin") {
+                showRoleAdministrator(organization() === undefined)
+            }
 
-            Array.from(document.querySelectorAll(".log-in"))
-                .forEach(element => element.classList.remove("d-none"))
-
-            document.getElementById("navbarDropdown").innerHTML = profile.username
-        }
-
-        document.getElementById("git-commit-time").innerHTML = `${moment(new Number(info.git.commit.time) * 1000).format("MMMM Do, YYYY")} ${moment(new Number(info.git.commit.time) * 1000).format("h:mm:ss A UTC")}`;
-        document.getElementById("application-version").innerHTML = profile.applicationVersion;
-    }
+            return roleValue()
+        });
 }

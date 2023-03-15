@@ -6,6 +6,7 @@
 
         <script type="text/javascript">
             initialize(
+                "${createLink(controller:'profile', action: 'findOne')}",
                 "${createLink(controller:'protectedSystem', action: 'findAll')}",
                 "${createLink(controller:'protectedSystem', action: 'findOne')}",
                 "${createLink(controller:'protectedSystem', action: 'insert')}",

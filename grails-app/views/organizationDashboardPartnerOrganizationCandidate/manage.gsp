@@ -2,6 +2,7 @@
     <head>
         <asset:javascript src="dashboard_candidate_manage.js"/>
         <asset:javascript src="dashboard_candidate_manage_organization.js"/>
+        <asset:javascript src="trustExpressionUtility.js"/>
         <asset:javascript src="trustExpression.js"/>
         <asset:stylesheet src="dashboard.css"/>
 
@@ -9,6 +10,7 @@
 
         <script type="text/javascript">
             initialize(
+                "${createLink(controller:'profile', action: 'findOne')}",
                 "${createLink(controller:'organizationDashboardPartnerOrganizationCandidate', action: 'findOne')}",
                 "${createLink(controller:'organization', action: 'findOne')}",
                 "${createLink(controller:'organization', action: 'update')}")

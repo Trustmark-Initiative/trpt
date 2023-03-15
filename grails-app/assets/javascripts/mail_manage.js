@@ -1,4 +1,5 @@
 function initialize(
+    profileFindOneUrl,
     mailFindUrl,
     mailUpdateUrl,
     mailTestUrl) {
@@ -17,9 +18,10 @@ function initialize(
 
     function find() {
 
-        fetchGet(mailFindUrl)
-            .then(response => response.json())
-            .then(afterFind)
+        profile(profileFindOneUrl)
+            .then(role => role === undefined ? Promise.resolve() : fetchGet(mailFindUrl)
+                .then(response => response.json())
+                .then(afterFind))
     }
 
     function afterFind(mail) {

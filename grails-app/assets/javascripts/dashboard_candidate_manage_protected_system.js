@@ -1,9 +1,11 @@
 function initialize(
+    profileFindOneUrl,
     entityPartnerCandidateFindOneUrl,
     entityFindOneUrl,
     entityUpdateUrl) {
 
     initializeHelper(
+        profileFindOneUrl,
         entityPartnerCandidateFindOneUrl,
         entityFindOneUrl,
         entityUpdateUrl,
