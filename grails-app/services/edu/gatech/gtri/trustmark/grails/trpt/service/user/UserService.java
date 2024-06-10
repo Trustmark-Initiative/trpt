@@ -130,13 +130,16 @@ public class UserService {
             final String nameGiven,
             final String contactEmail,
             final List<Role> roleList) {
-        User user = User.findByUsernameHelper(username).orSome(new User());
-        user.setUsername(username);
-        user.setNameFamily(nameFamily);
-        user.setNameGiven(nameGiven);
-        user.setContactEmail(contactEmail);
-        user.setRoleArrayJson(new JSONArray(roleList.map(role -> role.getValue())).toString());
-        user.saveAndFlushHelper();
+
+        User.withTransactionHelper( () -> {
+            User user = User.findByUsernameHelper(username).orSome(new User());
+            user.setUsername(username);
+            user.setNameFamily(nameFamily);
+            user.setNameGiven(nameGiven);
+            user.setContactEmail(contactEmail);
+            user.setRoleArrayJson(new JSONArray(roleList.map(role -> role.getValue())).toString());
+            user.saveAndFlushHelper();
+        });
     }
 
     private Validation<NonEmptyList<ValidationMessage<UserField>>, UserResponse> insertHelper(
