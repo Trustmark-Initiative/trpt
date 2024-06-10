@@ -27,19 +27,43 @@
         <main>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container">
-                    <ul class="navbar-nav me-auto">
+                    <ul class="nav navbar-nav me-auto">
                         <li class="nav-item fw-bold pe-4"><a class="nav-link" href="${createLink(uri: "/")}">Trustmark Relying Party Tool</a></li>
-                        <li class="d-none nav-item ps-4 pe-4 role-administrator-organization role-administrator"><a class="nav-link" href="${createLink(controller: "protectedSystem", action: "manage")}">Protected Systems</a></li>
-                        <li class="d-none nav-item pe-4      role-administrator-organization role-administrator"><a class="nav-link" href="${createLink(controller: "trustmarkBindingRegistry", action: "manage")}">Trustmark Binding Registries</a></li>
-                        <li class="d-none nav-item pe-4      role-administrator-organization role-administrator"><a class="nav-link" href="${createLink(controller: "organization", action: "manage")}">Organizations</a></li>
-                        <li class="d-none nav-item pe-4      role-administrator-organization role-administrator"><a class="nav-link" href="${createLink(controller: "user", action: "manage")}">Users</a></li>
-                        <li class="d-none nav-item pe-4                                      role-administrator"><a class="nav-link" href="${createLink(controller: "oidcClientRegistration", action: "manage")}">Clients</a></li>
-                        <li class="d-none nav-item pe-4                                      role-administrator"><a class="nav-link" href="${createLink(controller: "email", action: "settings")}">Mail</a></li>
-                        <li class="d-none nav-item pe-4                                      role-administrator"><a class="nav-link" href="${createLink(controller: "uriSet", action: "manage")}">Status</a></li>
+
+                        <li class="d-none nav-item dropdown role-administrator-organization role-administrator">
+                            <a class="nav-link dropdown-toggle" href="#" id="dropdown-toggle-manage" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Manage
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdown-toggle-manage">
+                                <li class="d-none dropdown-item pe-4      role-administrator-organization role-administrator"><a class="dropdown-item" href="${createLink(controller: "protectedSystem", action: "manage")}">Protected Systems</a></li>
+                                <li class="d-none dropdown-item pe-4      role-administrator-organization role-administrator"><a class="dropdown-item" href="${createLink(controller: "trustmarkBindingRegistry", action: "manage")}">Trustmark Binding Registries</a></li>
+                                <li class="d-none dropdown-item pe-4      role-administrator-organization role-administrator"><a class="dropdown-item" href="${createLink(controller: "organization", action: "manage")}">Organizations</a></li>
+                                <li class="d-none dropdown-item pe-4      role-administrator-organization role-administrator"><a class="dropdown-item" href="${createLink(controller: "user", action: "manage")}">Users</a></li>
+                                <li class="d-none dropdown-item pe-4                                      role-administrator"><a class="dropdown-item" href="${createLink(controller: "oidcClientRegistration", action: "manage")}">Clients</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li class="d-none nav-item dropdown role-administrator">
+                            <a class="nav-link dropdown-toggle" href="#" id="dropdown-toggle-administrator" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Administrator
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdown-toggle-administrator">
+                                <li class="d-none dropdown-item pe-4                role-administrator"><a class="dropdown-item" href="${createLink(controller: "email", action: "settings")}">Mail</a></li>
+                                <li class="d-none dropdown-item pe-4                role-administrator"><a class="dropdown-item" href="${createLink(controller: "uriSet", action: "manage")}">Status</a></li>
+                            </ul>
+                        </li>
                     </ul>
-                    <ul class="navbar-nav">
+
+                    <ul class="nav navbar-nav">
                         <li class="d-none log-in nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link" href="#" role="button"></a>
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Test</a>
+
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a  class="dropdown-item" href="${createLink(controller: 'logout')}">Logout</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
